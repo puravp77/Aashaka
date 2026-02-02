@@ -1,0 +1,37 @@
+/* ===============================
+   HERO SECTION – STABLE VERSION
+================================ */
+
+.hero-video {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+
+  /* 🔥 isolate video paint */
+  contain: paint;
+}
+
+.hero-video video {
+  width: 100%;
+  display: block;
+
+  /* 🔥 STOP REPAINT STORMS */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Desktop */
+@media (min-width: 769px) {
+  .hero-video {
+    height: 80vh;
+  }
+}
+
+
+
+/* Kill margin gaps */
+.hero-video + section {
+  margin-top: 0 !important;
+}

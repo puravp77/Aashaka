@@ -1,0 +1,45 @@
+.page-loader {
+  position: fixed;
+  inset: 0;
+  background: #f6f0e7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 🔥 DO NOT TRIGGER REPAINTS */
+  pointer-events: none;
+  contain: strict;
+
+  z-index: 9999;
+}
+
+
+.loader-logo {
+  font-family: "Times New Roman", serif;
+  font-size: 28px;
+  letter-spacing: 4px;
+  color: #8b1538;
+  animation: fadePulse 1.2s ease-in-out infinite;
+}
+
+@keyframes fadePulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .loader-logo {
+    font-size: 24px;
+    letter-spacing: 3px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .loader-logo {
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+}

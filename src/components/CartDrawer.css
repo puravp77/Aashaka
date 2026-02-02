@@ -1,0 +1,233 @@
+/* ===============================
+   OVERLAY
+================================ */
+
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1999;
+  display: flex;
+  justify-content: flex-end;
+  overscroll-behavior: contain;
+}
+
+/* ===============================
+   DRAWER
+================================ */
+
+.cart-drawer {
+  position: fixed;              /* ✅ FIX */
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100vh;                /* ✅ FIX */
+  background: #f7f3ed;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 2000;                /* ✅ FIX */
+  box-sizing: border-box;
+}
+
+/* ===============================
+   ITEM LIST
+================================ */
+
+.drawer-items {
+  flex: 1;
+}
+
+/* SINGLE ITEM */
+.drawer-item {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.drawer-item img {
+  width: 70px;
+  height: auto;
+  object-fit: cover;
+}
+
+/* TEXT */
+.drawer-text h4 {
+  font-size: 15px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.drawer-text p {
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  color: #555;
+}
+
+/* RIGHT */
+.drawer-right {
+  margin-left: auto;
+  text-align: right;
+}
+
+.drawer-remove {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.drawer-price {
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ===============================
+   FOOTER
+================================ */
+
+.drawer-footer {
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+}
+
+.drawer-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* CHECKOUT BUTTON */
+.drawer-checkout {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #000;
+  background: transparent;
+  font-size: 13px;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+.drawer-checkout:hover {
+  background: #000;
+  color: #fff;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1024px) {
+  .cart-drawer {
+    width: 360px;
+  }
+}
+
+@media (max-width: 768px) {
+  .drawer-item {
+    gap: 12px;
+  }
+
+  .drawer-item img {
+    width: 60px;
+  }
+
+  .drawer-text h4 {
+    font-size: 14px;
+  }
+
+  .drawer-text p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cart-drawer {
+    width: 100%;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .drawer-item {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .drawer-right {
+    font-size: 13px;
+  }
+
+  .drawer-total {
+    font-size: 15px;
+  }
+
+  .drawer-checkout {
+    padding: 12px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+  }
+}
+
+
+/* ================= EMPTY CART ================= */
+
+.empty-cart {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.empty-title {
+  font-family: "Times New Roman", serif;
+  font-size: 16px;
+  color: #777;
+  letter-spacing: 1px;
+}
+
+/* Reuse checkout button style */
+.empty-cart .drawer-checkout {
+  width: 100%;
+  max-width: 280px;
+  
+}
+
+
+/* =========================
+   DRAWER QUANTITY CONTROL
+========================= */
+
+.drawer-qty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+}
+
+.drawer-qty button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f7f3ed;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.drawer-qty span {
+  min-width: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.drawer-size {
+  font-size: 12px;
+  color: #555;
+}

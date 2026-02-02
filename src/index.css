@@ -1,13 +1,37 @@
-body {
+/* =========================
+   GLOBAL RESET (SAFE)
+========================= */
+
+*,
+*::before,
+*::after {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Do NOT force height: 100% */
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Base font */
+body {
+  font-family: "Times New Roman", serif;
+  background: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Prevent inline image gaps */
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Code font */
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }

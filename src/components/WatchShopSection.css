@@ -1,0 +1,188 @@
+/* ===============================
+   WATCH & SHOP SECTION
+================================ */
+
+.watchshop {
+  padding: 50px 30px;
+  background: #fff;
+  position: relative;
+}
+
+.watchshop-title {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 30px;
+  font-family: "Times New Roman", serif;
+}
+
+/* ===============================
+   CARD
+================================ */
+
+.watchshop-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* ===============================
+   VIDEO
+================================ */
+
+.watchshop-video-wrapper {
+  height: 420px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.watchshop-video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===============================
+   INFO SECTION
+================================ */
+
+.watchshop-info {
+  padding: 16px 14px 18px;
+  text-align: center;
+}
+
+.watchshop-price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.watchshop-price .price {
+  font-weight: 600;
+  color: #111;
+}
+
+.watchshop-price .discount {
+  font-size: 14px;
+  color: #666;
+}
+
+.watchshop-price .old-price {
+  font-size: 14px;
+  color: #9a9a9a;
+  text-decoration: line-through;
+}
+
+.watchshop-name {
+  font-family: "Times New Roman", serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #111;
+  margin: 8px 0 14px;
+}
+
+/* ===============================
+   BUY BUTTON
+================================ */
+
+.watchshop-btn {
+  width: 100%;
+  padding: 12px 0;
+  background: #3b3b3b;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.watchshop-btn:hover {
+  background: #000;
+}
+/* ===============================
+   CUSTOM SLIDER ARROWS (CLEAN)
+================================ */
+
+.watchshop-prev,
+.watchshop-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  color: #000000;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.watchshop-prev:hover,
+.watchshop-next:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.watchshop-prev {
+  left: 8px;
+}
+
+.watchshop-next {
+  right: 8px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .watchshop-prev,
+  .watchshop-next {
+    width: 38px;
+    height: 38px;
+    font-size: 22px;
+  }
+}
+
+
+
+
+/* ===============================
+   MOBILE
+================================ */
+
+@media (max-width: 768px) {
+  .watchshop-video-wrapper {
+    height: 520px;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 38px;
+    height: 38px;
+    font-size: 22px;
+  }
+
+  .swiper-button-prev {
+    left: 6px;
+  }
+
+  .swiper-button-next {
+    right: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .watchshop-video-wrapper {
+    height: 460px;
+  }
+}
+

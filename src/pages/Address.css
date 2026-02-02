@@ -1,0 +1,106 @@
+/* =========================
+   ADDRESS PAGE
+========================= */
+
+.address-page {
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 6px 20px 80px;
+}
+
+/* TITLE */
+.address-title {
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  font-size: 32px;
+  margin-bottom: 40px;
+  color: #000;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.address-form {
+  max-width: 520px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* INPUTS & TEXTAREA */
+.address-form input,
+.address-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-family: "Times New Roman", serif;
+  background: #fff;
+}
+
+.address-form input::placeholder,
+.address-form textarea::placeholder {
+  color: #777;
+}
+
+/* FOCUS */
+.address-form input:focus,
+.address-form textarea:focus {
+  border-color: #000;
+}
+
+/* TEXTAREA */
+.address-form textarea {
+  resize: none;
+}
+
+/* ROW (CITY + STATE) */
+.address-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* ERROR */
+.error-text {
+  color: #b00020;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.continue-btn {
+  margin-top: 20px;
+  padding: 16px 0;
+  background: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 1.2px;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.continue-btn:hover {
+  opacity: 0.9;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+  .address-title {
+    font-size: 26px;
+  }
+
+  .address-row {
+    grid-template-columns: 1fr;
+  }
+}

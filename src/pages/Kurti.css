@@ -1,0 +1,276 @@
+.kurti-page {
+  background: #ffffff;
+  padding: 5px 120px 100px;
+}
+
+/* TOP BAR */
+.kurti-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.kurti-top .count {
+font-family: "Times New Roman", serif;
+color: #808080;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.kurti-top .sort {
+  font-size: 13px;
+  padding: 1px 10px;
+}
+
+/* GRID */
+.kurti-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+/* PRODUCT ITEM */
+.kurti-item img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.kurti-item h3 {
+  font-family: "Times New Roman", serif;
+  font-size: 15px;
+  margin: 10px 0 6px;
+  justify-content: left;
+}
+
+.price {
+  font-size: 14px;
+  justify-content: left;
+}
+
+.price .old {
+  margin-left: 6px;
+  color: #999;
+  text-decoration: line-through;
+  justify-content: left;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .kurti-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .kurti-page {
+    padding: 140px 24px 80px;
+  }
+
+  .kurti-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ===============================
+   RESPONSIVE – KURTI PAGE
+   Desktop untouched
+================================ */
+
+/* Tablets */
+@media (max-width: 1024px) {
+
+  .kurti-page {
+    padding: 20px 40px 80px;
+  }
+
+  .kurti-top {
+    margin-bottom: 30px;
+  }
+
+  .kurti-item img {
+    height: 360px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+
+  .kurti-page {
+    padding: 120px 18px 70px; /* keeps header safe */
+  }
+
+  /* Stack top bar */
+  .kurti-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .kurti-top .count {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+  }
+
+  .kurti-top .sort {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  /* Images */
+  .kurti-item img {
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+
+  /* Text */
+  .kurti-item h3 {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 13px;
+  }
+}
+
+
+
+
+
+/* ===============================
+   KURTI PAGE – DESKTOP (UNCHANGED)
+================================ */
+
+.kurti-page {
+  background: #ffffff;
+  padding: 5px 120px 100px;
+}
+
+/* TOP BAR */
+.kurti-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.kurti-top .count {
+  font-family: "Times New Roman", serif;
+  color: #808080;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.kurti-top .sort {
+  font-size: 13px;
+  padding: 1px 10px;
+}
+
+/* GRID */
+.kurti-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+/* PRODUCT CARD */
+.kurti-item {
+  text-align: center;
+}
+
+.kurti-item img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+/* TITLE */
+.kurti-item h3 {
+  font-family: "Times New Roman", serif;
+  font-size: 15px;
+  margin: 12px 0 6px;
+  color: #222;
+}
+
+/* PRICE */
+.price {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.price .old {
+  margin-left: 6px;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* ===============================
+   TABLET (2 COLUMNS)
+================================ */
+
+@media (max-width: 1024px) {
+
+  .kurti-page {
+    padding: 20px 40px 80px;
+  }
+
+  .kurti-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .kurti-item img {
+    height: 380px;
+  }
+}
+
+/* ===============================
+   MOBILE – EXACT AASHAKA UI
+================================ */
+
+@media (max-width: 600px) {
+
+  .kurti-page {
+    padding: 12px 24px 80px;
+  }
+
+  /* Stack top bar neatly */
+  .kurti-top {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 26px;
+  }
+
+  .kurti-top .count {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+  }
+
+  .kurti-top .sort {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  /* 🔥 IMPORTANT: KEEP 2 COLUMNS */
+  .kurti-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  /* Portrait images */
+  .kurti-item img {
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+
+  .kurti-item h3 {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 13px;
+  }
+}

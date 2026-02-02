@@ -1,0 +1,35 @@
+.app-layout {
+  position: relative; /* 🔥 REQUIRED */
+}
+
+
+.page-content {
+  background: #ffffff;
+  min-height: 100vh;
+
+  /* 🔥 footer reveal mechanics */
+  position: relative;
+  z-index: 2;
+
+  /* MUST match footer height */
+  margin-bottom: 420px;
+  isolation: isolate;
+}
+
+
+/* MOBILE reveal space */
+@media (max-width: 768px) {
+  .page-content {
+    margin-bottom: 0;
+  }
+}
+
+
+
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .page-content::after {
+    height: 520px;
+  }
+}

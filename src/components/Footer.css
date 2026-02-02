@@ -1,0 +1,206 @@
+.footer {
+  background: #b47c82;
+  font-family: "Times New Roman", serif;
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+
+  /* 🔥 GPU isolation */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+
+
+
+
+
+
+/* =========================
+   DESKTOP FOOTER (AASHAKA.IN MATCH)
+========================= */
+.footer-top {
+  max-width: 1400px;
+  margin: auto;
+  padding: 90px 70px;
+  display: grid;
+  grid-template-columns: 1.1fr 2.2fr 1fr 1fr;
+  column-gap: 90px;
+  align-items: start;
+  color: #fff;
+}
+
+/* LOGO */
+.footer-logo {
+  margin-top: 12px;
+}
+
+.footer-logo img {
+  max-width: 150px;
+}
+
+/* SUBSCRIBE */
+.footer-subscribe h3 {
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.35;
+  max-width: 520px;
+  margin-bottom: 36px;
+}
+
+.subscribe-input {
+  position: relative;
+  max-width: 420px;
+}
+
+.subscribe-input input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 12px 40px 10px 0;
+  font-size: 15px;
+  color: #fff;
+  outline: none;
+}
+
+.subscribe-input input::placeholder {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.subscribe-input button {
+  position: absolute;
+  right: 0;
+  bottom: 6px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  padding: 0;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* ================= LINKS ================= */
+
+.footer-links-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 80px;
+  margin-top: 6px;
+}
+
+.footer-links h4 {
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+  white-space: nowrap;
+}
+
+.footer-links ul {
+  list-style: none;
+  white-space: nowrap;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.footer-links li:hover,
+.footer-links a:hover {
+  text-decoration: underline;
+  color: #623438;
+}
+
+/* =========================
+   BOTTOM BAR
+========================= */
+.footer-bottom {
+  background-color: #ffffff;
+  color: #222;
+  text-align: center;
+  font-size: 13px;
+  padding: 14px;
+  letter-spacing: 1px;
+}
+
+
+
+
+/* =========================
+   TABLET
+========================= */
+@media (max-width: 1024px) {
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 50px;
+    padding: 70px 48px; /* 🔧 normalize height */
+  }
+
+  .footer-links-wrapper {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 50px;
+  }
+}
+
+/* =========================
+   MOBILE (MATCHES AASHAKA.IN)
+========================= */
+@media (max-width: 600px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+    padding: 56px 24px; /* 🔧 stable height */
+    row-gap: 32px;
+  }
+
+  .footer-logo img {
+    max-width: 120px;
+  }
+
+  .footer-subscribe h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .footer-links-wrapper {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .footer-links h4 {
+    font-size: 12px;
+  }
+
+  .footer-links li {
+    font-size: 14px;
+  }
+
+  .footer-bottom {
+    font-size: 12px;
+    padding: 12px;
+  }
+}
+
+/* MOBILE: footer scrolls normally */
+
+@media (max-width: 768px) {
+  .footer {
+    position: static;
+    transform: none;
+  }
+}
+
+

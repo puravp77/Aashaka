@@ -1,0 +1,126 @@
+import { createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
+
+const CartContext = createContext();
+
+export function CartProvider({ children }) {
+  const [cartItems, setCartItems] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  /* =========================
+     ADD TO CART (MERGE BY ID + SIZE)
+  ========================= */
+  const addToCart = (product, qty = 1, size = null, showToast = false) => {
+    setCartItems((prev) => {
+      const existing = prev.find(
+        (item) => item.id === product.id && item.size === size
+      );
+
+      if (existing) {
+        return prev.map((item) =>
+          item.id === product.id && item.size === size
+            ? { ...item, qty: item.qty + qty }
+            : item
+        );
+      }
+
+      return [
+        ...prev,
+        {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          image: product.images?.[0],
+          qty,
+          size,
+        },
+      ];
+    });
+
+    if (showToast) {
+      toast.success("Product Added To Cart", {
+        icon: "✅",
+      });
+    }
+  };
+
+  /* =========================
+     REMOVE FROM CART
+  ========================= */
+  const removeFromCart = (id, size) => {
+    setCartItems((prev) =>
+      prev.filter((item) => !(item.id === id && item.size === size))
+    );
+  };
+
+  /* =========================
+     UPDATE QTY
+  ========================= */
+  const updateQty = (id, size, newQty) => {
+    setCartItems((prev) => {
+      if (newQty < 1) {
+        return prev.filter(
+          (item) => !(item.id === id && item.size === size)
+        );
+      }
+
+      return prev.map((item) =>
+        item.id === id && item.size === size
+          ? { ...item, qty: newQty }
+          : item
+      );
+    });
+  };
+
+  /* =========================
+     CLEAR CART
+  ========================= */
+  const clearCart = () => {
+    setCartItems([]);
+    setCartOpen(false);
+  };
+
+  /* =========================
+     TOTAL PRICE
+  ========================= */
+  const total = cartItems.reduce(
+    (sum, item) => sum + item.price * item.qty,
+    0
+  );
+
+  /* =========================
+     COUNTS (IMPORTANT FIX)
+  ========================= */
+
+  // Number of unique products
+  const uniqueItemCount = cartItems.length;
+
+  // Total quantity (sum of qty)
+  const totalQuantity = cartItems.reduce(
+    (sum, item) => sum + item.qty,
+    0
+  );
+
+  return (
+    <CartContext.Provider
+      value={{
+        cartItems,
+        cartOpen,
+        setCartOpen,
+        addToCart,
+        removeFromCart,
+        updateQty,
+        clearCart,
+        total,
+
+        // ✅ expose both
+        uniqueItemCount,
+        totalQuantity,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export const useCart = () => useContext(CartContext);

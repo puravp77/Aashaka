@@ -1,0 +1,109 @@
+/* ---------- AUTH PAGE ---------- */
+.auth-page {
+  max-width: 420px;
+  margin: 80px auto;
+  padding: 20px;
+  margin-bottom: 20%;
+}
+
+/* Inputs */
+.auth-page input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-top: 16px;
+  border: none;
+  background: #efefe9;
+  font-size: 15px;
+  outline: none;
+  font-family: inherit;
+}
+
+/* Reserve space so layout doesn't jump */
+.auth-page .field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+/* Error text */
+.error {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #c62828;
+  line-height: 1.3;
+}
+
+/* Optional: subtle red hint on invalid input */
+input.error-input {
+  background: #f6eaea;
+  border-left: 3px solid #c62828;
+}
+
+/* Submit button */
+.auth-page button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: 1px solid #000;
+  background: transparent;
+  color: #000;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* 🔥 Hover effect */
+.auth-page button:hover {
+  background: #000;
+  color: #fff;
+}
+/* Links */
+.auth-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  font-size: 14px;
+  color:#000;
+}
+
+
+/* ===============================
+   RESPONSIVE – AUTH (LOGIN / SIGNUP)
+   Desktop untouched
+================================ */
+
+/* Tablets */
+@media (max-width: 768px) {
+
+  .auth-page {
+    margin: 60px auto;
+    padding: 20px 18px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+
+  .auth-page {
+    margin: 40px auto;
+    padding: 18px 14px;
+    margin-bottom: 60px; /* 🔥 predictable spacing */
+  }
+
+  .auth-page input {
+    padding: 13px 14px;
+    font-size: 14px;
+  }
+
+  .auth-page button {
+    padding: 13px;
+    font-size: 13px;
+  }
+
+  .auth-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+  }
+}

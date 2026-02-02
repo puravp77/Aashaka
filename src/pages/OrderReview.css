@@ -1,0 +1,162 @@
+  .order-review-page {
+    background: #ffffff;
+    min-height: 100vh;
+    padding: 60px 20px 80px;
+  }
+
+  .review-title {
+    text-align: center;
+    font-family: "Playfair Display", serif;
+    font-size: 32px;
+    margin-bottom: 40px;
+  }
+
+  /* LAYOUT */
+  .review-wrapper {
+    max-width: 1000px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  /* CARD */
+  .review-card {
+    border: 1px solid #eee;
+    padding: 30px;
+    background: #fff;
+  }
+
+  .review-card h3 {
+    font-family: "Playfair Display", serif;
+    margin-bottom: 20px;
+  }
+
+  /* ITEMS */
+  .review-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .review-item:last-child {
+    border-bottom: none;
+  }
+
+  .review-item img {
+    width: 70px;
+    height: 100px;
+    object-fit: cover;
+  }
+
+  .review-info .title {
+    font-family: "Times New Roman", serif;
+    font-size: 15px;
+  }
+
+  .review-info .meta {
+    font-size: 13px;
+    color: #555;
+  }
+
+  .review-item .price {
+    margin-left: auto;
+    font-weight: 500;
+  }
+
+  /* TOTAL */
+  .review-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 16px;
+  }
+
+  /* BUTTON */
+  .place-order-btn {
+    margin-top: 30px;
+    width: 100%;
+    padding: 16px;
+    background: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 1.2px;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  .place-order-btn:hover {
+    opacity: 0.9;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .review-wrapper {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  /* ===============================
+   RESPONSIVE – ORDER REVIEW PAGE
+   Desktop untouched
+================================ */
+
+/* Tablets */
+@media (max-width: 1024px) {
+
+  .order-review-page {
+    padding: 50px 20px 70px;
+  }
+
+  .review-title {
+    font-size: 28px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+
+  .review-title {
+    font-size: 24px;
+    margin-bottom: 28px;
+  }
+
+  .review-card {
+    padding: 20px;
+  }
+
+  .review-item {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .review-item img {
+    width: 60px;
+    height: 90px;
+  }
+
+  .review-info .title {
+    font-size: 14px;
+  }
+
+  .review-info .meta {
+    font-size: 12px;
+  }
+
+  .review-item .price {
+    margin-left: 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .place-order-btn {
+    padding: 14px;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,92 @@
+/* ===============================
+   OXIDISED PAGE – DESKTOP
+================================ */
+
+.oxidised-section {
+  background: #ffffff;
+  padding: 35px 120px 100px;
+}
+
+.oxidised-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+/* PRODUCT CARD */
+.product-card {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.product-image img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+}
+
+.product-info {
+  padding: 14px 10px;
+}
+
+.product-title {
+  font-family: "Times New Roman", serif;
+  font-size: 15px;
+  line-height: 1.35;
+  margin-bottom: 6px;
+  color: #222;
+    min-height: 42px;          /* 🔥 KEY FIX */
+
+}
+
+.product-price {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* ===============================
+   TABLET
+================================ */
+@media (max-width: 1024px) {
+  .oxidised-section {
+    padding: 30px 40px 80px;
+  }
+
+  .oxidised-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+/* ===============================
+   MOBILE (2 PER ROW, NO SCROLL)
+================================ */
+@media (max-width: 600px) {
+  .oxidised-section {
+    padding: 20px 16px 70px;
+  }
+
+  .oxidised-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .product-title {
+    font-size: 13.5px;
+    line-height: 1.3;
+  }
+
+  .product-price {
+    font-size: 13px;
+  }
+}

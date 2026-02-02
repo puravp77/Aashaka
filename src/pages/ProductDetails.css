@@ -1,0 +1,789 @@
+
+.product-page {
+  max-width: 1200px;
+  margin: 50px auto;
+  display: flex;
+  gap: 70px;
+  padding: 0 20px; /* 🔥 REQUIRED for mobile */
+}
+
+/* LEFT */
+.product-gallery {
+  display: flex;
+  gap: 16px;
+  width: 55%;
+}
+
+.thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.thumbs img {
+  width: 70px;
+  height: 90px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 1px solid #ddd;
+}
+
+.thumbs img.active {
+  border: 2px solid #000;
+}
+
+.main-image img {
+  width: 700px;
+  max-height: 700px;
+  object-fit: cover;
+}
+
+/* RIGHT */
+.product-info-panel {
+  width: 45%;
+}
+
+.product-info-panel h1 {
+  font-size: 28px;
+  margin-bottom: 14px;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.off {
+  color: #2e7d32;
+}
+
+.old {
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* DETAILS TABLE */
+.details-box {
+  border: 1px solid #ddd;
+  margin-bottom: 25px;
+}
+
+.details-box h4 {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.details-box td {
+  padding: 12px;
+  font-size: 14px;
+}
+
+.details-box td:first-child {
+  width: 35%;
+  color: #666;
+}
+
+/* ACTION ROW */
+.action-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.qty-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: none !important;
+  outline: none !important;
+}
+
+.qty-box * {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  
+}
+
+.qty-box button {
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.qty-box span {
+  width: 32px;
+  text-align: center;
+  font-size: 14px;
+}
+
+
+
+.add-cart {
+  width: 510px;            /* 🔥 fixed clean width */
+  height: 44px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+
+  display: flex;           /* 🔥 text always centered */
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+
+
+
+.buy-now {
+  width: 100%;
+  padding: 16px;
+  background: #2f2f2f;
+  color: #fff;
+  border: none;
+  margin-bottom: 12px;
+    cursor: pointer;
+
+}
+
+.wishlist {
+  position: relative;
+  z-index: 999;
+  pointer-events: auto;
+}
+
+/* ACCORDION */
+.accordion {
+  margin-top: 25px;
+}
+
+.accordion-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-top: 1px solid #ddd;
+  font-weight: 500;
+}
+
+
+/* ===============================
+   WISHLIST POPUP
+================================ */
+/* WISHLIST BUTTON */
+.wishlist {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s ease;   /* 🔥 smooth hover */
+}
+
+/* HOVER EFFECT */
+.wishlist:hover {
+  background: #000;           /* 🔥 white → black */
+  color: #fff;                /* 🔥 text white */
+  border-color: #000;
+}
+
+/* WISHLIST OVERLAY */
+.wishlist-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+/* MODAL BOX */
+.wishlist-modal {
+  background: #fff;
+  padding: 40px 60px;
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  border-radius: 6px;
+}
+
+/* TITLE */
+.wishlist-modal h2 {
+  font-size: 18px;
+  font-family: "Times New Roman", serif;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+  color: #000;
+}
+
+
+.login-btn {
+  background: #8b1538;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.login-btn:hover {
+  background: #6f102c;
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+}
+
+
+/* ===============================
+   ALSO BOUGHT (SAFE ADD-ON)
+================================ */
+
+.also-bought {
+  max-width: 1200px;
+  margin: 80px auto 100px;
+    margin-top: 10%;
+
+}
+
+.also-bought-title {
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 2px;
+  margin-bottom: 40px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+.also-bought-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+.also-card {
+  cursor: pointer;
+  text-align: center;
+}
+
+.also-card img {
+  width: 100%;
+  height: 360px;          /* 🔥 fixed height */
+  object-fit: cover;     /* 🔥 crops excess */
+  display: block;
+  margin-bottom: 4.5%;
+}
+
+.also-title {
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  font-weight: bolder;
+}
+
+.also-price {
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.also-price del {
+  color: #999;
+  margin-left: 6px;
+}
+
+
+
+/* ===============================
+   ALSO BOUGHT – HOVER EFFECT
+================================ */
+
+.also-card {
+  cursor: pointer;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.also-card img {
+  width: 100%;
+  display: block;
+  transition: transform 0.45s ease;
+}
+
+/* Hover effect */
+.also-card:hover {
+  transform: translateY(-6px);
+}
+
+.also-card:hover img {
+  transform: scale(1.05);
+}
+
+.also-card:hover {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.product-info-panel,
+.product-page {
+  pointer-events: auto;
+}
+
+/* ===============================
+   ACCORDION – AASHAKA STYLE
+================================ */
+
+.accordion {
+  margin-top: 40px;
+  border-top: 1px solid #d8d8d8;
+  font-family: "Times New Roman", serif;
+}
+
+.accordion-item {
+  border-bottom: 1px solid #d8d8d8;
+}
+
+/* HEADER */
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 0;
+  cursor: pointer;
+}
+
+.accordion-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #000;
+}
+
+.accordion-icon {
+  font-size: 22px;
+  font-weight: 300;
+}
+
+/* BODY */
+.accordion-body {
+  position: relative;
+  padding: 0 40px 22px 0;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #555;
+}
+
+/* RIGHT SIDE VERTICAL LINE */
+.accordion-body::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  height: calc(100% - 10px);
+  width: 2px;
+  background: #c7b6a4;
+}
+
+/* TEXT */
+.accordion-body p {
+  margin: 1%;
+}
+
+/* SHIPPING LIST */
+.accordion-body ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.accordion-body li {
+  margin-bottom: 12px;
+}
+
+.accordion-body b {
+  font-weight: 600;
+}
+
+
+/* ===============================
+   RESPONSIVE – PRODUCT PAGE
+================================ */
+
+/* ---------- TABLET ---------- */
+@media (max-width: 1199px) {
+  .product-page {
+    flex-direction: column;
+    gap: 40px;
+    padding: 0 20px;
+  }
+
+  .product-gallery,
+  .product-info-panel {
+    width: 100%;
+  }
+
+  .product-gallery {
+    flex-direction: column;
+  }
+
+  .thumbs {
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .thumbs img {
+    width: 60px;
+    height: 80px;
+  }
+
+  .add-cart {
+    width: 100%;
+  }
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 767px) {
+  .product-page {
+    margin: 30px auto;
+    gap: 30px;
+  }
+
+  .main-image img {
+    max-height: 480px;
+  }
+
+  .product-info-panel h1 {
+    font-size: 22px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .qty-box {
+    justify-content: flex-start;
+  }
+
+  .buy-now,
+  .wishlist,
+  .add-cart {
+    width: 100%;
+  }
+}
+
+
+/* ===============================
+   RESPONSIVE – ALSO BOUGHT
+================================ */
+
+@media (max-width: 1024px) {
+  .also-bought-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .also-bought-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .also-bought-title {
+    font-size: 15px;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+  }
+}
+
+
+
+/* ===== FORCE MOBILE STACK ===== */
+@media (max-width: 768px) {
+  .product-page {
+    flex-direction: column;
+  }
+
+  .product-gallery,
+  .product-info-panel {
+    width: 100% !important;
+  }
+
+  .product-gallery {
+    flex-direction: column;
+  }
+
+  .thumbs {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .main-image img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+  }
+}
+  
+
+/* ===============================
+   FINAL RESPONSIVE PATCH – PRODUCT DETAIL
+   Desktop untouched
+================================ */
+
+/* ---------- TABLETS ---------- */
+@media (max-width: 1024px) {
+
+  .main-image img {
+    width: 100%;
+    max-width: 100%;
+    max-height: 520px;
+  }
+
+  .product-gallery {
+    gap: 20px;
+  }
+
+  .product-info-panel {
+    padding-top: 10px;
+  }
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 600px) {
+
+  /* Layout spacing */
+  .product-page {
+    margin: 20px auto;
+    gap: 24px;
+  }
+
+  /* Images */
+  .main-image img {
+    max-height: 380px;
+  }
+
+  .thumbs img {
+    width: 52px;
+    height: 68px;
+  }
+
+  /* Text */
+  .product-info-panel h1 {
+    font-size: 20px;
+    line-height: 1.3;
+  }
+
+  .price {
+    font-size: 17px;
+  }
+
+  /* Buttons – remove fixed widths safely */
+  .add-cart {
+    width: 100%;
+    height: 42px;
+  }
+
+  .buy-now,
+  .wishlist {
+    padding: 14px;
+  }
+
+  /* Accordion */
+  .accordion-body {
+    padding: 0 0 18px 0;
+    font-size: 14px;
+  }
+
+  .accordion-body::after {
+    display: none; /* vertical line off on mobile */
+  }
+}
+
+/* ===============================
+   ALSO BOUGHT – MOBILE FIX
+   Desktop untouched
+================================ */
+
+@media (max-width: 768px) {
+
+  .also-bought {
+    margin: 60px auto 80px;
+    padding: 0 16px;
+  }
+
+  .also-bought-title {
+    font-size: 16px;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+  }
+
+  /* 🔥 2-column grid like Aashaka */
+  .also-bought-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .also-card {
+    text-align: center;
+  }
+
+  .also-card img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;   /* 🔥 square look */
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+
+  .also-title {
+    font-size: 13px;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+
+  .also-price {
+    font-size: 13px;
+  }
+
+  .also-price del {
+    font-size: 12px;
+  }
+
+  /* Disable hover effects on touch */
+  .also-card:hover,
+  .also-card:hover img {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+
+/* ===============================
+   MOBILE FIX – THUMBNAILS BELOW MAIN IMAGE
+   Desktop untouched
+================================ */
+
+@media (max-width: 768px) {
+
+  .product-gallery {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* MAIN IMAGE FIRST */
+  .main-image {
+    order: 1;
+  }
+
+  /* THUMBNAILS BELOW */
+  .thumbs {
+    order: 2;
+    margin-top: 12px;
+    justify-content: center;
+  }
+
+  .thumbs img {
+    width: 60px;
+    height: 80px;
+  }
+}
+
+
+/* ===============================
+   SIZE SELECTION (KURTI PAGE)
+================================ */
+
+.size-section {
+  margin: 18px 0 12px;
+}
+
+.size-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* size buttons row */
+.size-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* individual size button */
+.size-btn {
+  min-width: 36px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid #000;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* hover */
+.size-btn:hover:not(.disabled) {
+  background: #000;
+  color: #fff;
+}
+
+/* active / selected */
+.size-btn.active {
+  background: #000;
+  color: #fff;
+}
+
+/* out of stock */
+.size-btn.disabled {
+  border-color: #ccc;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* stock text */
+.size-stock {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* ===============================
+   MOBILE TWEAKS
+================================ */
+
+@media (max-width: 768px) {
+  .size-options {
+    gap: 6px;
+  }
+
+  .size-btn {
+    min-width: 34px;
+    height: 30px;
+    font-size: 12px;
+  }
+}
+
+

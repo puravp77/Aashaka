@@ -1,0 +1,291 @@
+/* SECTION */
+.signature-section {
+  background-color: #d8beb9;
+  padding: 80px 60px 50px;
+}
+
+/* LAYOUT */
+.signature-inner {
+  max-width: 1400px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 120px;
+}
+
+/* IMAGE AREA */
+.signature-images {
+  position: relative;
+  width: 520px;
+  height: 520px;
+}
+
+/* COMMON IMAGE STYLE */
+.signature-images .img {
+  position: absolute;
+  border-radius: 10px;
+  object-fit: cover;
+  opacity: 0; /* hidden initially */
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* LEFT IMAGE – BEHIND CENTER */
+.img-left {
+  width: 200px;
+  height: 280px;
+  top: -30px;
+  left: -6px;
+  z-index: 1;
+}
+
+/* CENTER IMAGE – MAIN */
+.img-center {
+  width: 260px;
+  height: 380px;
+  top: 60px;
+  left: 160px;
+  z-index: 3;
+}
+
+/* RIGHT IMAGE – BEHIND CENTER */
+.img-right {
+  width: 200px;
+  height: 280px;
+  top: 250px;
+  left: 390px;
+  z-index: 2;
+}
+
+/* TEXT */
+.signature-text {
+  max-width: 400px;
+  margin-left: 150px;
+  margin-bottom: 100px;
+}
+
+/* SIGNATURE LABEL */
+.signature-text h4 {
+  font-family: "Times New Roman", serif;
+  font-size: 50px;
+  letter-spacing: 6px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.55);
+  margin-bottom: 26px;
+  position: relative;
+}
+
+/* UNDERLINE */
+.signature-text h4::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -12px;
+  width: 345px;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+/* MAIN HEADING */
+.signature-text h1 {
+  font-family: "Playfair Display", "Times New Roman", serif;
+  font-size: 46px;
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 40px 0 28px;
+  color: #1f1f1f;
+}
+
+/* DESCRIPTION */
+.signature-text p {
+  font-family: "Times New Roman", serif;
+  font-size: 15px;
+  letter-spacing: 1.4px;
+  line-height: 2;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* ===================== */
+/* ANIMATIONS (KEYFRAMES) */
+/* ===================== */
+
+@keyframes fromLeftBehind {
+  from {
+    transform: translateX(-120px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fromBottomTop {
+  from {
+    transform: translateY(120px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fromRightBehind {
+  from {
+    transform: translateX(120px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ===================== */
+/* SCROLL TRIGGER */
+/* ===================== */
+
+.signature-section .img {
+  animation: none;
+  opacity: 0;
+}
+
+.signature-section.animate .img-left {
+  animation: fromLeftBehind 1s ease-out forwards;
+}
+
+.signature-section.animate .img-center {
+  animation: fromBottomTop 1s ease-out forwards;
+  animation-delay: 0.3s;
+}
+
+.signature-section.animate .img-right {
+  animation: fromRightBehind 1s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
+@media (max-width: 1024px) {
+  .signature-inner {
+    flex-direction: column;
+    gap: 60px;
+  }
+
+  .signature-text {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .signature-text h4::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+
+
+
+/* ===================================================
+   RESPONSIVE ONLY – DESKTOP UNTOUCHED
+=================================================== */
+
+/* TABLET & MOBILE */
+@media (max-width: 768px) {
+
+  .signature-section {
+    padding: 60px 20px 40px;
+  }
+
+  .signature-inner {
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  /* SCALE IMAGE GROUP */
+  .signature-images {
+    width: 320px;
+    height: 360px;
+    margin: 0 auto;
+  }
+
+  .img-left {
+    width: 140px;
+    height: 200px;
+    top: 0;
+    left: 0;
+  }
+
+  .img-center {
+    width: 180px;
+    height: 260px;
+    top: 50px;
+    left: 70px;
+  }
+
+  .img-right {
+    width: 140px;
+    height: 200px;
+    top: 150px;
+    left: 180px;
+  }
+
+  .signature-text {
+    margin: 0;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  .signature-text h4::after {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+  }
+
+  .signature-text h4 {
+    font-size: 36px;
+    letter-spacing: 4px;
+  }
+
+  .signature-text h1 {
+    font-size: 32px;
+  }
+
+  .signature-text p {
+    font-size: 14px;
+    line-height: 1.8;
+  }
+}
+
+/* SMALL PHONES */
+@media (max-width: 480px) {
+
+  .signature-images {
+    width: 280px;
+    height: 320px;
+  }
+
+  .img-left {
+    width: 120px;
+    height: 180px;
+  }
+
+  .img-center {
+    width: 160px;
+    height: 240px;
+    left: 60px;
+  }
+
+  .img-right {
+    width: 120px;
+    height: 180px;
+    left: 160px;
+  }
+
+  .signature-text h4 {
+    font-size: 30px;
+  }
+
+  .signature-text h1 {
+    font-size: 28px;
+  }
+}
+

@@ -1,6 +1,9 @@
 .App {
   text-align: center;
+    overflow-anchor: none;
 }
+
+
 
 .App-logo {
   height: 40vmin;
@@ -36,3 +39,26 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* ========================= */
+/* GLOBAL RESPONSIVE TEXT */
+/* ========================= */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 32px !important;
+  }
+
+  h4 {
+    font-size: 22px !important;
+  }
+
+  p {
+    font-size: 14px;
+  }
+}
+
+
+
+

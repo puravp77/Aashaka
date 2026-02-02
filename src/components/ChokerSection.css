@@ -1,0 +1,170 @@
+/* ===============================
+   SECTION
+================================ */
+.choker-section {
+  background: #faf7f2;
+  padding: 40px 120px;
+}
+
+/* ===============================
+   TITLE
+================================ */
+.choker-title {
+  text-align: center;
+  font-family: "Times New Roman", serif;
+  font-size: 28px;
+  letter-spacing: 3px;
+  margin-bottom: 50px;
+}
+
+/* ===============================
+   GRID (DEFAULT = GRID)
+================================ */
+.choker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  align-items: stretch;
+}
+
+/* ===============================
+   CARD
+================================ */
+.product-card {
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ===============================
+   IMAGE
+================================ */
+.product-image {
+  position: relative;
+  width: 100%;
+}
+
+.product-image img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===============================
+   OVERLAY
+================================ */
+.hover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.55);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.product-card:hover .hover-overlay {
+  opacity: 1;
+}
+
+/* ===============================
+   VIEW ICON
+================================ */
+.view-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .view-icon {
+  opacity: 1;
+}
+
+/* ===============================
+   INFO
+================================ */
+.product-info {
+  text-align: center;
+  padding: 18px 10px 22px;
+  margin-top: auto;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.product-card:hover .product-info {
+  transform: translateY(-12px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+/* ===============================
+   TITLE & PRICE
+================================ */
+.product-title {
+  font-family: "Times New Roman", serif;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* ===============================
+   RESPONSIVE GRID
+================================ */
+@media (max-width: 1200px) {
+  .choker-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .choker-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .choker-section {
+    padding: 30px 20px;
+  }
+
+  .choker-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* ===============================
+   HOMEPAGE ONLY – HORIZONTAL SCROLL
+================================ */
+
+/* 👇 IMPORTANT: add `.home` wrapper in Home.jsx */
+@media (max-width: 768px) {
+  .home .choker-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding-bottom: 10px;
+  }
+
+  .home .choker-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .home .product-card {
+    min-width: 220px;
+    flex-shrink: 0;
+  }
+}
