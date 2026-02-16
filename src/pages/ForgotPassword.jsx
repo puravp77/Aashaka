@@ -1,7 +1,6 @@
 import "./Auth.css";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Button, TextField } from "@mui/material";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();

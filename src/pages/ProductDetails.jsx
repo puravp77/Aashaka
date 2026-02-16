@@ -18,7 +18,6 @@ export default function ProductDetails() {
   const [openAccordion, setOpenAccordion] = useState(null);
   const [activeImg, setActiveImg] = useState("");
   const [qty, setQty] = useState(1);
-  const [showWishlistPopup, setShowWishlistPopup] = useState(false);
   const [selectedSize, setSelectedSize] = useState(null);
 
   /* FIND PRODUCT (SAFE) */
