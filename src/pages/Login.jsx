@@ -124,7 +124,11 @@ export default function Login() {
             />
 
             <motion.img
-              src={showPass ? "/assets/eye-open.png" : "/assets/eye-closed.png"}
+              src={
+                showPass
+                  ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
+                  : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
+              }
               alt="toggle password"
               className="eye-icon-img"
               onClick={() => setShowPass((p) => !p)}

@@ -13,7 +13,7 @@ const HeaderMainNav = () => {
     <nav className="header-main-nav">
       <div className="header-main-inner">
         <NavLink to="/" className="main-logo">
-          <img src="/images/headerlogo.jpeg" alt="Aashaka" />
+          <img src="images/headerlogo.jpeg" alt="Aashaka" />
         </NavLink>
 
         <div className="main-links">
@@ -61,3 +61,4 @@ const HeaderMainNav = () => {
 };
 
 export default HeaderMainNav;
+

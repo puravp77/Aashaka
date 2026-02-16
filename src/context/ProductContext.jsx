@@ -9,7 +9,7 @@ export function ProductProvider({ children }) {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const res = await fetch("/data/products.json");
+        const res = await fetch(`${process.env.PUBLIC_URL}/data/products.json`);
         const data = await res.json();
 
         setProducts(Array.isArray(data) ? data : []);

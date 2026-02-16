@@ -7,42 +7,42 @@ const banglesData = [
     name: "Aaina Ghungroo Silver Bangles Set",
     price: 899,
     oldPrice: 1600,
-    image: "/images/b1.jpg",
+    image: "images/b1.jpg",
   },
   {
     id: "b2",
     name: "Black And Silver Kada Set",
     price: 1299,
     oldPrice: 2200,
-    image: "/images/b2.jpg",
+    image: "images/b2.jpg",
   },
   {
     id: "b3",
     name: "Black Samudra Shell Kada Set",
     price: 999,
     oldPrice: 1800,
-    image: "/images/b3.jpg",
+    image: "images/b3.jpg",
   },
   {
     id: "b4",
     name: "Intricate Jaali Work Oxidized Silver Kada Bracelets",
     price: 1499,
     oldPrice: 2500,
-    image: "/images/b4.jpg",
+    image: "images/b4.jpg",
   },
   {
     id: "b5",
     name: "Phool Ghungroo Antique Bangle Set",
     price: 1499,
     oldPrice: 2500,
-    image: "/images/b5.jpg",
+    image: "images/b5.jpg",
   },
   {
     id: "b6",
     name: "Rajwadi Ghungroo Kada Set",
     price: 1499,
     oldPrice: 2500,
-    image: "/images/b6.jpg",
+    image: "images/b6.jpg",
   },
 ];
 
@@ -79,3 +79,4 @@ function Bangles() {
 }
 
 export default Bangles;
+

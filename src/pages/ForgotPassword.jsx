@@ -258,11 +258,11 @@ export default function ForgotPassword() {
                     onChange={(e) => setNewPassword(e.target.value)}
                   />
                   <img
-                    src={
-                      showPassword
-                        ? "/assets/eye-open.png"
-                        : "/assets/eye-closed.png"
-                    }
+                      src={
+                        showPassword
+                          ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
+                          : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
+                      }
                     className="eye-icon-img"
                     onClick={() => setShowPassword(!showPassword)}
                     alt=""
@@ -280,11 +280,11 @@ export default function ForgotPassword() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                   <img
-                    src={
-                      showConfirmPassword
-                        ? "/assets/eye-open.png"
-                        : "/assets/eye-closed.png"
-                    }
+                      src={
+                        showConfirmPassword
+                          ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
+                          : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
+                      }
                     className="eye-icon-img"
                     onClick={() =>
                       setShowConfirmPassword(!showConfirmPassword)

@@ -169,7 +169,7 @@ export default function Header() {
       <nav className="navbar">
         <div className="logo">
           <NavLink to="/">
-            <img src="/images/headerlogo.jpeg" alt="Aashaka" />
+            <img src="images/headerlogo.jpeg" alt="Aashaka" />
           </NavLink>
         </div>
 
@@ -342,3 +342,4 @@ export default function Header() {
     </>
   );
 }
+

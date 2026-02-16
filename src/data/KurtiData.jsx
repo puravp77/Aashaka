@@ -4,7 +4,7 @@ const kurtiData = [
     title: "Purple Aadhya Kurti Set",
     price: 2499,
     oldPrice: 4000,
-    images: ["/images/K1.jpg"],
+    images: ["images/K1.jpg"],
     details: {
       colour: "Purple",
       material: "Cotton",
@@ -16,7 +16,7 @@ const kurtiData = [
     title: "Peach Pink Aadhya Kurti Set",
     price: 2499,
     oldPrice: 4000,
-    images: ["/images/k2.jpg"],
+    images: ["images/k2.jpg"],
     details: {
       colour: "Peach Pink",
       material: "Cotton",
@@ -28,7 +28,7 @@ const kurtiData = [
     title: "Red Amara Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k3.jpg"],
+    images: ["images/k3.jpg"],
     details: {
       colour: "Red",
       material: "Cotton Blend",
@@ -40,7 +40,7 @@ const kurtiData = [
     title: "Navy Blue Amara Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k4.jpg"],
+    images: ["images/k4.jpg"],
     details: {
       colour: "Navy Blue",
       material: "Cotton Blend",
@@ -52,7 +52,7 @@ const kurtiData = [
     title: "Red Printed Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k5.jpg"],
+    images: ["images/k5.jpg"],
     details: {
       colour: "Red",
       material: "Printed Cotton",
@@ -64,7 +64,7 @@ const kurtiData = [
     title: "Blue Printed Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k6.jpg"],
+    images: ["images/k6.jpg"],
     details: {
       colour: "Blue",
       material: "Printed Cotton",
@@ -76,7 +76,7 @@ const kurtiData = [
     title: "Dark Green Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k7.jpg"],
+    images: ["images/k7.jpg"],
     details: {
       colour: "Dark Green",
       material: "Cotton",
@@ -88,7 +88,7 @@ const kurtiData = [
     title: "Olive Kashvi Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k8.jpg"],
+    images: ["images/k8.jpg"],
     details: {
       colour: "Olive Green",
       material: "Cotton",
@@ -100,7 +100,7 @@ const kurtiData = [
     title: "Pink Kusum Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k9.jpg"],
+    images: ["images/k9.jpg"],
     details: {
       colour: "Pink",
       material: "Cotton",
@@ -112,7 +112,7 @@ const kurtiData = [
     title: "Yellow Vrinda Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k10.jpg"],
+    images: ["images/k10.jpg"],
     details: {
       colour: "Yellow",
       material: "Cotton",
@@ -124,7 +124,7 @@ const kurtiData = [
     title: "Baby Pink Phool Mahal",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k11.jpg"],
+    images: ["images/k11.jpg"],
     details: {
       colour: "Baby Pink",
       material: "Cotton",
@@ -136,7 +136,7 @@ const kurtiData = [
     title: "Parrot Green Phool Mahal",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k12.jpg"],
+    images: ["images/k12.jpg"],
     details: {
       colour: "Parrot Green",
       material: "Cotton",
@@ -148,7 +148,7 @@ const kurtiData = [
     title: "White Pushpa Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k13.jpg"],
+    images: ["images/k13.jpg"],
     details: {
       colour: "White",
       material: "Cotton",
@@ -160,7 +160,7 @@ const kurtiData = [
     title: "Clay Blue Amara Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k14.jpg"],
+    images: ["images/k14.jpg"],
     details: {
       colour: "Clay Blue",
       material: "Cotton Blend",
@@ -172,7 +172,7 @@ const kurtiData = [
     title: "Red Rakta Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k15.jpg"],
+    images: ["images/k15.jpg"],
     details: {
       colour: "Red",
       material: "Cotton",
@@ -184,7 +184,7 @@ const kurtiData = [
     title: "Red Rosewood Anarkali Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k16.jpg"],
+    images: ["images/k16.jpg"],
     details: {
       colour: "Rosewood Red",
       material: "Cotton Anarkali",
@@ -196,7 +196,7 @@ const kurtiData = [
     title: "Baby Blue Savitri Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k17.jpg"],
+    images: ["images/k17.jpg"],
     details: {
       colour: "Baby Blue",
       material: "Cotton",
@@ -208,7 +208,7 @@ const kurtiData = [
     title: "Pink Phool Kusum Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k18.jpg"],
+    images: ["images/k18.jpg"],
     details: {
       colour: "Pink",
       material: "Cotton",
@@ -220,7 +220,7 @@ const kurtiData = [
     title: "Yellow Phool Kusum Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k19.jpg"],
+    images: ["images/k19.jpg"],
     details: {
       colour: "Yellow",
       material: "Cotton",
@@ -232,7 +232,7 @@ const kurtiData = [
     title: "Black Kusum Kurti Set",
     price: 2399,
     oldPrice: 3000,
-    images: ["/images/k20.jpg"],
+    images: ["images/k20.jpg"],
     details: {
       colour: "Black",
       material: "Cotton",
@@ -242,3 +242,4 @@ const kurtiData = [
 ];
 
 export default kurtiData;
+

@@ -168,7 +168,11 @@ export default function Signup() {
             />
 
             <motion.img
-              src={showPass ? "/assets/eye-open.png" : "/assets/eye-closed.png"}
+              src={
+                showPass
+                  ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
+                  : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
+              }
               alt="toggle password"
               className="eye-icon-img"
               onClick={() => setShowPass((p) => !p)}
@@ -209,7 +213,11 @@ export default function Signup() {
             />
 
             <motion.img
-              src={showConfirm ? "/assets/eye-open.png" : "/assets/eye-closed.png"}
+              src={
+                showConfirm
+                  ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
+                  : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
+              }
               alt="toggle confirm password"
               className="eye-icon-img"
               onClick={() => setShowConfirm((p) => !p)}

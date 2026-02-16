@@ -26,10 +26,11 @@ export default function AboutSection() {
         </div>
 
         <div className="about-right">
-          <img src="/images/About-Aashaka.jpg" alt="About Aashaka" />
+          <img src="images/About-Aashaka.jpg" alt="About Aashaka" />
         </div>
 
       </div>
     </section>
   );
 }
+

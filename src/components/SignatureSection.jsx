@@ -31,17 +31,17 @@ export default function   SignatureSection() {
 
         <div className="signature-images">
           <img
-            src="/images/sig1.jpg"
+            src="images/sig1.jpg"
             className="img img-left"
             alt="Signature Left"
           />
           <img
-            src="/images/sig2.jpg"
+            src="images/sig2.jpg"
             className="img img-center"
             alt="Signature Center"
           />
           <img
-            src="/images/sig3.jpg"
+            src="images/sig3.jpg"
             className="img img-right"
             alt="Signature Right"
           />
@@ -62,3 +62,4 @@ export default function   SignatureSection() {
     </section>
   );
 }
+

@@ -33,7 +33,7 @@ export default function CategorySection() {
             className="category-card"
             onClick={() => navigate("/jewellery/oxidised")}
           >
-            <img src="/images/oxidisedSet.jpeg" alt="Oxidised Set" />
+            <img src="images/OxidisedSet.jpeg" alt="Oxidised Set" />
             <p><b>Oxidised set</b></p>
           </div>
 
@@ -41,7 +41,7 @@ export default function CategorySection() {
             className="category-card"
             onClick={() => navigate("/jewellery/bangles")}
           >
-            <img src="/images/kada.jpeg" alt="Bangles Kada" />
+            <img src="images/kada.jpeg" alt="Bangles Kada" />
             <p><b>Bangles-Kada</b></p>
           </div>
 
@@ -49,7 +49,7 @@ export default function CategorySection() {
             className="category-card"
             onClick={() => navigate("/jewellery/earrings")}
           >
-            <img src="/images/Earrings.jpeg" alt="Earrings" />
+            <img src="images/Earrings.jpeg" alt="Earrings" />
             <p><b>Earrings</b></p>
           </div>
 
@@ -57,7 +57,7 @@ export default function CategorySection() {
             className="category-card"
             onClick={() => navigate("/jewellery/necklace")}
           >
-            <img src="/images/neckless.jpeg" alt="Necklace" />
+            <img src="images/neckless.jpeg" alt="Necklace" />
             <p><b>Necklace</b></p>
           </div>
 
@@ -65,7 +65,7 @@ export default function CategorySection() {
             className="category-card"
             onClick={() => navigate("/kurti")}
           >
-            <img src="/images/kurti.jpeg" alt="Kurti Set" />
+            <img src="images/kurti.jpeg" alt="Kurti Set" />
             <p><b>Kurti Set</b></p>
           </div>
 
@@ -74,3 +74,4 @@ export default function CategorySection() {
     </section>
   );
 }
+

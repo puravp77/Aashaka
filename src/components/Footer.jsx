@@ -28,7 +28,7 @@ export default function Footer() {
 
           {/* LOGO */}
           <div className="footer-logo">
-            <img src="/images/headerlogo.jpeg" alt="Aashaka" />
+            <img src="images/headerlogo.jpeg" alt="Aashaka" />
           </div>
 
           {/* SUBSCRIBE */}
@@ -113,3 +113,4 @@ export default function Footer() {
     </footer>
   );
 }
+

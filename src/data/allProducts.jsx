@@ -9,9 +9,9 @@ const normalizedKurtiData = [
   {
     id: "k1",
     title: "Purple Aadhya Kurti Set",
-    images: ["/images/K1.jpg", 
-      "/images/k1-1.jpg",
-      "/images/k1-2.jpg"
+    images: ["images/K1.jpg", 
+      "images/k1-1.jpg",
+      "images/k1-2.jpg"
     ],
     price: 2499,
     oldPrice: 4000,
@@ -32,9 +32,9 @@ const normalizedKurtiData = [
   {
     id: "k2",
     title: "Peach Pink Aadhya Kurti Set",
-    images: ["/images/k2.jpg",
-      "/images/k2-1.jpg",
-      "/images/k2-2.jpg"
+    images: ["images/k2.jpg",
+      "images/k2-1.jpg",
+      "images/k2-2.jpg"
     ],
     price: 2499,
     oldPrice: 4000,
@@ -55,9 +55,9 @@ const normalizedKurtiData = [
   {
     id: "k3",
     title: "Red Amara Kurti Set",
-    images: ["/images/k3.jpg",
-      "/images/k3-1.jpg",
-      "/images/k3-2.jpg"
+    images: ["images/k3.jpg",
+      "images/k3-1.jpg",
+      "images/k3-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -78,9 +78,9 @@ const normalizedKurtiData = [
   {
     id: "k4",
     title: "Navy Blue Amara Kurti Set",
-    images: ["/images/k4.jpg",
-      "/images/k4-1.jpg",
-      "/images/k4-2.jpg"
+    images: ["images/k4.jpg",
+      "images/k4-1.jpg",
+      "images/k4-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -101,9 +101,9 @@ const normalizedKurtiData = [
   {
     id: "k5",
     title: "Red Printed Kurti Set",
-    images: ["/images/k5.jpg",
-      "/images/k5-1.jpg",
-      "/images/k5-2.jpg"
+    images: ["images/k5.jpg",
+      "images/k5-1.jpg",
+      "images/k5-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -124,8 +124,8 @@ const normalizedKurtiData = [
   {
     id: "k6",
     title: "Blue Printed Kurti Set",
-    images: ["/images/k6.jpg",
-      "/images/k6-1.jpg"
+    images: ["images/k6.jpg",
+      "images/k6-1.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -146,9 +146,9 @@ const normalizedKurtiData = [
   {
     id: "k7",
     title: "Dark Green Kurti Set",
-    images: ["/images/k7.jpg",
-      "/images/k7-1.jpg",
-      "/images/k7-2.jpg"
+    images: ["images/k7.jpg",
+      "images/k7-1.jpg",
+      "images/k7-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -169,9 +169,9 @@ const normalizedKurtiData = [
   {
     id: "k8",
     title: "Olive Kashvi Kurti Set",
-    images: ["/images/k8.jpg",
-      "/images/k8-1.jpg",
-      "/images/k8-2.jpg"
+    images: ["images/k8.jpg",
+      "images/k8-1.jpg",
+      "images/k8-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -192,7 +192,7 @@ const normalizedKurtiData = [
   {
     id: "k9",
     title: "Pink Kusum Kurti Set",
-    images: ["/images/k9.jpg", "/images/k9-1.jpg", "/images/k9-2.jpg"],
+    images: ["images/k9.jpg", "images/k9-1.jpg", "images/k9-2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -212,7 +212,7 @@ const normalizedKurtiData = [
   {
     id: "k10",
     title: "Yellow Vrinda Kurti Set",
-    images: ["/images/k10.jpg", "/images/k10-1.jpg", "/images/k10-2.jpg", "/images/k10-3.jpg"],
+    images: ["images/k10.jpg", "images/k10-1.jpg", "images/k10-2.jpg", "images/k10-3.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -232,7 +232,7 @@ const normalizedKurtiData = [
   {
     id: "k11",
     title: "Baby Pink Phool Mahal",
-    images: ["/images/k11.jpg", "/images/k11-1.jpg", "/images/k11-2.jpg", "/images/k11-3.jpg"],
+    images: ["images/k11.jpg", "images/k11-1.jpg", "images/k11-2.jpg", "images/k11-3.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -252,7 +252,7 @@ const normalizedKurtiData = [
   {
     id: "k12",
     title: "Parrot Green Phool Mahal",
-    images: ["/images/k12.jpg", "/images/k12-1.jpg", "/images/k12-2.jpg"],
+    images: ["images/k12.jpg", "images/k12-1.jpg", "images/k12-2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -272,7 +272,7 @@ const normalizedKurtiData = [
   {
     id: "k13",
     title: "White Pushpa Kurti Set",
-    images: ["/images/k13.jpg", "/images/k13-1.jpg", "/images/k13-2.jpg"],
+    images: ["images/k13.jpg", "images/k13-1.jpg", "images/k13-2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -292,7 +292,7 @@ const normalizedKurtiData = [
   {
     id: "k14",
     title: "Clay Blue Amara Kurti Set",
-    images: ["/images/k14.jpg", "/images/k14-1.jpg", "/images/k14-2.jpg"],
+    images: ["images/k14.jpg", "images/k14-1.jpg", "images/k14-2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -312,7 +312,7 @@ const normalizedKurtiData = [
   {
     id: "k15",
     title: "Red Rakta Kurti Set",
-    images: ["/images/k15.jpg", "/images/k15-1.jpg", "/images/k15-2.jpg", "/images/k15-3.jpg"],
+    images: ["images/k15.jpg", "images/k15-1.jpg", "images/k15-2.jpg", "images/k15-3.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -332,7 +332,7 @@ const normalizedKurtiData = [
   {
     id: "k16",
     title: "Red Rosewood Anarkali Set",
-    images: ["/images/k16.jpg", "/images/k16-1.jpg", "/images/k16-2.jpg"],
+    images: ["images/k16.jpg", "images/k16-1.jpg", "images/k16-2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -352,7 +352,7 @@ const normalizedKurtiData = [
   {
     id: "k17",
     title: "Baby Blue Savitri Kurti Set",
-    images: ["/images/k17.jpg", "/images/k17-1.jpg", "/images/k17-2.jpg"],
+    images: ["images/k17.jpg", "images/k17-1.jpg", "images/k17-2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -372,7 +372,7 @@ const normalizedKurtiData = [
   {
     id: "k18",
     title: "Pink Phool Kusum Set",
-    images: ["/images/k18.jpg", "/images/k18-1.jpg", "/images/k18-2.jpg"],
+    images: ["images/k18.jpg", "images/k18-1.jpg", "images/k18-2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -392,7 +392,7 @@ const normalizedKurtiData = [
   {
     id: "k19",
     title: "Yellow Phool Kusum Kurti Set",
-    images: ["/images/k19.jpg", "/images/k19-1.jpg", "/images/k19-2.jpg", "/images/k19-3.jpg"],
+    images: ["images/k19.jpg", "images/k19-1.jpg", "images/k19-2.jpg", "images/k19-3.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -412,7 +412,7 @@ const normalizedKurtiData = [
   {
     id: "k20",
     title: "Black Kusum Kurti Set",
-    images: ["/images/k20.jpg", "/images/k20-1.jpg", "/images/k20-2.jpg",   "/images/k20-3.jpg"],
+    images: ["images/k20.jpg", "images/k20-1.jpg", "images/k20-2.jpg",   "images/k20-3.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -433,7 +433,7 @@ const normalizedKurtiData = [
  {
     id: "k21",
     title: "Anarkali Salwar Suit",
-    images: ["/images/WS1.jpg"],
+    images: ["images/WS1.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -454,7 +454,7 @@ const normalizedKurtiData = [
   {
     id: "k22",
     title: "Vastra Kala Kurti Set",
-    images: ["/images/WS2.jpg"],
+    images: ["images/WS2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -475,7 +475,7 @@ const normalizedKurtiData = [
     {
     id: "k23",
     title: "Phool Anarkali",
-    images: ["/images/WS3.jpg"],
+    images: ["images/WS3.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -496,7 +496,7 @@ const normalizedKurtiData = [
    {
     id: "k24",
     title: "Vastra kala Kurti Set",
-    images: ["/images/WS4.jpg"],
+    images: ["images/WS4.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -517,7 +517,7 @@ const normalizedKurtiData = [
    {
     id: "k25",
     title: "Dudhsagar Kurti",
-    images: ["/images/WS5.jpg"],
+    images: ["images/WS5.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -539,7 +539,7 @@ const normalizedKurtiData = [
   {
     id: "k26",
     title: "Rakta Kurti",
-    images: ["/images/WS6.jpg"],
+    images: ["images/WS6.jpg"],
     price: 2499,
     oldPrice: 3000,
     category: "kurti",
@@ -570,10 +570,10 @@ const chokerProducts = [
     title: "Dandiya Raas Choker, Earing Set",
     price: 2799,
     oldPrice: 5000,
-    images: ["/images/choker1.jpg",
-      "/images/choker1-1.jpg",
-      "/images/choker1-2.jpg",
-      "/images/choker1-3.jpg"
+    images: ["images/choker1.jpg",
+      "images/choker1-1.jpg",
+      "images/choker1-2.jpg",
+      "images/choker1-3.jpg"
     ],
     category: "choker",
           alsoBought: ["e1", "e2", "o3", "n1"],
@@ -589,10 +589,10 @@ const chokerProducts = [
     title: "Queen Handmade Jewelry Set",
     price: 1199,
     oldPrice: 2000,
-    images: ["/images/choker2.jpg",
-      "/images/choker2-2.jpg",
-      "/images/choker2-3.jpg",
-      "/images/choker2-4.jpg"],
+    images: ["images/choker2.jpg",
+      "images/choker2-2.jpg",
+      "images/choker2-3.jpg",
+      "images/choker2-4.jpg"],
     alsoBought: ["e1", "e2", "o3", "n1"],
     category: "choker",
     details: {
@@ -606,8 +606,8 @@ const chokerProducts = [
     title: "Vibrant Red Necklace With Earrings",
     price: 799,
     oldPrice: 1500,
-    images: ["/images/choker3.jpg",
-      "/images/choker3-1.jpg",
+    images: ["images/choker3.jpg",
+      "images/choker3-1.jpg",
     ],
     category: "choker",
         alsoBought: ["e4", "e5", "b2", "o1"],
@@ -623,10 +623,10 @@ const chokerProducts = [
     title: "Rani Pink Mirror Set",
     price: 1499,
     oldPrice: 2000,
-    images: ["/images/choker4.jpg",
-      "/images/choker4-1.jpg",
-      "/images/choker4-2.jpg",
-      "/images/choker4-3.jpg"
+    images: ["images/choker4.jpg",
+      "images/choker4-1.jpg",
+      "images/choker4-2.jpg",
+      "images/choker4-3.jpg"
     ],
     category: "choker",
         alsoBought: ["e6", "o2", "b3", "n3"],
@@ -654,7 +654,7 @@ const banglesProducts = [
     title: "Aaina Ghungroo Silver Bangles Set",
     price: 899,
     oldPrice: 1600,
-    images: ["/images/b1.jpg", "/images/b1-1.jpg", "/images/b1-2.jpg", "/images/b1-3.jpg"],
+    images: ["images/b1.jpg", "images/b1-1.jpg", "images/b1-2.jpg", "images/b1-3.jpg"],
     category: "bangles",
     alsoBought: ["c2", "e1", "o2"],
     details: {
@@ -669,7 +669,7 @@ const banglesProducts = [
     title: "Black And Silver Kada Set",
     price: 1299,
     oldPrice: 2200,
-    images: ["/images/b2.jpg", "/images/b2-1.jpg", "/images/b2-2.jpg"],
+    images: ["images/b2.jpg", "images/b2-1.jpg", "images/b2-2.jpg"],
     category: "bangles",
         alsoBought: ["c4", "e4", "o3"],
         details: {
@@ -684,7 +684,7 @@ const banglesProducts = [
     title: "Black Samudra Shell Kada Set",
     price: 999,
     oldPrice: 1800,
-    images: ["/images/b3.jpg", "/images/b3-1.jpg", "/images/b3-2.jpg", "/images/b3-3.jpg"],
+    images: ["images/b3.jpg", "images/b3-1.jpg", "images/b3-2.jpg", "images/b3-3.jpg"],
     category: "bangles",
         alsoBought: ["c3", "e3", "o1"],
         details: {
@@ -699,7 +699,7 @@ const banglesProducts = [
     title: "Intricate Jaali Work Oxidized Silver Kada Bracelets",
     price: 1499,
     oldPrice: 2500,
-    images: ["/images/b4.jpg", "/images/b4-1.jpg", "/images/b4-2.jpg", "/images/b4-3.jpg"],
+    images: ["images/b4.jpg", "images/b4-1.jpg", "images/b4-2.jpg", "images/b4-3.jpg"],
     category: "bangles",
         alsoBought: ["c2", "o3", "b1", "n4"],
         details: {
@@ -714,7 +714,7 @@ const banglesProducts = [
     title: "Phool Ghungroo Antique Bangle Set",
     price: 1499,
     oldPrice: 2500,
-    images: ["/images/b5.jpg", "/images/b5-1.jpg", "/images/b5-2.jpg", "/images/b5-3.jpg"],
+    images: ["images/b5.jpg", "images/b5-1.jpg", "images/b5-2.jpg", "images/b5-3.jpg"],
     category: "bangles",
         alsoBought: ["c1", "o2", "b2", "n5"],
         details: {
@@ -729,7 +729,7 @@ const banglesProducts = [
     title: "Rajwadi Ghungroo Kada Set",
     price: 1499,
     oldPrice: 2500,
-    images: ["/images/b6.jpg", "/images/b6-1.jpg", "/images/b6-2.jpg"],
+    images: ["images/b6.jpg", "images/b6-1.jpg", "images/b6-2.jpg"],
     category: "bangles",
         alsoBought: ["c3", "o1", "b3", "n1"],
         details: {
@@ -751,7 +751,7 @@ const earringsProducts = [
     title: "Antique Silver Oxidized Floral Dome Jhumka Earrings",
     price: 399,
     oldPrice: 800,
-    images: ["/images/e1.jpg", "/images/e1-1.jpg", "/images/e1-2.jpg", "/images/e1-3.jpg"],
+    images: ["images/e1.jpg", "images/e1-1.jpg", "images/e1-2.jpg", "images/e1-3.jpg"],
     category: "earrings",
         alsoBought: ["e2", "c2", "b2"],
         details: {
@@ -766,7 +766,7 @@ const earringsProducts = [
     title: "Aadrika Paisley Oxidized Jhumka Earrings",
     price: 399,
     oldPrice: 800,
-    images: ["/images/e2.jpg", "/images/e2-1.jpg", "/images/e2-2.jpg"],
+    images: ["images/e2.jpg", "images/e2-1.jpg", "images/e2-2.jpg"],
     category: "earrings",
         alsoBought: ["e3", "c4", "b3"],
         details: {
@@ -781,7 +781,7 @@ const earringsProducts = [
     title: "Aisha Circular Ghungroo Earrings",
     price: 399,
     oldPrice: 800,
-    images: ["/images/e3.jpg", "/images/e3-1.jpg", "/images/e3-2.jpg", "/images/e3-3.jpg"],
+    images: ["images/e3.jpg", "images/e3-1.jpg", "images/e3-2.jpg", "images/e3-3.jpg"],
     category: "earrings",
         alsoBought: ["c3", "e1", "b1"],
         details: {
@@ -796,7 +796,7 @@ const earringsProducts = [
     title: "Antique Textured Silver Jhumka Earrings",
     price: 399,
     oldPrice: 800,
-    images: ["/images/e4.jpg", "/images/e4-1.jpg", "/images/e4-2.jpg"],
+    images: ["images/e4.jpg", "images/e4-1.jpg", "images/e4-2.jpg"],
     category: "earrings",
         alsoBought: ["c2", "e2", "b2"],
         details: {
@@ -811,7 +811,7 @@ const earringsProducts = [
     title: "Celestial Mirror Chandbalis",
     price: 399,
     oldPrice: 800,
-    images: ["/images/e5.jpg", "/images/e5-1.jpg", "/images/e5-2.jpg", "/images/e5-3.jpg"],
+    images: ["images/e5.jpg", "images/e5-1.jpg", "images/e5-2.jpg", "images/e5-3.jpg"],
     category: "earrings",
         alsoBought: ["e1", "c3", "b1", "n2"],
         details: {
@@ -826,7 +826,7 @@ const earringsProducts = [
     title: "Chirping Tree Silver Oxidized Earrings",
     price: 399,
     oldPrice: 800,
-    images: ["/images/e6.jpg", "/images/e6-1.jpg", "/images/e6-2.jpg"],
+    images: ["images/e6.jpg", "images/e6-1.jpg", "images/e6-2.jpg"],
     category: "earrings",
         alsoBought: ["c2", "e4", "b2", "n3"],
         details: {
@@ -841,7 +841,7 @@ const earringsProducts = [
     title: "Divine Goddess Lakshmi Silver Oxidized Earrings",
     price: 399,
     oldPrice: 800,
-    images: ["/images/e7.jpg", "/images/e7-1.jpg"],
+    images: ["images/e7.jpg", "images/e7-1.jpg"],
     category: "earrings",
         alsoBought: ["c2", "e4", "b2", "n3"],
         details: {
@@ -856,7 +856,7 @@ const earringsProducts = [
     title: "Majestic Peacock Yellow Stone Chandbali Jhumka Earrings",
     price: 399,
     oldPrice: 800,
-    images: ["/images/e8.jpg", "/images/e8-1.jpg", "/images/e8-2.jpg"],
+    images: ["images/e8.jpg", "images/e8-1.jpg", "images/e8-2.jpg"],
     category: "earrings",
         alsoBought: ["WS2", "WS3", "e1", "c2"],
         details: {
@@ -878,7 +878,7 @@ const necklaceProducts = [
     title: "Blue Stone with Silver Bead Necklace and Earring",
     price: 1499,
     oldPrice: 2000,
-    images: ["/images/n1.jpg", "/images/n1-1.jpg", "/images/n1-2.jpg", "/images/n1-3.jpg"],
+    images: ["images/n1.jpg", "images/n1-1.jpg", "images/n1-2.jpg", "images/n1-3.jpg"],
     category: "necklace",
         alsoBought: ["WS1", "WS4", "c1"],
         details: {
@@ -894,7 +894,7 @@ const necklaceProducts = [
     title: "Rakta Kundan Set",
     price: 1999,
     oldPrice: 5000,
-    images: ["/images/n2.jpg"],
+    images: ["images/n2.jpg"],
     category: "necklace",
         alsoBought: ["e1", "e2", "o3", "n1"],
         details: {
@@ -910,7 +910,7 @@ const necklaceProducts = [
     title: "Royal Dynasty Pendant",
     price: 1499,
     oldPrice: 2000,
-    images: ["/images/n3.jpg", "/images/n3-1.jpg", "/images/n3-2.jpg"],
+    images: ["images/n3.jpg", "images/n3-1.jpg", "images/n3-2.jpg"],
     category: "necklace",
         alsoBought: ["e4", "e5", "b2", "o1"],
         details: {
@@ -926,7 +926,7 @@ const necklaceProducts = [
     title: "The Floral Petal Choker & Stud Set",
     price: 1299,
     oldPrice: 2000,
-    images: ["/images/n4.jpg", "/images/n4-1.jpg", "/images/n4-2.jpg"],
+    images: ["images/n4.jpg", "images/n4-1.jpg", "images/n4-2.jpg"],
     category: "necklace",
         alsoBought: ["e6", "o2", "b3", "n3"],
         details: {
@@ -942,7 +942,7 @@ const necklaceProducts = [
     title: "The Seafoam Stone Statement Set",
     price: 1499,
     oldPrice: 2000,
-    images: ["/images/n5.jpg", "/images/n5-1.jpg", "/images/n5-2.jpg", "/images/n5-3.jpg"],
+    images: ["images/n5.jpg", "images/n5-1.jpg", "images/n5-2.jpg", "images/n5-3.jpg"],
     category: "necklace",
         alsoBought: ["c3", "e3", "o1"],
         details: {
@@ -965,7 +965,7 @@ const oxidisedProducts = [
     title: "Red Stone Necklace Set",
     price: 999,
     oldPrice: 2000,
-    images: ["/images/j1.jpg", "/images/j1-1.jpg", "/images/j1-2.jpg", "/images/j1-3.jpg"],
+    images: ["images/j1.jpg", "images/j1-1.jpg", "images/j1-2.jpg", "images/j1-3.jpg"],
     category: "oxidised",
         alsoBought: ["c4", "e4", "o3"],
         details: {
@@ -981,7 +981,7 @@ const oxidisedProducts = [
     title: "Aadhya Oxidized Silver Jewelry Set",
     price: 1499,
     oldPrice: 2000,
-    images: ["/images/j2.jpg", "/images/j2-1.jpg", "/images/j2-2.jpg", "/images/j2-3.jpg"],
+    images: ["images/j2.jpg", "images/j2-1.jpg", "images/j2-2.jpg", "images/j2-3.jpg"],
     category: "oxidised",
         alsoBought: ["c2", "o3", "b1", "n4"],
         details: {
@@ -997,7 +997,7 @@ const oxidisedProducts = [
     title: "Amara Oxidized Silver Set",
     price: 1199,
     oldPrice: 2000,
-    images: ["/images/j3.jpg", "/images/j3-1.jpg"],
+    images: ["images/j3.jpg", "images/j3-1.jpg"],
     category: "oxidised",
         alsoBought: ["c1", "o2", "b2", "n5"],
         details: {
@@ -1013,7 +1013,7 @@ const oxidisedProducts = [
     title: "Artisanal Floral Jewelry Set",
     price: 1799,
     oldPrice: 3000,
-    images: ["/images/j4.jpg", "/images/j4-1.jpg"],
+    images: ["images/j4.jpg", "images/j4-1.jpg"],
     category: "oxidised",
         alsoBought: ["c3", "o1", "b3", "n1"],
         details: {
@@ -1029,7 +1029,7 @@ const oxidisedProducts = [
     title: "Zia Tribal Oxidized Set",
     price: 1799,
     oldPrice: 3000,
-    images: ["/images/j5.jpg", "/images/j5-1.jpg"],
+    images: ["images/j5.jpg", "images/j5-1.jpg"],
     category: "oxidised",
         alsoBought: ["e1", "c3", "b1", "n2"],
         details: {
@@ -1045,7 +1045,7 @@ const oxidisedProducts = [
     title: "Zia Tribal Oxidized Set",
     price: 1799,
     oldPrice: 3000,
-    images: ["/images/j6.jpg", "/images/j6-1.jpg", "/images/j6-2.jpg"],
+    images: ["images/j6.jpg", "images/j6-1.jpg", "images/j6-2.jpg"],
     category: "oxidised",
         alsoBought: ["c2", "e4", "b2", "n3"],
         details: {
@@ -1061,7 +1061,7 @@ const oxidisedProducts = [
     title: "Artisanal Floral Jewelry Set",
     price: 1799,
     oldPrice: 3000,
-    images: ["/images/j7.jpg", "/images/j7-1.jpg", "/images/j7-2.jpg", "/images/j7-3.jpg"],
+    images: ["images/j7.jpg", "images/j7-1.jpg", "images/j7-2.jpg", "images/j7-3.jpg"],
     category: "oxidised",
         alsoBought: ["c1", "e2", "b3", "n4"],
         details: {
@@ -1077,7 +1077,7 @@ const oxidisedProducts = [
     title: "Artisanal Floral Jewelry Set",
     price: 1799,
     oldPrice: 3000,
-    images: ["/images/j8.jpg", "/images/j8-1.jpg", "/images/j8-2.jpg"],
+    images: ["images/j8.jpg", "images/j8-1.jpg", "images/j8-2.jpg"],
     category: "oxidised",
         alsoBought: ["WS2", "WS3", "e1", "c2"],
         details: {
@@ -1095,7 +1095,7 @@ const watchShopData = [
   {
     id: "WS1",
     title: "Anarkali Salwar Suit",
-    images: ["/images/WS1.jpg"],
+    images: ["images/WS1.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -1118,7 +1118,7 @@ const watchShopData = [
   {
     id: "WS2",
     title: "Vastra Kala Kurti Set",
-    images: ["/images/WS2.jpg"],
+    images: ["images/WS2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -1141,7 +1141,7 @@ const watchShopData = [
     {
     id: "WS3",
     title: "Phool Anarkali",
-    images: ["/images/WS3.jpg"],
+    images: ["images/WS3.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -1164,7 +1164,7 @@ const watchShopData = [
    {
     id: "WS4",
     title: "Dudhsagar Kurti",
-    images: ["/images/WS4.jpg"],
+    images: ["images/WS4.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -1187,7 +1187,7 @@ const watchShopData = [
    {
     id: "WS5",
     title: "Rakta Kurti",
-    images: ["/images/WS5.jpg"],
+    images: ["images/WS5.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -1226,3 +1226,4 @@ const allProducts = [
 ];
 
 export default allProducts;
+

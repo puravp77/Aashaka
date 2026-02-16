@@ -173,7 +173,7 @@
           "price": 2399,
           "qty": 1,
           "size": "XXL",
-          "image": "/images/k3.jpg"
+          "image": "images/k3.jpg"
         }
       ],
       "subtotal": 2399,
@@ -206,7 +206,7 @@
           "price": 999,
           "qty": 1,
           "size": null,
-          "image": "/images/b3.jpg"
+          "image": "images/b3.jpg"
         }
       ],
       "subtotal": 999,
@@ -239,7 +239,7 @@
           "price": 2399,
           "qty": 1,
           "size": "M",
-          "image": "/images/WS4.jpg"
+          "image": "images/WS4.jpg"
         }
       ],
       "subtotal": 2399,
@@ -272,7 +272,7 @@
           "price": 1199,
           "qty": 1,
           "size": null,
-          "image": "/images/j3.jpg"
+          "image": "images/j3.jpg"
         }
       ],
       "subtotal": 1199,
@@ -305,7 +305,7 @@
           "price": 2499,
           "qty": 1,
           "size": "XL",
-          "image": "/images/K1.jpg"
+          "image": "images/K1.jpg"
         },
         {
           "id": "k3",
@@ -313,7 +313,7 @@
           "price": 2399,
           "qty": 1,
           "size": null,
-          "image": "/images/k3.jpg"
+          "image": "images/k3.jpg"
         }
       ],
       "subtotal": 4898,
@@ -346,7 +346,7 @@
           "price": 2399,
           "qty": 1,
           "size": "M",
-          "image": "/images/k19.jpg"
+          "image": "images/k19.jpg"
         }
       ],
       "subtotal": 2399,
@@ -379,7 +379,7 @@
           "price": 2499,
           "qty": 1,
           "size": "XL",
-          "image": "/images/k2.jpg"
+          "image": "images/k2.jpg"
         }
       ],
       "subtotal": 2499,

@@ -2,9 +2,9 @@ const normalizedKurtiData = [
   {
     id: "k1",
     title: "Purple Aadhya Kurti Set",
-    images: ["/images/K1.jpg", 
-      "/images/k1-1.jpg",
-      "/images/k1-2.jpg"
+    images: ["images/K1.jpg", 
+      "images/k1-1.jpg",
+      "images/k1-2.jpg"
     ],
     price: 2499,
     oldPrice: 4000,
@@ -18,9 +18,9 @@ const normalizedKurtiData = [
   {
     id: "k2",
     title: "Peach Pink Aadhya Kurti Set",
-    images: ["/images/k2.jpg",
-      "/images/k2-1.jpg",
-      "/images/k2-2.jpg"
+    images: ["images/k2.jpg",
+      "images/k2-1.jpg",
+      "images/k2-2.jpg"
     ],
     price: 2499,
     oldPrice: 4000,
@@ -34,9 +34,9 @@ const normalizedKurtiData = [
   {
     id: "k3",
     title: "Red Amara Kurti Set",
-    images: ["/images/k3.jpg",
-      "/images/k3-1.jpg",
-      "/images/k3-2.jpg"
+    images: ["images/k3.jpg",
+      "images/k3-1.jpg",
+      "images/k3-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -50,9 +50,9 @@ const normalizedKurtiData = [
   {
     id: "k4",
     title: "Navy Blue Amara Kurti Set",
-    images: ["/images/k4.jpg",
-      "/images/k4-1.jpg",
-      "/images/k4-2.jpg"
+    images: ["images/k4.jpg",
+      "images/k4-1.jpg",
+      "images/k4-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -66,9 +66,9 @@ const normalizedKurtiData = [
   {
     id: "k5",
     title: "Red Printed Kurti Set",
-    images: ["/images/k5.jpg",
-      "/images/k5-1.jpg",
-      "/images/k5-2.jpg"
+    images: ["images/k5.jpg",
+      "images/k5-1.jpg",
+      "images/k5-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -82,8 +82,8 @@ const normalizedKurtiData = [
   {
     id: "k6",
     title: "Blue Printed Kurti Set",
-    images: ["/images/k6.jpg",
-      "/images/k6-1.jpg"
+    images: ["images/k6.jpg",
+      "images/k6-1.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -97,9 +97,9 @@ const normalizedKurtiData = [
   {
     id: "k7",
     title: "Dark Green Kurti Set",
-    images: ["/images/k7.jpg",
-      "/images/k7-1.jpg",
-      "/images/k7-2.jpg"
+    images: ["images/k7.jpg",
+      "images/k7-1.jpg",
+      "images/k7-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -113,9 +113,9 @@ const normalizedKurtiData = [
   {
     id: "k8",
     title: "Olive Kashvi Kurti Set",
-    images: ["/images/k8.jpg",
-      "/images/k8-1.jpg",
-      "/images/k8-2.jpg"
+    images: ["images/k8.jpg",
+      "images/k8-1.jpg",
+      "images/k8-2.jpg"
     ],
     price: 2399,
     oldPrice: 3000,
@@ -129,7 +129,7 @@ const normalizedKurtiData = [
   {
     id: "k9",
     title: "Pink Kusum Kurti Set",
-    images: ["/images/k9.jpg"],
+    images: ["images/k9.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -142,7 +142,7 @@ const normalizedKurtiData = [
   {
     id: "k10",
     title: "Yellow Vrinda Kurti Set",
-    images: ["/images/k10.jpg"],
+    images: ["images/k10.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -155,7 +155,7 @@ const normalizedKurtiData = [
   {
     id: "k11",
     title: "Baby Pink Phool Mahal",
-    images: ["/images/k11.jpg"],
+    images: ["images/k11.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -168,7 +168,7 @@ const normalizedKurtiData = [
   {
     id: "k12",
     title: "Parrot Green Phool Mahal",
-    images: ["/images/k12.jpg"],
+    images: ["images/k12.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -181,7 +181,7 @@ const normalizedKurtiData = [
   {
     id: "k13",
     title: "White Pushpa Kurti Set",
-    images: ["/images/k13.jpg"],
+    images: ["images/k13.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -194,7 +194,7 @@ const normalizedKurtiData = [
   {
     id: "k14",
     title: "Clay Blue Amara Kurti Set",
-    images: ["/images/k14.jpg"],
+    images: ["images/k14.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -207,7 +207,7 @@ const normalizedKurtiData = [
   {
     id: "k15",
     title: "Red Rakta Kurti Set",
-    images: ["/images/k15.jpg"],
+    images: ["images/k15.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -220,7 +220,7 @@ const normalizedKurtiData = [
   {
     id: "k16",
     title: "Red Rosewood Anarkali Set",
-    images: ["/images/k16.jpg"],
+    images: ["images/k16.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -233,7 +233,7 @@ const normalizedKurtiData = [
   {
     id: "k17",
     title: "Baby Blue Savitri Kurti Set",
-    images: ["/images/k17.jpg"],
+    images: ["images/k17.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -246,7 +246,7 @@ const normalizedKurtiData = [
   {
     id: "k18",
     title: "Pink Phool Kusum Set",
-    images: ["/images/k18.jpg"],
+    images: ["images/k18.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -259,7 +259,7 @@ const normalizedKurtiData = [
   {
     id: "k19",
     title: "Yellow Phool Kusum Kurti Set",
-    images: ["/images/k19.jpg"],
+    images: ["images/k19.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -272,7 +272,7 @@ const normalizedKurtiData = [
   {
     id: "k20",
     title: "Black Kusum Kurti Set",
-    images: ["/images/k20.jpg"],
+    images: ["images/k20.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -286,7 +286,7 @@ const normalizedKurtiData = [
  {
     id: "k21",
     title: "Anarkali Salwar Suit",
-    images: ["/images/WS1.jpg"],
+    images: ["images/WS1.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -300,7 +300,7 @@ const normalizedKurtiData = [
   {
     id: "k22",
     title: "Vastra Kala Kurti Set",
-    images: ["/images/WS2.jpg"],
+    images: ["images/WS2.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -314,7 +314,7 @@ const normalizedKurtiData = [
     {
     id: "k23",
     title: "Phool Anarkali",
-    images: ["/images/WS3.jpg"],
+    images: ["images/WS3.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -328,7 +328,7 @@ const normalizedKurtiData = [
    {
     id: "k24",
     title: "Vastra kala Kurti Set",
-    images: ["/images/WS4.jpg"],
+    images: ["images/WS4.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -342,7 +342,7 @@ const normalizedKurtiData = [
    {
     id: "k25",
     title: "Dudhsagar Kurti",
-    images: ["/images/WS5.jpg"],
+    images: ["images/WS5.jpg"],
     price: 2399,
     oldPrice: 3000,
     category: "kurti",
@@ -357,7 +357,7 @@ const normalizedKurtiData = [
   {
     id: "k26",
     title: "Rakta Kurti",
-    images: ["/images/WS6.jpg"],
+    images: ["images/WS6.jpg"],
     price: 2499,
     oldPrice: 3000,
     category: "kurti",
@@ -372,3 +372,4 @@ const normalizedKurtiData = [
 ];
 
 export default normalizedKurtiData;
+

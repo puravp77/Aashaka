@@ -4,7 +4,7 @@ export default function ExploreCollection() {
   return (
     <section className="explore-collection">
       <img
-        src="/images/bannernewasaga.jpeg"
+        src="images/bannernewasaga.jpeg"
         alt="Explore Collection"
         className="explore-image"
       />
@@ -13,3 +13,4 @@ export default function ExploreCollection() {
     </section>
   );
 }
+
