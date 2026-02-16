@@ -21,7 +21,7 @@
 
 .cart-item {
   display: grid;
-  grid-template-columns: 40px 90px 1.6fr 1fr 1.4fr 1fr;
+  grid-template-columns: 32px 90px 1.8fr 0.9fr 1.2fr 0.9fr;
   gap: 20px;
   align-items: center;
   padding: 28px 0;
@@ -32,6 +32,7 @@
   width: 90px;
   height: auto;
   display: block;
+  border-radius: 8px;
 }
 
 /* REMOVE */
@@ -66,13 +67,48 @@
 .qty-box.horizontal {
   display: flex;
   align-items: center;
-  gap: 1px;
+  gap: 10px;
 }
 
 .qty-label {
   font-size: 12px;
-  letter-spacing: 2px;
-  margin-right: 90px;
+  letter-spacing: 1px;
+  color: #7a6f64;
+  white-space: nowrap;
+}
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border: 1px solid #d7cfc6;
+  border-radius: 999px;
+  background: #f0efef;
+}
+
+.qty-stepper button {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #c9beb3;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.qty-stepper button:hover {
+  background: #efe6df;
+}
+
+.qty-value {
+  min-width: 18px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .qty-box button {
@@ -102,6 +138,9 @@
   /* 🔥 THIS IS THE KEY */
   display: flex;
   flex-direction: column;
+  position: sticky;
+  top: 110px;
+  height: fit-content;
 }
 
 .summary-actions {
@@ -152,6 +191,49 @@
   margin: 0;
 }
 
+.shipping-note {
+  margin-top: 16px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #6b6057;
+}
+
+/* EMPTY STATE */
+.empty-cart {
+  background: #faf7f2;
+  border: 1px solid #eadfd6;
+  padding: 28px;
+  text-align: center;
+  border-radius: 14px;
+}
+
+.empty-cart h4 {
+  font-size: 18px;
+  margin: 8px 0 6px;
+  font-weight: 500;
+}
+
+.empty-cart p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.empty-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #eadfd6;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #8b0d2b;
+  text-transform: uppercase;
+}
+
 /* ================= BUTTON ================= */
 
 .checkout-btn {
@@ -172,6 +254,7 @@
 .checkout-btn:hover {
   background-color: #000;
   color: #fff;
+  transform: translateY(-1px);
 }
 
 
@@ -206,6 +289,10 @@
     grid-template-columns: 1fr;
     gap: 30px;
   }
+
+  .cart-summary {
+    position: static;
+  }
 }
 
 /* MOBILE */
@@ -216,7 +303,7 @@
   }
 
   .cart-item {
-    grid-template-columns: 30px 80px 1fr;
+    grid-template-columns: 28px 72px 1fr;
     row-gap: 12px;
   }
 

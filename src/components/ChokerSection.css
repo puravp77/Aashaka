@@ -168,10 +168,11 @@
 /* 👇 IMPORTANT: add `.home` wrapper in Home.jsx */
 @media (max-width: 768px) {
   .home .choker-grid {
-    display: flex;
-    overflow-x: auto;
-    gap: 16px;
-    padding-bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow: visible;
+    gap: 14px;
+    padding-bottom: 0;
   }
 
   .home .choker-grid::-webkit-scrollbar {
@@ -179,7 +180,33 @@
   }
 
   .home .product-card {
-    min-width: 220px;
-    flex-shrink: 0;
+    min-width: 0;
+  }
+
+  .home .product-image img {
+    aspect-ratio: 3 / 4;
+  }
+
+  .home .product-info {
+    padding: 12px 8px 14px;
+  }
+
+  .home .product-title {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 420px) {
+  .choker-section {
+    padding: 24px 14px;
+  }
+
+  .choker-title {
+    font-size: 22px;
+    margin-bottom: 26px;
+  }
+
+  .home .choker-grid {
+    gap: 12px;
   }
 }

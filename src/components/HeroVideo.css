@@ -96,21 +96,46 @@
 }
 
 @media (max-width: 768px) {
+  .hero-video {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .hero-video video {
+    height: auto;
+    object-fit: contain;
+    background: #fff;
+  }
+
   .hero-overlay {
+    position: static;
     justify-content: center;
     text-align: center;
-    padding: 0 8%;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.5) 55%, rgba(255, 255, 255, 0.2) 100%);
+    padding: 16px 8% 18px;
+    background: #ffffff;
   }
 
   .hero-title {
     font-size: 26px;
+  }
+  
+  .hero-video {
+    height: auto;
   }
 }
 
 @media (max-width: 480px) {
   .hero-title {
     font-size: 22px;
+  }
+
+  .hero-subtitle {
+    font-size: 13px;
+  }
+
+  .hero-video {
+    height: auto;
   }
 }
 

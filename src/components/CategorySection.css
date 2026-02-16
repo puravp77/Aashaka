@@ -48,7 +48,7 @@
 
 .category-card img {
   width: 220px;
-  height: 360px;              /* 🔥 FIXED HEIGHT = EVEN GRID */
+  height: 360px;              /* ?? FIXED HEIGHT = EVEN GRID */
   object-fit: cover;
   border-radius: 20px;
   display: block;
@@ -72,7 +72,7 @@
 }
 
 /* ===============================
-   MOBILE – HORIZONTAL CATEGORY SCROLL
+   MOBILE � HORIZONTAL CATEGORY SCROLL
    DESKTOP UNTOUCHED
 ================================ */
 
@@ -105,10 +105,10 @@
     scroll-snap-align: start;
   }
 
-  /* 🔥 FORCE SAME IMAGE SIZE ON MOBILE */
+  /* ?? FORCE SAME IMAGE SIZE ON MOBILE */
   .category-card img {
     width: 100%;
-    height: 240px;           /* 🔥 CRITICAL FIX */
+    height: 240px;           /* ?? CRITICAL FIX */
     object-fit: cover;
     border-radius: 20px;
   }

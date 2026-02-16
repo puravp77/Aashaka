@@ -12,174 +12,6 @@
 }
 
 .kurti-top .count {
-font-family: "Times New Roman", serif;
-color: #808080;
-  font-size: 16px;
-  letter-spacing: 2px;
-}
-
-.kurti-top .sort {
-  font-size: 13px;
-  padding: 1px 10px;
-}
-
-/* GRID */
-.kurti-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 28px;
-}
-
-/* PRODUCT ITEM */
-.kurti-item {
-  background: #fff;
-  border: 1px solid #eadfd6;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  cursor: pointer;
-}
-
-.kurti-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
-}
-
-.kurti-item img {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.35s ease;
-}
-
-.kurti-item:hover img {
-  transform: scale(1.05);
-}
-
-.kurti-item h3 {
-  font-family: "Times New Roman", serif;
-  font-size: 15px;
-  margin: 10px 0 6px;
-  justify-content: left;
-  padding: 0 12px;
-}
-
-.price {
-  font-size: 14px;
-  justify-content: left;
-  padding: 0 12px 14px;
-}
-
-.price .old {
-  margin-left: 6px;
-  color: #999;
-  text-decoration: line-through;
-  justify-content: left;
-}
-
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-  .kurti-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .kurti-page {
-    padding: 140px 24px 80px;
-  }
-
-  .kurti-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-/* ===============================
-   RESPONSIVE – KURTI PAGE
-   Desktop untouched
-================================ */
-
-/* Tablets */
-@media (max-width: 1024px) {
-
-  .kurti-page {
-    padding: 20px 40px 80px;
-  }
-
-  .kurti-top {
-    margin-bottom: 30px;
-  }
-
-  .kurti-item img {
-    height: 360px;
-  }
-}
-
-/* Mobile phones */
-@media (max-width: 600px) {
-
-  .kurti-page {
-    padding: 120px 18px 70px; /* keeps header safe */
-  }
-
-  /* Stack top bar */
-  .kurti-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  .kurti-top .count {
-    font-size: 14px;
-    letter-spacing: 1.5px;
-  }
-
-  .kurti-top .sort {
-    font-size: 12px;
-    padding: 4px 10px;
-  }
-
-  /* Images */
-  .kurti-item img {
-    height: auto;
-    aspect-ratio: 3 / 4;
-  }
-
-  /* Text */
-  .kurti-item h3 {
-    font-size: 14px;
-  }
-
-  .price {
-    font-size: 13px;
-  }
-}
-
-
-
-
-
-/* ===============================
-   KURTI PAGE – DESKTOP (UNCHANGED)
-================================ */
-
-.kurti-page {
-  background: #ffffff;
-  padding: 5px 120px 100px;
-}
-
-/* TOP BAR */
-.kurti-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-.kurti-top .count {
   font-family: "Times New Roman", serif;
   color: #808080;
   font-size: 16px;
@@ -200,7 +32,19 @@ color: #808080;
 
 /* PRODUCT CARD */
 .kurti-item {
+  background: #fff;
+  border: 1px solid #eadfd6;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
   text-align: center;
+}
+
+.kurti-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
 }
 
 .kurti-item img {
@@ -208,20 +52,25 @@ color: #808080;
   height: 420px;
   object-fit: cover;
   display: block;
+  transition: transform 0.35s ease;
 }
 
-/* TITLE */
+.kurti-item:hover img {
+  transform: scale(1.05);
+}
+
 .kurti-item h3 {
   font-family: "Times New Roman", serif;
   font-size: 15px;
   margin: 12px 0 6px;
   color: #222;
+  padding: 0 12px;
 }
 
-/* PRICE */
 .price {
   font-size: 14px;
   font-weight: 600;
+  padding: 0 12px 14px;
 }
 
 .price .old {
@@ -230,12 +79,8 @@ color: #808080;
   text-decoration: line-through;
 }
 
-/* ===============================
-   TABLET (2 COLUMNS)
-================================ */
-
+/* TABLET */
 @media (max-width: 1024px) {
-
   .kurti-page {
     padding: 20px 40px 80px;
   }
@@ -250,21 +95,17 @@ color: #808080;
   }
 }
 
-/* ===============================
-   MOBILE – EXACT AASHAKA UI
-================================ */
-
+/* MOBILE */
 @media (max-width: 600px) {
-
   .kurti-page {
-    padding: 12px 24px 80px;
+    padding: 24px 18px 70px;
   }
 
-  /* Stack top bar neatly */
   .kurti-top {
     flex-direction: row;
     align-items: center;
-    margin-bottom: 26px;
+    margin-bottom: 22px;
+    gap: 10px;
   }
 
   .kurti-top .count {
@@ -277,13 +118,11 @@ color: #808080;
     padding: 4px 8px;
   }
 
-  /* 🔥 IMPORTANT: KEEP 2 COLUMNS */
   .kurti-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 16px;
   }
 
-  /* Portrait images */
   .kurti-item img {
     height: auto;
     aspect-ratio: 3 / 4;

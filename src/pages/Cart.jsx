@@ -3,7 +3,8 @@ import { withPublicUrl } from "../utils/assetPath";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { AnimatePresence, motion } from "framer-motion";
+import { FiMinus, FiPlus } from "react-icons/fi";
 
 const MAX_QTY_PER_PRODUCT = 10;
 const FREE_SHIPPING_THRESHOLD = 1999;
@@ -12,10 +13,8 @@ const SHIPPING_CHARGE = 100;
 export default function Cart() {
   const navigate = useNavigate();
 
-  /* 🔥 MUST COME FIRST */
   const { cartItems, updateQty, removeFromCart } = useCart();
 
-  /* -------- DERIVED VALUES -------- */
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.qty,
     0
@@ -26,7 +25,6 @@ export default function Cart() {
 
   const grandTotal = subtotal + shipping;
 
-  /* 🔥 SAFE TO USE cartItems HERE */
   const hasOutOfStockItem = cartItems.some(
     (item) => item.qty >= MAX_QTY_PER_PRODUCT
   );
@@ -34,89 +32,102 @@ export default function Cart() {
   return (
     <section className="cart-page">
       <div className="cart-wrapper">
-
-        {/* ================= LEFT : CART ITEMS ================= */}
         <div className="cart-items">
           {cartItems.length === 0 && (
-            <p className="empty-cart">Your cart is empty</p>
+            <div className="empty-cart">
+              <div className="empty-icon">Shop</div>
+              <h4>Your cart is empty</h4>
+              <p>Browse our collection and add something you love.</p>
+              <button className="return-btn" onClick={() => navigate("/")}
+              >
+                RETURN TO SHOP
+              </button>
+            </div>
           )}
 
-          {cartItems.map((item) => (
-            <div
-              className="cart-item"
-              key={`${item.id}-${item.size || "nosize"}`}
-            >
-              {/* REMOVE */}
-              <button
-                className="remove"
-                onClick={() => removeFromCart(item.id, item.size)}
+          <AnimatePresence>
+            {cartItems.map((item) => (
+              <motion.div
+                className="cart-item"
+                key={`${item.id}-${item.size || "nosize"}`}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
               >
-                ×
-              </button>
-
-              {/* PRODUCT IMAGE */}
-              <img src={withPublicUrl(item.image)} alt={item.title} />
-
-              {/* PRODUCT INFO */}
-              <div className="cart-info">
-                <h4>{item.title}</h4>
-
-                {/* ✅ SIZE DISPLAY (FIXED) */}
-                {item.size && (
-                  <p className="size">Size: {item.size}</p>
-                )}
-              </div>
-
-              {/* UNIT PRICE */}
-              <div className="cart-unit-price">
-                Rs. {item.price}
-              </div>
-
-              {/* QUANTITY */}
-              <div className="qty-box horizontal">
-                <span className="qty-label">QUANTITY</span>
-
-                <button
-                  onClick={() =>
-                    updateQty(item.id, item.size, item.qty - 1)
-                  }
-                  disabled={item.qty === 1}
+                <motion.button
+                  className="remove"
+                  onClick={() => removeFromCart(item.id, item.size)}
+                  whileTap={{ scale: 0.9 }}
                 >
-                  −
-                </button>
+                  ×
+                </motion.button>
 
-                <span>{item.qty}</span>
+                <img src={withPublicUrl(item.image)} alt={item.title} />
 
-                <button
-                  onClick={() => {
-                    if (item.qty >= MAX_QTY_PER_PRODUCT) {
-                      toast.error("Out of stock", {
-                        toastId: "cart-out-of-stock",
-                      });
-                      return;
-                    }
-                    updateQty(item.id, item.size, item.qty + 1);
-                  }}
-                  disabled={item.qty >= MAX_QTY_PER_PRODUCT}
-                >
-                  +
-                </button>
+                <div className="cart-info">
+                  <h4>{item.title}</h4>
+                  {item.size && (
+                    <p className="size">Size: {item.size}</p>
+                  )}
+                </div>
 
-                {item.qty >= MAX_QTY_PER_PRODUCT && (
-                  <p className="stock-warning">Out Of Stock</p>
-                )}
-              </div>
+                <div className="cart-unit-price">Rs. {item.price}</div>
 
-              {/* LINE TOTAL */}
-              <div className="cart-line-total">
-                Rs. {item.price * item.qty}
-              </div>
-            </div>
-          ))}
+                <div className="qty-box horizontal">
+                  <span className="qty-label">Qty</span>
+
+                  <div className="qty-stepper">
+                    <motion.button
+                      onClick={() =>
+                        updateQty(item.id, item.size, item.qty - 1)
+                      }
+                      disabled={item.qty === 1}
+                      whileTap={{ scale: 0.9 }}
+                      aria-label="Decrease quantity"
+                    >
+                      <FiMinus />
+                    </motion.button>
+
+                    <span className="qty-value">{item.qty}</span>
+
+                    <motion.button
+                      onClick={() => {
+                        if (item.qty >= MAX_QTY_PER_PRODUCT) {
+                          toast.error("Out of stock", {
+                            toastId: "cart-out-of-stock",
+                          });
+                          return;
+                        }
+                        updateQty(item.id, item.size, item.qty + 1);
+                      }}
+                      disabled={item.qty >= MAX_QTY_PER_PRODUCT}
+                      whileTap={{ scale: 0.9 }}
+                      aria-label="Increase quantity"
+                    >
+                      <FiPlus />
+                    </motion.button>
+                  </div>
+
+                  {item.qty >= MAX_QTY_PER_PRODUCT && (
+                    <p className="stock-warning">Out Of Stock</p>
+                  )}
+                </div>
+
+                <div className="cart-line-total">
+                  Rs. {item.price * item.qty}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
-        {/* ================= RIGHT : SUMMARY ================= */}
-        <div className="cart-summary">
+        <motion.div
+          className="cart-summary"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+        >
           <h3>Cart Total</h3>
 
           <div className="summary-row">
@@ -134,6 +145,12 @@ export default function Cart() {
           <div className="summary-row total">
             <span>Total</span>
             <span>Rs. {grandTotal}</span>
+          </div>
+
+          <div className="shipping-note">
+            {shipping === 0
+              ? "You unlocked free shipping."
+              : `Add Rs. ${FREE_SHIPPING_THRESHOLD - subtotal} for free shipping.`}
           </div>
 
           <div className="summary-actions">
@@ -166,8 +183,7 @@ export default function Cart() {
               RETURN TO SHOP
             </button>
           </div>
-        </div>
-
+        </motion.div>
       </div>
     </section>
   );

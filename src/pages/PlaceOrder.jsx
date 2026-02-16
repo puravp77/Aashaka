@@ -15,6 +15,9 @@ const COUPONS = [
   { code: "SAVE10", type: "percent", value: 10, minCart: 1999 },
 ];
 
+const FREE_SHIPPING_THRESHOLD = 1999;
+const SHIPPING_CHARGE = 100;
+
 export default function PlaceOrder() {
   const navigate = useNavigate();
   const fieldRefs = useRef({});
@@ -263,7 +266,7 @@ export default function PlaceOrder() {
         image: withPublicUrl(item.image),
       })),
       subtotal: total,
-      shipping: SHIPPING_CHARGE,
+      shipping: shippingCharge,
       discount,
       total: finalTotal,
       paymentMode,
@@ -301,10 +304,11 @@ export default function PlaceOrder() {
     navigate("/order-success");
   };
 
-  const SHIPPING_CHARGE = total >= 999 ? 0 : 99;
+  const shippingCharge =
+    total >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CHARGE;
 
   const finalTotal = Math.max(
-    total + SHIPPING_CHARGE - discount,
+    total + shippingCharge - discount,
     0
   );
 
@@ -535,7 +539,7 @@ export default function PlaceOrder() {
             <div>
               <span>Shipping</span>
               <span>
-                {SHIPPING_CHARGE === 0 ? "Free" : `Rs. ${SHIPPING_CHARGE}`}
+                {shippingCharge === 0 ? "Free" : `Rs. ${shippingCharge}`}
               </span>
             </div>
 
