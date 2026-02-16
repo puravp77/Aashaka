@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./header.css";
 import { withPublicUrl } from "../utils/assetPath";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -56,6 +56,25 @@ export default function Header() {
   const displayName = getDisplayName();
   const isLoggedIn = Boolean(displayName);
 
+  useEffect(() => {
+    if (!logoutOpen) return;
+
+    const handleEscClose = (event) => {
+      if (event.key === "Escape") {
+        setLogoutOpen(false);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleEscClose);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleEscClose);
+    };
+  }, [logoutOpen]);
+
   /* =========================
      SEARCH SUBMIT
   ========================= */
@@ -79,7 +98,7 @@ export default function Header() {
         )}
 
         <div className="top-text">
-          <b>Free Delivery</b> on all orders over <b>₹1999</b> !!
+          <b>Free Delivery</b> on all orders over <b>{"\u20B9"}1999</b> !!
         </div>
 
         <div className="top-right">
@@ -161,8 +180,9 @@ export default function Header() {
           type="button"
           className="search-close"
           onClick={() => setSearchOpen(false)}
+          aria-label="Close search"
         >
-          ✕
+          <span aria-hidden="true">&times;</span>
         </button>
       </form>
 
@@ -312,10 +332,25 @@ export default function Header() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="logout-title"
+          aria-describedby="logout-desc"
+          onClick={() => setLogoutOpen(false)}
         >
-          <div className="logout-modal">
-            <h3 id="logout-title">Log out?</h3>
-            <p>Are you sure you want to log out of Aashaka?</p>
+          <div className="logout-modal" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="logout-close"
+              onClick={() => setLogoutOpen(false)}
+              aria-label="Close logout confirmation"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+
+            <div className="logout-badge" aria-hidden="true">
+              <FiLogOut />
+            </div>
+
+            <h3 id="logout-title">Log out, {displayName || "User"}?</h3>
+            <p id="logout-desc">Your wishlist and cart stay saved for your next visit.</p>
             <div className="logout-actions">
               <button
                 type="button"

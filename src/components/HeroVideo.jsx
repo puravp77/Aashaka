@@ -52,7 +52,7 @@ export default function HeroVideo() {
             className="hero-cta"
             type="button"
             variants={item}
-            onClick={() => navigate("/kurti")}
+            onClick={() => navigate("/jewellery/oxidised")}
           >
             Explore Collection
           </motion.button>

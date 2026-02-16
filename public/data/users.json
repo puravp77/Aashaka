@@ -128,38 +128,6 @@
       "pincode": "895540"
     },
     {
-      "id": "d307",
-      "userId": "purav222@gmail.com",
-      "firstName": "Purav",
-      "middleName": "Manoj",
-      "lastName": "Patel",
-      "mobile": "8160359981",
-      "email": "patelpurav077@gmail.com",
-      "company": "SM",
-      "address1": "Mahavir Timber Mart, Khatodara, Surat",
-      "address2": "",
-      "country": "India",
-      "state": "Gujarat",
-      "city": "Surat",
-      "pincode": "395002"
-    },
-    {
-      "id": "cb49",
-      "userId": "purav222@gmail.com",
-      "firstName": "Dev",
-      "middleName": "Govind",
-      "lastName": "Patel",
-      "mobile": "9106614471",
-      "email": "Devpatel1@gmail.com",
-      "company": "sm",
-      "address1": "Mahavir Timber Mart, Khatodara, Surat",
-      "address2": "",
-      "country": "India",
-      "state": "Gujarat",
-      "city": "Surat",
-      "pincode": "395002"
-    },
-    {
       "id": "92e5",
       "userId": "purav222@gmail.com",
       "firstName": "Purav",
@@ -414,6 +382,39 @@
         "city": "Margao",
         "pincode": "895540",
         "phone": "9825442105"
+      }
+    },
+    {
+      "id": "206b",
+      "orderId": "ORD-MLP0315D",
+      "userId": "purav222@gmail.com",
+      "date": "2026-02-16T09:57:15.025Z",
+      "items": [
+        {
+          "id": "k4",
+          "title": "Navy Blue Amara Kurti Set",
+          "price": 2399,
+          "qty": 2,
+          "size": "3XL",
+          "image": "/Aashaka/images/k4.jpg"
+        }
+      ],
+      "subtotal": 4798,
+      "shipping": 0,
+      "discount": 0,
+      "total": 4798,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "patelpurav077@gmail.com",
+        "firstName": "Purav",
+        "middleName": "Manoj",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart, Khatodara, Surat",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9106618331"
       }
     }
   ]

@@ -80,11 +80,29 @@
   padding: 14px 16px;
   border-bottom: 1px solid #e2ded6;
   font-size: 14px;
+  align-items: center;
+}
+
+.address-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
 .address-action {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: "Times New Roman", serif;
+  font-size: 14px;
   color: #8b0d2b;
   cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.address-action.delete {
+  color: #8a2020;
 }
 
 .address-empty {
@@ -264,6 +282,105 @@
   color: #fff;
 }
 
+.address-delete-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(24, 16, 13, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1200;
+  animation: fadeInOverlay 0.2s ease;
+}
+
+.address-delete-modal {
+  width: min(460px, 100%);
+  background: #fffaf6;
+  border: 1px solid #e3d8cd;
+  border-radius: 14px;
+  box-shadow: 0 18px 42px rgba(27, 17, 12, 0.22);
+  padding: 24px 24px 20px;
+  animation: popInModal 0.2s ease;
+}
+
+.address-delete-modal h3 {
+  margin: 0 0 10px;
+  color: #7e0f2a;
+  letter-spacing: 0.8px;
+  font-size: 24px;
+}
+
+.address-delete-modal p {
+  margin: 0;
+  color: #3f352e;
+  line-height: 1.55;
+}
+
+.address-delete-actions {
+  margin-top: 22px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.delete-cancel-btn,
+.delete-confirm-btn {
+  border-radius: 999px;
+  border: 1px solid #c9b8a7;
+  padding: 9px 18px;
+  font-family: "Times New Roman", serif;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-cancel-btn {
+  background: #fff;
+  color: #4b3e35;
+}
+
+.delete-cancel-btn:hover:not(:disabled) {
+  background: #f3ebe4;
+}
+
+.delete-confirm-btn {
+  background: #8b0d2b;
+  border-color: #8b0d2b;
+  color: #fff;
+}
+
+.delete-confirm-btn:hover:not(:disabled) {
+  background: #6f0a22;
+  border-color: #6f0a22;
+}
+
+.delete-cancel-btn:disabled,
+.delete-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popInModal {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @media (max-width: 900px) {
   .address-form-grid {
     grid-template-columns: 1fr;
@@ -291,5 +408,26 @@
   .address-table-row {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+
+  .address-actions {
+    gap: 12px;
+  }
+
+  .address-delete-modal {
+    padding: 20px 16px 16px;
+  }
+
+  .address-delete-modal h3 {
+    font-size: 21px;
+  }
+
+  .address-delete-actions {
+    justify-content: stretch;
+  }
+
+  .delete-cancel-btn,
+  .delete-confirm-btn {
+    flex: 1;
   }
 }

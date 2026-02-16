@@ -56,6 +56,10 @@ const UserProfile = () => {
   // Address UI
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [addresses, setAddresses] = useState([]);
+  const [editingAddressId, setEditingAddressId] = useState(null);
+  const [editingAddressIndex, setEditingAddressIndex] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [isDeletingAddress, setIsDeletingAddress] = useState(false);
 
   const [isStateOpen, setIsStateOpen] = useState(false);
   const [stateSearch, setStateSearch] = useState("");
@@ -309,6 +313,86 @@ const UserProfile = () => {
     setIsCityOpen(false);
     setStateSearch("");
     setCitySearch("");
+    setEditingAddressId(null);
+    setEditingAddressIndex(null);
+  };
+
+  const handleEditAddress = (address, index) => {
+    setFormData({
+      firstName: address.firstName || "",
+      middleName: address.middleName || "",
+      lastName: address.lastName || "",
+      mobile: address.mobile || "",
+      email: address.email || "",
+      company: address.company || "",
+      address1: address.address1 || "",
+      address2: address.address2 || "",
+      country: address.country || "India",
+      state: address.state || "",
+      city: address.city || "",
+      pincode: address.pincode || "",
+    });
+    setErrors({});
+    setIsStateOpen(false);
+    setIsCityOpen(false);
+    setStateSearch("");
+    setCitySearch("");
+    setEditingAddressId(address.id ?? null);
+    setEditingAddressIndex(index);
+    setShowAddressForm(true);
+  };
+
+  const handleDeleteAddress = (address, index) => {
+    setDeleteTarget({ address, index });
+  };
+
+  const closeDeleteDialog = () => {
+    if (isDeletingAddress) return;
+    setDeleteTarget(null);
+  };
+
+  const confirmDeleteAddress = async () => {
+    if (!deleteTarget?.address) return;
+
+    const { address, index } = deleteTarget;
+
+    const hasPersistedId =
+      address?.id !== null && address?.id !== undefined && address?.id !== "";
+
+    setIsDeletingAddress(true);
+
+    if (hasPersistedId) {
+      try {
+        const res = await fetch(`http://localhost:5000/addresses/${address.id}`, {
+          method: "DELETE",
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to delete address");
+        }
+      } catch (err) {
+        setIsDeletingAddress(false);
+        return;
+      }
+    }
+
+    setAddresses((prev) =>
+      prev.filter((item, itemIndex) =>
+        hasPersistedId ? item.id !== address.id : itemIndex !== index
+      )
+    );
+
+    if (
+      showAddressForm &&
+      ((hasPersistedId && editingAddressId === address.id) ||
+        (!hasPersistedId && editingAddressIndex === index))
+    ) {
+      resetForm();
+      setShowAddressForm(false);
+    }
+
+    setDeleteTarget(null);
+    setIsDeletingAddress(false);
   };
 
   const handleSubmit = async (e) => {
@@ -317,7 +401,7 @@ const UserProfile = () => {
 
     if (Object.keys(nextErrors).length > 0) return;
 
-    const newAddress = {
+    const payload = {
       userId,
       firstName: formData.firstName,
       middleName: formData.middleName,
@@ -333,21 +417,63 @@ const UserProfile = () => {
       pincode: formData.pincode,
     };
 
-    if (userId) {
+    const isEditing = editingAddressId !== null || editingAddressIndex !== null;
+
+    if (isEditing) {
+      const hasPersistedId =
+        editingAddressId !== null &&
+        editingAddressId !== undefined &&
+        editingAddressId !== "";
+
+      if (hasPersistedId) {
+        try {
+          const res = await fetch(`http://localhost:5000/addresses/${editingAddressId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          if (res.ok) {
+            const updated = await res.json();
+            setAddresses((prev) =>
+              prev.map((item) => (item.id === editingAddressId ? updated : item))
+            );
+          } else {
+            setAddresses((prev) =>
+              prev.map((item, index) =>
+                index === editingAddressIndex ? { ...item, ...payload } : item
+              )
+            );
+          }
+        } catch (err) {
+          setAddresses((prev) =>
+            prev.map((item, index) =>
+              index === editingAddressIndex ? { ...item, ...payload } : item
+            )
+          );
+        }
+      } else {
+        setAddresses((prev) =>
+          prev.map((item, index) =>
+            index === editingAddressIndex ? { ...item, ...payload } : item
+          )
+        );
+      }
+    } else if (userId) {
       try {
         const res = await fetch("http://localhost:5000/addresses", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newAddress),
+          body: JSON.stringify(payload),
         });
         if (res.ok) {
           const saved = await res.json();
           setAddresses((prev) => [...prev, saved]);
         } else {
-          setAddresses((prev) => [...prev, newAddress]);
+          setAddresses((prev) => [...prev, payload]);
         }
       } catch (err) {
-        setAddresses((prev) => [...prev, newAddress]);
+        setAddresses((prev) => [...prev, payload]);
       }
     }
 
@@ -356,9 +482,8 @@ const UserProfile = () => {
   };
 
   const handleCancel = () => {
+    resetForm();
     setShowAddressForm(false);
-    setIsStateOpen(false);
-    setIsCityOpen(false);
   };
 
   const selectedStateOption = stateOptions.find((stateOption) => {
@@ -525,14 +650,17 @@ const UserProfile = () => {
                   <div className="address-table-header">
                     <span>Name</span>
                     <span>Address</span>
-                    <span>Change Address</span>
+                    <span>Actions</span>
                   </div>
 
                   {addresses.length === 0 ? (
                     <div className="address-empty">Address Not Available</div>
                   ) : (
                     addresses.map((addr, index) => (
-                      <div className="address-table-row" key={index}>
+                      <div
+                        className="address-table-row"
+                        key={addr.id ?? `address-${index}`}
+                      >
                         <span>
                           {addr.firstName} {addr.middleName} {addr.lastName}
                         </span>
@@ -541,7 +669,22 @@ const UserProfile = () => {
                           {addr.address2 ? `, ${addr.address2}` : ""},{" "}
                           {addr.city}, {addr.state} - {addr.pincode}
                         </span>
-                        <span className="address-action">Edit</span>
+                        <div className="address-actions">
+                          <button
+                            type="button"
+                            className="address-action"
+                            onClick={() => handleEditAddress(addr, index)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            className="address-action delete"
+                            onClick={() => handleDeleteAddress(addr, index)}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     ))
                   )}
@@ -829,7 +972,9 @@ const UserProfile = () => {
 
                   <div className="address-form-actions">
                     <button type="submit" className="submit-btn">
-                      SUBMIT
+                      {editingAddressId !== null || editingAddressIndex !== null
+                        ? "UPDATE"
+                        : "SUBMIT"}
                     </button>
                     <button
                       type="button"
@@ -845,6 +990,45 @@ const UserProfile = () => {
           )}
         </div>
       </div>
+
+      {deleteTarget?.address && (
+        <div className="address-delete-overlay" onClick={closeDeleteDialog}>
+          <div
+            className="address-delete-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-address-title"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 id="delete-address-title">Delete Address?</h3>
+            <p>
+              This will remove the saved address for{" "}
+              <strong>
+                {deleteTarget.address.firstName} {deleteTarget.address.lastName}
+              </strong>
+              .
+            </p>
+            <div className="address-delete-actions">
+              <button
+                type="button"
+                className="delete-cancel-btn"
+                onClick={closeDeleteDialog}
+                disabled={isDeletingAddress}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="delete-confirm-btn"
+                onClick={confirmDeleteAddress}
+                disabled={isDeletingAddress}
+              >
+                {isDeletingAddress ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
