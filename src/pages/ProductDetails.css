@@ -110,7 +110,7 @@
 
 .price-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 12px;
   margin-bottom: 20px;
   flex-wrap: wrap;
@@ -124,6 +124,7 @@
 .off {
   color: #2e7d32;
   font-size: 15px;
+  margin-left: 6px;
 }
 
 .old {
