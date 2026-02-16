@@ -531,7 +531,7 @@
 }
 
 .mobile-submenu.open {
-  max-height: 120px;
+  max-height: 220px;
   opacity: 1;
   transform: translateY(1);
 }
@@ -540,6 +540,8 @@
   font-size: 13px;
   color: #666;
   text-decoration: none;
+  line-height: 1.6;
+  padding-bottom: 2px;
 }
 
 
