@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import watchShopData from "../data/WatchShopData";
 import WatchShopModal from "./WatchShopModal";
@@ -10,6 +11,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./WatchShopSection.css";
+import { withPublicUrl } from "../utils/assetPath";
 
 const WatchShopSection = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -43,14 +45,20 @@ const WatchShopSection = () => {
       >
         {watchShopData.map((item, index) => (
           <SwiperSlide key={item.id}>
-            <div className="watchshop-card">
+            <motion.div
+              className="watchshop-card"
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.04 }}
+            >
               {/* VIDEO CLICK → OPEN MODAL */}
               <div
                 className="watchshop-video-wrapper"
                 onClick={() => setActiveIndex(index)}
               >
                 <video
-                  src={item.video}
+                  src={withPublicUrl(item.video)}
                   autoPlay
                   muted
                   loop
@@ -78,7 +86,7 @@ const WatchShopSection = () => {
                   Buy Now
                 </button>
               </div>
-            </div>
+            </motion.div>
           </SwiperSlide>
         ))}
 

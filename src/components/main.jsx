@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 
 import AnimatedRoute from "./AnimatedRoute";
 
@@ -45,16 +45,76 @@ import PageLoader from "../pages/PageLoader";
 import "./page-content.css";
 
 function Home() {
+  const { scrollY } = useScroll();
+  const orbY1 = useTransform(scrollY, [0, 1200], [0, -80]);
+  const orbY2 = useTransform(scrollY, [0, 1200], [0, 120]);
+
+  const reveal = {
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <>
+    <div className="home">
+      <motion.div className="home-orb orb-1" style={{ y: orbY1 }} />
+      <motion.div className="home-orb orb-2" style={{ y: orbY2 }} />
+
       <HeroVideo />
-      <CategorySection />
-      <SignatureSection />
-      <ChokerSection />
-      <ExploreCollection />
-      <WatchShopSection />
-      <AboutSection />
-    </>
+      <motion.section
+        variants={reveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.25 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <CategorySection />
+      </motion.section>
+      <motion.section
+        variants={reveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.25 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+      >
+        <SignatureSection />
+      </motion.section>
+      <motion.section
+        variants={reveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.25 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+      >
+        <ChokerSection />
+      </motion.section>
+      <motion.section
+        variants={reveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.25 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+      >
+        <ExploreCollection />
+      </motion.section>
+      <motion.section
+        variants={reveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.25 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+      >
+        <WatchShopSection />
+      </motion.section>
+      <motion.section
+        variants={reveal}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.25 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+      >
+        <AboutSection />
+      </motion.section>
+    </div>
   );
 }
 

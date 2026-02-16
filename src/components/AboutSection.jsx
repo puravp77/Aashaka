@@ -1,4 +1,5 @@
 import "./AboutSection.css";
+import { withPublicUrl } from "../utils/assetPath";
 
 export default function AboutSection() {
   return (
@@ -26,7 +27,7 @@ export default function AboutSection() {
         </div>
 
         <div className="about-right">
-          <img src="images/About-Aashaka.jpg" alt="About Aashaka" />
+          <img src={withPublicUrl("images/About-Aashaka.jpg")} alt="About Aashaka" />
         </div>
 
       </div>

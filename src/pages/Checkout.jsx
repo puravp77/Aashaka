@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "./Checkout.css";
+import { withPublicUrl } from "../utils/assetPath";
 
 export default function Checkout() {
   const { cartItems, total } = useCart();
@@ -39,7 +40,7 @@ export default function Checkout() {
               key={`${item.id}-${item.size || "free"}`}
             >
               <img
-                src={item.image || "/placeholder.png"}
+                src={withPublicUrl(item.image || "/placeholder.png")}
                 alt={item.title}
               />
 

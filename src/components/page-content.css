@@ -16,6 +16,41 @@
   isolation: isolate;
 }
 
+.home {
+  position: relative;
+  overflow: hidden;
+}
+
+.home > section {
+  position: relative;
+  z-index: 1;
+}
+
+.home-orb {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.22;
+  filter: blur(0px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.home-orb.orb-1 {
+  width: 520px;
+  height: 520px;
+  top: -140px;
+  left: -140px;
+  background: radial-gradient(circle at 30% 30%, #f3d7dd 0%, #f7f0f2 45%, transparent 70%);
+}
+
+.home-orb.orb-2 {
+  width: 420px;
+  height: 420px;
+  top: 520px;
+  right: -160px;
+  background: radial-gradient(circle at 40% 40%, #e9edf5 0%, #f5f7fb 45%, transparent 70%);
+}
+
 
 /* MOBILE reveal space */
 @media (max-width: 768px) {

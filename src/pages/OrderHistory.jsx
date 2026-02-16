@@ -1,4 +1,5 @@
 import "./OrderHistory.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
@@ -62,7 +63,7 @@ export default function OrderHistory() {
                       className="order-history-item"
                       key={`${order.orderId || order.id}-${item.id}-${item.size || "nosize"}`}
                     >
-                      <img src={item.image} alt={item.title} />
+                      <img src={withPublicUrl(item.image)} alt={item.title} />
                       <div>
                         <div className="order-item-title">{item.title}</div>
                         {item.size && (

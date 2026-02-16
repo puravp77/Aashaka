@@ -1,6 +1,7 @@
 import "./Bangles.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useNavigate } from "react-router-dom";
-
+import { motion } from "framer-motion";
 const banglesData = [
   {
     id: "b1",
@@ -48,32 +49,47 @@ const banglesData = [
 
 function Bangles() {
   const navigate = useNavigate();
+    const container = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.08 } },
+  };
+  const itemMotion = {
+    hidden: { opacity: 0, y: 18 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   return (
     <section className="bangles-section">
-      <div className="bangles-grid">
-        {banglesData.map((item) => (
-          <div
+      <motion.div
+        className="bangles-grid"
+        variants={container}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.2 }}
+      >
+        {banglesData.map((product) => (
+          <motion.div
             className="product-card"
-            key={item.id}
-            onClick={() => navigate(`/product/${item.id}`)}
+            key={product.id}
+            onClick={() => navigate(`/product/${product.id}`)}
             style={{ cursor: "pointer" }}
+            variants={itemMotion}
           >
             <div className="product-image">
-              <img src={item.image} alt={item.name} />
+              <img src={withPublicUrl(product.image)} alt={product.name} />
             </div>
 
             <div className="product-info">
-              <h3 className="product-title">{item.name}</h3>
+              <h3 className="product-title">{product.name}</h3>
 
               <div className="product-price">
-                <span className="price">₹{item.price}</span>
-                <span className="old-price">₹{item.oldPrice}</span>
+                <span className="price">₹{product.price}</span>
+                <span className="old-price">₹{product.oldPrice}</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

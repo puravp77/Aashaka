@@ -24,6 +24,9 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eadfd6;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
 }
 
 /* ===============================
@@ -41,6 +44,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.35s ease;
 }
 
 /* ===============================
@@ -104,6 +108,15 @@
 
 .watchshop-btn:hover {
   background: #000;
+}
+
+.watchshop-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+}
+
+.watchshop-card:hover .watchshop-video-wrapper video {
+  transform: scale(1.05);
 }
 
 

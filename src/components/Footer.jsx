@@ -1,4 +1,5 @@
 import "./Footer.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -28,7 +29,7 @@ export default function Footer() {
 
           {/* LOGO */}
           <div className="footer-logo">
-            <img src="images/headerlogo.jpeg" alt="Aashaka" />
+            <img src={withPublicUrl("images/headerlogo.jpeg")} alt="Aashaka" />
           </div>
 
           {/* SUBSCRIBE */}

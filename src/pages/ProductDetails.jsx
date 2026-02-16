@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useMemo } from "react";
 import "./ProductDetails.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
 import WatchShopSection from "../components/WatchShopSection";
@@ -20,7 +21,7 @@ export default function ProductDetails() {
   const [qty, setQty] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
 
-  /* FIND PRODUCT (SAFE) */
+  /* FIND PRODUCT */
   const product = !loading
     ? products.find(p => String(p.id) === String(id))
     : null;
@@ -33,7 +34,7 @@ export default function ProductDetails() {
   /* DEFAULT IMAGE */
   useEffect(() => {
     if (product?.images?.length) {
-      setActiveImg(product.images[0]);
+      setActiveImg(withPublicUrl(product.images[0]));
     }
   }, [product]);
 
@@ -85,16 +86,19 @@ export default function ProductDetails() {
     );
   }
 
-  const images = product.images || [];
+  const images = (product.images || []).map(withPublicUrl);
   const title = product.title;
   const price = product.price;
   const oldPrice = product.oldPrice;
   const inWishlist = isInWishlist(product.id);
+  const hasSizes = Boolean(product.sizes);
 
   const discountPercent =
     oldPrice && price
       ? Math.round(((oldPrice - price) / oldPrice) * 100)
       : 0;
+  const savings =
+    oldPrice && price && oldPrice > price ? oldPrice - price : 0;
 
   const accordionSections = [
     {
@@ -131,7 +135,7 @@ export default function ProductDetails() {
       title: "SHIPPING",
       content: (
         <p>
-          Ships within 2–4 business days. Easy returns available within 7 days.
+          Ships within 2-4 business days. Easy returns available within 7 days.
         </p>
       ),
     },
@@ -155,7 +159,7 @@ export default function ProductDetails() {
           </div>
 
           <div className="main-image">
-            {activeImg && <img src={activeImg} alt={title} />}
+            {activeImg && <img src={withPublicUrl(activeImg)} alt={title} />}
           </div>
         </div>
 
@@ -163,16 +167,28 @@ export default function ProductDetails() {
         <div className="product-info-panel">
           <h1>{title}</h1>
 
+          <div className="product-meta">
+            {product.category && (
+              <span className="meta-pill">{product.category}</span>
+            )}
+            {discountPercent > 0 && (
+              <span className="meta-pill sale">Save {discountPercent}%</span>
+            )}
+          </div>
+
           <div className="price-row">
-            <span className="price">₹ {price}</span>
+            <span className="price">Rs. {price}</span>
             {discountPercent > 0 && (
               <span className="off">{discountPercent}% off</span>
             )}
-            {oldPrice && <span className="old">₹ {oldPrice}</span>}
+            {oldPrice && <span className="old">Rs. {oldPrice}</span>}
           </div>
+          {savings > 0 && (
+            <div className="savings">You save Rs. {savings}</div>
+          )}
 
           {/* SIZE */}
-          {product.sizes && (
+          {hasSizes && (
             <div className="size-section">
               <p className="size-title">Size:</p>
               <div className="size-options">
@@ -190,6 +206,11 @@ export default function ProductDetails() {
                   </button>
                 ))}
               </div>
+              <div className="size-help">
+                {selectedSize
+                  ? `Selected: ${selectedSize}`
+                  : "Select a size to continue"}
+              </div>
             </div>
           )}
 
@@ -197,9 +218,17 @@ export default function ProductDetails() {
           <div className="quantity-row">
             <span>QUANTITY</span>
             <div className="qty-box">
-              <button onClick={() => setQty(q => Math.max(1, q - 1))}>−</button>
+              <button
+                type="button"
+                aria-label="Decrease quantity"
+                onClick={() => setQty(q => Math.max(1, q - 1))}
+              >
+                -
+              </button>
               <span>{qty}</span>
               <button
+                type="button"
+                aria-label="Increase quantity"
                 onClick={() => {
                   if (qty >= 9) {
                     toast.error("Out of stock", { toastId: "out-of-stock" });
@@ -224,7 +253,6 @@ export default function ProductDetails() {
 
               addToCart(product, qty, selectedSize || null);
               toast.success("Added to Cart", {
-                icon: "🛒",
                 toastId: "added-to-cart",
               });
             }}
@@ -262,7 +290,7 @@ export default function ProductDetails() {
               }
             }}
           >
-            {inWishlist ? "REMOVE FROM WISHLIST" : "♥ ADD TO WISHLIST"}
+            {inWishlist ? "REMOVE FROM WISHLIST" : "ADD TO WISHLIST"}
           </button>
 
           <div className="product-perks">
@@ -292,7 +320,7 @@ export default function ProductDetails() {
                     {section.title}
                   </span>
                   <span className="product-accordion-icon">
-                    {openAccordion === section.key ? "–" : "+"}
+                    {openAccordion === section.key ? "-" : "+"}
                   </span>
                 </button>
                 {openAccordion === section.key && (
@@ -320,14 +348,17 @@ export default function ProductDetails() {
                 onClick={() => navigate(`/product/${item.id}`)}
               >
                 <div className="also-img">
-                  <img src={item.images?.[0]} alt={item.title} />
+                  <img src={withPublicUrl(item.images?.[0])} alt={item.title} />
                 </div>
-
-                <p className="also-title">{item.title}</p>
-
-                <div className="also-price">
-                  <span>₹ {item.price}</span>
-                  {item.oldPrice && <del>₹ {item.oldPrice}</del>}
+                <div className="also-info">
+                  <p className="also-title">{item.title}</p>
+                  <div className="also-price">
+                    <span>Rs. {item.price}</span>
+                    {item.oldPrice && <del>Rs. {item.oldPrice}</del>}
+                  </div>
+                  <button className="also-cta" type="button">
+                    View Details
+                  </button>
                 </div>
               </div>
             ))}

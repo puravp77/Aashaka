@@ -1,4 +1,5 @@
 import "./PlaceOrder.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
@@ -259,7 +260,7 @@ export default function PlaceOrder() {
         price: item.price,
         qty: item.qty,
         size: item.size || null,
-        image: item.image,
+        image: withPublicUrl(item.image),
       })),
       subtotal: total,
       shipping: SHIPPING_CHARGE,
@@ -497,7 +498,7 @@ export default function PlaceOrder() {
               className="order-item"
               key={`${item.id}-${item.size || "nosize"}`}
             >
-              <img src={item.image} alt={item.title} />
+              <img src={withPublicUrl(item.image)} alt={item.title} />
               <div>
                 <p>{item.title}</p>
 

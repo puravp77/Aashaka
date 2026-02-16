@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "./HeaderMainNav.css";
+import { withPublicUrl } from "../utils/assetPath";
 
 const HeaderMainNav = () => {
   const { uniqueItemCount } = useCart();
@@ -13,7 +14,7 @@ const HeaderMainNav = () => {
     <nav className="header-main-nav">
       <div className="header-main-inner">
         <NavLink to="/" className="main-logo">
-          <img src="images/headerlogo.jpeg" alt="Aashaka" />
+          <img src={withPublicUrl("images/headerlogo.jpeg")} alt="Aashaka" />
         </NavLink>
 
         <div className="main-links">

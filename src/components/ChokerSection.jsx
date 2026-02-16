@@ -1,9 +1,21 @@
 import "./ChokerSection.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import allProducts from "../data/allProducts";
 
 export default function ChokerSection() {
   const navigate = useNavigate();
+  const container = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.08 },
+    },
+  };
+  const item = {
+    hidden: { opacity: 0, y: 18 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   const chokers = allProducts.filter(
     (item) => item.category === "choker"
@@ -13,16 +25,23 @@ export default function ChokerSection() {
     <section className="choker-section">
       <h2 className="choker-title">CHOKER</h2>
 
-      <div className="choker-grid">
+      <motion.div
+        className="choker-grid"
+        variants={container}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.2 }}
+      >
         {chokers.map((product) => (
-          <div
+          <motion.div
             className="product-card"
             key={product.id}
             onClick={() => navigate(`/product/${product.id}`)}
             style={{ cursor: "pointer" }}
+            variants={item}
           >
             <div className="product-image">
-              <img src={product.images[0]} alt={product.title} />
+              <img src={withPublicUrl(product.images[0])} alt={product.title} />
               <div className="hover-overlay"></div>
               <span className="view-icon">👁</span>
             </div>
@@ -35,9 +54,9 @@ export default function ChokerSection() {
                 <span className="old-price">₹{product.oldPrice}</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

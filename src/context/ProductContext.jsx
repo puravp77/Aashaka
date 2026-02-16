@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { mapImageList, withPublicUrl } from "../utils/assetPath";
 
 const ProductContext = createContext();
 
@@ -12,7 +13,14 @@ export function ProductProvider({ children }) {
         const res = await fetch(`${process.env.PUBLIC_URL}/data/products.json`);
         const data = await res.json();
 
-        setProducts(Array.isArray(data) ? data : []);
+        const normalized = Array.isArray(data)
+          ? data.map((product) => ({
+              ...product,
+              images: mapImageList(product.images),
+              image: withPublicUrl(product.image),
+            }))
+          : [];
+        setProducts(normalized);
       } catch (error) {
         console.error("Failed to load products:", error);
         setProducts([]);

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "./OrderReview.css";
+import { withPublicUrl } from "../utils/assetPath";
 
 export default function OrderReview() {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ export default function OrderReview() {
               key={`${item.id}-${item.size || "free"}`}
             >
               <img
-                src={item.image}
+                src={withPublicUrl(item.image)}
                 alt={item.title}
               />
 

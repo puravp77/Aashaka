@@ -1,4 +1,5 @@
 import "./CartDrawer.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -51,7 +52,7 @@ export default function CartDrawer({ open, onClose }) {
                   className="drawer-item"
                   key={`${item.id}-${item.size || "free"}`}
                 >
-                  <img src={item.image} alt={item.title} />
+                  <img src={withPublicUrl(item.image)} alt={item.title} />
 
                   <div className="drawer-text">
                     <h4>{item.title}</h4>

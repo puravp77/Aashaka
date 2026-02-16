@@ -1,10 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import { motion } from "framer-motion";
 import "./CategorySection.css";
+import { withPublicUrl } from "../utils/assetPath";
 
 export default function CategorySection() {
   const navigate = useNavigate();
   const gridRef = useRef(null);
+  const container = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.08 },
+    },
+  };
+  const item = {
+    hidden: { opacity: 0, y: 16 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   const scrollLeft = () => {
     gridRef.current.scrollBy({ left: -180, behavior: "smooth" });
@@ -27,49 +39,61 @@ export default function CategorySection() {
           ›
         </button>
 
-        <div className="category-grid" ref={gridRef}>
+        <motion.div
+          className="category-grid"
+          ref={gridRef}
+          variants={container}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.2 }}
+        >
 
-          <div
+          <motion.div
             className="category-card"
             onClick={() => navigate("/jewellery/oxidised")}
+            variants={item}
           >
-            <img src="images/OxidisedSet.jpeg" alt="Oxidised Set" />
+            <img src={withPublicUrl("images/OxidisedSet.jpeg")} alt="Oxidised Set" />
             <p><b>Oxidised set</b></p>
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
             className="category-card"
             onClick={() => navigate("/jewellery/bangles")}
+            variants={item}
           >
-            <img src="images/kada.jpeg" alt="Bangles Kada" />
+            <img src={withPublicUrl("images/kada.jpeg")} alt="Bangles Kada" />
             <p><b>Bangles-Kada</b></p>
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
             className="category-card"
             onClick={() => navigate("/jewellery/earrings")}
+            variants={item}
           >
-            <img src="images/Earrings.jpeg" alt="Earrings" />
+            <img src={withPublicUrl("images/Earrings.jpeg")} alt="Earrings" />
             <p><b>Earrings</b></p>
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
             className="category-card"
             onClick={() => navigate("/jewellery/necklace")}
+            variants={item}
           >
-            <img src="images/neckless.jpeg" alt="Necklace" />
+            <img src={withPublicUrl("images/neckless.jpeg")} alt="Necklace" />
             <p><b>Necklace</b></p>
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
             className="category-card"
             onClick={() => navigate("/kurti")}
+            variants={item}
           >
-            <img src="images/kurti.jpeg" alt="Kurti Set" />
+            <img src={withPublicUrl("images/kurti.jpeg")} alt="Kurti Set" />
             <p><b>Kurti Set</b></p>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
       </div>
     </section>
   );

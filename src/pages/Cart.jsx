@@ -1,4 +1,5 @@
 import "./Cart.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -54,7 +55,7 @@ export default function Cart() {
               </button>
 
               {/* PRODUCT IMAGE */}
-              <img src={item.image} alt={item.title} />
+              <img src={withPublicUrl(item.image)} alt={item.title} />
 
               {/* PRODUCT INFO */}
               <div className="cart-info">

@@ -55,6 +55,10 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  border: 1px solid #eadfd6;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
 }
 
 /* ===============================
@@ -71,6 +75,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.35s ease;
 }
 
 /* ===============================
@@ -123,6 +128,15 @@
   color: #fff;
   font-weight: 700;
   cursor: pointer;
+}
+
+.watch-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+}
+
+.watch-card:hover .watch-video video {
+  transform: scale(1.05);
 }
 
 /* ===============================

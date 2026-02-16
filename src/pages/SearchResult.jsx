@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, NavLink } from "react-router-dom";
 import allProducts from "../data/allProducts";
 import "./SearchResult.css";
+import { withPublicUrl } from "../utils/assetPath";
 
 export default function SearchResult() {
   const location = useLocation();
@@ -47,7 +48,7 @@ export default function SearchResult() {
               <NavLink to={`/product/${product.id}`}>
                 <div className="image-box">
                   <img
-                    src={product.images?.[0]}
+                    src={withPublicUrl(product.images?.[0])}
                     alt={product.title}
                   />
                 </div>

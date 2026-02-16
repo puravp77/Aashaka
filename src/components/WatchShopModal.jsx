@@ -1,4 +1,5 @@
 import "./WatchShopModal.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useNavigate } from "react-router-dom";
 
 export default function WatchShopModal({ items, index, setIndex }) {
@@ -21,7 +22,7 @@ export default function WatchShopModal({ items, index, setIndex }) {
 
       <div className="modal-card">
         <video
-          src={item.video}
+          src={withPublicUrl(item.video)}
           autoPlay
           muted
           loop

@@ -1,3 +1,5 @@
+import { withPublicUrl } from "./assetPath";
+
 const LOCAL_USERS_KEY = "aashaka_users";
 
 export const isStaticHost = () => {
@@ -10,7 +12,12 @@ export const loadLocalUsers = async () => {
     const stored = localStorage.getItem(LOCAL_USERS_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
-      return Array.isArray(parsed) ? parsed : [];
+      return Array.isArray(parsed)
+        ? parsed.map((user) => ({
+            ...user,
+            image: withPublicUrl(user.image),
+          }))
+        : [];
     }
   } catch {
     // ignore malformed storage
@@ -22,8 +29,12 @@ export const loadLocalUsers = async () => {
     const data = await res.json();
     const users = Array.isArray(data) ? data : data?.users;
     if (Array.isArray(users)) {
-      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users));
-      return users;
+      const normalized = users.map((user) => ({
+        ...user,
+        image: withPublicUrl(user.image),
+      }));
+      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(normalized));
+      return normalized;
     }
   } catch {
     // ignore fetch errors
@@ -35,4 +46,3 @@ export const loadLocalUsers = async () => {
 export const saveLocalUsers = (users) => {
   localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users));
 };
-

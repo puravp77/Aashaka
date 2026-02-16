@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./UserProfile.css";
 import "../pages/OrderHistory.css";
 import { useAuth } from "../context/AuthContext";
+import { withPublicUrl } from "../utils/assetPath";
 
 const STATES = [
   "Andaman and Nicobar Islands",
@@ -422,7 +423,7 @@ const UserProfile = () => {
                             className="order-history-item"
                             key={`${order.orderId || order.id}-${item.id}-${item.size || "nosize"}`}
                           >
-                            <img src={item.image} alt={item.title} />
+                            <img src={withPublicUrl(item.image)} alt={item.title} />
                             <div>
                               <div className="order-item-title">{item.title}</div>
                               {item.size && (

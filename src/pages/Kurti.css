@@ -31,10 +31,31 @@ color: #808080;
 }
 
 /* PRODUCT ITEM */
+.kurti-item {
+  background: #fff;
+  border: 1px solid #eadfd6;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.kurti-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+}
+
 .kurti-item img {
   width: 100%;
   height: 400px;
   object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.kurti-item:hover img {
+  transform: scale(1.05);
 }
 
 .kurti-item h3 {
@@ -42,11 +63,13 @@ color: #808080;
   font-size: 15px;
   margin: 10px 0 6px;
   justify-content: left;
+  padding: 0 12px;
 }
 
 .price {
   font-size: 14px;
   justify-content: left;
+  padding: 0 12px 14px;
 }
 
 .price .old {

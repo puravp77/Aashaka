@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./header.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FiClipboard, FiHeart, FiLogOut, FiSearch, FiUser } from "react-icons/fi";
 import { HiOutlineMenu } from "react-icons/hi";
@@ -169,7 +170,7 @@ export default function Header() {
       <nav className="navbar">
         <div className="logo">
           <NavLink to="/">
-            <img src="images/headerlogo.jpeg" alt="Aashaka" />
+            <img src={withPublicUrl("images/headerlogo.jpeg")} alt="Aashaka" />
           </NavLink>
         </div>
 

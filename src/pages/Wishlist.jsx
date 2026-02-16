@@ -1,4 +1,5 @@
 import "./Wishlist.css";
+import { withPublicUrl } from "../utils/assetPath";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
@@ -47,7 +48,7 @@ export default function Wishlist() {
                   }}
                 >
                   {(item.images?.[0] || item.image) && (
-                    <img src={item.images?.[0] || item.image} alt={item.title} />
+                    <img src={withPublicUrl(item.images?.[0] || item.image)} alt={item.title} />
                   )}
                 </div>
 
