@@ -158,6 +158,22 @@
       "state": "Gujarat",
       "city": "Surat",
       "pincode": "395002"
+    },
+    {
+      "id": "92e5",
+      "userId": "purav222@gmail.com",
+      "firstName": "Purav",
+      "middleName": "Manoj",
+      "lastName": "Patel",
+      "mobile": "9106618331",
+      "email": "patelpurav077@gmail.com",
+      "company": "Sm Techno",
+      "address1": "Mahavir Timber Mart, Khatodara, Surat",
+      "address2": "",
+      "country": "India",
+      "state": "Gujarat",
+      "city": "Surat",
+      "pincode": "395002"
     }
   ],
   "orders": [
