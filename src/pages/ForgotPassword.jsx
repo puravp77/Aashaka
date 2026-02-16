@@ -1,6 +1,7 @@
 import "./Auth.css";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { isStaticHost, loadLocalUsers, saveLocalUsers } from "../utils/localAuth";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -43,6 +44,24 @@ export default function ForgotPassword() {
     }
 
     try {
+      if (isStaticHost()) {
+        const users = await loadLocalUsers();
+        const exists = users.some((u) => u.id === email.trim());
+        if (!exists) {
+          setErrors({ email: "Email ID does not exist" });
+          return;
+        }
+
+        const otp = generateOtp();
+        setGeneratedOtp(otp);
+        setOtpInput("");
+        setErrors({});
+        setProgress(100);
+        setShowToast(true);
+        setStep(2);
+        return;
+      }
+
       const res = await fetch(
         `http://localhost:5000/users/${email.trim()}`
       );
@@ -122,6 +141,37 @@ export default function ForgotPassword() {
     }
 
     try {
+      if (isStaticHost()) {
+        const users = await loadLocalUsers();
+        const idx = users.findIndex((u) => u.id === email.trim());
+        if (idx === -1) {
+          setErrors({ password: "Email ID does not exist" });
+          return;
+        }
+        const updated = [...users];
+        updated[idx] = { ...updated[idx], password: newPassword };
+        saveLocalUsers(updated);
+
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          try {
+            const parsed = JSON.parse(storedUser);
+            if (parsed?.id === email.trim()) {
+              localStorage.setItem(
+                "user",
+                JSON.stringify({ ...parsed, password: newPassword })
+              );
+            }
+          } catch {
+            // ignore
+          }
+        }
+
+        setErrors({});
+        setStep(4);
+        return;
+      }
+
       const updateRes = await fetch(
         `http://localhost:5000/users/${email.trim()}`,
         {

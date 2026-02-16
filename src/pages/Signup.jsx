@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { authPageVariants } from "../components/authPageMotion";
+import { isStaticHost, loadLocalUsers, saveLocalUsers } from "../utils/localAuth";
 
 /* ---------------- HELPERS ---------------- */
 
@@ -86,6 +87,29 @@ export default function Signup() {
     } 
     
     try {
+      if (isStaticHost()) {
+        const users = await loadLocalUsers();
+        const exists = users.some((u) => u.id === form.email.trim());
+        if (exists) {
+          toast.error("Email already registered");
+          return;
+        }
+
+        const nextUsers = [
+          ...users,
+          { id: form.email.trim(), password: form.password, role: "user" },
+        ];
+        saveLocalUsers(nextUsers);
+
+        toast.success("Account created successfully!", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+
+        navigate("/login", { replace: true });
+        return;
+      }
+
       const checkRes = await fetch(
         `http://localhost:5000/users?id=${form.email.trim()}`
       );

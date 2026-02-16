@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { isStaticHost, loadLocalUsers } from "../utils/localAuth";
 
 const AuthContext = createContext();
 
@@ -15,31 +16,46 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (id, password) => {
-  const res = await fetch(
-    `http://localhost:5000/users?id=${id}`
-  );
+    if (isStaticHost()) {
+      const users = await loadLocalUsers();
+      const user = users.find((u) => u.id === id);
+      if (!user) {
+        throw new Error("EMAIL_NOT_FOUND");
+      }
+      if (user.password !== password) {
+        throw new Error("WRONG_PASSWORD");
+      }
 
-  if (!res.ok) {
-    throw new Error("Server error");
-  }
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
+      return user;
+    }
 
-  const users = await res.json();
+    const res = await fetch(
+      `http://localhost:5000/users?id=${id}`
+    );
 
-  if (users.length === 0) {
-    throw new Error("EMAIL_NOT_FOUND");
-  }
+    if (!res.ok) {
+      throw new Error("Server error");
+    }
 
-  const user = users[0];
+    const users = await res.json();
 
-  if (user.password !== password) {
-    throw new Error("WRONG_PASSWORD");
-  }
+    if (users.length === 0) {
+      throw new Error("EMAIL_NOT_FOUND");
+    }
 
-  localStorage.setItem("user", JSON.stringify(user));
-  setUser(user);
+    const user = users[0];
 
-  return user;
-};
+    if (user.password !== password) {
+      throw new Error("WRONG_PASSWORD");
+    }
+
+    localStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
+
+    return user;
+  };
 
 
   const logout = () => {
