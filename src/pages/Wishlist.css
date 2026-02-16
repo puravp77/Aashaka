@@ -21,6 +21,55 @@
   text-align: center;
   color: #777;
   font-size: 15px;
+  background: radial-gradient(circle at top, #fff6f1 0%, #fbf6f2 40%, #f7f1ec 100%);
+  border: 1px solid #eadfd6;
+  padding: 36px 24px;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.wishlist-empty-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  border: 1px solid #eadfd6;
+  display: grid;
+  place-items: center;
+  color: #8b0d2b;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: #fff;
+  box-shadow: 0 8px 18px rgba(139, 13, 43, 0.12);
+}
+
+.wishlist-empty h4 {
+  margin: 6px 0;
+  font-size: 20px;
+  color: #2b1e1e;
+}
+
+.wishlist-empty p {
+  margin: 0 0 16px;
+  font-size: 14px;
+}
+
+.wishlist-empty-btn {
+  padding: 11px 26px;
+  border: 1px solid #8b0d2b;
+  background: #8b0d2b;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.wishlist-empty-btn:hover {
+  background: #6f0a22;
+  transform: translateY(-1px);
 }
 
 .wishlist-list {
@@ -32,11 +81,16 @@
 .wishlist-item {
   position: relative;
   display: grid;
-  grid-template-columns: 120px 1fr auto;
+  grid-template-columns: 140px 1fr auto;
   gap: 20px;
   align-items: center;
   padding: 16px 0;
   border-bottom: 1px solid #eee;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.wishlist-item:hover {
+  transform: translateY(-2px);
 }
 
 .wishlist-remove {
@@ -55,15 +109,18 @@
 
 .wishlist-image img {
   width: 100%;
-  max-width: 120px;
-  height: auto;
+  max-width: 140px;
+  height: 160px;
+  object-fit: cover;
   display: block;
+  border-radius: 10px;
 }
 
 .wishlist-info h4 {
   font-size: 16px;
   margin-bottom: 8px;
   cursor: pointer;
+  color: #1f1a17;
 }
 
 .wishlist-size {
@@ -92,15 +149,18 @@
 .wishlist-qty {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   padding: 6px 8px;
+  border-radius: 999px;
+  background: #f6f5f5;
 }
 
 .wishlist-qty button {
-  width: 22px;
-  height: 22px;
-  border: none;
-  background: transparent;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #f6f5f5;
+  background: #f6f5f5;
+  border-radius: 50%;
   cursor: pointer;
   font-size: 16px;
   line-height: 1;
@@ -120,6 +180,7 @@
   font-size: 13px;
   letter-spacing: 1.2px;
   text-transform: uppercase;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
 .wishlist-cart-btn:hover {
@@ -141,6 +202,7 @@
   .wishlist-actions {
     grid-column: 1 / -1;
     justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .wishlist-remove {

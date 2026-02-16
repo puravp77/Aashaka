@@ -4,83 +4,39 @@ import "../pages/OrderHistory.css";
 import { useAuth } from "../context/AuthContext";
 import { withPublicUrl } from "../utils/assetPath";
 
-const STATES = [
-  "Andaman and Nicobar Islands",
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chandigarh",
-  "Chhattisgarh",
-  "Dadra and Nagar Haveli and Daman and Diu",
-  "Delhi",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Jammu and Kashmir",
-  "Karnataka",
-  "Kerala",
-  "Ladakh",
-  "Lakshadweep",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Puducherry",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-];
+const STATES_API_URL = "https://www.india-location-hub.in/api/locations/states";
+const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/districts";
 
-const CITY_MAP = {
-  "Andaman and Nicobar Islands": ["Port Blair", "Car Nicobar", "Diglipur"],
-  "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur"],
-  "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Tawang"],
-  Assam: ["Guwahati", "Silchar", "Dibrugarh"],
-  Bihar: ["Patna", "Gaya", "Bhagalpur"],
-  Chandigarh: ["Chandigarh"],
-  Chhattisgarh: ["Raipur", "Bilaspur", "Durg"],
-  "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Diu", "Silvassa"],
-  Delhi: ["New Delhi", "Dwarka", "Rohini"],
-  Goa: ["Panaji", "Margao", "Vasco da Gama"],
-  Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-  Haryana: ["Gurugram", "Faridabad", "Panipat"],
-  "Himachal Pradesh": ["Shimla", "Manali", "Dharamshala"],
-  Jharkhand: ["Ranchi", "Jamshedpur", "Dhanbad"],
-  "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag"],
-  Karnataka: ["Bengaluru", "Mysuru", "Mangaluru"],
-  Kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode"],
-  Ladakh: ["Leh", "Kargil"],
-  Lakshadweep: ["Kavaratti", "Minicoy"],
-  "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior"],
-  Maharashtra: ["Mumbai", "Pune", "Nagpur", "Nashik"],
-  Manipur: ["Imphal", "Bishnupur"],
-  Meghalaya: ["Shillong", "Tura"],
-  Mizoram: ["Aizawl", "Lunglei"],
-  Nagaland: ["Kohima", "Dimapur"],
-  Odisha: ["Bhubaneswar", "Cuttack", "Rourkela"],
-  Punjab: ["Ludhiana", "Amritsar", "Jalandhar"],
-  Puducherry: ["Puducherry", "Karaikal"],
-  Rajasthan: ["Jaipur", "Jodhpur", "Udaipur"],
-  Sikkim: ["Gangtok", "Namchi"],
-  "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
-  Telangana: ["Hyderabad", "Warangal", "Nizamabad"],
-  Tripura: ["Agartala", "Udaipur"],
-  "Uttar Pradesh": ["Lucknow", "Noida", "Varanasi", "Kanpur"],
-  Uttarakhand: ["Dehradun", "Haridwar", "Haldwani"],
-  "West Bengal": ["Kolkata", "Howrah", "Siliguri"],
+const formatLocationName = (value) => {
+  if (!value || typeof value !== "string") return "";
+
+  return value
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(" ")
+    .map((word) => {
+      if (word === "of" || word === "and") return word;
+      if (word.includes("&")) {
+        return word
+          .split("&")
+          .map((part) =>
+            part ? part.charAt(0).toUpperCase() + part.slice(1) : ""
+          )
+          .join(" & ");
+      }
+      return word ? word.charAt(0).toUpperCase() + word.slice(1) : "";
+    })
+    .join(" ")
+    .replace(/\s+&\s+/g, " & ");
 };
+
+const normalizeLocationText = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/&/g, "and")
+    .trim();
 
 const UserProfile = () => {
   const { user } = useAuth();
@@ -105,6 +61,10 @@ const UserProfile = () => {
   const [stateSearch, setStateSearch] = useState("");
   const [isCityOpen, setIsCityOpen] = useState(false);
   const [citySearch, setCitySearch] = useState("");
+  const [stateOptions, setStateOptions] = useState([]);
+  const [districtOptions, setDistrictOptions] = useState([]);
+  const [locationLoading, setLocationLoading] = useState(true);
+  const [locationError, setLocationError] = useState("");
 
   const stateRef = useRef(null);
   const cityRef = useRef(null);
@@ -181,6 +141,71 @@ const UserProfile = () => {
       ignore = true;
     };
   }, [userId]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const loadLocations = async () => {
+      setLocationLoading(true);
+      setLocationError("");
+
+      try {
+        const [statesRes, districtsRes] = await Promise.all([
+          fetch(STATES_API_URL),
+          fetch(DISTRICTS_API_URL),
+        ]);
+
+        if (!statesRes.ok || !districtsRes.ok) {
+          throw new Error("Failed to load locations");
+        }
+
+        const statesJson = await statesRes.json();
+        const districtsJson = await districtsRes.json();
+
+        const apiStates = Array.isArray(statesJson?.data?.states)
+          ? statesJson.data.states
+          : [];
+        const apiDistricts = Array.isArray(districtsJson?.data?.districts)
+          ? districtsJson.data.districts
+          : [];
+
+        const normalizedStates = apiStates
+          .map((state) => ({
+            rawName: state?.name || "",
+            label: formatLocationName(state?.name || ""),
+          }))
+          .filter((state) => state.rawName && state.label)
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        const normalizedDistricts = apiDistricts
+          .map((district) => ({
+            name: formatLocationName(district?.name || ""),
+            rawStateName: district?.state_name || "",
+          }))
+          .filter((district) => district.name && district.rawStateName);
+
+        if (!ignore) {
+          setStateOptions(normalizedStates);
+          setDistrictOptions(normalizedDistricts);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setLocationError("Unable to load states and cities right now.");
+          setStateOptions([]);
+          setDistrictOptions([]);
+        }
+      } finally {
+        if (!ignore) {
+          setLocationLoading(false);
+        }
+      }
+    };
+
+    loadLocations();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -336,11 +361,22 @@ const UserProfile = () => {
     setIsCityOpen(false);
   };
 
-  const handleSelectState = (state) => {
-    setFormData((prev) => ({ ...prev, state, city: "" }));
+  const selectedStateOption = stateOptions.find((stateOption) => {
+    const normalizedSelected = normalizeLocationText(formData.state);
+    return (
+      normalizeLocationText(stateOption.label) === normalizedSelected ||
+      normalizeLocationText(stateOption.rawName) === normalizedSelected
+    );
+  });
+
+  const selectedStateRawName = selectedStateOption?.rawName || "";
+
+  const handleSelectState = (stateOption) => {
+    setFormData((prev) => ({ ...prev, state: stateOption.label, city: "" }));
     setErrors((prev) => ({ ...prev, state: "", city: "" }));
     setIsStateOpen(false);
     setStateSearch("");
+    setCitySearch("");
   };
 
   const handleSelectCity = (city) => {
@@ -357,17 +393,28 @@ const UserProfile = () => {
   };
 
   const toggleCityDropdown = () => {
-    if (!formData.state) return;
+    if (!selectedStateRawName) return;
     setIsCityOpen((prev) => !prev);
     setIsStateOpen(false);
     setCitySearch("");
   };
 
-  const filteredStates = STATES.filter((state) =>
-    state.toLowerCase().includes(stateSearch.toLowerCase())
+  const filteredStates = stateOptions.filter((stateOption) =>
+    stateOption.label.toLowerCase().includes(stateSearch.toLowerCase())
   );
 
-  const cityOptions = CITY_MAP[formData.state] || [];
+  const cityOptions = Array.from(
+    new Set(
+      districtOptions
+        .filter(
+          (district) =>
+            normalizeLocationText(district.rawStateName) ===
+            normalizeLocationText(selectedStateRawName)
+        )
+        .map((district) => district.name)
+    )
+  ).sort((a, b) => a.localeCompare(b));
+
   const filteredCities = cityOptions.filter((city) =>
     city.toLowerCase().includes(citySearch.toLowerCase())
   );
@@ -424,7 +471,7 @@ const UserProfile = () => {
                             key={`${order.orderId || order.id}-${item.id}-${item.size || "nosize"}`}
                           >
                             <img src={withPublicUrl(item.image)} alt={item.title} />
-                            <div>
+                              <div>
                               <div className="order-item-title">{item.title}</div>
                               {item.size && (
                                 <div className="order-item-size">Size: {item.size}</div>
@@ -456,7 +503,9 @@ const UserProfile = () => {
             </div>
           )}
 
-          {/* ================= ADDRESSES ================= */}
+
+
+
           {activeTab === "address" && (
             <div className="address-section">
               <h2 className="address-title">ADDRESSES</h2>
@@ -660,19 +709,26 @@ const UserProfile = () => {
                               onChange={(e) => setStateSearch(e.target.value)}
                             />
                             <div className="select-options">
-                              {filteredStates.length === 0 ? (
-                                <div className="select-empty">No results</div>
+                              {locationLoading ? (
+                                <div className="select-empty">Loading states...</div>
+                              ) : locationError ? (
+                                <div className="select-empty">{locationError}</div>
+                              ) : filteredStates.length === 0 ? (
+                                <div className="select-empty">No states found</div>
                               ) : (
-                                filteredStates.map((state) => (
+                                filteredStates.map((stateOption) => (
                                   <button
-                                    key={state}
+                                    key={stateOption.rawName}
                                     type="button"
                                     className={`select-option ${
-                                      formData.state === state ? "selected" : ""
+                                      normalizeLocationText(formData.state) ===
+                                      normalizeLocationText(stateOption.label)
+                                        ? "selected"
+                                        : ""
                                     }`}
-                                    onClick={() => handleSelectState(state)}
+                                    onClick={() => handleSelectState(stateOption)}
                                   >
-                                    {state}
+                                    {stateOption.label}
                                   </button>
                                 ))
                               )}
@@ -691,7 +747,7 @@ const UserProfile = () => {
                       </label>
                       <div
                         className={`select-wrapper ${
-                          !formData.state ? "disabled" : ""
+                          !selectedStateRawName ? "disabled" : ""
                         } ${isCityOpen ? "open" : ""}`}
                         ref={cityRef}
                       >
@@ -699,7 +755,7 @@ const UserProfile = () => {
                           type="button"
                           className="select-trigger"
                           onClick={toggleCityDropdown}
-                          disabled={!formData.state}
+                          disabled={!selectedStateRawName}
                         >
                           <span
                             className={
@@ -720,9 +776,13 @@ const UserProfile = () => {
                               onChange={(e) => setCitySearch(e.target.value)}
                             />
                             <div className="select-options">
-                              {filteredCities.length === 0 ? (
+                              {locationLoading ? (
+                                <div className="select-empty">Loading cities...</div>
+                              ) : locationError ? (
+                                <div className="select-empty">{locationError}</div>
+                              ) : filteredCities.length === 0 ? (
                                 <div className="select-empty">
-                                  No results
+                                  No cities found
                                 </div>
                               ) : (
                                 filteredCities.map((city) => (
