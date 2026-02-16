@@ -2,22 +2,41 @@ import "./OrderHistory.css";
 import { withPublicUrl } from "../utils/assetPath";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import {
+  getLocalOrders,
+  shouldUseLocalCheckoutStore,
+} from "../utils/localCheckoutData";
 
 export default function OrderHistory() {
   const { user } = useAuth();
+  const storedUser = (() => {
+    try {
+      const raw = localStorage.getItem("user");
+      return raw ? JSON.parse(raw) : null;
+    } catch (err) {
+      return null;
+    }
+  })();
+  const userId = user?.id || storedUser?.id || null;
+  const useLocalCheckoutStore = shouldUseLocalCheckoutStore();
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    if (!user?.id) {
+    if (!userId) {
       setOrders([]);
       return;
     }
 
     let ignore = false;
 
+    if (useLocalCheckoutStore) {
+      setOrders(getLocalOrders(userId));
+      return;
+    }
+
     try {
       const loadOrders = async () => {
-        const res = await fetch(`http://localhost:5000/orders?userId=${encodeURIComponent(user.id)}`);
+        const res = await fetch(`http://localhost:5000/orders?userId=${encodeURIComponent(userId)}`);
         if (!res.ok) return;
         const data = await res.json();
         if (!ignore) {
@@ -32,7 +51,7 @@ export default function OrderHistory() {
     return () => {
       ignore = true;
     };
-  }, [user]);
+  }, [userId, useLocalCheckoutStore]);
 
   return (
     <section className="order-history-page">

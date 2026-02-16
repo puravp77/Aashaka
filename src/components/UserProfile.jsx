@@ -3,6 +3,13 @@ import "./UserProfile.css";
 import "../pages/OrderHistory.css";
 import { useAuth } from "../context/AuthContext";
 import { withPublicUrl } from "../utils/assetPath";
+import {
+  createLocalRecordId,
+  getLocalAddresses,
+  getLocalOrders,
+  setLocalAddresses,
+  shouldUseLocalCheckoutStore,
+} from "../utils/localCheckoutData";
 
 const STATES_API_URL = "https://www.india-location-hub.in/api/locations/states";
 const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/districts";
@@ -49,6 +56,7 @@ const UserProfile = () => {
     }
   })();
   const userId = user?.id || storedUser?.id || null;
+  const useLocalCheckoutStore = shouldUseLocalCheckoutStore();
 
   // Tabs
   const [activeTab, setActiveTab] = useState("address");
@@ -101,6 +109,13 @@ const UserProfile = () => {
     let ignore = false;
 
     const loadOrders = async () => {
+      if (useLocalCheckoutStore) {
+        if (!ignore) {
+          setOrders(getLocalOrders(userId));
+        }
+        return;
+      }
+
       try {
         const res = await fetch(`http://localhost:5000/orders?userId=${encodeURIComponent(userId)}`);
         if (!res.ok) return;
@@ -117,7 +132,7 @@ const UserProfile = () => {
     return () => {
       ignore = true;
     };
-  }, [userId]);
+  }, [userId, useLocalCheckoutStore]);
 
   useEffect(() => {
     if (!userId) {
@@ -128,6 +143,13 @@ const UserProfile = () => {
     let ignore = false;
 
     const loadAddresses = async () => {
+      if (useLocalCheckoutStore) {
+        if (!ignore) {
+          setAddresses(getLocalAddresses(userId));
+        }
+        return;
+      }
+
       try {
         const res = await fetch(`http://localhost:5000/addresses?userId=${encodeURIComponent(userId)}`);
         if (!res.ok) return;
@@ -144,7 +166,7 @@ const UserProfile = () => {
     return () => {
       ignore = true;
     };
-  }, [userId]);
+  }, [userId, useLocalCheckoutStore]);
 
   useEffect(() => {
     let ignore = false;
@@ -361,6 +383,30 @@ const UserProfile = () => {
 
     setIsDeletingAddress(true);
 
+    if (useLocalCheckoutStore) {
+      const nextAddresses = addresses.filter((item, itemIndex) =>
+        hasPersistedId
+          ? String(item.id) !== String(address.id)
+          : itemIndex !== index
+      );
+
+      setAddresses(nextAddresses);
+      setLocalAddresses(userId, nextAddresses);
+
+      if (
+        showAddressForm &&
+        ((hasPersistedId && String(editingAddressId) === String(address.id)) ||
+          (!hasPersistedId && editingAddressIndex === index))
+      ) {
+        resetForm();
+        setShowAddressForm(false);
+      }
+
+      setDeleteTarget(null);
+      setIsDeletingAddress(false);
+      return;
+    }
+
     if (hasPersistedId) {
       try {
         const res = await fetch(`http://localhost:5000/addresses/${address.id}`, {
@@ -418,6 +464,53 @@ const UserProfile = () => {
     };
 
     const isEditing = editingAddressId !== null || editingAddressIndex !== null;
+
+    if (useLocalCheckoutStore) {
+      if (userId) {
+        let nextAddresses = [...addresses];
+
+        if (isEditing) {
+          const hasPersistedId =
+            editingAddressId !== null &&
+            editingAddressId !== undefined &&
+            editingAddressId !== "";
+
+          let updated = false;
+          nextAddresses = nextAddresses.map((item, index) => {
+            const isMatch = hasPersistedId
+              ? String(item.id) === String(editingAddressId)
+              : index === editingAddressIndex;
+
+            if (!isMatch) return item;
+            updated = true;
+            return {
+              ...item,
+              ...payload,
+              id: item.id ?? createLocalRecordId("addr"),
+            };
+          });
+
+          if (!updated) {
+            nextAddresses.push({
+              ...payload,
+              id: editingAddressId || createLocalRecordId("addr"),
+            });
+          }
+        } else {
+          nextAddresses.push({
+            ...payload,
+            id: createLocalRecordId("addr"),
+          });
+        }
+
+        setAddresses(nextAddresses);
+        setLocalAddresses(userId, nextAddresses);
+      }
+
+      resetForm();
+      setShowAddressForm(false);
+      return;
+    }
 
     if (isEditing) {
       const hasPersistedId =

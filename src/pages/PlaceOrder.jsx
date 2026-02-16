@@ -5,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useRef } from "react";
+import {
+  appendLocalOrder,
+  getLocalAddresses,
+  shouldUseLocalCheckoutStore,
+} from "../utils/localCheckoutData";
 
 
 /* =============================
@@ -33,6 +38,7 @@ export default function PlaceOrder() {
     }
   })();
   const userId = user?.id || storedUser?.id || null;
+  const useLocalCheckoutStore = shouldUseLocalCheckoutStore();
 
   const [paymentMode, setPaymentMode] = useState("COD");
 
@@ -79,6 +85,13 @@ export default function PlaceOrder() {
     let ignore = false;
 
     const loadAddresses = async () => {
+      if (useLocalCheckoutStore) {
+        if (!ignore) {
+          setAddresses(getLocalAddresses(userId));
+        }
+        return;
+      }
+
       try {
         const res = await fetch(`http://localhost:5000/addresses?userId=${encodeURIComponent(userId)}`);
         if (!res.ok) return;
@@ -95,7 +108,7 @@ export default function PlaceOrder() {
     return () => {
       ignore = true;
     };
-  }, [userId]);
+  }, [userId, useLocalCheckoutStore]);
 
   useEffect(() => {
     try {
@@ -284,14 +297,18 @@ export default function PlaceOrder() {
       },
     };
 
-    try {
-      await fetch("http://localhost:5000/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderRecord),
-      });
-    } catch (err) {
-      // If API fails, continue checkout without blocking
+    if (useLocalCheckoutStore) {
+      appendLocalOrder(orderRecord.userId, orderRecord);
+    } else {
+      try {
+        await fetch("http://localhost:5000/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderRecord),
+        });
+      } catch (err) {
+        // If API fails, continue checkout without blocking
+      }
     }
 
     try {
