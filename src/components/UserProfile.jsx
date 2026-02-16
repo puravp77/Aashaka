@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import "./UserProfile.css";
 import "../pages/OrderHistory.css";
 import { useAuth } from "../context/AuthContext";
@@ -507,6 +508,10 @@ const UserProfile = () => {
         setLocalAddresses(userId, nextAddresses);
       }
 
+      if (isEditing) {
+        toast.success("Address updated successfully!");
+      }
+
       resetForm();
       setShowAddressForm(false);
       return;
@@ -568,6 +573,10 @@ const UserProfile = () => {
       } catch (err) {
         setAddresses((prev) => [...prev, payload]);
       }
+    }
+
+    if (isEditing) {
+      toast.success("Address updated successfully!");
     }
 
     resetForm();
@@ -726,64 +735,91 @@ const UserProfile = () => {
 
           {activeTab === "address" && (
             <div className="address-section">
-              <h2 className="address-title">ADDRESSES</h2>
-
-              <button
-                className="add-address-btn"
-                onClick={() => {
-                  resetForm();
-                  setShowAddressForm(true);
-                }}
-              >
-                ADD ADDRESS
-              </button>
+              <div className="address-hero">
+                <p className="address-kicker">Your Account</p>
+                <h2 className="address-title">Address Book</h2>
+                <p className="address-subtitle">
+                  Save and manage your delivery locations for faster checkout.
+                </p>
+                <button
+                  className="add-address-btn"
+                  onClick={() => {
+                    resetForm();
+                    setShowAddressForm(true);
+                  }}
+                >
+                  + Add New Address
+                </button>
+              </div>
 
               {!showAddressForm ? (
-                <div className="address-table">
-                  <div className="address-table-header">
-                    <span>Name</span>
-                    <span>Address</span>
-                    <span>Actions</span>
-                  </div>
-
+                <div className="address-directory">
                   {addresses.length === 0 ? (
-                    <div className="address-empty">Address Not Available</div>
+                    <div className="address-empty">
+                      <h3>No saved addresses yet</h3>
+                      <p>Add your first delivery address to get started.</p>
+                    </div>
                   ) : (
-                    addresses.map((addr, index) => (
-                      <div
-                        className="address-table-row"
-                        key={addr.id ?? `address-${index}`}
-                      >
-                        <span>
-                          {addr.firstName} {addr.middleName} {addr.lastName}
-                        </span>
-                        <span>
-                          {addr.address1}
-                          {addr.address2 ? `, ${addr.address2}` : ""},{" "}
-                          {addr.city}, {addr.state} - {addr.pincode}
-                        </span>
-                        <div className="address-actions">
-                          <button
-                            type="button"
-                            className="address-action"
-                            onClick={() => handleEditAddress(addr, index)}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            className="address-action delete"
-                            onClick={() => handleDeleteAddress(addr, index)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    ))
+                    <div className="address-grid">
+                      {addresses.map((addr, index) => (
+                        <article
+                          className="address-card"
+                          key={addr.id ?? `address-${index}`}
+                        >
+                          <div className="address-card-head">
+                            <h3 className="address-card-name">
+                              {[addr.firstName, addr.middleName, addr.lastName]
+                                .filter(Boolean)
+                                .join(" ") || "Saved Address"}
+                            </h3>
+                            <span className="address-chip">
+                              {addr.pincode || "No PIN"}
+                            </span>
+                          </div>
+
+                          <p className="address-card-line">
+                            {[addr.address1, addr.address2].filter(Boolean).join(", ")}
+                          </p>
+                          <p className="address-card-line muted">
+                            {[addr.city, addr.state].filter(Boolean).join(", ")}
+                          </p>
+                          <div className="address-card-meta">
+                            {addr.mobile && <span>Mobile: {addr.mobile}</span>}
+                            {addr.email && <span>{addr.email}</span>}
+                          </div>
+
+                          <div className="address-actions">
+                            <button
+                              type="button"
+                              className="address-action"
+                              onClick={() => handleEditAddress(addr, index)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              className="address-action delete"
+                              onClick={() => handleDeleteAddress(addr, index)}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
                   )}
                 </div>
               ) : (
+                <div className="address-form-wrap">
                 <form className="address-form" onSubmit={handleSubmit}>
+                  <div className="address-form-head">
+                    <h3>
+                      {editingAddressId !== null || editingAddressIndex !== null
+                        ? "Edit Address"
+                        : "Add New Address"}
+                    </h3>
+                    <p>Fields marked with * are required.</p>
+                  </div>
                   <div className="address-form-grid">
                     <div className="address-field">
                       <label>
@@ -931,7 +967,7 @@ const UserProfile = () => {
                               formData.state ? "" : "select-placeholder"
                             }
                           >
-                            {formData.state || "--------Select State--------"}
+                            {formData.state || "Select State"}
                           </span>
                           <span className="select-caret"></span>
                         </button>
@@ -998,7 +1034,7 @@ const UserProfile = () => {
                               formData.city ? "" : "select-placeholder"
                             }
                           >
-                            {formData.city || "--------Select City--------"}
+                            {formData.city || "Select City"}
                           </span>
                           <span className="select-caret"></span>
                         </button>
@@ -1078,6 +1114,7 @@ const UserProfile = () => {
                     </button>
                   </div>
                 </form>
+                </div>
               )}
             </div>
           )}

@@ -1,132 +1,355 @@
+:root {
+  --profile-bg: #f7f2ed;
+  --surface: #fffdf8;
+  --surface-strong: #fffaf2;
+  --line: #e5d7c9;
+  --ink: #2d1f1a;
+  --ink-soft: #6b5a51;
+  --brand: #7f102f;
+  --brand-deep: #5d0b23;
+  --accent: #c9873d;
+  --danger: #8a2020;
+  --font-display: "Cinzel", "Bodoni MT", "Times New Roman", serif;
+  --font-body: "Lora", Georgia, serif;
+}
+
 .profile-container {
   width: 100%;
-  background: #ffffff;
-  padding: 40px 0 80px;
+  padding: 36px 0 84px;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(201, 135, 61, 0.16), transparent 42%),
+    radial-gradient(circle at 100% 28%, rgba(127, 16, 47, 0.12), transparent 40%),
+    linear-gradient(180deg, #fffaf4 0%, var(--profile-bg) 45%, #f5efe8 100%);
 }
 
 .profile-inner {
-  max-width: 1200px;
+  max-width: 1220px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
+.profile-content {
+  animation: fadeLift 0.35s ease;
+}
+
 .profile-tabs {
-  display: flex;
-  gap: 28px;
-  margin-bottom: 36px;
+  display: inline-flex;
+  gap: 8px;
+  margin: 0 0 30px;
+  padding: 6px;
+  border: 1px solid rgba(127, 16, 47, 0.26);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
 }
 
 .profile-tabs button {
-  background: none;
   border: none;
-  font-family: "Times New Roman", serif;
-  font-size: 14px;
-  letter-spacing: 1.6px;
-  cursor: pointer;
-  padding-bottom: 6px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: #333;
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.profile-tabs button:hover {
+  color: var(--ink);
+  background: rgba(127, 16, 47, 0.08);
 }
 
 .profile-tabs button.active {
-  border-bottom: 1px solid #333;
+  color: #fff;
+  background: linear-gradient(145deg, var(--brand) 0%, var(--brand-deep) 100%);
+  box-shadow: 0 10px 20px rgba(93, 11, 35, 0.22);
 }
 
-.address-title {
-  text-align: center;
-  font-family: "Times New Roman", serif;
-  font-size: 26px;
-  letter-spacing: 1.8px;
-  color: #8b0d2b;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-}
-
-.add-address-btn {
-  display: inline-block;
-  margin: 0 auto 36px;
-  padding: 10px 24px;
-  border: 1px solid #333;
-  background: transparent;
-  cursor: pointer;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
+.orders-section h2 {
+  margin: 0 0 14px;
+  color: var(--ink);
+  font-family: var(--font-display);
+  letter-spacing: 0.8px;
 }
 
 .address-section {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 26px;
+  background: linear-gradient(180deg, rgba(255, 253, 248, 0.95) 0%, rgba(255, 249, 241, 0.98) 100%);
+  box-shadow: 0 14px 34px rgba(52, 35, 25, 0.1);
+  overflow: visible;
+}
+
+.address-section::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -70px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 30%, rgba(127, 16, 47, 0.24), transparent 68%);
+  pointer-events: none;
+}
+
+.address-hero {
+  position: relative;
+  margin-bottom: 26px;
   text-align: center;
 }
 
-.address-table {
-  text-align: left;
+.address-kicker {
+  margin: 0;
+  color: var(--accent);
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-family: var(--font-display);
+}
+
+.address-title {
+  margin: 8px 0 6px;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: 1.4px;
+  color: var(--brand);
+  text-transform: uppercase;
+}
+
+.address-subtitle {
   margin: 0 auto;
-  max-width: 1000px;
-  border-top: 1px solid #ffffff;
+  max-width: 560px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-family: var(--font-body);
+  font-size: 15px;
 }
 
-.address-table-header {
-  display: grid;
-  grid-template-columns: 1fr 2.4fr 1.2fr;
-  padding: 12px 16px;
-  font-weight: 600;
-  background: #f2f2f2;
-  border: 1px solid #e2ded6;
-  border-bottom: none;
+.add-address-btn {
+  margin-top: 16px;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(93, 11, 35, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.address-table-row {
+.add-address-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(93, 11, 35, 0.3);
+}
+
+.address-directory {
+  position: relative;
+  z-index: 1;
+}
+
+.address-grid {
   display: grid;
-  grid-template-columns: 1fr 2.4fr 1.2fr;
-  padding: 14px 16px;
-  border-bottom: 1px solid #e2ded6;
-  font-size: 14px;
-  align-items: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.address-card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  background: var(--surface);
+  box-shadow: 0 10px 22px rgba(58, 38, 28, 0.08);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  animation: riseIn 0.3s ease both;
+}
+
+.address-card:nth-child(2n) {
+  animation-delay: 0.06s;
+}
+
+.address-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(127, 16, 47, 0.38);
+  box-shadow: 0 14px 28px rgba(58, 38, 28, 0.14);
+}
+
+.address-card-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.address-card-name {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.4px;
+}
+
+.address-chip {
+  border: 1px solid rgba(127, 16, 47, 0.24);
+  background: rgba(127, 16, 47, 0.08);
+  color: var(--brand);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+}
+
+.address-card-line {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.55;
+  font-family: var(--font-body);
+}
+
+.address-card-line + .address-card-line {
+  margin-top: 4px;
+}
+
+.address-card-line.muted {
+  color: var(--ink-soft);
+}
+
+.address-card-meta {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.address-card-meta span {
+  background: #f5ede4;
+  border-radius: 999px;
+  padding: 4px 10px;
 }
 
 .address-actions {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 .address-action {
-  background: transparent;
-  border: none;
-  padding: 0;
-  font-family: "Times New Roman", serif;
-  font-size: 14px;
-  color: #8b0d2b;
+  border: 1px solid rgba(127, 16, 47, 0.36);
+  border-radius: 999px;
+  background: rgba(127, 16, 47, 0.08);
+  color: var(--brand);
+  padding: 7px 14px;
+  font-family: var(--font-display);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-size: 11px;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  transition: all 0.2s ease;
+}
+
+.address-action:hover {
+  background: rgba(127, 16, 47, 0.18);
 }
 
 .address-action.delete {
-  color: #8a2020;
+  border-color: rgba(138, 32, 32, 0.32);
+  background: rgba(138, 32, 32, 0.1);
+  color: var(--danger);
+}
+
+.address-action.delete:hover {
+  background: rgba(138, 32, 32, 0.2);
 }
 
 .address-empty {
-  padding: 18px 16px;
-  color: #666;
-  border-bottom: 1px solid #e2ded6;
+  border: 1px dashed #ccbba9;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fffefb 0%, #fff7ef 100%);
+  padding: 36px 20px;
+  text-align: center;
+}
+
+.address-empty h3 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-family: var(--font-display);
+  letter-spacing: 0.6px;
+}
+
+.address-empty p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+}
+
+.address-form-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1060px;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px;
+  background: var(--surface);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  overflow: visible;
 }
 
 .address-form {
   text-align: left;
-  margin: 10px auto 0;
-  max-width: 1000px;
+}
+
+.address-form-head {
+  margin-bottom: 16px;
+}
+
+.address-form-head h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--ink);
+  letter-spacing: 0.6px;
+}
+
+.address-form-head p {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: 14px;
 }
 
 .address-form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 22px 32px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 22px;
+  align-items: start;
+}
+
+.address-field {
+  align-self: start;
 }
 
 .address-field label {
   display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
+  margin-bottom: 7px;
+  color: #4b3e35;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
 }
 
 .required {
@@ -137,89 +360,107 @@
 .address-field textarea,
 .address-field select {
   width: 100%;
-  padding: 14px 16px;
-  background: #e9ebe6;
-  border: none;
+  padding: 13px 14px;
+  border: 1px solid #dbc9b7;
+  border-radius: 12px;
+  background: var(--surface-strong);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
   outline: none;
-  font-family: "Times New Roman", serif;
-  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.address-field input:disabled {
-  color: #777;
-  cursor: not-allowed;
+.address-field input:focus,
+.address-field textarea:focus,
+.address-field select:focus,
+.select-trigger:focus,
+.select-search:focus {
+  border-color: rgba(127, 16, 47, 0.45);
+  box-shadow: 0 0 0 3px rgba(127, 16, 47, 0.12);
 }
 
+.address-field input:disabled,
 .address-field select:disabled {
-  color: #777;
+  color: #8c7a6d;
   cursor: not-allowed;
+  background: #f1e8dd;
 }
 
 .address-field textarea {
   resize: none;
-  min-height: 88px;
+  min-height: 92px;
 }
 
 .select-wrapper {
   position: relative;
 }
 
+.select-wrapper.open {
+  z-index: 20;
+}
+
 .select-trigger {
   width: 100%;
-  padding: 14px 16px;
-  background: #e9ebe6;
-  border: none;
-  outline: none;
-  font-family: "Times New Roman", serif;
-  font-size: 14px;
+  padding: 13px 14px;
+  border: 1px solid #dbc9b7;
+  border-radius: 12px;
+  background: var(--surface-strong);
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink);
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .select-wrapper.disabled .select-trigger {
-  color: #777;
+  color: #8c7a6d;
   cursor: not-allowed;
+  background: #f1e8dd;
 }
 
 .select-placeholder {
-  color: #777;
+  color: #8c7a6d;
 }
 
 .select-caret {
   margin-left: 10px;
-  font-size: 16px;
-  transform: translateY(-1px);
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid #6b5a51;
+  border-bottom: 2px solid #6b5a51;
+  transform: rotate(45deg) translateY(-2px);
+  flex: 0 0 auto;
 }
 
-.select-caret::before {
-  content: "▾";
-  display: inline-block;
-  color: #555;
+.select-wrapper.open .select-caret {
+  transform: rotate(-135deg) translateY(-1px);
 }
 
 .select-panel {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  right: 0;
-  background: #efefef;
-  border: 1px solid #ddd;
-  z-index: 10;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  margin-top: 8px;
+  border: 1px solid #dbc9b7;
+  border-radius: 14px;
+  background: #fff;
+  z-index: 21;
   padding: 10px;
+  box-shadow: 0 14px 30px rgba(45, 31, 26, 0.14);
 }
 
 .select-search {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #cfcfcf;
-  background: #fff;
-  font-family: "Times New Roman", serif;
+  border: 1px solid #dbc9b7;
+  border-radius: 10px;
+  background: #fffdf8;
+  font-family: var(--font-body);
   font-size: 14px;
-  outline: none;
   margin-bottom: 10px;
+  outline: none;
 }
 
 .select-options {
@@ -231,55 +472,73 @@
 }
 
 .select-option {
-  text-align: left;
-  background: transparent;
   border: none;
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: 14px;
   padding: 8px 10px;
   cursor: pointer;
-  font-family: "Times New Roman", serif;
-  font-size: 14px;
-  color: #444;
 }
 
 .select-option:hover,
 .select-option.selected {
-  background: #e1e1e1;
+  background: rgba(127, 16, 47, 0.08);
+  color: var(--ink);
 }
 
 .select-empty {
   padding: 8px 10px;
-  color: #888;
+  color: #8c7a6d;
   font-size: 13px;
 }
 
 .field-error {
   display: block;
   margin-top: 6px;
-  color: #b00020;
+  color: #a31b1b;
   font-size: 12px;
 }
 
 .address-form-actions {
+  margin-top: 24px;
   display: flex;
-  gap: 18px;
-  margin-top: 28px;
+  gap: 12px;
 }
 
 .submit-btn,
 .cancel-btn {
-  padding: 12px 30px;
-  border: 1px solid #333;
-  background: transparent;
-  cursor: pointer;
-  letter-spacing: 1.4px;
+  border-radius: 999px;
+  border: 1px solid #c7b29f;
+  padding: 11px 22px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
-  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.22s ease;
 }
 
-.submit-btn:hover,
-.cancel-btn:hover {
-  background: #333;
+.submit-btn {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-deep) 100%);
+  border-color: transparent;
   color: #fff;
+}
+
+.submit-btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+.cancel-btn {
+  background: #fff;
+  color: #4f4037;
+}
+
+.cancel-btn:hover {
+  background: #f3e9dd;
 }
 
 .address-delete-overlay {
@@ -306,7 +565,7 @@
 
 .address-delete-modal h3 {
   margin: 0 0 10px;
-  color: #7e0f2a;
+  color: var(--brand);
   letter-spacing: 0.8px;
   font-size: 24px;
 }
@@ -329,7 +588,7 @@
   border-radius: 999px;
   border: 1px solid #c9b8a7;
   padding: 9px 18px;
-  font-family: "Times New Roman", serif;
+  font-family: var(--font-display);
   letter-spacing: 0.8px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -345,20 +604,42 @@
 }
 
 .delete-confirm-btn {
-  background: #8b0d2b;
-  border-color: #8b0d2b;
+  background: var(--brand);
+  border-color: var(--brand);
   color: #fff;
 }
 
 .delete-confirm-btn:hover:not(:disabled) {
-  background: #6f0a22;
-  border-color: #6f0a22;
+  background: var(--brand-deep);
+  border-color: var(--brand-deep);
 }
 
 .delete-cancel-btn:disabled,
 .delete-confirm-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+@keyframes fadeLift {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInOverlay {
@@ -381,37 +662,57 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 980px) {
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+
   .address-form-grid {
     grid-template-columns: 1fr;
   }
-
-  .address-table {
-    width: 100%;
-  }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .profile-container {
-    padding: 30px 0 60px;
+    padding: 28px 0 64px;
+  }
+
+  .profile-inner {
+    padding: 0 14px;
   }
 
   .profile-tabs {
-    gap: 18px;
+    gap: 4px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .profile-tabs button {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+
+  .address-section {
+    padding: 18px 14px;
+    border-radius: 18px;
   }
 
   .address-title {
-    font-size: 22px;
+    font-size: 30px;
   }
 
-  .address-table-header,
-  .address-table-row {
-    grid-template-columns: 1fr;
-    gap: 8px;
+  .address-form-wrap {
+    padding: 14px;
   }
 
-  .address-actions {
-    gap: 12px;
+  .address-form-actions {
+    flex-direction: column;
+  }
+
+  .submit-btn,
+  .cancel-btn {
+    width: 100%;
   }
 
   .address-delete-modal {
