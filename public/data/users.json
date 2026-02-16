@@ -1,0 +1,404 @@
+{
+  "users": [
+    {
+      "id": "purav",
+      "password": "Test12345",
+      "role": "user"
+    },
+    {
+      "id": "patelpurav220@gmail.com",
+      "password": "1234Purav",
+      "role": "user"
+    },
+    {
+      "id": "parth3000@gmail.com",
+      "password": "Test123456",
+      "role": "user"
+    },
+    {
+      "id": "patelpurav077@gmail.com",
+      "password": "Purav12345",
+      "role": "user"
+    },
+    {
+      "id": "dev2@gmail.com",
+      "password": "Test12345",
+      "role": "user"
+    },
+    {
+      "id": "purav222@gmail.com",
+      "password": "purav1504",
+      "role": "user"
+    },
+    {
+      "id": "dev11122@gmail.com",
+      "password": "Toast123456",
+      "role": "user"
+    },
+    {
+      "id": "dhruv10@gmail.com",
+      "password": "Gorani12345",
+      "role": "user"
+    },
+    {
+      "id": "patelpura44@gmail.com",
+      "password": "puravP12345",
+      "role": "user"
+    }
+  ],
+  "addresses": [
+    {
+      "id": "2cea",
+      "userId": "patelpurav220@gmail.com",
+      "firstName": "Purav",
+      "middleName": "Manoj",
+      "lastName": "Patel",
+      "mobile": "9106618331",
+      "email": "patelpurav077@gmail.com",
+      "company": "Sm Techno",
+      "address1": "Mahavir Timber Mart, Khatodara, Surat",
+      "address2": "",
+      "country": "India",
+      "state": "Gujarat",
+      "city": "Surat",
+      "pincode": "395002"
+    },
+    {
+      "id": "9afd",
+      "userId": "dev2@gmail.com",
+      "firstName": "Dev",
+      "middleName": "Govind",
+      "lastName": "Patel",
+      "mobile": "9106614471",
+      "email": "patelpurav077@gmail.com",
+      "company": "SM",
+      "address1": "Shiv Complex, Bhatar Char Rasta, Surat",
+      "address2": "",
+      "country": "India",
+      "state": "Gujarat",
+      "city": "Surat",
+      "pincode": "395002"
+    },
+    {
+      "id": "ce5d",
+      "userId": "patelpurav220@gmail.com",
+      "firstName": "Dhruv",
+      "middleName": "Keshavbhai",
+      "lastName": "Patel",
+      "mobile": "9106618559",
+      "email": "dhruvpatel@gmail.com",
+      "company": "Sm Tech",
+      "address1": "Tea Post, Goddod Road, Surat",
+      "address2": "",
+      "country": "India",
+      "state": "Gujarat",
+      "city": "Surat",
+      "pincode": "395010"
+    },
+    {
+      "id": "b57e",
+      "userId": "parth3000@gmail.com",
+      "firstName": "Parth",
+      "middleName": "A",
+      "lastName": "Patel",
+      "mobile": "9825445613",
+      "email": "parth3000@gmail.com",
+      "company": "MNC",
+      "address1": "Shree Ram Hardware, Shiroli, Kolhapur",
+      "address2": "",
+      "country": "India",
+      "state": "Maharashtra",
+      "city": "Pune",
+      "pincode": "506889"
+    },
+    {
+      "id": "b40f",
+      "userId": "patelpurav220@gmail.com",
+      "firstName": "shiv",
+      "middleName": "ashish",
+      "lastName": "patel",
+      "mobile": "9825442105",
+      "email": "Shiv12@gmail.com",
+      "company": "SMM",
+      "address1": "Udhna 123, Surat",
+      "address2": "",
+      "country": "India",
+      "state": "Goa",
+      "city": "Margao",
+      "pincode": "895540"
+    },
+    {
+      "id": "d307",
+      "userId": "purav222@gmail.com",
+      "firstName": "Purav",
+      "middleName": "Manoj",
+      "lastName": "Patel",
+      "mobile": "8160359981",
+      "email": "patelpurav077@gmail.com",
+      "company": "SM",
+      "address1": "Mahavir Timber Mart, Khatodara, Surat",
+      "address2": "",
+      "country": "India",
+      "state": "Gujarat",
+      "city": "Surat",
+      "pincode": "395002"
+    },
+    {
+      "id": "cb49",
+      "userId": "purav222@gmail.com",
+      "firstName": "Dev",
+      "middleName": "Govind",
+      "lastName": "Patel",
+      "mobile": "9106614471",
+      "email": "Devpatel1@gmail.com",
+      "company": "sm",
+      "address1": "Mahavir Timber Mart, Khatodara, Surat",
+      "address2": "",
+      "country": "India",
+      "state": "Gujarat",
+      "city": "Surat",
+      "pincode": "395002"
+    }
+  ],
+  "orders": [
+    {
+      "id": "e170",
+      "orderId": "ORD-MLF2V5QW",
+      "userId": "patelpurav220@gmail.com",
+      "date": "2026-02-09T11:17:24.824Z",
+      "items": [
+        {
+          "id": "k3",
+          "title": "Red Amara Kurti Set",
+          "price": 2399,
+          "qty": 1,
+          "size": "XXL",
+          "image": "/images/k3.jpg"
+        }
+      ],
+      "subtotal": 2399,
+      "shipping": 0,
+      "discount": 100,
+      "total": 2299,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "patelpurav077@gmail.com",
+        "firstName": "Purav",
+        "middleName": "Manoj",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart, Khatodara, Surat",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9106618331"
+      }
+    },
+    {
+      "id": "973b",
+      "orderId": "ORD-MLF31MCS",
+      "userId": "patelpurav220@gmail.com",
+      "date": "2026-02-09T11:22:26.284Z",
+      "items": [
+        {
+          "id": "b3",
+          "title": "Black Samudra Shell Kada Set",
+          "price": 999,
+          "qty": 1,
+          "size": null,
+          "image": "/images/b3.jpg"
+        }
+      ],
+      "subtotal": 999,
+      "shipping": 0,
+      "discount": 0,
+      "total": 999,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "patelpurav077@gmail.com",
+        "firstName": "Dev",
+        "middleName": "Govind",
+        "lastName": "Patel",
+        "address1": "Shiv Complex, Bhatar Char Rasta, Surat",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9106614471"
+      }
+    },
+    {
+      "id": "93fd",
+      "orderId": "ORD-MLF32AR6",
+      "userId": "patelpurav220@gmail.com",
+      "date": "2026-02-09T11:22:57.906Z",
+      "items": [
+        {
+          "id": "k24",
+          "title": "Vastra kala Kurti Set",
+          "price": 2399,
+          "qty": 1,
+          "size": "M",
+          "image": "/images/WS4.jpg"
+        }
+      ],
+      "subtotal": 2399,
+      "shipping": 0,
+      "discount": 100,
+      "total": 2299,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "patelpurav077@gmail.com",
+        "firstName": "Purav",
+        "middleName": "Manoj",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart, Khatodara, Surat",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9106618331"
+      }
+    },
+    {
+      "id": "73a9",
+      "orderId": "ORD-MLF35JIJ",
+      "userId": "patelpurav220@gmail.com",
+      "date": "2026-02-09T11:25:29.227Z",
+      "items": [
+        {
+          "id": "o3",
+          "title": "Amara Oxidized Silver Set",
+          "price": 1199,
+          "qty": 1,
+          "size": null,
+          "image": "/images/j3.jpg"
+        }
+      ],
+      "subtotal": 1199,
+      "shipping": 0,
+      "discount": 0,
+      "total": 1199,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "patelpurav077@gmail.com",
+        "firstName": "Purav",
+        "middleName": "Manoj",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart, Khatodara, Surat",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9106618331"
+      }
+    },
+    {
+      "id": "1b8b",
+      "orderId": "ORD-MLF3TTC1",
+      "userId": "parth3000@gmail.com",
+      "date": "2026-02-09T11:44:21.697Z",
+      "items": [
+        {
+          "id": "k1",
+          "title": "Purple Aadhya Kurti Set",
+          "price": 2499,
+          "qty": 1,
+          "size": "XL",
+          "image": "/images/K1.jpg"
+        },
+        {
+          "id": "k3",
+          "title": "Red Amara Kurti Set",
+          "price": 2399,
+          "qty": 1,
+          "size": null,
+          "image": "/images/k3.jpg"
+        }
+      ],
+      "subtotal": 4898,
+      "shipping": 0,
+      "discount": 0,
+      "total": 4898,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "parth3000@gmail.com",
+        "firstName": "Parth",
+        "middleName": "A",
+        "lastName": "Patel",
+        "address1": "Shree Ram Hardware, Shiroli, Kolhapur",
+        "address2": "",
+        "state": "Maharashtra",
+        "city": "Pune",
+        "pincode": "506889",
+        "phone": "9825445613"
+      }
+    },
+    {
+      "id": "e4dd",
+      "orderId": "ORD-MLF3WYWF",
+      "userId": "parth3000@gmail.com",
+      "date": "2026-02-09T11:46:48.879Z",
+      "items": [
+        {
+          "id": "k19",
+          "title": "Yellow Phool Kusum Kurti Set",
+          "price": 2399,
+          "qty": 1,
+          "size": "M",
+          "image": "/images/k19.jpg"
+        }
+      ],
+      "subtotal": 2399,
+      "shipping": 0,
+      "discount": 0,
+      "total": 2399,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "parth3000@gmail.com",
+        "firstName": "Parth",
+        "middleName": "A",
+        "lastName": "Patel",
+        "address1": "Shree Ram Hardware, Shiroli, Kolhapur",
+        "address2": "",
+        "state": "Maharashtra",
+        "city": "Pune",
+        "pincode": "506889",
+        "phone": "9825445613"
+      }
+    },
+    {
+      "id": "60f6",
+      "orderId": "ORD-MLF429HL",
+      "userId": "patelpurav220@gmail.com",
+      "date": "2026-02-09T11:50:55.881Z",
+      "items": [
+        {
+          "id": "k2",
+          "title": "Peach Pink Aadhya Kurti Set",
+          "price": 2499,
+          "qty": 1,
+          "size": "XL",
+          "image": "/images/k2.jpg"
+        }
+      ],
+      "subtotal": 2499,
+      "shipping": 0,
+      "discount": 0,
+      "total": 2499,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "Shiv12@gmail.com",
+        "firstName": "shiv",
+        "middleName": "ashish",
+        "lastName": "patel",
+        "address1": "Udhna 123, Surat",
+        "address2": "",
+        "state": "Goa",
+        "city": "Margao",
+        "pincode": "895540",
+        "phone": "9825442105"
+      }
+    }
+  ]
+}

@@ -60,10 +60,11 @@ input.error-input {
 /* Links */
 .auth-links {
   display: flex;
-  justify-content: space-between;
-  margin-top: 24px;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 22px;
   font-size: 14px;
-  color:#000;
+  color: #000;
 }
 
 
@@ -103,7 +104,259 @@ input.error-input {
   .auth-links {
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    font-size: 13px;
+    gap: 10px;
+    font-size: 12px;
   }
 }
+
+
+.auth-page h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #451212;
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.password-wrapper input {
+  padding-right: 45px !important;
+  width: 100%;  
+}
+
+.eye-icon-img {
+  position: absolute;
+  right: 12px;
+  top: 31px; /* Adjust based on your input field's height */
+  width: 15px; 
+  height: auto;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0.7;
+}
+
+.eye-icon-img:hover {
+  opacity: 1;
+}
+
+
+
+
+
+
+/* Container for the whole page to avoid layout shifts */
+.forgot-password-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ---------- TOAST POPUP ---------- */
+.custom-toast {
+  position: fixed;
+  top: 150px; /* BELOW HEADER HEIGHT */
+  right: 24px;
+  background: #ffffff;
+  min-width: 320px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  z-index: 99999; /* 🔥 ABOVE HEADER & FOOTER */
+  overflow: hidden;
+  animation: toastSlideIn 0.4s ease-out;
+}
+
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-main {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 12px;
+}
+
+.toast-success-icon {
+  width: 26px;
+  height: 26px;
+  background: #28a745;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.toast-text-content {
+  flex: 1;
+  font-size: 14px;
+}
+
+.toast-text-content strong {
+  font-size: 16px;
+}
+
+.toast-close-icon {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.toast-progress-track {
+  height: 4px;
+  background: #eee;
+}
+
+.toast-progress-fill {
+  height: 100%;
+  background: #28a745;
+}
+
+/* ---------- FORM ---------- */
+.auth-page {
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-page h2 {
+  color: #701c1c;
+  margin-bottom: 25px;
+}
+
+.auth-page h3 {
+  color: #2e9634;
+  margin-bottom: 25px;
+  font-size: 40 px;
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
+.field input {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background-color: #f2f1ed;
+  outline: none;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  border: 1px solid black;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.auth-btn:hover {
+  background: #701c1c;
+  color: white;
+  border-color: #701c1c;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  display: block;
+  margin-top: 5px;
+}
+
+.auth-links a {
+  color: #8b0d2b;
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border-bottom: none;
+  padding-bottom: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.auth-links a:hover {
+  color: #5f0a1e;
+}
+
+
+
+.custom-success-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-weight: 500;
+}
+
+.toast-icon {
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.toast-content h3 {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.toast-content p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+
+
+
+/* Password strength text */
+.strength-label {
+  font-size: 12px;        /* 👈 smaller text */
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+/* Color coding */
+.strength-weak span {
+  color: #ff4d4f;         /* red */
+}
+
+.strength-medium span {
+  color: #faad14;         /* yellow */
+}
+
+.strength-strong span {
+  color: #52c41a;         /* green */
+}
+
+
+.auth-page input {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.auth-page input:focus {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+  

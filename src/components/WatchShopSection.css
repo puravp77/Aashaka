@@ -105,6 +105,10 @@
 .watchshop-btn:hover {
   background: #000;
 }
+
+
+
+
 /* ===============================
    CUSTOM SLIDER ARROWS (CLEAN)
 ================================ */
@@ -114,9 +118,9 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.75);
+  width: 45px;
+  height: 45px;
+  background: rgba(255, 255, 255, 1);
   border-radius: 50%;
   color: #000000;
   font-size: 26px;
@@ -131,24 +135,26 @@
 .watchshop-prev:hover,
 .watchshop-next:hover {
   background: rgba(255, 255, 255, 0.95);
-  transform: translateY(-50%) scale(1.05);
+  transform: translateY(-50%) scale(1);
 }
 
 .watchshop-prev {
-  left: 8px;
+  left: 10px;
 }
 
 .watchshop-next {
-  right: 8px;
+  right: 10px;
 }
+
+
 
 /* MOBILE */
 @media (max-width: 768px) {
   .watchshop-prev,
   .watchshop-next {
-    width: 38px;
-    height: 38px;
-    font-size: 22px;
+    width: 45px;
+    height: 45px;
+    font-size: 26px;
   }
 }
 

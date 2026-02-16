@@ -56,17 +56,19 @@
 }
 
 .price {
-  font-size: 22px;
+  font-size: 30px;
   font-weight: 600;
 }
 
 .off {
   color: #2e7d32;
+  font-size: 15px;
 }
 
 .old {
   text-decoration: line-through;
   color: #999;
+  font-size: 15px;
 }
 
 /* DETAILS TABLE */
@@ -192,6 +194,9 @@
   color: #000;
   cursor: pointer;
   transition: all 0.3s ease;   /* 🔥 smooth hover */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
 /* HOVER EFFECT */
@@ -199,6 +204,70 @@
   background: #000;           /* 🔥 white → black */
   color: #fff;                /* 🔥 text white */
   border-color: #000;
+}
+
+/* ===============================
+   PRODUCT PERKS + ACCORDION
+================================ */
+
+.product-perks {
+  margin: 16px 0 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #555;
+  font-size: 15px;
+}
+
+.perk-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.perk-icon {
+  font-size: 18px;
+  color: #666;
+}
+
+.product-accordion {
+  margin-top: 18px;
+  border-top: 1px solid #d8d8d8;
+}
+
+.product-accordion-item {
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.product-accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.product-accordion-title {
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: #111;
+}
+
+.product-accordion-icon {
+  font-size: 22px;
+  line-height: 1;
+  color: #333;
+}
+
+.product-accordion-body {
+  padding: 0 0 16px 0;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #666;
 }
 
 /* WISHLIST OVERLAY */
@@ -349,6 +418,7 @@
   pointer-events: auto;
 }
 
+
 /* ===============================
    ACCORDION – AASHAKA STYLE
 ================================ */
@@ -366,9 +436,10 @@
 /* HEADER */
 .accordion-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 22px 0;
+  justify-content: space-between;
+  width: 100%;
+  padding: 18px 0;
   cursor: pointer;
 }
 
@@ -376,22 +447,26 @@
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 1px;
-  color: #000;
+  color: #656565;
 }
 
 .accordion-icon {
   font-size: 22px;
   font-weight: 300;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 /* BODY */
 .accordion-body {
   position: relative;
-  padding: 0 40px 22px 0;
+  padding: 0 40px 22px 90px;   /* ⬅️ key fix */
   font-size: 15px;
-  line-height: 1.8;
+  line-height: 1.9;
   color: #555;
 }
+
 
 /* RIGHT SIDE VERTICAL LINE */
 .accordion-body::after {
@@ -408,6 +483,26 @@
 .accordion-body p {
   margin: 1%;
 }
+
+
+/* AASHAKA DESCRIPTION INNER CONTENT */
+
+.description-body {
+  max-width: 520px;           /* readable text column */
+}
+.desc-lead {
+  font-size: 15.8px;
+  line-height: 1.95;
+  color: #444;
+  margin-bottom: 18px;
+}
+
+.desc-sub {
+  font-size: 15px;
+  line-height: 1.85;
+  color: #555;
+}
+
 
 /* SHIPPING LIST */
 .accordion-body ul {
@@ -720,46 +815,55 @@
 }
 
 .size-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 /* size buttons row */
 .size-options {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 /* individual size button */
 .size-btn {
-  min-width: 36px;
-  height: 32px;
-  padding: 0 8px;
-  border: 1px solid #000;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1.5px solid #bdbdbd;
   background: #fff;
   font-size: 13px;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-/* hover */
-.size-btn:hover:not(.disabled) {
-  background: #000;
-  color: #fff;
+/* hover (not active / not disabled) */
+.size-btn:hover:not(.disabled):not(.active) {
+  border-color: #8b0424;
+  color: #8b0d2b;
+}
+
+/* keep active style on hover */
+.size-btn.active:hover {
+  background: #8b0d2b;
+  color: #ffffff;
+  border-color: #000000;
 }
 
 /* active / selected */
 .size-btn.active {
-  background: #000;
-  color: #fff;
+  background: #8b0d2b;
+  color: #ffffff;
+  border-color: #000000;
 }
 
 /* out of stock */
 .size-btn.disabled {
-  border-color: #ccc;
-  color: #999;
+  border-color: #ddd;
+  color: #aaa;
   cursor: not-allowed;
 }
 
@@ -776,12 +880,12 @@
 
 @media (max-width: 768px) {
   .size-options {
-    gap: 6px;
+    gap: 8px;
   }
 
   .size-btn {
-    min-width: 34px;
-    height: 30px;
+    width: 38px;
+    height: 38px;
     font-size: 12px;
   }
 }

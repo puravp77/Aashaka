@@ -10,8 +10,7 @@
   pointer-events: none;
   contain: strict;
 
-  z-index: 9999;
-}
+ z-index: 5000; /* LOWER than toast */}
 
 
 .loader-logo {

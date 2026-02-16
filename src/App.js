@@ -1,5 +1,5 @@
 import Main from "./components/main";
-import "./index.css";   // ✅ THIS LINE (must be here)
+import "./index.css";   
 
 function App() {
 
