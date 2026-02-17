@@ -662,6 +662,39 @@
         "pincode": "395002",
         "phone": "9889989899"
       }
+    },
+    {
+      "id": "6eb2",
+      "orderId": "ORD-MLQJR8GP",
+      "userId": "dhruv10@gmail.com",
+      "date": "2026-02-17T11:55:43.129Z",
+      "items": [
+        {
+          "id": "n4",
+          "title": "The Floral Petal Choker & Stud Set",
+          "price": 1299,
+          "qty": 1,
+          "size": null,
+          "image": "/Aashaka/images/n4.jpg"
+        }
+      ],
+      "subtotal": 1299,
+      "shipping": 100,
+      "discount": 100,
+      "total": 1299,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "patelpurav077@gmail.com",
+        "firstName": "Purav",
+        "middleName": "",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart, Khatodara, Surat",
+        "address2": "",
+        "state": "Arunachal Pradesh",
+        "city": "Changlang",
+        "pincode": "395002",
+        "phone": "9889989899"
+      }
     }
   ]
 }

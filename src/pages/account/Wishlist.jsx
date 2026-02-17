@@ -25,12 +25,26 @@ export default function Wishlist() {
 
         {wishlistItems.length === 0 ? (
           <div className="wishlist-empty">
+            <div className="wishlist-empty-icon" aria-hidden="true">
+              W
+            </div>
+            <p className="wishlist-empty-kicker">Curate Your Favorites</p>
             <h4>Your wishlist is empty</h4>
             <p>Save your favorite pieces and shop later.</p>
-            <button className="wishlist-empty-btn" onClick={() => navigate("/")}
-            >
-              RETURN TO SHOP
-            </button>
+            <div className="wishlist-empty-actions">
+              <button
+                className="wishlist-empty-btn"
+                onClick={() => navigate("/")}
+              >
+                RETURN TO SHOP
+              </button>
+              <button
+                className="wishlist-empty-btn secondary"
+                onClick={() => navigate("/jewellery/oxidised")}
+              >
+                EXPLORE JEWELLERY
+              </button>
+            </div>
           </div>
         ) : (
           <div className="wishlist-list">
