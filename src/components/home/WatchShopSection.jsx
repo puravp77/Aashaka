@@ -14,8 +14,6 @@ import { withPublicUrl } from "../../utils/assetPath";
 
 const WatchShopSection = () => {
   const [activeIndex, setActiveIndex] = useState(null);
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [slidesPerView, setSlidesPerView] = useState(1);
   const [isSectionVisible, setIsSectionVisible] = useState(false);
 
   const sectionRef = useRef(null);
@@ -44,43 +42,11 @@ const WatchShopSection = () => {
     return () => observer.disconnect();
   }, []);
 
-  const getSlidesPerViewValue = (swiper) => {
-    if (!swiper) return 1;
-
-    const directValue = swiper.params?.slidesPerView;
-    if (typeof directValue === "number") {
-      return Math.max(1, Math.floor(directValue));
-    }
-
-    const currentBreakpoint = swiper.currentBreakpoint;
-    const breakpointValue =
-      swiper.params?.breakpoints?.[currentBreakpoint]?.slidesPerView;
-
-    if (typeof breakpointValue === "number") {
-      return Math.max(1, Math.floor(breakpointValue));
-    }
-
-    return 1;
-  };
-
-  const syncSliderWindow = (swiper) => {
-    if (!swiper) return;
-    setActiveSlide(swiper.realIndex ?? swiper.activeIndex ?? 0);
-    setSlidesPerView(getSlidesPerViewValue(swiper));
-  };
-
   useEffect(() => {
-    const preloadAhead = 1;
-    const firstVisible = activeSlide;
-    const lastVisible = activeSlide + slidesPerView + preloadAhead - 1;
-
-    videoRefs.current.forEach((videoEl, index) => {
+    videoRefs.current.forEach((videoEl) => {
       if (!videoEl) return;
 
-      const shouldPlay =
-        isSectionVisible && index >= firstVisible && index <= lastVisible;
-
-      if (shouldPlay) {
+      if (isSectionVisible) {
         const playPromise = videoEl.play();
         if (playPromise && typeof playPromise.catch === "function") {
           playPromise.catch(() => {});
@@ -89,7 +55,7 @@ const WatchShopSection = () => {
         videoEl.pause();
       }
     });
-  }, [activeSlide, isSectionVisible, slidesPerView]);
+  }, [isSectionVisible]);
 
   return (
     <section className="watchshop" ref={sectionRef}>
@@ -97,10 +63,6 @@ const WatchShopSection = () => {
 
       <Swiper
         modules={[Navigation]}
-        onSwiper={syncSliderWindow}
-        onSlideChange={syncSliderWindow}
-        onResize={syncSliderWindow}
-        onBreakpoint={syncSliderWindow}
         navigation={{
           nextEl: ".watchshop-next",
           prevEl: ".watchshop-prev",

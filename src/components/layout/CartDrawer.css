@@ -94,9 +94,9 @@
 }
 
 .drawer-item {
-  position: relative;
   display: grid;
-  grid-template-columns: 72px 1fr;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: start;
   gap: 10px;
   margin-bottom: 8px;
   padding: 8px;
@@ -115,7 +115,7 @@
 
 .drawer-text {
   min-width: 0;
-  padding-right: 18px;
+  padding-right: 0;
 }
 
 .drawer-text h4 {
@@ -194,9 +194,10 @@
 }
 
 .drawer-remove {
-  position: absolute;
-  top: 6px;
-  right: 6px;
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  align-self: start;
   width: 22px;
   height: 22px;
   border: none;
@@ -330,7 +331,7 @@
   }
 
   .drawer-item {
-    grid-template-columns: 64px 1fr;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
     gap: 8px;
     padding: 8px;
   }
