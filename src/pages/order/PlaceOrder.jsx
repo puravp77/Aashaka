@@ -1,10 +1,9 @@
 import "./PlaceOrder.css";
 import { withPublicUrl } from "../../utils/assetPath";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
-import { useRef } from "react";
 import {
   appendLocalOrder,
   getLocalAddresses,
@@ -22,6 +21,39 @@ const COUPONS = [
 
 const FREE_SHIPPING_THRESHOLD = 1999;
 const SHIPPING_CHARGE = 100;
+const STATES_API_URL = "https://www.india-location-hub.in/api/locations/states";
+const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/districts";
+
+const formatLocationName = (value) => {
+  if (!value || typeof value !== "string") return "";
+
+  return value
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim()
+    .split(" ")
+    .map((word) => {
+      if (word === "of" || word === "and") return word;
+      if (word.includes("&")) {
+        return word
+          .split("&")
+          .map((part) =>
+            part ? part.charAt(0).toUpperCase() + part.slice(1) : ""
+          )
+          .join(" & ");
+      }
+      return word ? word.charAt(0).toUpperCase() + word.slice(1) : "";
+    })
+    .join(" ")
+    .replace(/\s+&\s+/g, " & ");
+};
+
+const normalizeLocationText = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/&/g, "and")
+    .trim();
 
 export default function PlaceOrder() {
   const navigate = useNavigate();
@@ -62,6 +94,19 @@ export default function PlaceOrder() {
   const checkoutKey = userId ? `aashaka_checkout_${userId}` : "aashaka_checkout_guest";
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState("");
+  const [stateOptions, setStateOptions] = useState([]);
+  const [districtOptions, setDistrictOptions] = useState([]);
+  const [locationLoading, setLocationLoading] = useState(true);
+  const [locationError, setLocationError] = useState("");
+  const [cityLoading, setCityLoading] = useState(false);
+  const [cityError, setCityError] = useState("");
+  const allDistrictsRef = useRef([]);
+  const [isStateOpen, setIsStateOpen] = useState(false);
+  const [isCityOpen, setIsCityOpen] = useState(false);
+  const [stateSearch, setStateSearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
+  const stateDropdownRef = useRef(null);
+  const cityDropdownRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -111,11 +156,210 @@ export default function PlaceOrder() {
   }, [userId, useLocalCheckoutStore]);
 
   useEffect(() => {
+    let ignore = false;
+
+    const loadStates = async () => {
+      setLocationLoading(true);
+      setLocationError("");
+
+      try {
+        const statesRes = await fetch(STATES_API_URL);
+        if (!statesRes.ok) {
+          throw new Error("Failed to load states");
+        }
+
+        const statesJson = await statesRes.json();
+        const apiStates = Array.isArray(statesJson?.data?.states)
+          ? statesJson.data.states
+          : [];
+
+        const normalizedStates = apiStates
+          .map((state) => ({
+            rawName: state?.name || "",
+            label: formatLocationName(state?.name || ""),
+          }))
+          .filter((state) => state.rawName && state.label)
+          .sort((a, b) => a.label.localeCompare(b.label));
+
+        if (!ignore) {
+          setStateOptions(normalizedStates);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setLocationError("Unable to load states right now.");
+          setStateOptions([]);
+          setDistrictOptions([]);
+        }
+      } finally {
+        if (!ignore) {
+          setLocationLoading(false);
+        }
+      }
+    };
+
+    loadStates();
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  const selectedStateOption = stateOptions.find((stateOption) => {
+    const normalizedSelected = normalizeLocationText(form.state);
+    return (
+      normalizeLocationText(stateOption.label) === normalizedSelected ||
+      normalizeLocationText(stateOption.rawName) === normalizedSelected
+    );
+  });
+
+  const selectedStateRawName = selectedStateOption?.rawName || "";
+
+  useEffect(() => {
+    if (!selectedStateRawName) {
+      setDistrictOptions([]);
+      setCityLoading(false);
+      setCityError("");
+      return;
+    }
+
+    const normalizedSelectedState = normalizeLocationText(selectedStateRawName);
+
+    if (allDistrictsRef.current.length > 0) {
+      const cachedDistricts = allDistrictsRef.current.filter(
+        (district) =>
+          normalizeLocationText(district.rawStateName) === normalizedSelectedState
+      );
+      setDistrictOptions(cachedDistricts);
+      setCityLoading(false);
+      setCityError("");
+      return;
+    }
+
+    let ignore = false;
+
+    const loadDistricts = async () => {
+      setCityLoading(true);
+      setCityError("");
+      setDistrictOptions([]);
+
+      try {
+        const districtsRes = await fetch(
+          `${DISTRICTS_API_URL}?state_name=${encodeURIComponent(
+            selectedStateRawName
+          )}`
+        );
+
+        if (!districtsRes.ok) {
+          throw new Error("Failed to load districts");
+        }
+
+        const districtsJson = await districtsRes.json();
+        const apiDistricts = Array.isArray(districtsJson?.data?.districts)
+          ? districtsJson.data.districts
+          : [];
+
+        const normalizedDistricts = apiDistricts
+          .map((district) => ({
+            name: formatLocationName(district?.name || ""),
+            rawStateName: district?.state_name || "",
+          }))
+          .filter((district) => district.name && district.rawStateName);
+
+        const uniqueStates = new Set(
+          normalizedDistricts.map((district) =>
+            normalizeLocationText(district.rawStateName)
+          )
+        );
+
+        if (uniqueStates.size > 1) {
+          allDistrictsRef.current = normalizedDistricts;
+        }
+
+        const filteredDistricts = normalizedDistricts.filter(
+          (district) =>
+            normalizeLocationText(district.rawStateName) ===
+            normalizedSelectedState
+        );
+
+        if (!ignore) {
+          setDistrictOptions(filteredDistricts);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setDistrictOptions([]);
+          setCityError("Unable to load cities right now.");
+        }
+      } finally {
+        if (!ignore) {
+          setCityLoading(false);
+        }
+      }
+    };
+
+    loadDistricts();
+
+    return () => {
+      ignore = true;
+    };
+  }, [selectedStateRawName]);
+
+  const cityOptions = Array.from(
+    new Set(districtOptions.map((district) => district.name))
+  ).sort((a, b) => a.localeCompare(b));
+
+  const filteredStates = stateOptions.filter((stateOption) =>
+    stateOption.label.toLowerCase().includes(stateSearch.toLowerCase())
+  );
+
+  const filteredCities = cityOptions.filter((city) =>
+    city.toLowerCase().includes(citySearch.toLowerCase())
+  );
+
+  const handleSelectState = (stateOption) => {
+    setForm((prev) => ({
+      ...prev,
+      state: stateOption.label,
+      city: "",
+    }));
+    setErrors((prev) => ({ ...prev, state: "", city: "" }));
+    setIsStateOpen(false);
+    setIsCityOpen(false);
+    setStateSearch("");
+    setCitySearch("");
+  };
+
+  const handleSelectCity = (city) => {
+    setForm((prev) => ({ ...prev, city }));
+    setErrors((prev) => ({ ...prev, city: "" }));
+    setIsCityOpen(false);
+    setCitySearch("");
+  };
+
+  useEffect(() => {
     try {
       localStorage.setItem(checkoutKey, JSON.stringify(form));
     } catch (err) {
     }
   }, [form, checkoutKey]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        stateDropdownRef.current &&
+        !stateDropdownRef.current.contains(event.target)
+      ) {
+        setIsStateOpen(false);
+      }
+      if (
+        cityDropdownRef.current &&
+        !cityDropdownRef.current.contains(event.target)
+      ) {
+        setIsCityOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const applyAddress = (addr) => {
     if (!addr) return;
@@ -132,6 +376,7 @@ export default function PlaceOrder() {
       city: addr.city || "",
       pincode: addr.pincode || "",
     }));
+    setErrors((prev) => ({ ...prev, state: "", city: "" }));
   };
 
   /* =============================
@@ -142,6 +387,18 @@ export default function PlaceOrder() {
 
     if (name === "phone" && !/^\d*$/.test(value)) return;
     if (name === "pincode" && !/^\d*$/.test(value)) return;
+
+    if (name === "state") {
+      setForm((prev) => ({ ...prev, state: value, city: "" }));
+      setErrors((prev) => ({ ...prev, state: value ? "" : "State is required", city: "" }));
+      return;
+    }
+
+    if (name === "city") {
+      setForm((prev) => ({ ...prev, city: value }));
+      setErrors((prev) => ({ ...prev, city: value ? "" : "City is required" }));
+      return;
+    }
 
     setForm((prev) => ({ ...prev, [name]: value }));
 
@@ -331,11 +588,22 @@ export default function PlaceOrder() {
 
   return (
     <section className="placeorder-page">
+      <div className="placeorder-intro">
+        <p className="eyebrow">Secure Checkout</p>
+        <h1>Complete Your Order</h1>
+        <p className="subtext">
+          Fill in your delivery details and review your order before placing it.
+        </p>
+      </div>
+
       <div className="placeorder-wrapper">
 
         {/* LEFT */}
         <div className="placeorder-left">
-          <h2>Contact Information</h2>
+          <div className="section-head">
+            <h2>Contact Information</h2>
+            <p>We will send order updates to this email and phone number.</p>
+          </div>
 
           {addresses.length > 0 && (
             <div className="saved-addresses">
@@ -408,7 +676,10 @@ export default function PlaceOrder() {
             <span>Email me with news and offers</span>
           </div>
 
-          <h2>Shipping details</h2>
+          <div className="section-head">
+            <h2>Shipping Details</h2>
+            <p>Please verify your address carefully for smooth delivery.</p>
+          </div>
 
           <label>First Name <span style={{ color: "red" }}>*</span></label>
           <input
@@ -452,20 +723,132 @@ export default function PlaceOrder() {
           <input value="India" disabled />
 
           <label>State <span style={{ color: "red" }}>*</span></label>
-          <input
-            name="state"
-            value={form.state}
-            onChange={handleChange}
-          />
+          <div
+            className={`place-select ${errors.state ? "invalid" : ""}`}
+            ref={stateDropdownRef}
+          >
+            <button
+              type="button"
+              className="place-select-trigger"
+              ref={(el) => (fieldRefs.current.state = el)}
+              onClick={() => {
+                if (locationLoading && stateOptions.length === 0) return;
+                setIsStateOpen((prev) => !prev);
+                setIsCityOpen(false);
+                setStateSearch("");
+              }}
+              aria-expanded={isStateOpen}
+            >
+              <span className={form.state ? "" : "place-select-placeholder"}>
+                {form.state || (locationLoading ? "Loading states..." : "Select State")}
+              </span>
+              <span className="place-select-caret">▾</span>
+            </button>
+
+            {isStateOpen && (
+              <div className="place-select-panel">
+                <input
+                  className="place-select-search"
+                  placeholder="Search State"
+                  value={stateSearch}
+                  onChange={(e) => setStateSearch(e.target.value)}
+                />
+                <div className="place-select-options">
+                  {locationLoading ? (
+                    <div className="place-select-empty">Loading states...</div>
+                  ) : filteredStates.length === 0 ? (
+                    <div className="place-select-empty">No states found</div>
+                  ) : (
+                    filteredStates.map((stateOption) => (
+                      <button
+                        key={stateOption.rawName}
+                        type="button"
+                        className={`place-select-option ${
+                          normalizeLocationText(form.state) ===
+                          normalizeLocationText(stateOption.label)
+                            ? "selected"
+                            : ""
+                        }`}
+                        onClick={() => handleSelectState(stateOption)}
+                      >
+                        {stateOption.label}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
           {errors.state && <div className="error-text">{errors.state}</div>}
+          {locationError && <div className="field-note error">{locationError}</div>}
 
           <label>City <span style={{ color: "red" }}>*</span></label>
-          <input
-            name="city"
-            value={form.city}
-            onChange={handleChange}
-          />
+          <div
+            className={`place-select ${!selectedStateRawName ? "disabled" : ""} ${
+              errors.city ? "invalid" : ""
+            }`}
+            ref={cityDropdownRef}
+          >
+            <button
+              type="button"
+              className="place-select-trigger"
+              ref={(el) => (fieldRefs.current.city = el)}
+              onClick={() => {
+                if (!selectedStateRawName || cityLoading) return;
+                setIsCityOpen((prev) => !prev);
+                setIsStateOpen(false);
+                setCitySearch("");
+              }}
+              disabled={!selectedStateRawName || cityLoading}
+              aria-expanded={isCityOpen}
+            >
+              <span className={form.city ? "" : "place-select-placeholder"}>
+                {form.city ||
+                  (!selectedStateRawName
+                    ? "Select state first"
+                    : cityLoading
+                      ? "Loading cities..."
+                      : "Select City")}
+              </span>
+              <span className="place-select-caret">▾</span>
+            </button>
+
+            {isCityOpen && (
+              <div className="place-select-panel">
+                <input
+                  className="place-select-search"
+                  placeholder="Search City"
+                  value={citySearch}
+                  onChange={(e) => setCitySearch(e.target.value)}
+                />
+                <div className="place-select-options">
+                  {cityLoading ? (
+                    <div className="place-select-empty">Loading cities...</div>
+                  ) : filteredCities.length === 0 ? (
+                    <div className="place-select-empty">No cities found</div>
+                  ) : (
+                    filteredCities.map((city) => (
+                      <button
+                        key={city}
+                        type="button"
+                        className={`place-select-option ${
+                          normalizeLocationText(form.city) ===
+                          normalizeLocationText(city)
+                            ? "selected"
+                            : ""
+                        }`}
+                        onClick={() => handleSelectCity(city)}
+                      >
+                        {city}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
           {errors.city && <div className="error-text">{errors.city}</div>}
+          {cityError && <div className="field-note error">{cityError}</div>}
 
           <label>PinCode <span style={{ color: "red" }}>*</span></label>
           <input
@@ -489,7 +872,9 @@ export default function PlaceOrder() {
           <h3 className="section-title">Payment Mode</h3>
 
           <div className="payment-box">
-            <label className="radio-option">
+            <label
+              className={`payment-card ${paymentMode === "COD" ? "selected" : ""}`}
+            >
               <input
                 type="radio"
                 name="paymentMode"
@@ -497,7 +882,10 @@ export default function PlaceOrder() {
                 checked={paymentMode === "COD"}
                 onChange={(e) => setPaymentMode(e.target.value)}
               />
-              <span>COD</span>
+              <div className="payment-copy">
+                <span className="payment-title">Cash on Delivery</span>
+                <span className="payment-sub">Pay at your doorstep</span>
+              </div>
             </label>
           </div>
 
@@ -512,24 +900,27 @@ export default function PlaceOrder() {
 
         {/* RIGHT */}
         <div className="placeorder-right">
-          <h3>Your Order</h3> <br />
+          <h3>Your Order</h3>
 
-          {cartItems.map((item) => (
-            <div
-              className="order-item"
-              key={`${item.id}-${item.size || "nosize"}`}
-            >
-              <img src={withPublicUrl(item.image)} alt={item.title} />
-              <div>
-                <p>{item.title}</p>
+          <div className="order-list">
+            {cartItems.length === 0 && (
+              <div className="order-empty">Your cart is currently empty.</div>
+            )}
 
-                {/* ✅ ONLY ADDITION */}
-                {item.size && <p>Size: {item.size}</p>}
-
-                <p>x {item.qty} - Rs. {item.price * item.qty}</p>
+            {cartItems.map((item) => (
+              <div
+                className="order-item"
+                key={`${item.id}-${item.size || "nosize"}`}
+              >
+                <img src={withPublicUrl(item.image)} alt={item.title} />
+                <div>
+                  <p>{item.title}</p>
+                  {item.size && <p>Size: {item.size}</p>}
+                  <p>x {item.qty} - Rs. {item.price * item.qty}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {/* COUPON */}
           <div className={`coupon-box ${couponStatus}`}>
@@ -571,6 +962,12 @@ export default function PlaceOrder() {
               <span>Total</span>
               <span>Rs. {finalTotal}</span>
             </div>
+          </div>
+
+          <div className="checkout-assurance">
+            <span>Secure Payment</span>
+            <span>COD Available</span>
+            <span>Fast Dispatch</span>
           </div>
         </div>
 

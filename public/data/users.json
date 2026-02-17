@@ -142,6 +142,22 @@
       "state": "Arunachal Pradesh",
       "city": "Anjaw",
       "pincode": "395002"
+    },
+    {
+      "id": "c524",
+      "userId": "patelpurav077@gmail.com",
+      "firstName": "Purav",
+      "middleName": "Manoj",
+      "lastName": "Patel",
+      "mobile": "9106618331",
+      "email": "puravp02@gmail.com",
+      "company": "SMM",
+      "address1": "Mahavir Timber Mart",
+      "address2": "",
+      "country": "India",
+      "state": "Gujarat",
+      "city": "Surat",
+      "pincode": "395002"
     }
   ],
   "orders": [
@@ -410,6 +426,72 @@
         "middleName": "Manoj",
         "lastName": "Patel",
         "address1": "Mahavir Timber Mart, Khatodara, Surat",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9106618331"
+      }
+    },
+    {
+      "id": "d04a",
+      "orderId": "ORD-MLQALH01",
+      "userId": "patelpurav077@gmail.com",
+      "date": "2026-02-17T07:39:17.713Z",
+      "items": [
+        {
+          "id": "k5",
+          "title": "Red Printed Kurti Set",
+          "price": 2399,
+          "qty": 1,
+          "size": "L",
+          "image": "/Aashaka/images/k5.jpg"
+        }
+      ],
+      "subtotal": 2399,
+      "shipping": 0,
+      "discount": 0,
+      "total": 2399,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "puravp02@gmail.com",
+        "firstName": "Purav",
+        "middleName": "Manoj",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9106618331"
+      }
+    },
+    {
+      "id": "da46",
+      "orderId": "ORD-MLQANVE5",
+      "userId": "patelpurav077@gmail.com",
+      "date": "2026-02-17T07:41:09.677Z",
+      "items": [
+        {
+          "id": "o2",
+          "title": "Aadhya Oxidized Silver Jewelry Set",
+          "price": 1499,
+          "qty": 1,
+          "size": null,
+          "image": "/Aashaka/images/j2.jpg"
+        }
+      ],
+      "subtotal": 1499,
+      "shipping": 100,
+      "discount": 100,
+      "total": 1499,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "puravp02@gmail.com",
+        "firstName": "Purav",
+        "middleName": "Manoj",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart",
         "address2": "",
         "state": "Gujarat",
         "city": "Surat",
