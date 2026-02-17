@@ -57,10 +57,11 @@
 }
 
 .watchshop-price {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(78px, auto) minmax(78px, auto) minmax(78px, auto);
   justify-content: center;
-  align-items: center;
-  gap: 10px;
+  align-items: baseline;
+  column-gap: 8px;
   font-size: 15px;
   margin-bottom: 6px;
 }
@@ -68,17 +69,26 @@
 .watchshop-price .price {
   font-weight: 600;
   color: #111;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .watchshop-price .discount {
   font-size: 14px;
   color: #666;
+  text-align: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .watchshop-price .old-price {
   font-size: 14px;
   color: #9a9a9a;
   text-decoration: line-through;
+  text-align: left;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .watchshop-name {

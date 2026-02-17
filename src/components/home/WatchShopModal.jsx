@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import "./WatchShopModal.css";
 import { withPublicUrl } from "../../utils/assetPath";
 import { useNavigate } from "react-router-dom";
@@ -14,11 +16,20 @@ export default function WatchShopModal({ items, index, setIndex }) {
     setIndex(index === items.length - 1 ? 0 : index + 1);
   };
 
-  return (
-    <div className="watch-modal">
-      <span className="close" onClick={() => setIndex(null)}>✕</span>
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-      <button className="nav left" onClick={prev}>‹</button>
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
+
+  return createPortal(
+    <div className="watch-modal">
+      <span className="close" onClick={() => setIndex(null)}>&#10005;</span>
+
+      <button className="nav left" onClick={prev}>&#8249;</button>
 
       <div className="modal-card">
         <video
@@ -40,7 +51,8 @@ export default function WatchShopModal({ items, index, setIndex }) {
         </div>
       </div>
 
-      <button className="nav right" onClick={next}>›</button>
-    </div>
+      <button className="nav right" onClick={next}>&#8250;</button>
+    </div>,
+    document.body
   );
 }

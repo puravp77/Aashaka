@@ -58,50 +58,103 @@
 
 /* TEXT */
 .signature-text {
-  max-width: 400px;
-  margin-left: 150px;
-  margin-bottom: 100px;
+  position: relative;
+  max-width: 460px;
+  margin-left: 130px;
+  margin-bottom: 86px;
+  padding: 28px 32px 30px;
+  border-radius: 20px;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.24) 52%,
+    rgba(247, 226, 219, 0.36) 100%
+  );
+  border: 1px solid rgba(56, 33, 25, 0.11);
+  box-shadow:
+    0 20px 36px rgba(63, 37, 27, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.signature-text::before {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(139, 26, 57, 0.12) 0%,
+    rgba(139, 26, 57, 0) 70%
+  );
+  pointer-events: none;
 }
 
 /* SIGNATURE LABEL */
-.signature-text h4 {
-  font-family: "Times New Roman", serif;
-  font-size: 50px;
-  letter-spacing: 6px;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.55);
-  margin-bottom: 26px;
+.signature-kicker {
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: 12px;
+  letter-spacing: 2.8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(45, 25, 18, 0.72);
+  margin: 0 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   position: relative;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(139, 26, 57, 0.2);
+  background: rgba(255, 255, 255, 0.5);
 }
 
 /* UNDERLINE */
-.signature-text h4::after {
+.signature-kicker::after {
   content: "";
-  position: absolute;
-  left: 0;
-  bottom: -12px;
-  width: 345px;
+  display: inline-block;
+  width: 34px;
   height: 1px;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: rgba(139, 26, 57, 0.48);
 }
 
 /* MAIN HEADING */
-.signature-text h1 {
+.signature-heading {
   font-family: "Playfair Display", "Times New Roman", serif;
-  font-size: 46px;
-  font-weight: 500;
-  line-height: 1.15;
-  margin: 40px 0 28px;
-  color: #1f1f1f;
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1.02;
+  margin: 0 0 14px;
+  color: #2b1a14;
+  letter-spacing: 0.2px;
+}
+
+.signature-brand {
+  color: #7f102f;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.signature-lead {
+  margin: 0 0 14px;
+  font-family: "Lora", "Times New Roman", serif;
+  font-size: 19px;
+  line-height: 1.5;
+  color: rgba(38, 22, 17, 0.82);
+  font-style: italic;
 }
 
 /* DESCRIPTION */
-.signature-text p {
-  font-family: "Times New Roman", serif;
-  font-size: 15px;
-  letter-spacing: 1.4px;
-  line-height: 2;
-  color: rgba(0, 0, 0, 0.6);
+.signature-description {
+  font-family: "Lora", "Times New Roman", serif;
+  font-size: 16px;
+  letter-spacing: 0.15px;
+  line-height: 1.88;
+  color: rgba(33, 21, 16, 0.78);
+  margin: 0;
+  padding-left: 14px;
+  border-left: 2px solid rgba(139, 26, 57, 0.28);
 }
 
 /* ===================== */
@@ -173,11 +226,16 @@
   .signature-text {
     margin-left: 0;
     text-align: center;
+    padding: 20px 20px 22px;
   }
 
-  .signature-text h4::after {
-    left: 50%;
-    transform: translateX(-50%);
+  .signature-lead {
+    font-size: 17px;
+  }
+
+  .signature-description {
+    border-left: none;
+    padding-left: 0;
   }
 }
 
@@ -232,26 +290,31 @@
     margin: 0;
     text-align: center;
     max-width: 100%;
+    padding: 18px 16px 20px;
   }
 
-  .signature-text h4::after {
-    left: 50%;
-    transform: translateX(-50%);
-    width: 220px;
+  .signature-kicker {
+    justify-content: center;
+    font-size: 11px;
+    letter-spacing: 2px;
   }
 
-  .signature-text h4 {
-    font-size: 36px;
-    letter-spacing: 4px;
+  .signature-kicker::after {
+    width: 26px;
   }
 
-  .signature-text h1 {
-    font-size: 32px;
+  .signature-heading {
+    font-size: 37px;
   }
 
-  .signature-text p {
+  .signature-lead {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .signature-description {
     font-size: 14px;
-    line-height: 1.8;
+    line-height: 1.75;
   }
 }
 
@@ -280,12 +343,12 @@
     left: 160px;
   }
 
-  .signature-text h4 {
-    font-size: 30px;
+  .signature-heading {
+    font-size: 31px;
   }
 
-  .signature-text h1 {
-    font-size: 28px;
+  .signature-lead {
+    font-size: 14px;
   }
 }
 

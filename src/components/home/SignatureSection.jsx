@@ -49,9 +49,14 @@ export default function   SignatureSection() {
         </div>
 
         <div className="signature-text">
-          <h4>SIGNATURE</h4>
-          <h1>Hue's Of Aashaka</h1>
-          <p>
+          <h4 className="signature-kicker">Signature </h4>
+          <h1 className="signature-heading">
+            Hues of <span className="signature-brand">Aashaka</span>
+          </h1>
+          <p className="signature-lead">
+            Hand-finished styles, made to feel effortless and elevated.
+          </p>
+          <p className="signature-description">
             Where design becomes emotion and craftsmanship tells a story.
             Every silhouette is curated with intention, blending modern
             aesthetics with comfort-driven luxury to create pieces that feel

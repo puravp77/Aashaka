@@ -58,6 +58,11 @@ function Home() {
     hidden: { opacity: 0, y: 24 },
     visible: { opacity: 1, y: 0 },
   };
+  const sectionViewport = { once: false, amount: 0.25 };
+  const sectionTransition = {
+    duration: 0.55,
+    ease: [0.22, 1, 0.36, 1],
+  };
 
   return (
     <div className="home">
@@ -69,8 +74,8 @@ function Home() {
         variants={reveal}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.25 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={sectionViewport}
+        transition={sectionTransition}
       >
         <CategorySection />
       </motion.section>
@@ -78,8 +83,8 @@ function Home() {
         variants={reveal}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.25 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+        viewport={sectionViewport}
+        transition={sectionTransition}
       >
         <SignatureSection />
       </motion.section>
@@ -87,8 +92,8 @@ function Home() {
         variants={reveal}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.25 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+        viewport={sectionViewport}
+        transition={sectionTransition}
       >
         <ChokerSection />
       </motion.section>
@@ -96,8 +101,8 @@ function Home() {
         variants={reveal}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.25 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+        viewport={sectionViewport}
+        transition={sectionTransition}
       >
         <ExploreCollection />
       </motion.section>
@@ -105,8 +110,8 @@ function Home() {
         variants={reveal}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.25 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+        viewport={sectionViewport}
+        transition={sectionTransition}
       >
         <WatchShopSection />
       </motion.section>
@@ -114,8 +119,8 @@ function Home() {
         variants={reveal}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.25 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+        viewport={sectionViewport}
+        transition={sectionTransition}
       >
         <AboutSection />
       </motion.section>

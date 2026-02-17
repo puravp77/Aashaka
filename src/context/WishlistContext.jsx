@@ -34,7 +34,14 @@ export function WishlistProvider({ children }) {
   }, [wishlistItems, user, storageKey]);
 
   const addToWishlist = (product, size = null, showToast = true) => {
-    if (!user) return;
+    if (!user) {
+      if (showToast) {
+        toast.error("Please login first to add items to wishlist", {
+          toastId: "wishlist-login-required",
+        });
+      }
+      return;
+    }
     setWishlistItems((prev) => {
       const exists = prev.some((item) => item.id === product.id);
       if (exists) return prev;

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
 
 import watchShopData from "../../data/WatchShopData";
 import WatchShopModal from "./WatchShopModal";
@@ -15,21 +14,93 @@ import { withPublicUrl } from "../../utils/assetPath";
 
 const WatchShopSection = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [slidesPerView, setSlidesPerView] = useState(1);
+  const [isSectionVisible, setIsSectionVisible] = useState(false);
+
+  const sectionRef = useRef(null);
+  const videoRefs = useRef(new Map());
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  /* 🔥 AUTO-CLOSE MODAL ON ROUTE CHANGE */
+  // Auto-close modal on route change.
   useEffect(() => {
     setActiveIndex(null);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (!sectionRef.current) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSectionVisible(entry.isIntersecting && entry.intersectionRatio >= 0.2);
+      },
+      { threshold: [0, 0.2, 0.4, 0.6] }
+    );
+
+    observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const getSlidesPerViewValue = (swiper) => {
+    if (!swiper) return 1;
+
+    const directValue = swiper.params?.slidesPerView;
+    if (typeof directValue === "number") {
+      return Math.max(1, Math.floor(directValue));
+    }
+
+    const currentBreakpoint = swiper.currentBreakpoint;
+    const breakpointValue =
+      swiper.params?.breakpoints?.[currentBreakpoint]?.slidesPerView;
+
+    if (typeof breakpointValue === "number") {
+      return Math.max(1, Math.floor(breakpointValue));
+    }
+
+    return 1;
+  };
+
+  const syncSliderWindow = (swiper) => {
+    if (!swiper) return;
+    setActiveSlide(swiper.realIndex ?? swiper.activeIndex ?? 0);
+    setSlidesPerView(getSlidesPerViewValue(swiper));
+  };
+
+  useEffect(() => {
+    const preloadAhead = 1;
+    const firstVisible = activeSlide;
+    const lastVisible = activeSlide + slidesPerView + preloadAhead - 1;
+
+    videoRefs.current.forEach((videoEl, index) => {
+      if (!videoEl) return;
+
+      const shouldPlay =
+        isSectionVisible && index >= firstVisible && index <= lastVisible;
+
+      if (shouldPlay) {
+        const playPromise = videoEl.play();
+        if (playPromise && typeof playPromise.catch === "function") {
+          playPromise.catch(() => {});
+        }
+      } else {
+        videoEl.pause();
+      }
+    });
+  }, [activeSlide, isSectionVisible, slidesPerView]);
+
   return (
-    <section className="watchshop">
+    <section className="watchshop" ref={sectionRef}>
       <h2 className="watchshop-title">Watch & Shop</h2>
 
       <Swiper
         modules={[Navigation]}
+        onSwiper={syncSliderWindow}
+        onSlideChange={syncSliderWindow}
+        onResize={syncSliderWindow}
+        onBreakpoint={syncSliderWindow}
         navigation={{
           nextEl: ".watchshop-next",
           prevEl: ".watchshop-prev",
@@ -45,33 +116,32 @@ const WatchShopSection = () => {
       >
         {watchShopData.map((item, index) => (
           <SwiperSlide key={item.id}>
-            <motion.div
-              className="watchshop-card"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.2 }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.04 }}
-            >
-              {/* VIDEO CLICK → OPEN MODAL */}
+            <div className="watchshop-card">
               <div
                 className="watchshop-video-wrapper"
                 onClick={() => setActiveIndex(index)}
               >
                 <video
+                  ref={(el) => {
+                    if (el) {
+                      videoRefs.current.set(index, el);
+                    } else {
+                      videoRefs.current.delete(index);
+                    }
+                  }}
                   src={withPublicUrl(item.video)}
-                  autoPlay
                   muted
                   loop
                   playsInline
+                  preload="metadata"
                 />
               </div>
 
-              {/* INFO */}
               <div className="watchshop-info">
                 <div className="watchshop-price">
-                  <span className="price">₹{item.price}</span>
+                  <span className="price">{"\u20B9"}{item.price}</span>
                   <span className="discount">{item.discount}% off</span>
-                  <span className="old-price">₹{item.oldPrice}</span>
+                  <span className="old-price">{"\u20B9"}{item.oldPrice}</span>
                 </div>
 
                 <h3 className="watchshop-name">{item.title}</h3>
@@ -79,23 +149,21 @@ const WatchShopSection = () => {
                 <button
                   className="watchshop-btn"
                   onClick={() => {
-                    setActiveIndex(null);               // ✅ close modal
+                    setActiveIndex(null);
                     navigate(`/product/${item.productId}`);
                   }}
                 >
                   Buy Now
                 </button>
               </div>
-            </motion.div>
+            </div>
           </SwiperSlide>
         ))}
 
-        {/* CUSTOM ARROWS */}
-        <div className="watchshop-prev">‹</div>
-        <div className="watchshop-next">›</div>
+        <div className="watchshop-prev">&#8249;</div>
+        <div className="watchshop-next">&#8250;</div>
       </Swiper>
 
-      {/* MODAL */}
       {activeIndex !== null && (
         <WatchShopModal
           items={watchShopData}
