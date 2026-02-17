@@ -1,103 +1,269 @@
-.order-success {
-  min-height: 70vh;
-  display: flex;
+.order-success-page {
+  min-height: 72vh;
+  padding: 32px 18px 64px;
+  background: linear-gradient(180deg, #f7f4ef 0%, #f2ece2 100%);
+}
+
+.order-success-shell {
+  max-width: 860px;
+  margin: 0 auto;
+  position: relative;
+  border: 1px solid #e6d8c7;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 36px rgba(40, 22, 12, 0.08);
+  padding: 34px 34px 30px;
+  overflow: hidden;
+}
+
+.order-success-shell::before,
+.order-success-shell::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.order-success-shell::before {
+  width: 230px;
+  height: 230px;
+  right: -80px;
+  top: -84px;
+  background: radial-gradient(circle, rgba(139, 13, 43, 0.16) 0%, rgba(139, 13, 43, 0) 72%);
+}
+
+.order-success-shell::after {
+  width: 180px;
+  height: 180px;
+  left: -70px;
+  bottom: -80px;
+  background: radial-gradient(circle, rgba(194, 163, 131, 0.2) 0%, rgba(194, 163, 131, 0) 70%);
+}
+
+.order-success-eyebrow {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #8b0d2b;
+  text-align: center;
+}
+
+.order-success-head {
+  margin-top: 14px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.order-success-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #8b0d2b;
+  background: linear-gradient(180deg, #fff7f8 0%, #fff 100%);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  padding: 40px 20px;
-}
-
-.order-success-box {
-  max-width: 620px;
-  width: 100%;
-  text-align: center;
-  border: 1px solid #eee;
-  padding: 50px 40px;
-  border-radius: 6px;
-  background: #fff;
-}
-
-.order-success-box h1 {
-  font-size: 32px;
-  font-weight: 500;
+  box-shadow: 0 10px 24px rgba(139, 13, 43, 0.14);
   margin-bottom: 16px;
-  color: #000;
 }
 
-.order-success-box p {
-  font-size: 15px;
-  color: #555;
-  line-height: 1.6;
-  margin-bottom: 10px;
+.order-success-icon-mark {
+  width: 24px;
+  height: 13px;
+  border-left: 3px solid #8b0d2b;
+  border-bottom: 3px solid #8b0d2b;
+  transform: rotate(-45deg) translate(2px, -1px);
 }
 
-.order-success-box .success-icon {
-  font-size: 54px;
-  color: #740318;
-  margin-bottom: 20px;
+.order-success-head h1 {
+  margin: 0;
+  font-size: 46px;
+  font-weight: 500;
+  color: #1f1510;
+  line-height: 1;
 }
 
-.order-success-box a {
-  display: inline-block;
+.order-success-head p {
+  margin: 10px 0 0;
+  font-size: 16px;
+  color: #5f5248;
+}
+
+.order-success-meta {
   margin-top: 28px;
-  padding: 14px 34px;
-  border: 1px solid #000;
-  text-decoration: none;
-  color: #000;
-  letter-spacing: 1.5px;
-  font-size: 13px;
-  transition: all 0.3s ease;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
-.order-success-box a:hover {
-  background: #000;
+.meta-card {
+  border: 1px solid #eadcca;
+  border-radius: 14px;
+  background: #fffaf4;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meta-label {
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #6e5e53;
+}
+
+.meta-value {
+  font-size: 19px;
+  color: #231913;
+  line-height: 1.25;
+}
+
+.order-success-note {
+  margin-top: 16px;
+  border: 1px solid #e4d4c3;
+  border-radius: 12px;
+  background: #fff;
+  padding: 11px 14px;
+  font-size: 14px;
+  color: #5f5248;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.order-success-actions {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.order-success-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 2px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.order-success-actions a:hover {
+  transform: translateY(-1px);
+}
+
+.order-success-actions .btn-primary {
+  border: 1px solid #7f0d32;
+  background: linear-gradient(135deg, #7f0d32 0%, #a71043 100%);
   color: #fff;
 }
 
-
-/* ===============================
-   RESPONSIVE – ORDER SUCCESS
-   Desktop untouched
-================================ */
-
-/* Tablets */
-@media (max-width: 768px) {
-
-  .order-success-box {
-    padding: 40px 30px;
-  }
-
-  .order-success-box h1 {
-    font-size: 28px;
-  }
+.order-success-actions .btn-primary:hover {
+  filter: brightness(1.05);
 }
 
-/* Mobile phones */
-@media (max-width: 480px) {
+.order-success-actions .btn-secondary {
+  border: 1px solid #2a1d16;
+  background: #fff;
+  color: #2a1d16;
+}
 
-  .order-success {
-    padding: 30px 16px;
+.order-success-actions .btn-secondary:hover {
+  background: #2a1d16;
+  color: #fff;
+}
+
+.order-success-chips {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.order-success-chips span {
+  text-align: center;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid #ddcfbe;
+  background: #fff;
+  font-size: 11px;
+  color: #64564c;
+}
+
+@media (max-width: 900px) {
+  .order-success-page {
+    padding: 24px 14px 44px;
   }
 
-  .order-success-box {
-    padding: 30px 20px;
+  .order-success-shell {
+    padding: 24px 18px 20px;
+    border-radius: 18px;
   }
 
-  .order-success-box h1 {
-    font-size: 24px;
+  .order-success-head h1 {
+    font-size: 34px;
   }
 
-  .order-success-box p {
+  .order-success-head p {
     font-size: 14px;
   }
 
-  .order-success-box .success-icon {
-    font-size: 44px;
+  .order-success-meta {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
-  .order-success-box a {
-    padding: 12px 26px;
-    font-size: 12px;
-    letter-spacing: 1.2px;
+  .meta-value {
+    font-size: 17px;
+  }
+
+  .order-success-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .order-success-actions a {
+    min-height: 46px;
+    letter-spacing: 1.6px;
+  }
+
+  .order-success-chips {
+    grid-template-columns: 1fr;
+  }
+
+  .order-success-chips span {
+    text-align: left;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-success-head h1 {
+    font-size: 28px;
+  }
+
+  .order-success-icon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 12px;
+  }
+
+  .order-success-icon-mark {
+    width: 20px;
+    height: 11px;
+  }
+
+  .order-success-note {
+    font-size: 13px;
   }
 }
