@@ -588,6 +588,9 @@ const UserProfile = () => {
     setShowAddressForm(false);
   };
 
+  const fieldClassName = (fieldName) =>
+    `address-field ${errors[fieldName] ? "error" : ""}`;
+
   const selectedStateOption = stateOptions.find((stateOption) => {
     const normalizedSelected = normalizeLocationText(formData.state);
     return (
@@ -821,7 +824,7 @@ const UserProfile = () => {
                     <p>Fields marked with * are required.</p>
                   </div>
                   <div className="address-form-grid">
-                    <div className="address-field">
+                    <div className={fieldClassName("firstName")}>
                       <label>
                         First Name <span className="required">*</span>
                       </label>
@@ -829,13 +832,15 @@ const UserProfile = () => {
                         name="firstName"
                         value={formData.firstName}
                         onChange={handleChange}
+                        autoComplete="given-name"
+                        aria-invalid={Boolean(errors.firstName)}
                       />
                       {errors.firstName && (
                         <span className="field-error">{errors.firstName}</span>
                       )}
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("middleName")}>
                       <label>
                         Middle Name <span className="required">*</span>
                       </label>
@@ -843,13 +848,15 @@ const UserProfile = () => {
                         name="middleName"
                         value={formData.middleName}
                         onChange={handleChange}
+                        autoComplete="additional-name"
+                        aria-invalid={Boolean(errors.middleName)}
                       />
                       {errors.middleName && (
                         <span className="field-error">{errors.middleName}</span>
                       )}
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("lastName")}>
                       <label>
                         Last Name <span className="required">*</span>
                       </label>
@@ -857,15 +864,17 @@ const UserProfile = () => {
                         name="lastName"
                         value={formData.lastName}
                         onChange={handleChange}
+                        autoComplete="family-name"
+                        aria-invalid={Boolean(errors.lastName)}
                       />
                       {errors.lastName && (
                         <span className="field-error">{errors.lastName}</span>
                       )}
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("mobile")}>
                       <label>
-                        Mobile No <span className="required">*</span>
+                        Mobile Number <span className="required">*</span>
                       </label>
                       <input
                         type="tel"
@@ -876,27 +885,32 @@ const UserProfile = () => {
                         title="Enter a 10 digit mobile number"
                         value={formData.mobile}
                         onChange={handleChange}
+                        autoComplete="tel"
+                        aria-invalid={Boolean(errors.mobile)}
                       />
                       {errors.mobile && (
                         <span className="field-error">{errors.mobile}</span>
                       )}
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("email")}>
                       <label>
                         Email ID <span className="required">*</span>
                       </label>
                       <input
+                        type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
+                        autoComplete="email"
+                        aria-invalid={Boolean(errors.email)}
                       />
                       {errors.email && (
                         <span className="field-error">{errors.email}</span>
                       )}
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("company")}>
                       <label>
                         Company <span className="required">*</span>
                       </label>
@@ -904,13 +918,15 @@ const UserProfile = () => {
                         name="company"
                         value={formData.company}
                         onChange={handleChange}
+                        autoComplete="organization"
+                        aria-invalid={Boolean(errors.company)}
                       />
                       {errors.company && (
                         <span className="field-error">{errors.company}</span>
                       )}
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("address1")}>
                       <label>
                         Address <span className="required">*</span>
                       </label>
@@ -919,6 +935,8 @@ const UserProfile = () => {
                         placeholder="House number and street name"
                         value={formData.address1}
                         onChange={handleChange}
+                        autoComplete="address-line1"
+                        aria-invalid={Boolean(errors.address1)}
                       />
                       {errors.address1 && (
                         <span className="field-error">{errors.address1}</span>
@@ -926,16 +944,17 @@ const UserProfile = () => {
                     </div>
 
                     <div className="address-field">
-                      <label>Address :</label>
+                      <label>Address Line 2 (Optional)</label>
                       <textarea
                         name="address2"
-                        placeholder="Apartment,suite, unit,etc."
+                        placeholder="Apartment, suite, unit, etc."
                         value={formData.address2}
                         onChange={handleChange}
+                        autoComplete="address-line2"
                       />
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("country")}>
                       <label>
                         Country <span className="required">*</span>
                       </label>
@@ -943,24 +962,29 @@ const UserProfile = () => {
                         name="country"
                         value={formData.country}
                         disabled
+                        autoComplete="country-name"
+                        aria-invalid={Boolean(errors.country)}
                       />
                       {errors.country && (
                         <span className="field-error">{errors.country}</span>
                       )}
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("state")}>
                       <label>
                         State <span className="required">*</span>
                       </label>
                       <div
-                        className={`select-wrapper ${isStateOpen ? "open" : ""}`}
+                        className={`select-wrapper ${isStateOpen ? "open" : ""} ${
+                          errors.state ? "invalid" : ""
+                        }`}
                         ref={stateRef}
                       >
                         <button
                           type="button"
                           className="select-trigger"
                           onClick={toggleStateDropdown}
+                          aria-expanded={isStateOpen}
                         >
                           <span
                             className={
@@ -1013,14 +1037,16 @@ const UserProfile = () => {
                       )}
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("city")}>
                       <label>
                         City <span className="required">*</span>
                       </label>
                       <div
                         className={`select-wrapper ${
                           !selectedStateRawName ? "disabled" : ""
-                        } ${isCityOpen ? "open" : ""}`}
+                        } ${isCityOpen ? "open" : ""} ${
+                          errors.city ? "invalid" : ""
+                        }`}
                         ref={cityRef}
                       >
                         <button
@@ -1028,6 +1054,7 @@ const UserProfile = () => {
                           className="select-trigger"
                           onClick={toggleCityDropdown}
                           disabled={!selectedStateRawName}
+                          aria-expanded={isCityOpen}
                         >
                           <span
                             className={
@@ -1079,7 +1106,7 @@ const UserProfile = () => {
                       )}
                     </div>
 
-                    <div className="address-field">
+                    <div className={fieldClassName("pincode")}>
                       <label>
                         Pincode <span className="required">*</span>
                       </label>
@@ -1092,6 +1119,8 @@ const UserProfile = () => {
                         title="Enter a 6 digit pincode"
                         value={formData.pincode}
                         onChange={handleChange}
+                        autoComplete="postal-code"
+                        aria-invalid={Boolean(errors.pincode)}
                       />
                       {errors.pincode && (
                         <span className="field-error">{errors.pincode}</span>
