@@ -1,11 +1,10 @@
-import Main from "./components/main";
+import Main from "./components/layout/main";
 import "./index.css";   
 
-function App() {
+function App() 
 
-  
-
-  return <Main />;
+{
+   return <Main />;
 }
 
 export default App;
