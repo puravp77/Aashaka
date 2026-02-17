@@ -87,76 +87,78 @@ export default function Login() {
 
 
   return (
-    <motion.div
-      className="auth-page"
-      variants={authPageVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      transition={{ duration: 0.35, ease: "easeOut" }}
-    >
-      <h2>Login</h2>
+    <div className="auth-shell">
+      <motion.div
+        className="auth-page"
+        variants={authPageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      >
+        <h2>Login</h2>
 
-      <form onSubmit={handleLogin}>
-        <motion.div key={shakeKey} variants={shake} animate="animate">
-          {/* EMAIL */}
-          <div className="field">
-            <input
-              type="text"
-              name="id"
-              placeholder="Email ID"
-              value={form.id}
-              onChange={handleChange}
-              className={errors.id ? "error-input" : ""}
-            />
-            {errors.id && <span className="error">{errors.id}</span>}
-          </div>
+        <form onSubmit={handleLogin}>
+          <motion.div key={shakeKey} variants={shake} animate="animate">
+            {/* EMAIL */}
+            <div className="field">
+              <input
+                type="text"
+                name="id"
+                placeholder="Email ID"
+                value={form.id}
+                onChange={handleChange}
+                className={errors.id ? "error-input" : ""}
+              />
+              {errors.id && <span className="error">{errors.id}</span>}
+            </div>
 
-          {/* PASSWORD */}
-          <div className="field password-wrapper">
-            <input
-              type={showPass ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
-              className={errors.password ? "error-input" : ""}
-            />
+            {/* PASSWORD */}
+            <div className="field password-wrapper">
+              <input
+                type={showPass ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={form.password}
+                onChange={handleChange}
+                className={errors.password ? "error-input" : ""}
+              />
 
-            <motion.img
-              src={
-                showPass
-                  ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
-                  : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
-              }
-              alt="toggle password"
-              className="eye-icon-img"
-              onClick={() => setShowPass((p) => !p)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9, rotate: 15 }}
-            />
+              <motion.img
+                src={
+                  showPass
+                    ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
+                    : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
+                }
+                alt="toggle password"
+                className="eye-icon-img"
+                onClick={() => setShowPass((p) => !p)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9, rotate: 15 }}
+              />
 
-            {errors.password && (
-              <span className="error">{errors.password}</span>
-            )}
-          </div>
-        </motion.div>
+              {errors.password && (
+                <span className="error">{errors.password}</span>
+              )}
+            </div>
+          </motion.div>
 
-        <motion.button
-          type="submit"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          SUBMIT
-        </motion.button>
-      </form>
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            SUBMIT
+          </motion.button>
+        </form>
 
-      <div className="auth-links">
-        <Link to="/signup">Create your account</Link>
-        <Link to="/forget-password">Forgot password?</Link>
-      </div>
-    </motion.div>
+        <div className="auth-links">
+          <Link to="/signup">Create your account</Link>
+          <Link to="/forget-password">Forgot password?</Link>
+        </div>
+      </motion.div>
+    </div>
   );
 }
 

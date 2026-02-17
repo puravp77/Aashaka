@@ -147,128 +147,129 @@ export default function Signup() {
   };
 
   return (
-    <motion.div
-      className="auth-page"
-      variants={authPageVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      transition={{ duration: 0.35, ease: "easeOut" }}
-    >
-      <h2>Create Account</h2>
+    <div className="auth-shell">
+      <motion.div
+        className="auth-page"
+        variants={authPageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      >
+        <h2>Create Account</h2>
 
-      <form onSubmit={handleSignup}>
-        {/* EMAIL */}
-        <motion.div
-          className="field"
-          variants={shake}
-          animate={errors.email ? "animate" : ""}
-        >
-          <input
-            type="text"
-            name="email"
-            placeholder="Email ID"
-            value={form.email}
-            onChange={handleChange}
-            className={errors.email ? "error-input" : ""}
-          />
-          {errors.email && <span className="error">{errors.email}</span>}
-        </motion.div>
-
-        {/* 🔥 PASSWORD + CONFIRM (SHAKE TOGETHER) */}
-        <motion.div
-          variants={shake}
-          animate={isMismatch ? "animate" : ""}
-        >
-          {/* PASSWORD */}
-          <div className="field password-wrapper">
+        <form onSubmit={handleSignup}>
+          {/* EMAIL */}
+          <motion.div
+            className="field"
+            variants={shake}
+            animate={errors.email ? "animate" : ""}
+          >
             <input
-              type={showPass ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              value={form.password}
+              type="text"
+              name="email"
+              placeholder="Email ID"
+              value={form.email}
               onChange={handleChange}
-              className={errors.password ? "error-input" : ""}
+              className={errors.email ? "error-input" : ""}
             />
+            {errors.email && <span className="error">{errors.email}</span>}
+          </motion.div>
 
-            <motion.img
-              src={
-                showPass
-                  ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
-                  : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
-              }
-              alt="toggle password"
-              className="eye-icon-img"
-              onClick={() => setShowPass((p) => !p)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9, rotate: 15 }}
-            />
+          {/* 🔥 PASSWORD + CONFIRM (SHAKE TOGETHER) */}
+          <motion.div
+            variants={shake}
+            animate={isMismatch ? "animate" : ""}
+          >
+            {/* PASSWORD */}
+            <div className="field password-wrapper">
+              <input
+                type={showPass ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={form.password}
+                onChange={handleChange}
+                className={errors.password ? "error-input" : ""}
+              />
 
-            {form.password && (
-              <div className="password-strength">
-                <div className={`strength-label strength-${strength.label.toLowerCase()}`}>
-                  Strength: <span>{strength.label}</span>
+              <motion.img
+                src={
+                  showPass
+                    ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
+                    : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
+                }
+                alt="toggle password"
+                className="eye-icon-img"
+                onClick={() => setShowPass((p) => !p)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9, rotate: 15 }}
+              />
+
+              {form.password && (
+                <div className="password-strength">
+                  <div className={`strength-label strength-${strength.label.toLowerCase()}`}>
+                    Strength: <span>{strength.label}</span>
+                  </div>
+
+                  <div className="strength-bar">
+                    <motion.div
+                      className="strength-fill"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${strength.value}%` }}
+                      transition={{ duration: 0.3 }}
+                      style={{ backgroundColor: strength.color }}
+                    />
+                  </div>
                 </div>
+              )}
 
-                <div className="strength-bar">
-                  <motion.div
-                    className="strength-fill"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${strength.value}%` }}
-                    transition={{ duration: 0.3 }}
-                    style={{ backgroundColor: strength.color }}
-                  />
-                </div>
-              </div>
-            )}
+              {errors.password && <span className="error">{errors.password}</span>}
+            </div>
 
-            {errors.password && <span className="error">{errors.password}</span>}
-          </div>
+            {/* CONFIRM PASSWORD */}
+            <div className="field password-wrapper">
+              <input
+                type={showConfirm ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                className={errors.confirmPassword ? "error-input" : ""}
+              />
 
-          {/* CONFIRM PASSWORD */}
-          <div className="field password-wrapper">
-            <input
-              type={showConfirm ? "text" : "password"}
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              className={errors.confirmPassword ? "error-input" : ""}
-            />
+              <motion.img
+                src={
+                  showConfirm
+                    ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
+                    : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
+                }
+                alt="toggle confirm password"
+                className="eye-icon-img"
+                onClick={() => setShowConfirm((p) => !p)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9, rotate: -15 }}
+              />
 
-            <motion.img
-              src={
-                showConfirm
-                  ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
-                  : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
-              }
-              alt="toggle confirm password"
-              className="eye-icon-img"
-              onClick={() => setShowConfirm((p) => !p)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9, rotate: -15 }}
-            />
+              {errors.confirmPassword && (
+                <span className="error">{errors.confirmPassword}</span>
+              )}
+            </div>
+          </motion.div>
 
-            {errors.confirmPassword && (
-              <span className="error">{errors.confirmPassword}</span>
-            )}
-          </div>
-        </motion.div>
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            CREATE ACCOUNT
+          </motion.button>
+        </form>
 
-        <motion.button
-          type="submit"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
-          CREATE ACCOUNT
-        </motion.button>
-      </form>
-
-      <div className="auth-links">
-        <Link to="/login">Already have an account? Login</Link>
-      </div>
-    </motion.div>
+        <div className="auth-links">
+          <Link to="/login">Already have an account? Login</Link>
+        </div>
+      </motion.div>
+    </div>
   );
 }
-

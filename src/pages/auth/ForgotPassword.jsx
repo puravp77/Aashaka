@@ -29,10 +29,39 @@ export default function ForgotPassword() {
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef(null);
 
+  const redirectToLogin = () => {
+    sessionStorage.removeItem("fp_step");
+    navigate("/login", { replace: true });
+  };
+
+  const resetToEmailStep = () => {
+    setStep(1);
+    setEmail("");
+    setOtpInput("");
+    setGeneratedOtp("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setErrors({});
+    setShowToast(false);
+    setProgress(100);
+    sessionStorage.removeItem("fp_step");
+  };
+
   // SYNC STEP
   useEffect(() => {
-    sessionStorage.setItem("fp_step", step);
+    if (step >= 1 && step <= 3) {
+      sessionStorage.setItem("fp_step", String(step));
+      return;
+    }
+    sessionStorage.removeItem("fp_step");
   }, [step]);
+
+  useEffect(() => {
+    if ((step === 2 || step === 3) && !email.trim()) {
+      setStep(1);
+      sessionStorage.removeItem("fp_step");
+    }
+  }, [step, email]);
 
   const generateOtp = () =>
     Math.floor(100000 + Math.random() * 900000).toString();
@@ -168,6 +197,7 @@ export default function ForgotPassword() {
         }
 
         setErrors({});
+        setShowToast(false);
         setStep(4);
         return;
       }
@@ -183,6 +213,7 @@ export default function ForgotPassword() {
 
       if (updateRes.ok) {
         setErrors({});
+        setShowToast(false);
         setStep(4);
       } else {
         setErrors({ password: "Server error. Please try again." });
@@ -230,8 +261,7 @@ export default function ForgotPassword() {
               className="auth-btn"
               type="button"
               onClick={() => {
-                sessionStorage.removeItem("fp_step");
-                navigate("/login");
+                redirectToLogin();
               }}
             >
               GO TO LOGIN
@@ -294,6 +324,13 @@ export default function ForgotPassword() {
                     RESEND OTP
                   </button>
                 )}
+                <button
+                  className="auth-inline-link"
+                  type="button"
+                  onClick={resetToEmailStep}
+                >
+                  USE DIFFERENT EMAIL ID
+                </button>
               </>
             )}
 
@@ -356,11 +393,26 @@ export default function ForgotPassword() {
                 >
                   UPDATE
                 </button>
+
+                <button
+                  className="auth-inline-link"
+                  type="button"
+                  onClick={resetToEmailStep}
+                >
+                  USE DIFFERENT EMAIL ID
+                </button>
               </>
             )}
 
             <div className="auth-links">
-              <Link to="/login">Back to Login</Link>
+              <Link
+                to="/login"
+                onClick={() => {
+                  sessionStorage.removeItem("fp_step");
+                }}
+              >
+                Back to Login
+              </Link>
             </div>
           </>
         )}
