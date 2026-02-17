@@ -17,7 +17,7 @@
     },
     {
       "id": "patelpurav077@gmail.com",
-      "password": "Purav12345",
+      "password": "Toast12345",
       "role": "user"
     },
     {
@@ -485,6 +485,39 @@
       "shipping": 100,
       "discount": 100,
       "total": 1499,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "puravp02@gmail.com",
+        "firstName": "Purav",
+        "middleName": "Manoj",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9106618331"
+      }
+    },
+    {
+      "id": "fed6",
+      "orderId": "ORD-MLQAZPJM",
+      "userId": "patelpurav077@gmail.com",
+      "date": "2026-02-17T07:50:21.970Z",
+      "items": [
+        {
+          "id": "k2",
+          "title": "Peach Pink Aadhya Kurti Set",
+          "price": 2499,
+          "qty": 1,
+          "size": "L",
+          "image": "/Aashaka/images/k2.jpg"
+        }
+      ],
+      "subtotal": 2499,
+      "shipping": 0,
+      "discount": 0,
+      "total": 2499,
       "paymentMode": "COD",
       "shippingAddress": {
         "email": "puravp02@gmail.com",
