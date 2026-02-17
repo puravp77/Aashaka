@@ -1,6 +1,6 @@
 import "./PlaceOrder.css";
 import { withPublicUrl } from "../../utils/assetPath";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
@@ -23,6 +23,9 @@ const FREE_SHIPPING_THRESHOLD = 1999;
 const SHIPPING_CHARGE = 100;
 const STATES_API_URL = "https://www.india-location-hub.in/api/locations/states";
 const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/districts";
+const STATES_CACHE_KEY = "aashaka_states_cache_v1";
+const STATE_FETCH_TIMEOUT_MS = 8000;
+const STATE_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
 
 const formatLocationName = (value) => {
   if (!value || typeof value !== "string") return "";
@@ -54,6 +57,45 @@ const normalizeLocationText = (value) =>
     .replace(/\s+/g, " ")
     .replace(/&/g, "and")
     .trim();
+
+const CONFETTI_COLORS = [
+  "#7f0d32",
+  "#a71043",
+  "#c9873d",
+  "#f0c987",
+  "#f5ede3",
+  "#ffffff",
+];
+
+const createConfettiParticles = (count) =>
+  Array.from({ length: count }, (_, idx) => ({
+    id: idx,
+    xStart: 3 + Math.random() * 94,
+    xDrift: -90 + Math.random() * 180,
+    duration: 1400 + Math.random() * 1000,
+    delay: Math.random() * 400,
+    spinDuration: 500 + Math.random() * 900,
+    color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+    size: 6 + Math.random() * 8,
+    opacity: 0.6 + Math.random() * 0.4,
+    shape: idx % 3,
+  }));
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const parseStatesResponse = (statesJson) => {
+  const apiStates = Array.isArray(statesJson?.data?.states)
+    ? statesJson.data.states
+    : [];
+
+  return apiStates
+    .map((state) => ({
+      rawName: state?.name || "",
+      label: formatLocationName(state?.name || ""),
+    }))
+    .filter((state) => state.rawName && state.label)
+    .sort((a, b) => a.label.localeCompare(b.label));
+};
 
 export default function PlaceOrder() {
   const navigate = useNavigate();
@@ -155,53 +197,91 @@ export default function PlaceOrder() {
     };
   }, [userId, useLocalCheckoutStore]);
 
-  useEffect(() => {
-    let ignore = false;
+  const loadStates = useCallback(async () => {
+    setLocationLoading(true);
+    setLocationError("");
 
-    const loadStates = async () => {
-      setLocationLoading(true);
+    try {
+      let statesJson = null;
+      let lastError = null;
+
+      for (let attempt = 0; attempt < STATE_FETCH_RETRY_DELAYS_MS.length; attempt += 1) {
+        const delayMs = STATE_FETCH_RETRY_DELAYS_MS[attempt];
+        if (delayMs > 0) {
+          await wait(delayMs);
+        }
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), STATE_FETCH_TIMEOUT_MS);
+
+        try {
+          const statesRes = await fetch(STATES_API_URL, {
+            signal: controller.signal,
+            cache: "no-store",
+          });
+          if (!statesRes.ok) {
+            throw new Error(`Failed to load states (${statesRes.status})`);
+          }
+          statesJson = await statesRes.json();
+          lastError = null;
+          break;
+        } catch (err) {
+          lastError = err;
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      }
+
+      if (!statesJson) {
+        throw lastError || new Error("Failed to load states");
+      }
+
+      const normalizedStates = parseStatesResponse(statesJson);
+      if (normalizedStates.length === 0) {
+        throw new Error("State API returned an empty list");
+      }
+
+      setStateOptions(normalizedStates);
       setLocationError("");
 
       try {
-        const statesRes = await fetch(STATES_API_URL);
-        if (!statesRes.ok) {
-          throw new Error("Failed to load states");
-        }
-
-        const statesJson = await statesRes.json();
-        const apiStates = Array.isArray(statesJson?.data?.states)
-          ? statesJson.data.states
-          : [];
-
-        const normalizedStates = apiStates
-          .map((state) => ({
-            rawName: state?.name || "",
-            label: formatLocationName(state?.name || ""),
-          }))
-          .filter((state) => state.rawName && state.label)
-          .sort((a, b) => a.label.localeCompare(b.label));
-
-        if (!ignore) {
-          setStateOptions(normalizedStates);
-        }
+        localStorage.setItem(
+          STATES_CACHE_KEY,
+          JSON.stringify({
+            savedAt: Date.now(),
+            states: normalizedStates,
+          })
+        );
       } catch (err) {
-        if (!ignore) {
-          setLocationError("Unable to load states right now.");
-          setStateOptions([]);
-          setDistrictOptions([]);
-        }
-      } finally {
-        if (!ignore) {
-          setLocationLoading(false);
-        }
+        // ignore cache write errors
       }
-    };
+    } catch (err) {
+      let cachedStates = [];
 
-    loadStates();
-    return () => {
-      ignore = true;
-    };
+      try {
+        const rawCache = localStorage.getItem(STATES_CACHE_KEY);
+        const parsedCache = rawCache ? JSON.parse(rawCache) : null;
+        cachedStates = Array.isArray(parsedCache?.states) ? parsedCache.states : [];
+      } catch (cacheErr) {
+        cachedStates = [];
+      }
+
+      if (cachedStates.length > 0) {
+        setStateOptions(cachedStates);
+        setLocationError("Live states service is slow. Showing saved state list.");
+      } else {
+        setLocationError("Unable to load states right now. Please tap Retry.");
+        setStateOptions([]);
+        setDistrictOptions([]);
+      }
+    } finally {
+      setLocationLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadStates();
+  }, [loadStates]);
 
   const selectedStateOption = stateOptions.find((stateOption) => {
     const normalizedSelected = normalizeLocationText(form.state);
@@ -460,11 +540,41 @@ export default function PlaceOrder() {
   const [discount, setDiscount] = useState(0);
   const [couponStatus, setCouponStatus] = useState("");
   const [couponMessage, setCouponMessage] = useState("");
+  const [showCouponCelebration, setShowCouponCelebration] = useState(false);
+  const [couponCelebrationBurstKey, setCouponCelebrationBurstKey] = useState(0);
+  const [couponConfettiParticles, setCouponConfettiParticles] = useState(() =>
+    createConfettiParticles(52)
+  );
+  const couponCelebrationTimerRef = useRef(null);
+
+  const triggerCouponCelebration = () => {
+    setCouponConfettiParticles(createConfettiParticles(52));
+    setCouponCelebrationBurstKey((prev) => prev + 1);
+    setShowCouponCelebration(true);
+
+    if (couponCelebrationTimerRef.current) {
+      clearTimeout(couponCelebrationTimerRef.current);
+    }
+
+    couponCelebrationTimerRef.current = setTimeout(() => {
+      setShowCouponCelebration(false);
+      couponCelebrationTimerRef.current = null;
+    }, 2400);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (couponCelebrationTimerRef.current) {
+        clearTimeout(couponCelebrationTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleApplyCoupon = () => {
     setCouponStatus("");
     setCouponMessage("");
     setDiscount(0);
+    setShowCouponCelebration(false);
 
     if (!coupon) {
       setCouponStatus("error");
@@ -496,6 +606,7 @@ export default function PlaceOrder() {
     setDiscount(applied);
     setCouponStatus("success");
     setCouponMessage("Coupon applied successfully!");
+    triggerCouponCelebration();
   };
 
   /* =============================
@@ -588,6 +699,32 @@ export default function PlaceOrder() {
 
   return (
     <section className="placeorder-page">
+      {showCouponCelebration && (
+        <div
+          key={couponCelebrationBurstKey}
+          className="page-confetti"
+          aria-hidden="true"
+        >
+          <div className="page-confetti-flash" />
+          {couponConfettiParticles.map((particle) => (
+            <span
+              key={particle.id}
+              className={`confetti-piece shape-${particle.shape}`}
+              style={{
+                "--x-start": `${particle.xStart}%`,
+                "--x-drift": `${particle.xDrift}px`,
+                "--fall-duration": `${particle.duration}ms`,
+                "--fall-delay": `${particle.delay}ms`,
+                "--spin-duration": `${particle.spinDuration}ms`,
+                "--piece-color": particle.color,
+                "--piece-size": `${particle.size}px`,
+                "--piece-opacity": particle.opacity,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       <div className="placeorder-intro">
         <p className="eyebrow">Secure Checkout</p>
         <h1>Complete Your Order</h1>
@@ -780,7 +917,19 @@ export default function PlaceOrder() {
             )}
           </div>
           {errors.state && <div className="error-text">{errors.state}</div>}
-          {locationError && <div className="field-note error">{locationError}</div>}
+          {locationError && (
+            <div className="field-note error field-note-with-action">
+              <span>{locationError}</span>
+              <button
+                type="button"
+                className="field-note-action"
+                onClick={loadStates}
+                disabled={locationLoading}
+              >
+                {locationLoading ? "Retrying..." : "Retry"}
+              </button>
+            </div>
+          )}
 
           <label>City <span style={{ color: "red" }}>*</span></label>
           <div
@@ -923,14 +1072,20 @@ export default function PlaceOrder() {
           </div>
 
           {/* COUPON */}
-          <div className={`coupon-box ${couponStatus}`}>
+          <form
+            className={`coupon-box ${couponStatus}`}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleApplyCoupon();
+            }}
+          >
             <input
               placeholder="Coupon code"
               value={coupon}
               onChange={(e) => setCoupon(e.target.value.toUpperCase())}
             />
-            <button onClick={handleApplyCoupon}>APPLY</button>
-          </div>
+            <button type="submit">APPLY</button>
+          </form>
 
           {couponMessage && (
             <div className={`coupon-message ${couponStatus}`}>

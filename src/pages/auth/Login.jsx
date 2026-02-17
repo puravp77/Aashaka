@@ -14,7 +14,6 @@ const shake = {
   },
 };
 
-/* ---------------- HELPERS ---------------- */
 
 const isValidEmail = (email) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -72,7 +71,7 @@ export default function Login() {
       const user = await login(form.id.trim(), form.password);
       navigate(user.role === "admin" ? "/admin-dashboard" : "/");
     } catch (err) {
-      // 🔑 Specific error handling
+
       if (err.message === "EMAIL_NOT_FOUND") {
         setErrors({ id: "Email does not exist" });
       } else if (err.message === "WRONG_PASSWORD") {

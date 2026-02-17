@@ -46,7 +46,13 @@ export default function CartDrawer({ open, onClose }) {
               Add products you love and they will appear here.
             </p>
 
-            <button className="drawer-btn drawer-btn-primary" onClick={onClose}>
+            <button
+              className="drawer-btn drawer-btn-primary"
+              onClick={() => {
+                onClose();
+                navigate("/");
+              }}
+            >
               CONTINUE SHOPPING
             </button>
           </div>

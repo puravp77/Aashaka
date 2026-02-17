@@ -1,12 +1,37 @@
 import "./OrderSuccess.css";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { getLocalOrders, shouldUseLocalCheckoutStore } from "../../utils/localCheckoutData";
 
+const CONFETTI_COLORS = [
+  "#7f0d32",
+  "#a71043",
+  "#c9873d",
+  "#f0c987",
+  "#f5ede3",
+  "#ffffff",
+];
+
+const createConfettiParticles = (count) =>
+  Array.from({ length: count }, (_, idx) => ({
+    id: idx,
+    xStart: 3 + Math.random() * 94,
+    xDrift: -90 + Math.random() * 180,
+    duration: 2600 + Math.random() * 2200,
+    delay: Math.random() * 900,
+    spinDuration: 500 + Math.random() * 900,
+    color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
+    size: 6 + Math.random() * 8,
+    opacity: 0.6 + Math.random() * 0.4,
+    shape: idx % 3,
+  }));
+
 export default function OrderSuccess() {
   const { user } = useAuth();
   const [latestOrder, setLatestOrder] = useState(null);
+  const [showCelebration, setShowCelebration] = useState(true);
+  const celebrationTimerRef = useRef(null);
 
   const fallbackUser = useMemo(() => {
     try {
@@ -18,6 +43,20 @@ export default function OrderSuccess() {
   }, []);
 
   const userId = user?.id || fallbackUser?.id || null;
+  const confettiParticles = useMemo(() => createConfettiParticles(56), []);
+
+  useEffect(() => {
+    celebrationTimerRef.current = setTimeout(() => {
+      setShowCelebration(false);
+      celebrationTimerRef.current = null;
+    }, 6000);
+
+    return () => {
+      if (celebrationTimerRef.current) {
+        clearTimeout(celebrationTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     let ignore = false;
@@ -76,6 +115,28 @@ export default function OrderSuccess() {
 
   return (
     <section className="order-success-page">
+      {showCelebration && (
+        <div className="order-success-confetti" aria-hidden="true">
+          <div className="order-success-confetti-flash" />
+          {confettiParticles.map((particle) => (
+            <span
+              key={particle.id}
+              className={`order-success-piece shape-${particle.shape}`}
+              style={{
+                "--x-start": `${particle.xStart}%`,
+                "--x-drift": `${particle.xDrift}px`,
+                "--fall-duration": `${particle.duration}ms`,
+                "--fall-delay": `${particle.delay}ms`,
+                "--spin-duration": `${particle.spinDuration}ms`,
+                "--piece-color": particle.color,
+                "--piece-size": `${particle.size}px`,
+                "--piece-opacity": particle.opacity,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       <div className="order-success-shell">
         <p className="order-success-eyebrow">Aashaka Checkout</p>
 

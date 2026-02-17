@@ -139,8 +139,8 @@
       "address1": "Mahavir Timber Mart, Khatodara, Surat",
       "address2": "",
       "country": "India",
-      "state": "Sikkim",
-      "city": "East District",
+      "state": "Arunachal Pradesh",
+      "city": "West Kameng",
       "pincode": "395002"
     },
     {
@@ -157,6 +157,38 @@
       "country": "India",
       "state": "Gujarat",
       "city": "Surat",
+      "pincode": "395002"
+    },
+    {
+      "id": "4e6a",
+      "userId": "purav222@gmail.com",
+      "firstName": "Guru GuruGuruGuruGuruGuru",
+      "middleName": "ABC  ABC ABC ABC ABC ABC ABC ",
+      "lastName": "Shah",
+      "mobile": "9106600000",
+      "email": "purav22@gmail.com",
+      "company": "DIVTECH",
+      "address1": "MAHAVIR TIMBER MART MAHAVIR TIMBER MART",
+      "address2": "",
+      "country": "India",
+      "state": "Assam",
+      "city": "Barpeta",
+      "pincode": "898445"
+    },
+    {
+      "id": "b8f2",
+      "userId": "purav222@gmail.com",
+      "firstName": "Purav",
+      "middleName": "ABC",
+      "lastName": "Patel",
+      "mobile": "9105558899",
+      "email": "patelpurav0@gmail.com",
+      "company": "Sdd",
+      "address1": "Mahavir Timber Mart, Khatodara, Surat",
+      "address2": "",
+      "country": "India",
+      "state": "Arunachal Pradesh",
+      "city": "Changlang",
       "pincode": "395002"
     }
   ],
@@ -596,6 +628,39 @@
         "city": "Anjaw",
         "pincode": "395002",
         "phone": "9825442105"
+      }
+    },
+    {
+      "id": "0832",
+      "orderId": "ORD-MLQJ0Q7X",
+      "userId": "dhruv10@gmail.com",
+      "date": "2026-02-17T11:35:06.429Z",
+      "items": [
+        {
+          "id": "o3",
+          "title": "Amara Oxidized Silver Set",
+          "price": 1199,
+          "qty": 1,
+          "size": null,
+          "image": "/Aashaka/images/j3.jpg"
+        }
+      ],
+      "subtotal": 1199,
+      "shipping": 100,
+      "discount": 0,
+      "total": 1299,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "patelpurav077@gmail.com",
+        "firstName": "Purav",
+        "middleName": "",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart, Khatodara, Surat",
+        "address2": "",
+        "state": "Arunachal Pradesh",
+        "city": "Changlang",
+        "pincode": "395002",
+        "phone": "9889989899"
       }
     }
   ]

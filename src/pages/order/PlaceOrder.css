@@ -368,6 +368,35 @@
   color: #b00020;
 }
 
+.field-note-with-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.field-note-action {
+  border: none;
+  background: transparent;
+  color: #8b0d2b;
+  font-size: 12px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.field-note-action:hover:not(:disabled) {
+  color: #6e0b22;
+}
+
+.field-note-action:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .section-title {
   font-size: 20px;
   margin: 22px 0 12px;
@@ -514,6 +543,59 @@
   margin: 12px 0 8px;
 }
 
+.page-confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3000;
+  overflow: hidden;
+}
+
+.page-confetti-flash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42vmin;
+  height: 42vmin;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(201, 135, 61, 0.18) 30%,
+    rgba(127, 13, 50, 0.14) 52%,
+    transparent 72%
+  );
+  animation: confetti-flash 520ms ease-out forwards;
+}
+
+.confetti-piece {
+  position: absolute;
+  left: var(--x-start);
+  top: -10vh;
+  width: var(--piece-size);
+  height: calc(var(--piece-size) * 0.48);
+  background: var(--piece-color);
+  opacity: var(--piece-opacity);
+  transform: translateX(-50%) rotate(0deg);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+  animation:
+    confetti-fall var(--fall-duration) cubic-bezier(0.2, 0.72, 0.25, 0.98)
+      forwards,
+    confetti-spin var(--spin-duration) linear infinite;
+  animation-delay: var(--fall-delay), var(--fall-delay);
+}
+
+.confetti-piece.shape-1 {
+  border-radius: 999px;
+}
+
+.confetti-piece.shape-2 {
+  clip-path: polygon(50% 0, 0 100%, 100% 100%);
+  width: calc(var(--piece-size) * 0.92);
+  height: calc(var(--piece-size) * 0.85);
+}
+
 .coupon-box input {
   flex: 1;
   padding: 12px;
@@ -559,6 +641,44 @@
 
 .coupon-message.error {
   color: #c62828;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8vh) rotate(0deg);
+  }
+  8% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(calc(-50% + var(--x-drift))) translateY(112vh)
+      rotate(600deg);
+  }
+}
+
+@keyframes confetti-spin {
+  from {
+    filter: saturate(1) brightness(1);
+  }
+  to {
+    filter: saturate(1.15) brightness(1.05);
+  }
+}
+
+@keyframes confetti-flash {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
 }
 
 .summary {
