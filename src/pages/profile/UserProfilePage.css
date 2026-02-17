@@ -744,6 +744,7 @@
     gap: 4px;
     width: 100%;
     justify-content: center;
+    margin-bottom: 18px;
   }
 
   .profile-tabs button {
@@ -757,8 +758,39 @@
     border-radius: 18px;
   }
 
+  .address-section::before {
+    top: -88px;
+    right: -92px;
+    width: 190px;
+    height: 190px;
+    background: radial-gradient(circle at 40% 30%, rgba(127, 16, 47, 0.12), transparent 72%);
+  }
+
+  .address-hero {
+    margin-bottom: 18px;
+  }
+
+  .address-kicker {
+    letter-spacing: 1.7px;
+    font-size: 10px;
+  }
+
   .address-title {
-    font-size: 30px;
+    margin: 6px 0 6px;
+    font-size: 28px;
+    letter-spacing: 1px;
+    line-height: 1.08;
+  }
+
+  .address-subtitle {
+    max-width: 290px;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .add-address-btn {
+    margin-top: 13px;
+    padding: 11px 18px;
   }
 
   .address-form-wrap {
