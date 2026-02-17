@@ -72,8 +72,8 @@ const createConfettiParticles = (count) =>
     id: idx,
     xStart: 3 + Math.random() * 94,
     xDrift: -90 + Math.random() * 180,
-    duration: 1400 + Math.random() * 1000,
-    delay: Math.random() * 400,
+    duration: 2600 + Math.random() * 2200,
+    delay: Math.random() * 900,
     spinDuration: 500 + Math.random() * 900,
     color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
     size: 6 + Math.random() * 8,
@@ -559,7 +559,7 @@ export default function PlaceOrder() {
     couponCelebrationTimerRef.current = setTimeout(() => {
       setShowCouponCelebration(false);
       couponCelebrationTimerRef.current = null;
-    }, 2400);
+    }, 6000);
   };
 
   useEffect(() => {
