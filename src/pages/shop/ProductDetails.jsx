@@ -20,6 +20,7 @@ export default function ProductDetails() {
   const [activeImg, setActiveImg] = useState("");
   const [qty, setQty] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
+  const RECENTLY_VIEWED_STORAGE_KEY = "aashaka_recently_viewed";
 
   /* FIND PRODUCT */
   const product = !loading
@@ -37,6 +38,23 @@ export default function ProductDetails() {
       setActiveImg(withPublicUrl(product.images[0]));
     }
   }, [product]);
+
+  useEffect(() => {
+    if (!product?.id) return;
+
+    try {
+      const raw = localStorage.getItem(RECENTLY_VIEWED_STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      const existing = Array.isArray(parsed) ? parsed.map(String) : [];
+      const next = [
+        String(product.id),
+        ...existing.filter((idValue) => idValue !== String(product.id)),
+      ].slice(0, 12);
+      localStorage.setItem(RECENTLY_VIEWED_STORAGE_KEY, JSON.stringify(next));
+    } catch (err) {
+      // ignore storage errors in private mode or restricted environments
+    }
+  }, [product?.id]);
 
   /* ALSO BOUGHT */
   const alsoBoughtProducts = useMemo(() => {

@@ -1018,4 +1018,31 @@
   }
 }
 
+/* ===============================
+   MOBILE CENTER FIX - PRODUCT IMAGE
+================================ */
+@media (max-width: 768px) {
+  .product-gallery {
+    width: 100%;
+    align-items: center;
+  }
+
+  .main-image {
+    width: min(100%, 360px);
+    margin: 0 auto;
+  }
+
+  .main-image img {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .thumbs {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 

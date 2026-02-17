@@ -81,7 +81,7 @@ export default function CartDrawer({ open, onClose }) {
                           type="button"
                           aria-label="Increase quantity"
                           onClick={() => {
-                            if (item.qty >= 9) {
+                            if (item.qty >= 9) {  
                               toast.error("Out of stock", {
                                 toastId: "out-of-stock-cart",
                               });

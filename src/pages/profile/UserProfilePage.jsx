@@ -81,10 +81,13 @@ const UserProfile = ({ defaultTab = "address" }) => {
   const [districtOptions, setDistrictOptions] = useState([]);
   const [locationLoading, setLocationLoading] = useState(true);
   const [locationError, setLocationError] = useState("");
+  const [cityLoading, setCityLoading] = useState(false);
+  const [cityError, setCityError] = useState("");
 
   const stateRef = useRef(null);
   const cityRef = useRef(null);
   const handledProfileToastRef = useRef(null);
+  const allDistrictsRef = useRef([]);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -197,28 +200,20 @@ const UserProfile = ({ defaultTab = "address" }) => {
 
     let ignore = false;
 
-    const loadLocations = async () => {
+    const loadStates = async () => {
       setLocationLoading(true);
       setLocationError("");
 
       try {
-        const [statesRes, districtsRes] = await Promise.all([
-          fetch(STATES_API_URL),
-          fetch(DISTRICTS_API_URL),
-        ]);
-
-        if (!statesRes.ok || !districtsRes.ok) {
-          throw new Error("Failed to load locations");
+        const statesRes = await fetch(STATES_API_URL);
+        if (!statesRes.ok) {
+          throw new Error("Failed to load states");
         }
 
         const statesJson = await statesRes.json();
-        const districtsJson = await districtsRes.json();
 
         const apiStates = Array.isArray(statesJson?.data?.states)
           ? statesJson.data.states
-          : [];
-        const apiDistricts = Array.isArray(districtsJson?.data?.districts)
-          ? districtsJson.data.districts
           : [];
 
         const normalizedStates = apiStates
@@ -229,20 +224,12 @@ const UserProfile = ({ defaultTab = "address" }) => {
           .filter((state) => state.rawName && state.label)
           .sort((a, b) => a.label.localeCompare(b.label));
 
-        const normalizedDistricts = apiDistricts
-          .map((district) => ({
-            name: formatLocationName(district?.name || ""),
-            rawStateName: district?.state_name || "",
-          }))
-          .filter((district) => district.name && district.rawStateName);
-
         if (!ignore) {
           setStateOptions(normalizedStates);
-          setDistrictOptions(normalizedDistricts);
         }
       } catch (err) {
         if (!ignore) {
-          setLocationError("Unable to load states and cities right now.");
+          setLocationError("Unable to load states right now.");
           setStateOptions([]);
           setDistrictOptions([]);
         }
@@ -253,7 +240,7 @@ const UserProfile = ({ defaultTab = "address" }) => {
       }
     };
 
-    loadLocations();
+    loadStates();
     return () => {
       ignore = true;
     };
@@ -611,6 +598,97 @@ const UserProfile = ({ defaultTab = "address" }) => {
   });
 
   const selectedStateRawName = selectedStateOption?.rawName || "";
+
+  useEffect(() => {
+    if (!showAddressForm) return undefined;
+
+    if (!selectedStateRawName) {
+      setDistrictOptions([]);
+      setCityLoading(false);
+      setCityError("");
+      return undefined;
+    }
+
+    const normalizedSelectedState = normalizeLocationText(selectedStateRawName);
+
+    if (allDistrictsRef.current.length > 0) {
+      const cachedDistricts = allDistrictsRef.current.filter(
+        (district) =>
+          normalizeLocationText(district.rawStateName) === normalizedSelectedState
+      );
+      setDistrictOptions(cachedDistricts);
+      setCityLoading(false);
+      setCityError("");
+      return undefined;
+    }
+
+    let ignore = false;
+
+    const loadDistricts = async () => {
+      setCityLoading(true);
+      setCityError("");
+      setDistrictOptions([]);
+
+      try {
+        const districtsRes = await fetch(
+          `${DISTRICTS_API_URL}?state_name=${encodeURIComponent(
+            selectedStateRawName
+          )}`
+        );
+
+        if (!districtsRes.ok) {
+          throw new Error("Failed to load districts");
+        }
+
+        const districtsJson = await districtsRes.json();
+        const apiDistricts = Array.isArray(districtsJson?.data?.districts)
+          ? districtsJson.data.districts
+          : [];
+
+        const normalizedDistricts = apiDistricts
+          .map((district) => ({
+            name: formatLocationName(district?.name || ""),
+            rawStateName: district?.state_name || "",
+          }))
+          .filter((district) => district.name && district.rawStateName);
+
+        const uniqueStates = new Set(
+          normalizedDistricts.map((district) =>
+            normalizeLocationText(district.rawStateName)
+          )
+        );
+
+        if (uniqueStates.size > 1) {
+          allDistrictsRef.current = normalizedDistricts;
+        }
+
+        const filteredDistricts = normalizedDistricts.filter(
+          (district) =>
+            normalizeLocationText(district.rawStateName) ===
+            normalizedSelectedState
+        );
+
+        if (!ignore) {
+          setDistrictOptions(filteredDistricts);
+        }
+      } catch (err) {
+        if (!ignore) {
+          setDistrictOptions([]);
+          setCityError("Unable to load cities right now.");
+        }
+      } finally {
+        if (!ignore) {
+          setCityLoading(false);
+        }
+      }
+    };
+
+    loadDistricts();
+
+    return () => {
+      ignore = true;
+    };
+  }, [showAddressForm, selectedStateRawName]);
 
   const handleSelectState = (stateOption) => {
     setFormData((prev) => ({ ...prev, state: stateOption.label, city: "" }));
@@ -1080,10 +1158,10 @@ const UserProfile = ({ defaultTab = "address" }) => {
                               onChange={(e) => setCitySearch(e.target.value)}
                             />
                             <div className="select-options">
-                              {locationLoading ? (
+                              {cityLoading ? (
                                 <div className="select-empty">Loading cities...</div>
-                              ) : locationError ? (
-                                <div className="select-empty">{locationError}</div>
+                              ) : cityError ? (
+                                <div className="select-empty">{cityError}</div>
                               ) : filteredCities.length === 0 ? (
                                 <div className="select-empty">
                                   No cities found
