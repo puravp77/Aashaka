@@ -29,6 +29,9 @@ export default function Header() {
 
   useEffect(() => {
     setOpenDesktopDropdown(null);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   }, [location.pathname]);
 
   const getDisplayName = () => {
@@ -207,7 +210,7 @@ export default function Header() {
           className="nav-links desktop"
           onMouseLeave={() => setOpenDesktopDropdown(null)}
         >
-          <li>
+          <li onMouseEnter={() => setOpenDesktopDropdown(null)}>
             <NavLink
               to="/"
               className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
@@ -220,20 +223,7 @@ export default function Header() {
             className={`dropdown${openDesktopDropdown === "cloths" ? " open" : ""}`}
             onMouseEnter={() => setOpenDesktopDropdown("cloths")}
           >
-            <span
-              className={`nav-item nav-trigger${isClothsActive ? " active" : ""}`}
-              role="button"
-              tabIndex={0}
-              onClick={() =>
-                setOpenDesktopDropdown((prev) => (prev === "cloths" ? null : "cloths"))
-              }
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  setOpenDesktopDropdown((prev) => (prev === "cloths" ? null : "cloths"));
-                }
-              }}
-            >
+            <span className={`nav-item nav-trigger${isClothsActive ? " active" : ""}`}>
               <span>CLOTHS</span>
             </span>
             <div className="dropdown-menu">
@@ -247,20 +237,7 @@ export default function Header() {
             className={`dropdown${openDesktopDropdown === "jewellery" ? " open" : ""}`}
             onMouseEnter={() => setOpenDesktopDropdown("jewellery")}
           >
-            <span
-              className={`nav-item nav-trigger${isJewelleryActive ? " active" : ""}`}
-              role="button"
-              tabIndex={0}
-              onClick={() =>
-                setOpenDesktopDropdown((prev) => (prev === "jewellery" ? null : "jewellery"))
-              }
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  setOpenDesktopDropdown((prev) => (prev === "jewellery" ? null : "jewellery"));
-                }
-              }}
-            >
+            <span className={`nav-item nav-trigger${isJewelleryActive ? " active" : ""}`}>
               <span>JEWELLERY</span>
             </span>
             <div className="dropdown-menu">
@@ -279,7 +256,7 @@ export default function Header() {
             </div>
           </li>
 
-          <li>
+          <li onMouseEnter={() => setOpenDesktopDropdown(null)}>
             <NavLink
               to="/about"
               className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
@@ -288,7 +265,7 @@ export default function Header() {
             </NavLink>
           </li>
 
-          <li>
+          <li onMouseEnter={() => setOpenDesktopDropdown(null)}>
             <button
               className="cart-link nav-cart"
               onClick={() => setCartOpen(true)}
