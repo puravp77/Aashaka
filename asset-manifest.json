@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/Aashaka/static/css/main.d18e5a06.css",
-    "main.js": "/Aashaka/static/js/main.289d455a.js",
+    "main.css": "/Aashaka/static/css/main.e17d1747.css",
+    "main.js": "/Aashaka/static/js/main.052902f5.js",
     "static/media/AashakaLoader.gif": "/Aashaka/static/media/AashakaLoader.21fc7bc02f089bcb1c9f.gif",
     "index.html": "/Aashaka/index.html",
-    "main.d18e5a06.css.map": "/Aashaka/static/css/main.d18e5a06.css.map",
-    "main.289d455a.js.map": "/Aashaka/static/js/main.289d455a.js.map"
+    "main.e17d1747.css.map": "/Aashaka/static/css/main.e17d1747.css.map",
+    "main.052902f5.js.map": "/Aashaka/static/js/main.052902f5.js.map"
   },
   "entrypoints": [
-    "static/css/main.d18e5a06.css",
-    "static/js/main.289d455a.js"
+    "static/css/main.e17d1747.css",
+    "static/js/main.052902f5.js"
   ]
 }
