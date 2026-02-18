@@ -10,7 +10,7 @@
   column-gap: 16px;
   position: relative;
   padding: 0 56px;
-  z-index: 1000;
+  z-index: 1600;
 }
 
 .top-left {
@@ -103,6 +103,7 @@
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
+  z-index: 1700;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
@@ -118,6 +119,7 @@
   border-right: 6px solid transparent;
   border-bottom: 6px solid #111;
   opacity: 0;
+  z-index: 1700;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
