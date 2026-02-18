@@ -39,7 +39,7 @@ export default function ExploreCollection() {
       <div className="explore-grid">
         <div className="explore-content">
           <p className="explore-kicker">Aashaka's</p>
-          <h2>Explore Collection</h2>
+          <h2>Curated for You</h2>
           <p className="explore-subtitle">
             Handpicked festive looks, timeless silhouettes, and statement
             detailing crafted for every celebration.
