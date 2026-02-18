@@ -5,7 +5,7 @@
   --footer-maroon: #8b0d2b;
   --footer-ink: #1f130e;
   background: linear-gradient(
-    125deg,
+    120deg,
     #f2ddc7 0%,
     #e5c2a4 18%,
     var(--footer-bg-2) 40%,
@@ -68,11 +68,6 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  border: 1px solid #e2bf9f;
-  border-radius: 18px;
-  background: linear-gradient(180deg, #fff3e5 0%, #f6e0ca 100%);
-  box-shadow: 0 14px 28px rgba(31, 19, 14, 0.18);
-  padding: 16px;
 }
 
 .footer-logo {
@@ -285,10 +280,6 @@
     grid-template-columns: 1fr;
     padding: 40px 18px 30px;
     row-gap: 20px;
-  }
-
-  .footer-brand {
-    padding: 14px;
   }
 
   .footer-brand-copy {

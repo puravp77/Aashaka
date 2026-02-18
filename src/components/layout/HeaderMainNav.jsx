@@ -51,9 +51,12 @@ const HeaderMainNav = () => {
           </NavLink>
           <NavLink
             to="/cart"
-            className={({ isActive }) => `main-link${isActive ? " active" : ""}`}
+            className={({ isActive }) =>
+              `main-link cart-link${isActive ? " active" : ""}`
+            }
           >
-            CART({uniqueItemCount})
+            <span className="cart-link-label">Cart</span>
+            <span className="cart-count">{uniqueItemCount}</span>
           </NavLink>
         </div>
       </div>
