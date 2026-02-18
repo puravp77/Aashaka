@@ -302,6 +302,38 @@
   .footer-subscribe h3 {
     font-size: 22px;
     max-width: none;
+    color: #fff9f1;
+    text-shadow: 0 1px 0 rgba(18, 8, 8, 0.2);
+  }
+
+  .footer-subscribe {
+    border-color: rgba(255, 236, 216, 0.34);
+    background: linear-gradient(
+      180deg,
+      rgba(106, 61, 71, 0.58) 0%,
+      rgba(88, 49, 60, 0.64) 100%
+    );
+    box-shadow:
+      0 10px 24px rgba(25, 13, 12, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(2px);
+  }
+
+  .footer-kicker {
+    color: #f4dbb5;
+  }
+
+  .subscribe-input input {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .subscribe-input input::placeholder {
+    color: rgba(255, 245, 236, 0.95);
+  }
+
+  .footer-sub-note {
+    color: rgba(255, 238, 222, 0.9);
   }
 
   .footer-links-grid {
@@ -339,6 +371,19 @@
 
   .footer-links-grid {
     grid-template-columns: 1fr;
+  }
+
+  .footer-subscribe {
+    border-color: rgba(255, 236, 216, 0.4);
+    background: linear-gradient(
+      180deg,
+      rgba(118, 72, 82, 0.62) 0%,
+      rgba(91, 52, 65, 0.7) 100%
+    );
+  }
+
+  .subscribe-input input {
+    background: rgba(255, 255, 255, 0.2);
   }
 
   .subscribe-input {
