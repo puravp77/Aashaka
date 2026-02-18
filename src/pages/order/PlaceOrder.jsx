@@ -26,6 +26,8 @@ const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/distr
 const STATES_CACHE_KEY = "aashaka_states_cache_v1";
 const STATE_FETCH_TIMEOUT_MS = 8000;
 const STATE_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
+const DISTRICT_FETCH_TIMEOUT_MS = 8000;
+const DISTRICT_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
 
 const formatLocationName = (value) => {
   if (!value || typeof value !== "string") return "";
@@ -142,6 +144,7 @@ export default function PlaceOrder() {
   const [locationError, setLocationError] = useState("");
   const [cityLoading, setCityLoading] = useState(false);
   const [cityError, setCityError] = useState("");
+  const [cityRetryTick, setCityRetryTick] = useState(0);
   const allDistrictsRef = useRef([]);
   const [isStateOpen, setIsStateOpen] = useState(false);
   const [isCityOpen, setIsCityOpen] = useState(false);
@@ -322,17 +325,47 @@ export default function PlaceOrder() {
       setDistrictOptions([]);
 
       try {
-        const districtsRes = await fetch(
-          `${DISTRICTS_API_URL}?state_name=${encodeURIComponent(
-            selectedStateRawName
-          )}`
-        );
+        let districtsJson = null;
+        let lastError = null;
 
-        if (!districtsRes.ok) {
-          throw new Error("Failed to load districts");
+        for (let attempt = 0; attempt < DISTRICT_FETCH_RETRY_DELAYS_MS.length; attempt += 1) {
+          const delayMs = DISTRICT_FETCH_RETRY_DELAYS_MS[attempt];
+          if (delayMs > 0) {
+            await wait(delayMs);
+          }
+
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), DISTRICT_FETCH_TIMEOUT_MS);
+
+          try {
+            const districtsRes = await fetch(
+              `${DISTRICTS_API_URL}?state_name=${encodeURIComponent(
+                selectedStateRawName
+              )}`,
+              {
+                signal: controller.signal,
+                cache: "no-store",
+              }
+            );
+
+            if (!districtsRes.ok) {
+              throw new Error(`Failed to load districts (${districtsRes.status})`);
+            }
+
+            districtsJson = await districtsRes.json();
+            lastError = null;
+            break;
+          } catch (err) {
+            lastError = err;
+          } finally {
+            clearTimeout(timeoutId);
+          }
         }
 
-        const districtsJson = await districtsRes.json();
+        if (!districtsJson) {
+          throw lastError || new Error("Failed to load districts");
+        }
+
         const apiDistricts = Array.isArray(districtsJson?.data?.districts)
           ? districtsJson.data.districts
           : [];
@@ -366,7 +399,7 @@ export default function PlaceOrder() {
       } catch (err) {
         if (!ignore) {
           setDistrictOptions([]);
-          setCityError("Unable to load cities right now.");
+          setCityError("Unable to load cities right now. Please tap Retry.");
         }
       } finally {
         if (!ignore) {
@@ -380,7 +413,12 @@ export default function PlaceOrder() {
     return () => {
       ignore = true;
     };
-  }, [selectedStateRawName]);
+  }, [selectedStateRawName, cityRetryTick]);
+
+  const retryCityLoad = () => {
+    if (!selectedStateRawName || cityLoading) return;
+    setCityRetryTick((prev) => prev + 1);
+  };
 
   const cityOptions = Array.from(
     new Set(districtOptions.map((district) => district.name))
@@ -997,7 +1035,19 @@ export default function PlaceOrder() {
             )}
           </div>
           {errors.city && <div className="error-text">{errors.city}</div>}
-          {cityError && <div className="field-note error">{cityError}</div>}
+          {cityError && (
+            <div className="field-note error field-note-with-action">
+              <span>{cityError}</span>
+              <button
+                type="button"
+                className="field-note-action"
+                onClick={retryCityLoad}
+                disabled={!selectedStateRawName || cityLoading}
+              >
+                {cityLoading ? "Retrying..." : "Retry"}
+              </button>
+            </div>
+          )}
 
           <label>PinCode <span style={{ color: "red" }}>*</span></label>
           <input
