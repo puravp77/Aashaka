@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./header.css";
 import { withPublicUrl } from "../../utils/assetPath";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FiClipboard, FiHeart, FiLogOut, FiSearch, FiUser } from "react-icons/fi";
 import { HiOutlineMenu } from "react-icons/hi";
 import { useCart } from "../../context/CartContext";
@@ -22,6 +22,9 @@ export default function Header() {
   const { logout } = useAuth();
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const isClothsActive = location.pathname.startsWith("/kurti");
+  const isJewelleryActive = location.pathname.startsWith("/jewellery");
 
   const getDisplayName = () => {
     try {
@@ -196,17 +199,28 @@ export default function Header() {
 
         {/* DESKTOP MENU */}
         <ul className="nav-links desktop">
-          <li><NavLink to="/">HOME</NavLink></li>
+          <li>
+            <NavLink
+              to="/"
+              className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
+            >
+              HOME
+            </NavLink>
+          </li>
 
           <li className="dropdown">
-            <span>CLOTHS</span>
+            <span className={`nav-item nav-trigger${isClothsActive ? " active" : ""}`}>
+              CLOTHS <span className="nav-caret">v</span>
+            </span>
             <div className="dropdown-menu">
               <NavLink to="/kurti">Kurti Set</NavLink>
             </div>
           </li>
 
           <li className="dropdown">
-            <span>JEWELLERY</span>
+            <span className={`nav-item nav-trigger${isJewelleryActive ? " active" : ""}`}>
+              JEWELLERY <span className="nav-caret">v</span>
+            </span>
             <div className="dropdown-menu">
               <NavLink to="/jewellery/oxidised">Oxidised Set</NavLink>
               <NavLink to="/jewellery/bangles">Bangles-Kada</NavLink>
@@ -215,26 +229,36 @@ export default function Header() {
             </div>
           </li>
 
-          <li><NavLink to="/about">ABOUT</NavLink></li>
+          <li>
+            <NavLink
+              to="/about"
+              className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
+            >
+              ABOUT
+            </NavLink>
+          </li>
 
           <li>
             <button
-              className="cart-link"
+              className="cart-link nav-cart"
               onClick={() => setCartOpen(true)}
             >
-              CART ({uniqueItemCount})
+              <span className="nav-cart-label">CART</span>
+              <span className="nav-cart-count">{uniqueItemCount}</span>
             </button>
           </li>
         </ul>
 
         {/* MOBILE RIGHT */}
         <div className="nav-right">
-          <span
+          <button
+            type="button"
             className="cart-text"
             onClick={() => setCartOpen(true)}
           >
-            CART ({uniqueItemCount})
-          </span>
+            <span>CART</span>
+            <span className="cart-mobile-count">{uniqueItemCount}</span>
+          </button>
 
           <button
             className="mobile-search"
