@@ -456,10 +456,28 @@
   align-items: center;
   padding: 10px 56px;
   position: relative;
-  z-index: 999;
+  z-index: 1200;
   border-top: 1px solid #f2e5d9;
   border-bottom: 1px solid #e9dccf;
   box-shadow: 0 12px 26px rgba(22, 12, 8, 0.06);
+  overflow: visible;
+}
+
+.navbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 13, 43, 0.25), transparent);
+}
+
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
 }
 
 .logo img {
@@ -535,39 +553,27 @@
 
 .nav-item:hover,
 .nav-item.active,
-.dropdown:hover .nav-item,
+.dropdown.open .nav-item,
 .dropdown:focus-within .nav-item {
   color: var(--nav-brand);
 }
 
 .nav-item:hover::before,
 .nav-item.active::before,
-.dropdown:hover .nav-item::before,
+.dropdown.open .nav-item::before,
 .dropdown:focus-within .nav-item::before {
   opacity: 1;
 }
 
 .nav-item:hover::after,
 .nav-item.active::after,
-.dropdown:hover .nav-item::after,
+.dropdown.open .nav-item::after,
 .dropdown:focus-within .nav-item::after {
   transform: scaleX(1);
 }
 
 .nav-trigger {
   user-select: none;
-}
-
-.nav-caret {
-  font-size: 10px;
-  line-height: 1;
-  transform: translateY(-1px);
-  transition: transform 0.2s ease;
-}
-
-.dropdown:hover .nav-caret,
-.dropdown:focus-within .nav-caret {
-  transform: rotate(180deg) translateY(1px);
 }
 
 .nav-cart {
@@ -608,11 +614,22 @@
 
 .navbar .dropdown {
   position: relative;
+  z-index: 1300;
+}
+
+.navbar .dropdown::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 14px;
 }
 
 .navbar .dropdown-menu {
   position: absolute;
-  top: calc(100% + 14px);
+  top: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
   background: #ffffff;
@@ -620,13 +637,13 @@
   border-radius: 16px;
   padding: 10px;
   display: none;
-  z-index: 999;
+  z-index: 1400;
   box-shadow: 0 20px 34px rgba(25, 14, 8, 0.15);
   min-width: 220px;
   text-align: left;
 }
 
-.navbar .dropdown:hover .dropdown-menu,
+.navbar .dropdown.open .dropdown-menu,
 .navbar .dropdown:focus-within .dropdown-menu {
   display: block;
   animation: navDrop 0.2s ease;

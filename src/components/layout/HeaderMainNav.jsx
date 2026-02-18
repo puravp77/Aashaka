@@ -31,7 +31,7 @@ const HeaderMainNav = () => {
           <div className="dropdown">
             <span className={`main-link dropdown-trigger${isClothsActive ? " active" : ""}`}>
               CLOTHS
-              <span className="dropdown-caret" aria-hidden="true">▾</span>
+              <span className="dropdown-caret" aria-hidden="true">v</span>
             </span>
             <div className="dropdown-menu">
               <NavLink to="/kurti">Kurti Set</NavLink>
@@ -40,7 +40,7 @@ const HeaderMainNav = () => {
           <div className="dropdown">
             <span className={`main-link dropdown-trigger${isJewelleryActive ? " active" : ""}`}>
               JEWELLERY
-              <span className="dropdown-caret" aria-hidden="true">▾</span>
+              <span className="dropdown-caret" aria-hidden="true">v</span>
             </span>
             <div className="dropdown-menu">
               <NavLink to="/jewellery/oxidised">Oxidised Set</NavLink>
@@ -71,4 +71,6 @@ const HeaderMainNav = () => {
 };
 
 export default HeaderMainNav;
+
+
 

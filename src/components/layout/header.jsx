@@ -16,6 +16,7 @@ export default function Header() {
   const [searchText, setSearchText] = useState("");
   const [cartOpen, setCartOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const [openDesktopDropdown, setOpenDesktopDropdown] = useState(null);
 
   // ✅ CORRECT: get unique product count
   const { uniqueItemCount } = useCart();
@@ -25,6 +26,10 @@ export default function Header() {
   const location = useLocation();
   const isClothsActive = location.pathname.startsWith("/kurti");
   const isJewelleryActive = location.pathname.startsWith("/jewellery");
+
+  useEffect(() => {
+    setOpenDesktopDropdown(null);
+  }, [location.pathname]);
 
   const getDisplayName = () => {
     try {
@@ -192,40 +197,85 @@ export default function Header() {
       {/* NAVBAR */}
       <nav className="navbar">
         <div className="logo">
-          <NavLink to="/">
+          <NavLink to="/" className="logo-link">
             <img src={withPublicUrl("images/headerlogo.jpeg")} alt="Aashaka" />
           </NavLink>
         </div>
 
         {/* DESKTOP MENU */}
-        <ul className="nav-links desktop">
+        <ul
+          className="nav-links desktop"
+          onMouseLeave={() => setOpenDesktopDropdown(null)}
+        >
           <li>
             <NavLink
               to="/"
               className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
             >
-              HOME
+              <span>HOME</span>
             </NavLink>
           </li>
 
-          <li className="dropdown">
-            <span className={`nav-item nav-trigger${isClothsActive ? " active" : ""}`}>
-              CLOTHS <span className="nav-caret">v</span>
+          <li
+            className={`dropdown${openDesktopDropdown === "cloths" ? " open" : ""}`}
+            onMouseEnter={() => setOpenDesktopDropdown("cloths")}
+          >
+            <span
+              className={`nav-item nav-trigger${isClothsActive ? " active" : ""}`}
+              role="button"
+              tabIndex={0}
+              onClick={() =>
+                setOpenDesktopDropdown((prev) => (prev === "cloths" ? null : "cloths"))
+              }
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setOpenDesktopDropdown((prev) => (prev === "cloths" ? null : "cloths"));
+                }
+              }}
+            >
+              <span>CLOTHS</span>
             </span>
             <div className="dropdown-menu">
-              <NavLink to="/kurti">Kurti Set</NavLink>
+              <NavLink to="/kurti" onClick={() => setOpenDesktopDropdown(null)}>
+                Kurti Set
+              </NavLink>
             </div>
           </li>
 
-          <li className="dropdown">
-            <span className={`nav-item nav-trigger${isJewelleryActive ? " active" : ""}`}>
-              JEWELLERY <span className="nav-caret">v</span>
+          <li
+            className={`dropdown${openDesktopDropdown === "jewellery" ? " open" : ""}`}
+            onMouseEnter={() => setOpenDesktopDropdown("jewellery")}
+          >
+            <span
+              className={`nav-item nav-trigger${isJewelleryActive ? " active" : ""}`}
+              role="button"
+              tabIndex={0}
+              onClick={() =>
+                setOpenDesktopDropdown((prev) => (prev === "jewellery" ? null : "jewellery"))
+              }
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setOpenDesktopDropdown((prev) => (prev === "jewellery" ? null : "jewellery"));
+                }
+              }}
+            >
+              <span>JEWELLERY</span>
             </span>
             <div className="dropdown-menu">
-              <NavLink to="/jewellery/oxidised">Oxidised Set</NavLink>
-              <NavLink to="/jewellery/bangles">Bangles-Kada</NavLink>
-              <NavLink to="/jewellery/earrings">Earrings</NavLink>
-              <NavLink to="/jewellery/necklace">Necklace</NavLink>
+              <NavLink to="/jewellery/oxidised" onClick={() => setOpenDesktopDropdown(null)}>
+                Oxidised Set
+              </NavLink>
+              <NavLink to="/jewellery/bangles" onClick={() => setOpenDesktopDropdown(null)}>
+                Bangles-Kada
+              </NavLink>
+              <NavLink to="/jewellery/earrings" onClick={() => setOpenDesktopDropdown(null)}>
+                Earrings
+              </NavLink>
+              <NavLink to="/jewellery/necklace" onClick={() => setOpenDesktopDropdown(null)}>
+                Necklace
+              </NavLink>
             </div>
           </li>
 
@@ -234,7 +284,7 @@ export default function Header() {
               to="/about"
               className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
             >
-              ABOUT
+              <span>ABOUT</span>
             </NavLink>
           </li>
 
