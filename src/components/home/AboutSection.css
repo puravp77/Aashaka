@@ -87,6 +87,8 @@
   flex-wrap: wrap;
   gap: 0;
   align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .about-highlights span {
@@ -264,10 +266,9 @@
 
   .about-highlights {
     margin-top: 12px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0;
-    row-gap: 2px;
+    display: grid;
+    justify-items: center;
+    gap: 2px;
   }
 
   .about-highlights span {
@@ -276,9 +277,8 @@
   }
 
   .about-highlights span + span::before {
-    content: " \2022 ";
-    color: rgba(103, 78, 64, 0.5);
-    margin: 0 6px;
+    content: "";
+    margin: 0;
   }
 
   .about-actions {
