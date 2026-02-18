@@ -695,6 +695,39 @@
         "pincode": "395002",
         "phone": "9889989899"
       }
+    },
+    {
+      "id": "a87a",
+      "orderId": "ORD-MLRI9MUO",
+      "userId": "dhruv10@gmail.com",
+      "date": "2026-02-18T04:01:48.528Z",
+      "items": [
+        {
+          "id": "o2",
+          "title": "Aadhya Oxidized Silver Jewelry Set",
+          "price": 1499,
+          "qty": 1,
+          "size": null,
+          "image": "/Aashaka/images/j2.jpg"
+        }
+      ],
+      "subtotal": 1499,
+      "shipping": 100,
+      "discount": 0,
+      "total": 1599,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "patelpurav077@gmail.com",
+        "firstName": "Purav",
+        "middleName": "",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart, Khatodara, Surat",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9889989899"
+      }
     }
   ]
 }
