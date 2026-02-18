@@ -37,6 +37,9 @@
   height: 420px;
   cursor: pointer;
   overflow: hidden;
+  contain: paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .watchshop-video-wrapper video {
@@ -45,6 +48,9 @@
   object-fit: cover;
   display: block;
   transition: transform 0.35s ease;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* ===============================

@@ -58,7 +58,7 @@ function Home() {
     hidden: { opacity: 0, y: 24 },
     visible: { opacity: 1, y: 0 },
   };
-  const sectionViewport = { once: false, amount: 0.25 };
+  const sectionViewport = { once: true, amount: 0.25 };
   const sectionTransition = {
     duration: 0.55,
     ease: [0.22, 1, 0.36, 1],
@@ -97,24 +97,12 @@ function Home() {
       >
         <ChokerSection />
       </motion.section>
-      <motion.section
-        variants={reveal}
-        initial="hidden"
-        whileInView="visible"
-        viewport={sectionViewport}
-        transition={sectionTransition}
-      >
+      <section>
         <ExploreCollection />
-      </motion.section>
-      <motion.section
-        variants={reveal}
-        initial="hidden"
-        whileInView="visible"
-        viewport={sectionViewport}
-        transition={sectionTransition}
-      >
+      </section>
+      <section>
         <WatchShopSection />
-      </motion.section>
+      </section>
       <motion.section
         variants={reveal}
         initial="hidden"

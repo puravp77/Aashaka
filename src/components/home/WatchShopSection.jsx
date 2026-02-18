@@ -14,10 +14,11 @@ import { withPublicUrl } from "../../utils/assetPath";
 
 const WatchShopSection = () => {
   const [activeIndex, setActiveIndex] = useState(null);
-  const [isSectionVisible, setIsSectionVisible] = useState(false);
+  const [shouldStartPlayback, setShouldStartPlayback] = useState(false);
 
   const sectionRef = useRef(null);
   const videoRefs = useRef(new Map());
+  const hasEnabledPlaybackRef = useRef(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,9 +33,16 @@ const WatchShopSection = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsSectionVisible(entry.isIntersecting && entry.intersectionRatio >= 0.2);
+        if (entry.isIntersecting && !hasEnabledPlaybackRef.current) {
+          hasEnabledPlaybackRef.current = true;
+          setShouldStartPlayback(true);
+          observer.disconnect();
+        }
       },
-      { threshold: [0, 0.2, 0.4, 0.6] }
+      {
+        threshold: 0.01,
+        rootMargin: "200px 0px",
+      }
     );
 
     observer.observe(sectionRef.current);
@@ -43,19 +51,16 @@ const WatchShopSection = () => {
   }, []);
 
   useEffect(() => {
+    if (!shouldStartPlayback) return;
+
     videoRefs.current.forEach((videoEl) => {
       if (!videoEl) return;
-
-      if (isSectionVisible) {
-        const playPromise = videoEl.play();
-        if (playPromise && typeof playPromise.catch === "function") {
-          playPromise.catch(() => {});
-        }
-      } else {
-        videoEl.pause();
+      const playPromise = videoEl.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {});
       }
     });
-  }, [isSectionVisible]);
+  }, [shouldStartPlayback]);
 
   return (
     <section className="watchshop" ref={sectionRef}>
@@ -95,6 +100,7 @@ const WatchShopSection = () => {
                   muted
                   loop
                   playsInline
+                  autoPlay={shouldStartPlayback}
                   preload="metadata"
                 />
               </div>
