@@ -1,6 +1,7 @@
 import "./ExploreCollection.css";
 import { withPublicUrl } from "../../utils/assetPath";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 
 const QUICK_LINKS = [
   {
@@ -27,9 +28,44 @@ const QUICK_LINKS = [
 
 export default function ExploreCollection() {
   const navigate = useNavigate();
+  const sectionRef = useRef(null);
+  const visibilityRef = useRef(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!sectionRef.current) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const ratio = entry.intersectionRatio || 0;
+        const wasVisible = visibilityRef.current;
+        let nextVisible = wasVisible;
+
+        if (!entry.isIntersecting) {
+          nextVisible = false;
+        } else if (!wasVisible && ratio >= 0.32) {
+          nextVisible = true;
+        } else if (wasVisible && ratio <= 0.14) {
+          nextVisible = false;
+        }
+
+        if (nextVisible !== wasVisible) {
+          visibilityRef.current = nextVisible;
+          setIsVisible(nextVisible);
+        }
+      },
+      { threshold: [0, 0.14, 0.32, 0.6] }
+    );
+
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section className="explore-collection">
+    <section
+      className={`explore-collection ${isVisible ? "is-visible" : ""}`}
+      ref={sectionRef}
+    >
       <img
         src={withPublicUrl("images/bannernewasaga2.jpeg")}
         alt="Explore Collection"

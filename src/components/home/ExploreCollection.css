@@ -54,7 +54,10 @@
 .explore-content {
   max-width: 640px;
   color: #fff;
-  animation: explore-rise 560ms ease-out both;
+  opacity: 0;
+  transform: translateY(14px);
+  will-change: opacity, transform;
+  transition: opacity 420ms ease, transform 420ms ease;
 }
 
 .explore-kicker {
@@ -195,6 +198,10 @@
   );
   backdrop-filter: blur(8px);
   box-shadow: 0 24px 44px rgba(20, 12, 9, 0.32);
+  opacity: 0;
+  transform: translateY(14px);
+  will-change: opacity, transform;
+  transition: opacity 460ms ease 80ms, transform 460ms ease 80ms;
 }
 
 .explore-quickshop-kicker {
@@ -282,6 +289,9 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   color: rgba(255, 237, 214, 0.88);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 420ms ease 120ms, transform 420ms ease 120ms;
 }
 
 .explore-scroll-note span {
@@ -295,15 +305,20 @@
   display: none;
 }
 
-@keyframes explore-rise {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.explore-mobile-quickshop,
+.explore-mobile-strip {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 380ms ease 60ms, transform 380ms ease 60ms;
+}
+
+.explore-collection.is-visible .explore-content,
+.explore-collection.is-visible .explore-quickshop,
+.explore-collection.is-visible .explore-scroll-note,
+.explore-collection.is-visible .explore-mobile-quickshop,
+.explore-collection.is-visible .explore-mobile-strip {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (max-width: 1024px) {

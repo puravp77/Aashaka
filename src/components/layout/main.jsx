@@ -98,15 +98,9 @@ function Home() {
       >
         <ChokerSection />
       </motion.section>
-      <motion.section
-        variants={reveal}
-        initial="hidden"
-        whileInView="visible"
-        viewport={repeatRevealViewport}
-        transition={sectionTransition}
-      >
+      <section>
         <ExploreCollection />
-      </motion.section>
+      </section>
       <motion.section
         variants={reveal}
         initial="hidden"

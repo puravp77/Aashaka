@@ -64,7 +64,13 @@ const WatchShopSection = () => {
 
   return (
     <section className="watchshop" ref={sectionRef}>
-      <h2 className="watchshop-title">Watch & Shop</h2>
+      <div className="watchshop-header">
+        <p className="watchshop-kicker">Style in Motion</p>
+        <h2 className="watchshop-title">Watch & Shop</h2>
+        <p className="watchshop-subtitle">
+          Tap any look to preview the outfit in motion and shop it instantly.
+        </p>
+      </div>
 
       <Swiper
         modules={[Navigation]}
