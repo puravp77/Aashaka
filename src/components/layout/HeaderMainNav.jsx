@@ -15,6 +15,10 @@ const HeaderMainNav = () => {
       <div className="header-main-inner">
         <NavLink to="/" className="main-logo">
           <img src={withPublicUrl("images/headerlogo.jpeg")} alt="Aashaka" />
+          <span className="main-logo-copy">
+            <span className="main-logo-kicker">Aashaka</span>
+            <span className="main-logo-tag">Festive Wardrobe</span>
+          </span>
         </NavLink>
 
         <div className="main-links">
@@ -25,16 +29,18 @@ const HeaderMainNav = () => {
             HOME
           </NavLink>
           <div className="dropdown">
-            <span className={`main-link${isClothsActive ? " active" : ""}`}>
+            <span className={`main-link dropdown-trigger${isClothsActive ? " active" : ""}`}>
               CLOTHS
+              <span className="dropdown-caret" aria-hidden="true">▾</span>
             </span>
             <div className="dropdown-menu">
               <NavLink to="/kurti">Kurti Set</NavLink>
             </div>
           </div>
           <div className="dropdown">
-            <span className={`main-link${isJewelleryActive ? " active" : ""}`}>
+            <span className={`main-link dropdown-trigger${isJewelleryActive ? " active" : ""}`}>
               JEWELLERY
+              <span className="dropdown-caret" aria-hidden="true">▾</span>
             </span>
             <div className="dropdown-menu">
               <NavLink to="/jewellery/oxidised">Oxidised Set</NavLink>
