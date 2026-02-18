@@ -110,10 +110,9 @@
 .about-actions {
   margin-top: 18px;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  
 }
 
 .about-btn {
@@ -126,12 +125,14 @@
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease,
     border-color 0.2s ease;
+    
 }
 
 .about-btn.primary {
   background: var(--about-maroon);
   color: #fff;
   border-color: var(--about-maroon);
+  
 }
 
 .about-btn.primary:hover {
@@ -268,9 +269,10 @@
 
   .about-highlights {
     margin-top: 12px;
-    display: grid;
-    justify-items: center;
-    gap: 2px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    row-gap: 2px;
   }
 
   .about-highlights span {
@@ -279,8 +281,9 @@
   }
 
   .about-highlights span + span::before {
-    content: "";
-    margin: 0;
+    content: " \2022 ";
+    color: rgba(103, 78, 64, 0.5);
+    margin: 0 6px;
   }
 
   .about-actions {
