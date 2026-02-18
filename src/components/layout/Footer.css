@@ -269,6 +269,19 @@
   .footer {
     position: static;
     transform: none;
+    background:
+      radial-gradient(
+        circle at 14% 12%,
+        rgba(255, 239, 216, 0.52) 0%,
+        rgba(255, 239, 216, 0) 44%
+      ),
+      linear-gradient(
+        155deg,
+        #f3dfca 0%,
+        #e7c8aa 36%,
+        #8a4e50 70%,
+        #603242 100%
+      );
   }
 
   .footer-inner::before,
@@ -308,6 +321,22 @@
 }
 
 @media (max-width: 520px) {
+  .footer {
+    background:
+      radial-gradient(
+        circle at 18% 10%,
+        rgba(255, 240, 220, 0.5) 0%,
+        rgba(255, 240, 220, 0) 42%
+      ),
+      linear-gradient(
+        180deg,
+        #f2ddc6 0%,
+        #e4c4a7 34%,
+        #81505a 68%,
+        #5a3244 100%
+      );
+  }
+
   .footer-links-grid {
     grid-template-columns: 1fr;
   }
