@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./header.css";
 import { withPublicUrl } from "../../utils/assetPath";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -17,6 +17,7 @@ export default function Header() {
   const [cartOpen, setCartOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [openDesktopDropdown, setOpenDesktopDropdown] = useState(null);
+  const desktopNavRef = useRef(null);
 
   // ✅ CORRECT: get unique product count
   const { uniqueItemCount } = useCart();
@@ -33,6 +34,29 @@ export default function Header() {
       document.activeElement.blur();
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!openDesktopDropdown) return;
+
+    const handlePointerDown = (event) => {
+      if (desktopNavRef.current && !desktopNavRef.current.contains(event.target)) {
+        setOpenDesktopDropdown(null);
+      }
+    };
+
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        setOpenDesktopDropdown(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleEsc);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [openDesktopDropdown]);
 
   const getDisplayName = () => {
     try {
@@ -208,12 +232,13 @@ export default function Header() {
         {/* DESKTOP MENU */}
         <ul
           className="nav-links desktop"
-          onMouseLeave={() => setOpenDesktopDropdown(null)}
+          ref={desktopNavRef}
         >
-          <li onMouseEnter={() => setOpenDesktopDropdown(null)}>
+          <li>
             <NavLink
               to="/"
               className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
+              onClick={() => setOpenDesktopDropdown(null)}
             >
               <span>HOME</span>
             </NavLink>
@@ -221,11 +246,20 @@ export default function Header() {
 
           <li
             className={`dropdown${openDesktopDropdown === "cloths" ? " open" : ""}`}
-            onMouseEnter={() => setOpenDesktopDropdown("cloths")}
           >
-            <span className={`nav-item nav-trigger${isClothsActive ? " active" : ""}`}>
+            <button
+              type="button"
+              className={`nav-item nav-trigger${isClothsActive ? " active" : ""}`}
+              onClick={() =>
+                setOpenDesktopDropdown((current) =>
+                  current === "cloths" ? null : "cloths"
+                )
+              }
+              aria-expanded={openDesktopDropdown === "cloths"}
+              aria-haspopup="true"
+            >
               <span>CLOTHS</span>
-            </span>
+            </button>
             <div className="dropdown-menu">
               <NavLink to="/kurti" onClick={() => setOpenDesktopDropdown(null)}>
                 Kurti Set
@@ -235,11 +269,20 @@ export default function Header() {
 
           <li
             className={`dropdown${openDesktopDropdown === "jewellery" ? " open" : ""}`}
-            onMouseEnter={() => setOpenDesktopDropdown("jewellery")}
           >
-            <span className={`nav-item nav-trigger${isJewelleryActive ? " active" : ""}`}>
+            <button
+              type="button"
+              className={`nav-item nav-trigger${isJewelleryActive ? " active" : ""}`}
+              onClick={() =>
+                setOpenDesktopDropdown((current) =>
+                  current === "jewellery" ? null : "jewellery"
+                )
+              }
+              aria-expanded={openDesktopDropdown === "jewellery"}
+              aria-haspopup="true"
+            >
               <span>JEWELLERY</span>
-            </span>
+            </button>
             <div className="dropdown-menu">
               <NavLink to="/jewellery/oxidised" onClick={() => setOpenDesktopDropdown(null)}>
                 Oxidised Set
@@ -256,19 +299,24 @@ export default function Header() {
             </div>
           </li>
 
-          <li onMouseEnter={() => setOpenDesktopDropdown(null)}>
+          <li>
             <NavLink
               to="/about"
               className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
+              onClick={() => setOpenDesktopDropdown(null)}
             >
               <span>ABOUT</span>
             </NavLink>
           </li>
 
-          <li onMouseEnter={() => setOpenDesktopDropdown(null)}>
+          <li>
             <button
+              type="button"
               className="cart-link nav-cart"
-              onClick={() => setCartOpen(true)}
+              onClick={() => {
+                setOpenDesktopDropdown(null);
+                setCartOpen(true);
+              }}
             >
               <span className="nav-cart-label">CART</span>
               <span className="nav-cart-count">{uniqueItemCount}</span>
