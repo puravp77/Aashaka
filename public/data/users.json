@@ -728,6 +728,39 @@
         "pincode": "395002",
         "phone": "9889989899"
       }
+    },
+    {
+      "id": "2c17",
+      "orderId": "ORD-MLVUFMTN",
+      "userId": "dhruv10@gmail.com",
+      "date": "2026-02-21T04:53:28.523Z",
+      "items": [
+        {
+          "id": "k3",
+          "title": "Red Amara Kurti Set",
+          "price": 2399,
+          "qty": 1,
+          "size": "XL",
+          "image": "/Aashaka/images/k3.jpg"
+        }
+      ],
+      "subtotal": 2399,
+      "shipping": 0,
+      "discount": 0,
+      "total": 2399,
+      "paymentMode": "COD",
+      "shippingAddress": {
+        "email": "patelpurav077@gmail.com",
+        "firstName": "Purav",
+        "middleName": "",
+        "lastName": "Patel",
+        "address1": "Mahavir Timber Mart, Khatodara, Surat",
+        "address2": "",
+        "state": "Gujarat",
+        "city": "Surat",
+        "pincode": "395002",
+        "phone": "9889989899"
+      }
     }
   ]
 }
