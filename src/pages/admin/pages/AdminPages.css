@@ -248,6 +248,14 @@
   gap: 8px;
 }
 
+.adm-product-add-form {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
 .adm-btn-save-content {
   border-color: #1f8a49;
   background: #1f8a49;
@@ -456,6 +464,10 @@
   .adm-content-grid {
     grid-template-columns: 1fr;
   }
+
+  .adm-product-add-form {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 680px) {
@@ -492,5 +504,9 @@
     min-width: 118px;
     height: 36px;
     font-size: 13px;
+  }
+
+  .adm-product-add-form {
+    grid-template-columns: 1fr;
   }
 }

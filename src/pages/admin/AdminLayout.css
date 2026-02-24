@@ -526,7 +526,14 @@
   font-size: 12px;
   background: #fff;
   color: #3e4655;
+  caret-color: #1f2f4d;
+  cursor: text;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.adm-input::placeholder {
+  color: #6f7c91;
+  opacity: 1;
 }
 
 .adm-input:focus,
@@ -732,6 +739,7 @@
   background: #111827;
   border-color: #374151;
   color: #e5e7eb;
+  caret-color: #e5e7eb;
 }
 
 .adm-page.dark-mode .adm-table th,
