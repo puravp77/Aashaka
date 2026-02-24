@@ -6,7 +6,6 @@ import {
   CheckSquare,
   FileText,
   LayoutDashboard,
-  List,
   LogOut,
   Mail,
   MessageSquare,
@@ -174,15 +173,6 @@ export default function AdminLayout() {
             </div>
 
             <div className="adm-topbar-right">
-              <button type="button" className="adm-icon-btn" aria-label="Notifications" data-tip="Notifications">
-                <Bell size={19} />
-              </button>
-              <button type="button" className="adm-icon-btn" aria-label="Activity" data-tip="Activity">
-                <List size={19} />
-              </button>
-              <button type="button" className="adm-icon-btn" aria-label="Messages" data-tip="Messages">
-                <Mail size={19} />
-              </button>
               <button
                 type="button"
                 className="adm-icon-btn"

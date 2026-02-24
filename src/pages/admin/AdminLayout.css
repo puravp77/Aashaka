@@ -718,11 +718,6 @@
     display: none;
   }
 
-  .adm-topbar-right .adm-icon-btn:nth-child(2),
-  .adm-topbar-right .adm-icon-btn:nth-child(3) {
-    display: none;
-  }
-
   .adm-page-head {
     flex-direction: column;
     align-items: flex-start;

@@ -15,6 +15,7 @@ const STATUS_ROTATION = ["Pending", "Processing", "Shipped", "Delivered"];
 export default function AdminOrders() {
   const [status, setStatus] = useState("All");
   const [rows, setRows] = useState(FALLBACK_ROWS);
+  const statusOptions = ["Pending", "Processing", "Shipped", "Delivered"];
 
   useEffect(() => {
     let mounted = true;
@@ -109,11 +110,21 @@ export default function AdminOrders() {
                 </td>
                 <td>{order.amount}</td>
                 <td>
-                  <select className="adm-select adm-select-inline" defaultValue={order.status}>
-                    <option>Pending</option>
-                    <option>Processing</option>
-                    <option>Shipped</option>
-                    <option>Delivered</option>
+                  <select
+                    className="adm-select adm-select-inline"
+                    value={order.status}
+                    onChange={(e) => {
+                      const nextStatus = e.target.value;
+                      setRows((prev) =>
+                        prev.map((row) =>
+                          row.id === order.id ? { ...row, status: nextStatus } : row
+                        )
+                      );
+                    }}
+                  >
+                    {statusOptions.map((option) => (
+                      <option key={option}>{option}</option>
+                    ))}
                   </select>
                 </td>
               </tr>
