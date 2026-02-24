@@ -3,16 +3,17 @@
   --cat-maroon-deep: #6f0a22;
   --cat-gold: #c89a58;
   position: relative;
-  padding: 58px 16px 54px;
+  padding: 62px 16px 58px;
   background:
-    radial-gradient(circle at 12% 20%, rgba(242, 218, 185, 0.38) 0%, rgba(242, 218, 185, 0) 44%),
-    linear-gradient(180deg, #fff7ef 0%, #fffdf9 48%, #ffffff 100%);
+    radial-gradient(circle at 12% 20%, rgba(242, 218, 185, 0.32) 0%, rgba(242, 218, 185, 0) 42%),
+    radial-gradient(circle at 88% 78%, rgba(139, 13, 43, 0.08) 0%, rgba(139, 13, 43, 0) 42%),
+    transparent;
   overflow: hidden;
 }
 
 .category-head {
   max-width: 760px;
-  margin: 0 auto 28px;
+  margin: 0 auto 30px;
   text-align: center;
 }
 
@@ -26,9 +27,9 @@
 
 .category-head h2 {
   margin: 8px 0 8px;
-  font-family: "Times New Roman", serif;
-  font-size: clamp(32px, 4vw, 46px);
-  line-height: 1.02;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(36px, 4.3vw, 54px);
+  line-height: 0.94;
   color: #1f130e;
 }
 
@@ -52,21 +53,37 @@
 }
 
 .category-card {
-  border: 1px solid #dbdbda;
+  border: 1px solid #e6d3bf;
   border-radius: 20px;
-  background: linear-gradient(180deg, #fffdfb 50%, #fff9f3 100%);
-  box-shadow: 0 12px 26px rgba(37, 20, 10, 0.12);
+  background: linear-gradient(180deg, #fffefb 44%, #fff6ec 100%);
+  box-shadow: 0 14px 30px rgba(37, 20, 10, 0.12);
   cursor: pointer;
   overflow: hidden;
   padding: 0;
   text-align: left;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  position: relative;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.category-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.42) 52%, rgba(255, 255, 255, 0) 74%);
+  transform: translateX(-140%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 30px rgba(37, 20, 10, 0.18);
-  border-color: #dcbc95;
+  transform: translateY(-6px);
+  box-shadow: 0 20px 34px rgba(37, 20, 10, 0.18);
+  border-color: #d9b790;
+}
+
+.category-card:hover::before {
+  animation: cat-sweep 0.9s ease forwards;
 }
 
 .category-media {
@@ -81,17 +98,17 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.38s ease;
+  transition: transform 0.42s ease;
 }
 
 .category-card:hover .category-media img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 .category-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(26, 13, 7, 0.06) 38%, rgba(20, 11, 7, 0.5) 100%);
+  background: linear-gradient(180deg, rgba(26, 13, 7, 0.05) 34%, rgba(20, 11, 7, 0.55) 100%);
 }
 
 .category-chip {
@@ -107,6 +124,7 @@
   padding: 5px 9px;
   background: rgba(24, 15, 9, 0.35);
   backdrop-filter: blur(3px);
+  z-index: 3;
 }
 
 .category-copy {
@@ -116,16 +134,16 @@
 
 .category-name {
   display: block;
-  font-family: "Times New Roman", serif;
-  font-size: 17px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: 26px;
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 0.95;
   color: #1f140e;
 }
 
 .category-tagline {
   display: block;
-  margin-top: 4px;
+  margin-top: 6px;
   font-size: 12px;
   color: #7a6c61;
 }
@@ -160,6 +178,22 @@
 
 .cat-arrow:hover {
   background: #fff;
+}
+
+@keyframes cat-sweep {
+  from {
+    transform: translateX(-140%);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(140%);
+    opacity: 0;
+  }
 }
 
 @media (max-width: 1080px) {
@@ -215,11 +249,16 @@
   }
 
   .category-name {
-    font-size: 15px;
+    font-size: 20px;
   }
 
   .category-tagline {
     font-size: 11px;
+  }
+
+  .category-chip {
+    font-size: 9px;
+    padding: 4px 8px;
   }
 
   .cat-arrow {
@@ -240,7 +279,7 @@
 
 @media (max-width: 480px) {
   .category-head h2 {
-    font-size: 32px;
+    font-size: 34px;
   }
 
   .category-kicker {
@@ -257,5 +296,9 @@
 
   .category-media {
     height: 232px;
+  }
+
+  .category-name {
+    font-size: 18px;
   }
 }

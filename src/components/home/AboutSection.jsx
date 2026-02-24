@@ -15,8 +15,8 @@ export default function AboutSection() {
     <section className="about-section">
       <div className="about-shell">
         <div className="about-copy">
-          <p className="about-kicker">Our Story –</p>
-          <h2 className="about-title">About Aashaka </h2>
+          <p className="about-kicker">Our Story</p>
+          <h2 className="about-title">About Aashaka</h2>
           <p className="about-lead">
             Jewellery and clothing that feel personal, rooted in culture, and
             effortlessly contemporary.
@@ -28,13 +28,13 @@ export default function AboutSection() {
             </span>
             <p>
               The word "AASHAKA" draws from Sanskrit roots, symbolizing hope,
-              desire & auspicious beginnings. It reflects the spirit of optimism
-              & beauty, capturing the essence of Clothing & Jewellery that blends
-              timeless tradition with modern elegance. At "AASHAKA", we believe
-              jewelry is more than just an outfit; it's a piece of your story, a
-              celebration of your spirit.
-              "AASHAKA" is more than a name – its a celebration of artistry,
-              culture & the moments that matter.
+              desire and auspicious beginnings. It reflects the spirit of
+              optimism and beauty, capturing the essence of clothing and
+              jewellery that blends timeless tradition with modern elegance. At
+              "AASHAKA", we believe jewellery is more than just an outfit; it is
+              a piece of your story, a celebration of your spirit. "AASHAKA" is
+              more than a name - its a celebration of artistry, culture and the
+              moments that matter.
             </p>
           </div>
 

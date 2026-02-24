@@ -116,7 +116,9 @@ export default function CategorySection() {
               <span className="category-media">
                 <img src={withPublicUrl(category.image)} alt={category.alt} />
                 <span className="category-shade" aria-hidden="true" />
-               
+                <span className="category-chip" aria-hidden="true">
+                  Curated
+                </span>
               </span>
 
               <span className="category-copy">

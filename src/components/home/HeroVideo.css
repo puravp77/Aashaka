@@ -1,22 +1,17 @@
-/* ===============================
-   HERO SECTION – STABLE VERSION
-================================ */
-
 .hero-video {
   width: 100%;
   position: relative;
   overflow: hidden;
-  background: #fff;
-
-  /* 🔥 isolate video paint */
+  background: transparent;
   contain: paint;
 }
 
 .hero-video video {
   width: 100%;
+  height: 100%;
   display: block;
-
-  /* 🔥 STOP REPAINT STORMS */
+  object-fit: cover;
+  object-position: center 38%;
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
@@ -29,43 +24,56 @@
   align-items: center;
   justify-content: flex-start;
   padding: 0 8%;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.35) 38%, rgba(255, 255, 255, 0) 70%);
+  background:
+    linear-gradient(95deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.46) 40%, rgba(255, 255, 255, 0.12) 70%, rgba(255, 255, 255, 0) 100%);
 }
 
 .hero-content {
-  max-width: 520px;
+  max-width: 560px;
   color: #1a1a1a;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 .hero-kicker {
-  font-size: 12px;
-  letter-spacing: 3px;
+  margin: 0 0 10px;
+  font-size: 11px;
+  letter-spacing: 2.8px;
   text-transform: uppercase;
   color: #8b0d2b;
-  margin-bottom: 10px;
 }
 
 .hero-title {
-  font-size: 38px;
-  line-height: 1.2;
-  margin: 0 0 12px;
+  margin: 0;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(42px, 5.2vw, 74px);
+  line-height: 0.88;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #1f130e;
 }
 
 .hero-subtitle {
+  margin: 14px 0 0;
+  max-width: 44ch;
   font-size: 15px;
   line-height: 1.7;
-  color: #444;
-  margin-bottom: 22px;
+  color: #413428;
 }
 
 .hero-cta {
+  margin-top: 22px;
   padding: 12px 22px;
   border-radius: 999px;
   border: 1px solid #8b0d2b;
   background: #8b0d2b;
   color: #fff;
   letter-spacing: 1px;
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
@@ -77,7 +85,6 @@
   transform: translateY(-1px);
 }
 
-/* Desktop */
 @media (min-width: 769px) {
   .hero-video {
     height: 80vh;
@@ -86,12 +93,16 @@
 
 @media (max-width: 1024px) {
   .hero-title {
-    font-size: 30px;
+    font-size: 32px;
   }
 
   .hero-overlay {
     padding: 0 6%;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 45%, rgba(255, 255, 255, 0) 75%);
+    background: linear-gradient(95deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 82%);
+  }
+
+  .hero-video video {
+    object-position: center 34%;
   }
 }
 
@@ -104,8 +115,9 @@
 
   .hero-video video {
     height: auto;
-    object-fit: contain;
-    background: #fff;
+    object-fit: cover;
+    object-position: center 28%;
+    background: transparent;
   }
 
   .hero-overlay {
@@ -113,13 +125,30 @@
     justify-content: center;
     text-align: center;
     padding: 16px 8% 18px;
-    background: #ffffff;
+    background: transparent;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    padding: 0;
   }
 
   .hero-title {
-    font-size: 26px;
+    font-size: clamp(30px, 10vw, 42px);
+    line-height: 0.94;
   }
-  
+
+  .hero-subtitle {
+    font-size: 13px;
+    line-height: 1.58;
+  }
+
+  .hero-cta {
+    margin-top: 16px;
+    font-size: 10px;
+    padding: 10px 14px;
+  }
+
   .hero-video {
     height: auto;
   }
@@ -127,11 +156,15 @@
 
 @media (max-width: 480px) {
   .hero-title {
-    font-size: 22px;
+    font-size: 30px;
+  }
+
+  .hero-video video {
+    object-position: center 24%;
   }
 
   .hero-subtitle {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .hero-video {
@@ -139,9 +172,6 @@
   }
 }
 
-
-
-/* Kill margin gaps */
 .hero-video + section {
   margin-top: 0 !important;
 }

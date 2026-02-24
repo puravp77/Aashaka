@@ -1,55 +1,108 @@
-/* ===============================
-   SECTION
-================================ */
 .choker-section {
-  background: #faf7f2;
-  padding: 40px 120px;
+  --choker-brand: #8b0d2b;
+  --choker-brand-deep: #6f0a22;
+  --choker-gold: #c89a58;
+  position: relative;
+  padding: 58px 20px 66px;
+  background: transparent;
 }
 
-/* ===============================
-   TITLE
-================================ */
-.choker-title {
+.choker-head {
+  max-width: 760px;
+  margin: 0 auto 30px;
   text-align: center;
-  font-family: "Times New Roman", serif;
-  font-size: 28px;
-  letter-spacing: 3px;
-  margin-bottom: 50px;
 }
 
-/* ===============================
-   GRID (DEFAULT = GRID)
-================================ */
+.choker-kicker {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--choker-brand);
+}
+
+.choker-title {
+  margin: 8px 0 8px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(34px, 4.5vw, 52px);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #231710;
+}
+
+.choker-subtitle {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6e5f53;
+}
+
 .choker-grid {
+  max-width: 1240px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
   align-items: stretch;
 }
 
-/* ===============================
-   CARD
-================================ */
 .product-card {
-  background: #fff;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
-  border: 1px solid #eadfd6;
-  border-radius: 14px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid #e9d5c1;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fffdf9 0%, #fff6ec 100%);
+  box-shadow: 0 14px 30px rgba(34, 19, 11, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
 }
 
-/* ===============================
-   IMAGE
-================================ */
+.product-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0) 75%);
+  transform: translateX(-135%);
+  opacity: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 36px rgba(34, 19, 11, 0.18);
+  border-color: #d7b38d;
+}
+
+.product-card:hover::before {
+  opacity: 1;
+  animation: choker-sweep 0.9s ease forwards;
+}
+
+@keyframes choker-sweep {
+  from {
+    transform: translateX(-135%);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(135%);
+    opacity: 0;
+  }
+}
+
 .product-image {
   position: relative;
   width: 100%;
+  overflow: hidden;
 }
 
 .product-image img {
@@ -57,121 +110,118 @@
   aspect-ratio: 3 / 4;
   object-fit: cover;
   display: block;
-  transition: transform 0.35s ease;
+  transition: transform 0.45s ease;
 }
 
-/* ===============================
-   OVERLAY
-================================ */
+.product-card:hover .product-image img {
+  transform: scale(1.06);
+}
+
 .hover-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.55);
-  opacity: 0;
-  transition: opacity 0.35s ease;
+  background: linear-gradient(180deg, rgba(22, 12, 8, 0.04) 30%, rgba(22, 12, 8, 0.5) 100%);
 }
 
-.product-card:hover .hover-overlay {
-  opacity: 1;
+.product-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff6ea;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(21, 11, 7, 0.44);
+  backdrop-filter: blur(3px);
+  z-index: 3;
 }
 
-/* ===============================
-   VIEW ICON
-================================ */
 .view-icon {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  font-size: 18px;
+  right: 12px;
+  bottom: 12px;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(20, 11, 8, 0.56);
+  backdrop-filter: blur(4px);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 3;
 }
 
 .product-card:hover .view-icon {
   opacity: 1;
+  transform: translateY(0);
 }
 
-/* ===============================
-   INFO
-================================ */
 .product-info {
   text-align: center;
-  padding: 18px 10px 22px;
+  padding: 12px 12px 14px;
   margin-top: auto;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.product-card:hover .product-info {
-  transform: translateY(-12px);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
-}
-
-.product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
-}
-
-.product-card:hover .product-image img {
-  transform: scale(1.05);
-}
-
-/* ===============================
-   TITLE & PRICE
-================================ */
 .product-title {
-  font-family: "Times New Roman", serif;
-  font-size: 15px;
-  margin-bottom: 10px;
+  margin: 0;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #24180f;
 }
 
 .product-price {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.price {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--choker-brand);
 }
 
 .old-price {
+  font-size: 12px;
   text-decoration: line-through;
-  color: #999;
+  color: #9f8f82;
 }
 
-/* ===============================
-   RESPONSIVE GRID
-================================ */
 @media (max-width: 1200px) {
   .choker-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 900px) {
-  .choker-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 500px) {
   .choker-section {
-    padding: 30px 20px;
+    padding: 46px 14px 52px;
   }
 
   .choker-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
 }
 
-/* ===============================
-   HOMEPAGE ONLY – HORIZONTAL SCROLL
-================================ */
-
-/* 👇 IMPORTANT: add `.home` wrapper in Home.jsx */
 @media (max-width: 768px) {
   .home .choker-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     overflow: visible;
-    gap: 14px;
+    gap: 12px;
     padding-bottom: 0;
   }
 
@@ -181,32 +231,53 @@
 
   .home .product-card {
     min-width: 0;
-  }
-
-  .home .product-image img {
-    aspect-ratio: 3 / 4;
-  }
-
-  .home .product-info {
-    padding: 12px 8px 14px;
+    border-radius: 14px;
   }
 
   .home .product-title {
+    font-size: 18px;
+  }
+
+  .home .price {
     font-size: 13px;
+  }
+
+  .home .old-price {
+    font-size: 11px;
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 480px) {
   .choker-section {
-    padding: 24px 14px;
+    padding: 34px 12px 40px;
+  }
+
+  .choker-head {
+    margin-bottom: 18px;
+  }
+
+  .choker-kicker {
+    font-size: 10px;
+    letter-spacing: 1.8px;
   }
 
   .choker-title {
-    font-size: 22px;
-    margin-bottom: 26px;
+    font-size: clamp(30px, 9vw, 38px);
   }
 
+  .choker-subtitle {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .choker-grid,
   .home .choker-grid {
-    gap: 12px;
+    gap: 10px;
+  }
+
+  .product-badge,
+  .view-icon {
+    font-size: 9px;
+    padding: 4px 8px;
   }
 }

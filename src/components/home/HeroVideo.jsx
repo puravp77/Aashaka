@@ -6,15 +6,16 @@ import { withPublicUrl } from "../../utils/assetPath";
 export default function HeroVideo() {
   const navigate = useNavigate();
   const container = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 0, y: 8 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+      y: 0,
+      transition: { staggerChildren: 0.11, delayChildren: 0.12, duration: 0.55 },
     },
   };
   const item = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 },
+    hidden: { opacity: 0, y: 12 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.45 } },
   };
 
   return (
@@ -24,6 +25,8 @@ export default function HeroVideo() {
         muted
         loop
         playsInline
+        preload="metadata"
+        poster={withPublicUrl("images/bannernewasaga2.jpeg")}
         initial={{ opacity: 0, scale: 1.04 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
@@ -43,7 +46,8 @@ export default function HeroVideo() {
             Aashaka
           </motion.p>
           <motion.h1 className="hero-title" variants={item}>
-            Timeless Jewellery, <br></br>Modern Grace
+            Timeless Jewellery, <br />
+            Modern Grace
           </motion.h1>
           <motion.p className="hero-subtitle" variants={item}>
             Discover curated pieces crafted to elevate every day.

@@ -4,10 +4,7 @@
   --sig-gold: #c79957;
   position: relative;
   padding: 74px 18px 82px;
-  background:
-    radial-gradient(circle at 10% 18%, rgba(240, 208, 167, 0.34) 0%, rgba(240, 208, 167, 0) 43%),
-    radial-gradient(circle at 84% 84%, rgba(139, 13, 43, 0.12) 0%, rgba(139, 13, 43, 0) 42%),
-    linear-gradient(180deg, #fff8f0 0%, #fff2e6 48%, #fffbf6 100%);
+  background: transparent;
   overflow: hidden;
 }
 
@@ -17,22 +14,7 @@
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-}
-
-.signature-section::before {
-  width: 260px;
-  height: 260px;
-  left: -130px;
-  top: 28px;
-  background: radial-gradient(circle, rgba(139, 13, 43, 0.15) 0%, rgba(139, 13, 43, 0) 70%);
-}
-
-.signature-section::after {
-  width: 300px;
-  height: 300px;
-  right: -140px;
-  bottom: -140px;
-  background: radial-gradient(circle, rgba(199, 153, 87, 0.2) 0%, rgba(199, 153, 87, 0) 70%);
+  display: none;
 }
 
 .signature-shell {
@@ -254,16 +236,16 @@
 
 .signature-gallery {
   position: relative;
-  min-height: 560px;
+  min-height: 620px;
   --frame-width: min(340px, 62vw);
   --frame-height: min(470px, 74vw);
-  --center-left: 145px;
-  --center-top: 58px;
-  --slot-left-x: -120px;
-  --slot-left-y: -70px;
-  --slot-right-x: 170px;
-  --slot-right-y: 128px;
-  --slot-side-scale: 0.7;
+  --center-left: 138px;
+  --center-top: 44px;
+  --slot-left-x: -108px;
+  --slot-left-y: -24px;
+  --slot-right-x: 132px;
+  --slot-right-y: 102px;
+  --slot-side-scale: 0.72;
 }
 
 .signature-orbit {
@@ -386,19 +368,19 @@
 
   .signature-gallery {
     order: 1;
-    min-height: 456px;
+    min-height: 520px;
     max-width: 640px;
     width: 100%;
     margin: 0 auto;
     --frame-width: min(305px, 54vw);
     --frame-height: min(420px, 69vw);
-    --center-left: 160px;
-    --center-top: 28px;
-    --slot-left-x: -116px;
-    --slot-left-y: -36px;
-    --slot-right-x: 146px;
-    --slot-right-y: 160px;
-    --slot-side-scale: 0.72;
+    --center-left: 150px;
+    --center-top: 34px;
+    --slot-left-x: -104px;
+    --slot-left-y: -20px;
+    --slot-right-x: 118px;
+    --slot-right-y: 96px;
+    --slot-side-scale: 0.74;
   }
 
   .signature-copy {
@@ -511,13 +493,13 @@
     max-width: 360px;
     --frame-width: 194px;
     --frame-height: 276px;
-    --center-left: 86px;
-    --center-top: 50px;
-    --slot-left-x: -76px;
-    --slot-left-y: -52px;
-    --slot-right-x: 118px;
-    --slot-right-y: 98px;
-    --slot-side-scale: 0.73;
+    --center-left: 84px;
+    --center-top: 34px;
+    --slot-left-x: -64px;
+    --slot-left-y: -18px;
+    --slot-right-x: 90px;
+    --slot-right-y: 76px;
+    --slot-side-scale: 0.74;
   }
 
   .signature-orbit {
@@ -564,12 +546,12 @@
     min-height: 338px;
     --frame-width: 172px;
     --frame-height: 246px;
-    --center-left: 66px;
-    --center-top: 46px;
-    --slot-left-x: -66px;
-    --slot-left-y: -44px;
-    --slot-right-x: 106px;
-    --slot-right-y: 94px;
+    --center-left: 62px;
+    --center-top: 34px;
+    --slot-left-x: -56px;
+    --slot-left-y: -14px;
+    --slot-right-x: 80px;
+    --slot-right-y: 70px;
     --slot-side-scale: 0.75;
   }
 }

@@ -17,13 +17,17 @@ export default function ChokerSection() {
     visible: { opacity: 1, y: 0 },
   };
 
-  const chokers = allProducts.filter(
-    (item) => item.category === "choker"
-  );
+  const chokers = allProducts.filter((product) => product.category === "choker");
 
   return (
     <section className="choker-section">
-      <h2 className="choker-title">CHOKER</h2>
+      <div className="choker-head">
+        <p className="choker-kicker">Signature Picks</p>
+        <h2 className="choker-title">Choker Collection</h2>
+        <p className="choker-subtitle">
+          Festive sparkle and statement silhouettes curated for every look.
+        </p>
+      </div>
 
       <motion.div
         className="choker-grid"
@@ -42,16 +46,17 @@ export default function ChokerSection() {
           >
             <div className="product-image">
               <img src={withPublicUrl(product.images[0])} alt={product.title} />
-              <div className="hover-overlay"></div>
-              <span className="view-icon">👁</span>
+              <div className="hover-overlay" />
+              <span className="product-badge">Curated</span>
+              <span className="view-icon">View</span>
             </div>
 
             <div className="product-info">
               <p className="product-title">{product.title}</p>
 
               <div className="product-price">
-                <span className="price">₹{product.price}</span>
-                <span className="old-price">₹{product.oldPrice}</span>
+                <span className="price">{"\u20B9"}{product.price}</span>
+                <span className="old-price">{"\u20B9"}{product.oldPrice}</span>
               </div>
             </div>
           </motion.div>
