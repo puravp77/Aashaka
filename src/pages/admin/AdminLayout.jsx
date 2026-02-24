@@ -43,7 +43,12 @@ export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth <= 1100 : false
+  );
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth > 1100 : true
+  );
   const [isDarkMode, setIsDarkMode] = useState(() => {
     try {
       return localStorage.getItem("admin_theme") === "dark";
@@ -69,10 +74,28 @@ export default function AdminLayout() {
     }
   }, [isDarkMode]);
 
+  useEffect(() => {
+    const syncViewport = () => {
+      const mobile = window.innerWidth <= 1100;
+      setIsMobile(mobile);
+      setIsSidebarOpen(!mobile);
+    };
+
+    syncViewport();
+    window.addEventListener("resize", syncViewport);
+    return () => window.removeEventListener("resize", syncViewport);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      setIsSidebarOpen(false);
+    }
+  }, [location.pathname, isMobile]);
+
   return (
     <section className={`adm-page ${isDarkMode ? "dark-mode" : ""}`}>
       <div className={`adm-shell ${isSidebarOpen ? "" : "sidebar-collapsed"}`}>
-        <aside className="adm-sidebar" id="admin-sidebar">
+        <aside className={`adm-sidebar ${isSidebarOpen ? "is-open" : ""}`} id="admin-sidebar">
           <div className="adm-logo-wrap">
             <div>
               <div className="adm-logo">Aashaka</div>
@@ -88,6 +111,9 @@ export default function AdminLayout() {
                 className={({ isActive }) =>
                   `adm-nav-item ${isActive ? "active" : ""}`
                 }
+                onClick={() => {
+                  if (isMobile) setIsSidebarOpen(false);
+                }}
               >
                 <item.icon size={16} />
                 {item.label}
@@ -125,24 +151,25 @@ export default function AdminLayout() {
             </div>
 
             <div className="adm-topbar-right">
-              <button type="button" className="adm-icon-btn" aria-label="Notifications">
+              <button type="button" className="adm-icon-btn" aria-label="Notifications" data-tip="Notifications">
                 <Bell size={19} />
               </button>
-              <button type="button" className="adm-icon-btn" aria-label="Activity">
+              <button type="button" className="adm-icon-btn" aria-label="Activity" data-tip="Activity">
                 <List size={19} />
               </button>
-              <button type="button" className="adm-icon-btn" aria-label="Messages">
+              <button type="button" className="adm-icon-btn" aria-label="Messages" data-tip="Messages">
                 <Mail size={19} />
               </button>
               <button
                 type="button"
                 className="adm-icon-btn"
                 aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+                data-tip={isDarkMode ? "Light mode" : "Dark mode"}
                 onClick={() => setIsDarkMode((prev) => !prev)}
               >
                 {isDarkMode ? <Sun size={19} /> : <Moon size={19} />}
               </button>
-              <button type="button" className="adm-icon-btn" aria-label="Logout" onClick={handleLogout}>
+              <button type="button" className="adm-icon-btn" aria-label="Logout" data-tip="Logout" onClick={handleLogout}>
                 <LogOut size={19} />
               </button>
               <div className="adm-avatar" aria-hidden="true">A</div>
@@ -158,6 +185,14 @@ export default function AdminLayout() {
           <Outlet />
         </main>
       </div>
+      {isMobile && isSidebarOpen && (
+        <button
+          type="button"
+          className="adm-sidebar-backdrop"
+          aria-label="Close sidebar"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
     </section>
   );
 }
