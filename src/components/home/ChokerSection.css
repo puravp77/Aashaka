@@ -42,6 +42,18 @@
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   cursor: pointer;
+  animation: choker-float-a 6.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+.product-card:nth-child(3n + 2) {
+  animation-name: choker-float-b;
+  animation-duration: 7.4s;
+}
+
+.product-card:nth-child(3n) {
+  animation-name: choker-float-c;
+  animation-duration: 8s;
 }
 
 /* ===============================
@@ -107,12 +119,45 @@
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px) scale(1.01);
   box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
 }
 
 .product-card:hover .product-image img {
   transform: scale(1.05);
+}
+
+@keyframes choker-float-a {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+@keyframes choker-float-b {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(-0.45deg);
+  }
+}
+
+@keyframes choker-float-c {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-7px) rotate(0.35deg);
+  }
 }
 
 /* ===============================
@@ -208,5 +253,11 @@
 
   .home .choker-grid {
     gap: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card {
+    animation: none !important;
   }
 }
