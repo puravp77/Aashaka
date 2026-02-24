@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 15;
 const PRODUCTS_API_URL = `${process.env.PUBLIC_URL}/data/products.json`;
 
 const toTitleCase = (value = "") =>
