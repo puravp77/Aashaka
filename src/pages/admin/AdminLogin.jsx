@@ -2,6 +2,7 @@ import "../auth/Auth.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { hasAdminAccess } from "./adminAccess";
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -32,7 +33,7 @@ export default function AdminLogin() {
     setLoading(true);
     try {
       const user = await login(form.id.trim(), form.password);
-      if (user.role !== "admin") {
+      if (user.role !== "admin" || !hasAdminAccess(user)) {
         setError("This account does not have admin access.");
         setLoading(false);
         return;

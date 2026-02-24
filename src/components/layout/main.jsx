@@ -51,6 +51,7 @@ import AdminProducts from "../../pages/admin/pages/AdminProducts";
 import AdminOrders from "../../pages/admin/pages/AdminOrders";
 import AdminCustomers from "../../pages/admin/pages/AdminCustomers";
 import AdminContent from "../../pages/admin/pages/AdminContent";
+import AdminAllowlist from "../../pages/admin/pages/AdminAllowlist";
 import AdminLogin from "../../pages/admin/AdminLogin";
 
 
@@ -313,6 +314,7 @@ export default function Main() {
                 <Route path="orders" element={<AdminOrders />} />
                 <Route path="customers" element={<AdminCustomers />} />
                 <Route path="content" element={<AdminContent />} />
+                <Route path="allowlist" element={<AdminAllowlist />} />
               </Route>
               <Route path="/forget-password" element={<AnimatedRoute><ForgotPassword /></AnimatedRoute>} />
 

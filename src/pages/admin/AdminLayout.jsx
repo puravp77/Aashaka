@@ -34,11 +34,12 @@ const TITLES = {
   "/admin/orders": "Orders",
   "/admin/customers": "Customers",
   "/admin/content": "Content",
+  "/admin/allowlist": "Admin Allowlist",
 };
 
 const QUICK_LINKS = [
   { to: "/admin/dashboard", label: "Dashboard" },
-  { to: "/admin/customers", label: "Users" },
+  { to: "/admin/allowlist", label: "Users" },
   { to: "/admin/content", label: "Settings" },
 ];
 
