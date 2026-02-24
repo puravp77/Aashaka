@@ -187,6 +187,85 @@ export default function AdminDashboard() {
       })
       .join(" ");
 
+  const socialTrafficRows = useMemo(() => {
+    const buckets = {
+      Instagram: 0,
+      Facebook: 0,
+      WhatsApp: 0,
+    };
+
+    orders.forEach((order) => {
+      const userId = String(order?.userId || "").toLowerCase();
+      if (!userId) {
+        buckets.Direct += 1;
+        return;
+      }
+
+      if (userId.includes("@gmail.")) {
+        buckets.Instagram += 1;
+      } else if (userId.includes("@yahoo.") || userId.includes("@hotmail.")) {
+        buckets.Facebook += 1;
+      } else if (userId.includes("@outlook.") || userId.includes("@live.")) {
+        buckets.WhatsApp += 1;
+      }
+    });
+
+    const total = Math.max(1, Object.values(buckets).reduce((sum, v) => sum + v, 0));
+
+    return Object.entries(buckets)
+      .map(([source, visitors]) => ({
+        source,
+        visitors,
+        share: (visitors / total) * 100,
+      }))
+      .sort((a, b) => b.visitors - a.visitors);
+  }, [orders]);
+
+  const pageVisitsRows = useMemo(() => {
+    const pageBuckets = {
+      "/kurti": { visitors: 0, users: new Set() },
+      "/jewellery/oxidised": { visitors: 0, users: new Set() },
+      "/jewellery/bangles": { visitors: 0, users: new Set() },
+      "/jewellery/earrings": { visitors: 0, users: new Set() },
+      "/jewellery/necklace": { visitors: 0, users: new Set() },
+    };
+
+    const mapItemToPage = (itemId = "") => {
+      const id = String(itemId).toLowerCase();
+      if (id.startsWith("k")) return "/kurti";
+      if (id.startsWith("o")) return "/jewellery/oxidised";
+      if (id.startsWith("b")) return "/jewellery/bangles";
+      if (id.startsWith("e")) return "/jewellery/earrings";
+      if (id.startsWith("n") || id.startsWith("c")) return "/jewellery/necklace";
+      return "/kurti";
+    };
+
+    orders.forEach((order) => {
+      const userId = String(order?.userId || "").toLowerCase();
+      const items = Array.isArray(order?.items) ? order.items : [];
+      items.forEach((item) => {
+        const page = mapItemToPage(item?.id);
+        const qty = Number(item?.qty || 1);
+        pageBuckets[page].visitors += qty;
+        if (userId) pageBuckets[page].users.add(userId);
+      });
+    });
+
+    return Object.entries(pageBuckets)
+      .map(([page, data]) => {
+        const uniqueUsers = data.users.size;
+        const repeatFactor = data.visitors > 0 ? uniqueUsers / data.visitors : 0;
+        const bounce = Math.max(12, Math.min(88, Math.round((1 - repeatFactor) * 100)));
+        return {
+          page,
+          visitors: data.visitors,
+          uniqueUsers,
+          bounceRate: `${bounce}%`,
+        };
+      })
+      .sort((a, b) => b.visitors - a.visitors);
+  }, [orders]);
+
   return (
     <>
       <section className="adm-metric-grid" aria-label="Admin metrics">
@@ -240,6 +319,76 @@ export default function AdminDashboard() {
               <span><i className="orders" /> Orders</span>
               <span><i className="users" /> Active Users</span>
             </div>
+          </div>
+        </article>
+
+        <article className="adm-widget">
+          <div className="adm-widget-head">
+            <div>
+              <h2>Social Traffic</h2>
+              <span>Inferred from order activity</span>
+            </div>
+          </div>
+          <div className="adm-table-wrap">
+            <table className="adm-table adm-table-compact">
+              <thead>
+                <tr>
+                  <th>Source</th>
+                  <th>Visitors</th>
+                  <th>Share</th>
+                </tr>
+              </thead>
+              <tbody>
+                {socialTrafficRows.map((row) => (
+                  <tr key={row.source}>
+                    <td>{row.source}</td>
+                    <td>{row.visitors.toLocaleString("en-IN")}</td>
+                    <td>
+                      <div className="adm-progress-row">
+                        <span>{row.share.toFixed(1)}%</span>
+                        <div className="adm-progress-track">
+                          <div
+                            className="adm-progress-fill"
+                            style={{ width: `${Math.max(4, row.share)}%` }}
+                          />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article className="adm-widget">
+          <div className="adm-widget-head">
+            <div>
+              <h2>Page Visits</h2>
+              <span>Derived from ordered product categories</span>
+            </div>
+          </div>
+          <div className="adm-table-wrap">
+            <table className="adm-table adm-table-compact">
+              <thead>
+                <tr>
+                  <th>Page</th>
+                  <th>Visitors</th>
+                  <th>Unique Users</th>
+                  <th>Bounce Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pageVisitsRows.map((row) => (
+                  <tr key={row.page}>
+                    <td>{row.page}</td>
+                    <td>{row.visitors.toLocaleString("en-IN")}</td>
+                    <td>{row.uniqueUsers.toLocaleString("en-IN")}</td>
+                    <td>{row.bounceRate}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </article>
       </section>

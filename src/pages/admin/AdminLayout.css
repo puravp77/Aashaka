@@ -592,6 +592,14 @@
   color: #cbd5e1;
 }
 
+.adm-page.dark-mode .adm-progress-row span {
+  color: #cbd5e1;
+}
+
+.adm-page.dark-mode .adm-progress-track {
+  background: #334155;
+}
+
 .adm-page.dark-mode .adm-profile-menu {
   background: #1f2937;
   border-color: #374151;

@@ -212,6 +212,50 @@
   gap: 8px;
 }
 
+.adm-btn-save-content {
+  border-color: #1f8a49;
+  background: #1f8a49;
+  color: #fff;
+  box-shadow: 0 8px 16px rgba(31, 138, 73, 0.24);
+}
+
+.adm-btn-save-content:hover {
+  background: #17753d;
+  border-color: #17753d;
+}
+
+.adm-table-compact th,
+.adm-table-compact td {
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+.adm-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.adm-progress-row span {
+  min-width: 48px;
+  font-size: 12px;
+  color: #5f6b7e;
+}
+
+.adm-progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #e8eef7;
+  width: min(240px, 100%);
+  overflow: hidden;
+}
+
+.adm-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #4f5edc 0%, #6a7bf3 100%);
+}
+
 @media (max-width: 1100px) {
   .adm-metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

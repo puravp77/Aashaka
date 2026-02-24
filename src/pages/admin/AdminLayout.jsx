@@ -4,11 +4,9 @@ import { useAuth } from "../../context/AuthContext";
 import {
   Bell,
   CheckSquare,
-  ClipboardList,
   FileText,
   LayoutDashboard,
   List,
-  Lock,
   LogOut,
   Mail,
   MessageSquare,
@@ -212,16 +210,16 @@ export default function AdminLayout() {
                   <div className="adm-profile-menu" role="menu" aria-label="Account menu">
                     <p className="adm-menu-title">Account</p>
                     <button type="button" className="adm-menu-item">
-                      <Bell size={16} /> Updates <span className="adm-badge blue">42</span>
+                      <Bell size={16} /> Updates
                     </button>
                     <button type="button" className="adm-menu-item">
-                      <Mail size={16} /> Messages <span className="adm-badge green">42</span>
+                      <Mail size={16} /> Messages
                     </button>
                     <button type="button" className="adm-menu-item">
-                      <CheckSquare size={16} /> Tasks <span className="adm-badge red">42</span>
+                      <CheckSquare size={16} /> Tasks
                     </button>
                     <button type="button" className="adm-menu-item">
-                      <MessageSquare size={16} /> Comments <span className="adm-badge yellow">42</span>
+                      <MessageSquare size={16} /> Comments
                     </button>
 
                     <p className="adm-menu-title">Settings</p>
@@ -231,15 +229,11 @@ export default function AdminLayout() {
                     <button type="button" className="adm-menu-item">
                       <Settings size={16} /> Settings
                     </button>
+                   
                     <button type="button" className="adm-menu-item">
-                      <ClipboardList size={16} /> Payments <span className="adm-badge gray">42</span>
+                      <FileText size={16} /> Projects
                     </button>
-                    <button type="button" className="adm-menu-item">
-                      <FileText size={16} /> Projects <span className="adm-badge purple">42</span>
-                    </button>
-                    <button type="button" className="adm-menu-item">
-                      <Lock size={16} /> Lock Account
-                    </button>
+                    
                   </div>
                 )}
               </div>

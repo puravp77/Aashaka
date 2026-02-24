@@ -82,7 +82,12 @@ export default function AdminContent() {
         <button type="button" className="adm-btn ghost" onClick={handleReset}>
           Reset
         </button>
-        <button type="button" className="adm-btn primary" onClick={handleSave} disabled={!isDirty}>
+        <button
+          type="button"
+          className="adm-btn success adm-btn-save-content"
+          onClick={handleSave}
+          disabled={!isDirty}
+        >
           Save Changes
         </button>
       </div>
