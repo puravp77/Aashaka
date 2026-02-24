@@ -28,6 +28,44 @@ const STATE_FETCH_TIMEOUT_MS = 8000;
 const STATE_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
 const DISTRICT_FETCH_TIMEOUT_MS = 8000;
 const DISTRICT_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
+const FALLBACK_STATE_NAMES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry",
+];
 
 const formatLocationName = (value) => {
   if (!value || typeof value !== "string") return "";
@@ -97,6 +135,31 @@ const parseStatesResponse = (statesJson) => {
     }))
     .filter((state) => state.rawName && state.label)
     .sort((a, b) => a.label.localeCompare(b.label));
+};
+
+const buildFallbackStates = () =>
+  FALLBACK_STATE_NAMES.map((name) => ({
+    rawName: name,
+    label: formatLocationName(name),
+  })).sort((a, b) => a.label.localeCompare(b.label));
+
+const loadFallbackDistrictsFromLocalData = async (selectedStateRawName) => {
+  const response = await fetch(`${process.env.PUBLIC_URL}/data/users.json`, {
+    cache: "no-store",
+  });
+  if (!response.ok) return [];
+  const json = await response.json();
+  const addresses = Array.isArray(json?.addresses) ? json.addresses : [];
+  const targetState = normalizeLocationText(selectedStateRawName);
+
+  return addresses
+    .filter(
+      (addr) => normalizeLocationText(addr?.state || "") === targetState && addr?.city
+    )
+    .map((addr) => ({
+      name: formatLocationName(addr.city),
+      rawStateName: selectedStateRawName,
+    }));
 };
 
 export default function PlaceOrder() {
@@ -273,9 +336,12 @@ export default function PlaceOrder() {
         setStateOptions(cachedStates);
         setLocationError("Live states service is slow. Showing saved state list.");
       } else {
-        setLocationError("Unable to load states right now. Please tap Retry.");
-        setStateOptions([]);
+        const fallbackStates = buildFallbackStates();
+        setStateOptions(fallbackStates);
         setDistrictOptions([]);
+        setLocationError(
+          "Live states service is unavailable. Showing offline state list."
+        );
       }
     } finally {
       setLocationLoading(false);
@@ -398,8 +464,32 @@ export default function PlaceOrder() {
         }
       } catch (err) {
         if (!ignore) {
-          setDistrictOptions([]);
-          setCityError("Unable to load cities right now. Please tap Retry.");
+          try {
+            const fallbackDistricts = await loadFallbackDistrictsFromLocalData(
+              selectedStateRawName
+            );
+            const uniqueFallbackDistricts = Array.from(
+              new Map(
+                fallbackDistricts.map((district) => [
+                  normalizeLocationText(district.name),
+                  district,
+                ])
+              ).values()
+            );
+
+            if (uniqueFallbackDistricts.length > 0) {
+              setDistrictOptions(uniqueFallbackDistricts);
+              setCityError(
+                "Live cities service is unavailable. Showing saved city list."
+              );
+            } else {
+              setDistrictOptions([]);
+              setCityError("Unable to load cities right now. Please tap Retry.");
+            }
+          } catch {
+            setDistrictOptions([]);
+            setCityError("Unable to load cities right now. Please tap Retry.");
+          }
         }
       } finally {
         if (!ignore) {

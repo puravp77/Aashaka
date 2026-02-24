@@ -81,7 +81,7 @@ export default function AdminCustomers() {
     <section className="adm-widget">
       <div className="adm-widget-head">
         <h2>Customers</h2>
-        <span>From users.json</span>
+        
       </div>
 
       <div className="adm-controls">

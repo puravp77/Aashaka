@@ -205,6 +205,13 @@
   color: #6e7a8d;
 }
 
+.adm-content-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 @media (max-width: 1100px) {
   .adm-metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

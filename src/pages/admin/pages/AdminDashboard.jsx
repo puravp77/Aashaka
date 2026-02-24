@@ -2,16 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 
-const METRICS = [
-  { label: "Revenue", value: "\u20B94,82,400", delta: "+12.3%", tone: "primary" },
-  { label: "Orders", value: "1,284", delta: "+8.7%", tone: "info" },
-  { label: "Customers", value: "934", delta: "+5.2%", tone: "success" },
-  { label: "Pending", value: "47", delta: "-2.1%", tone: "warning" },
-];
+const pctDelta = (current, previous) => {
+  if (previous === 0) return current === 0 ? "0.0%" : "+100.0%";
+  const delta = ((current - previous) / previous) * 100;
+  return `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}%`;
+};
 
 export default function AdminDashboard() {
   const [range, setRange] = useState("month");
   const [orders, setOrders] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     let mounted = true;
@@ -25,9 +25,13 @@ export default function AdminDashboard() {
         const data = await res.json();
         if (mounted) {
           setOrders(Array.isArray(data?.orders) ? data.orders : []);
+          setUsers(Array.isArray(data?.users) ? data.users : []);
         }
       } catch {
-        if (mounted) setOrders([]);
+        if (mounted) {
+          setOrders([]);
+          setUsers([]);
+        }
       }
     };
 
@@ -36,6 +40,72 @@ export default function AdminDashboard() {
       mounted = false;
     };
   }, []);
+
+  const metrics = useMemo(() => {
+    const safeOrders = orders
+      .map((order) => ({
+        date: new Date(order?.date),
+        total: Number(order?.total || 0),
+        paymentMode: String(order?.paymentMode || ""),
+        userId: String(order?.userId || "").toLowerCase(),
+      }))
+      .filter((order) => !Number.isNaN(order.date.getTime()));
+
+    const latestDate = safeOrders.length
+      ? new Date(Math.max(...safeOrders.map((o) => o.date.getTime())))
+      : new Date();
+
+    const currStart = new Date(latestDate.getFullYear(), latestDate.getMonth(), 1);
+    const nextStart = new Date(latestDate.getFullYear(), latestDate.getMonth() + 1, 1);
+    const prevStart = new Date(latestDate.getFullYear(), latestDate.getMonth() - 1, 1);
+
+    const current = safeOrders.filter((o) => o.date >= currStart && o.date < nextStart);
+    const previous = safeOrders.filter((o) => o.date >= prevStart && o.date < currStart);
+
+    const currentRevenue = current.reduce((sum, o) => sum + o.total, 0);
+    const previousRevenue = previous.reduce((sum, o) => sum + o.total, 0);
+
+    const currentOrders = current.length;
+    const previousOrders = previous.length;
+
+    const currentActiveCustomers = new Set(current.map((o) => o.userId).filter(Boolean)).size;
+    const previousActiveCustomers = new Set(previous.map((o) => o.userId).filter(Boolean)).size;
+
+    // No status field in users.json orders; using COD as pending fulfillment.
+    const currentPending = current.filter((o) => o.paymentMode.toUpperCase() === "COD").length;
+    const previousPending = previous.filter((o) => o.paymentMode.toUpperCase() === "COD").length;
+
+    const totalCustomers = users.filter(
+      (u) => String(u?.role || "").toLowerCase() !== "admin"
+    ).length;
+
+    return [
+      {
+        label: "Revenue",
+        value: `\u20B9${currentRevenue.toLocaleString("en-IN")}`,
+        delta: pctDelta(currentRevenue, previousRevenue),
+        tone: "primary",
+      },
+      {
+        label: "Orders",
+        value: currentOrders.toLocaleString("en-IN"),
+        delta: pctDelta(currentOrders, previousOrders),
+        tone: "info",
+      },
+      {
+        label: "Customers",
+        value: totalCustomers.toLocaleString("en-IN"),
+        delta: pctDelta(currentActiveCustomers, previousActiveCustomers),
+        tone: "success",
+      },
+      {
+        label: "Pending",
+        value: currentPending.toLocaleString("en-IN"),
+        delta: pctDelta(currentPending, previousPending),
+        tone: "warning",
+      },
+    ];
+  }, [orders, users]);
 
   const traffic = useMemo(() => {
     const safeOrders = orders
@@ -120,7 +190,7 @@ export default function AdminDashboard() {
   return (
     <>
       <section className="adm-metric-grid" aria-label="Admin metrics">
-        {METRICS.map((item) => (
+        {metrics.map((item) => (
           <article key={item.label} className={`adm-metric-card ${item.tone}`}>
             <p>{item.label}</p>
             <strong>{item.value}</strong>

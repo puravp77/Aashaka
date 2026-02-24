@@ -1,16 +1,22 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import {
   Bell,
+  CheckSquare,
+  ClipboardList,
   FileText,
   LayoutDashboard,
   List,
+  Lock,
   LogOut,
   Mail,
+  MessageSquare,
   Menu,
   Moon,
   Package,
+  Settings,
+  User,
   ShoppingCart,
   Sun,
   Users,
@@ -43,6 +49,7 @@ export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const profileMenuRef = useRef(null);
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined"
       ? window.matchMedia("(max-width: 1100px)").matches
@@ -60,6 +67,7 @@ export default function AdminLayout() {
       return false;
     }
   });
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const pageTitle = useMemo(() => {
     return TITLES[location.pathname] || "Admin";
@@ -96,6 +104,18 @@ export default function AdminLayout() {
       setIsSidebarOpen(false);
     }
   }, [location.pathname, isMobile]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!profileMenuRef.current) return;
+      if (!profileMenuRef.current.contains(event.target)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <section className={`adm-page ${isDarkMode ? "dark-mode" : ""}`}>
@@ -177,7 +197,52 @@ export default function AdminLayout() {
               <button type="button" className="adm-icon-btn" aria-label="Logout" data-tip="Logout" onClick={handleLogout}>
                 <LogOut size={19} />
               </button>
-              <div className="adm-avatar" aria-hidden="true">A</div>
+              <div className="adm-profile" ref={profileMenuRef}>
+                <button
+                  type="button"
+                  className="adm-avatar"
+                  aria-label="Account menu"
+                  aria-expanded={isProfileMenuOpen}
+                  onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+                >
+                  A
+                </button>
+
+                {isProfileMenuOpen && (
+                  <div className="adm-profile-menu" role="menu" aria-label="Account menu">
+                    <p className="adm-menu-title">Account</p>
+                    <button type="button" className="adm-menu-item">
+                      <Bell size={16} /> Updates <span className="adm-badge blue">42</span>
+                    </button>
+                    <button type="button" className="adm-menu-item">
+                      <Mail size={16} /> Messages <span className="adm-badge green">42</span>
+                    </button>
+                    <button type="button" className="adm-menu-item">
+                      <CheckSquare size={16} /> Tasks <span className="adm-badge red">42</span>
+                    </button>
+                    <button type="button" className="adm-menu-item">
+                      <MessageSquare size={16} /> Comments <span className="adm-badge yellow">42</span>
+                    </button>
+
+                    <p className="adm-menu-title">Settings</p>
+                    <button type="button" className="adm-menu-item">
+                      <User size={16} /> Profile
+                    </button>
+                    <button type="button" className="adm-menu-item">
+                      <Settings size={16} /> Settings
+                    </button>
+                    <button type="button" className="adm-menu-item">
+                      <ClipboardList size={16} /> Payments <span className="adm-badge gray">42</span>
+                    </button>
+                    <button type="button" className="adm-menu-item">
+                      <FileText size={16} /> Projects <span className="adm-badge purple">42</span>
+                    </button>
+                    <button type="button" className="adm-menu-item">
+                      <Lock size={16} /> Lock Account
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </header>
 
