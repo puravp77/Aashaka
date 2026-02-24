@@ -21,51 +21,14 @@ const COUPONS = [
 
 const FREE_SHIPPING_THRESHOLD = 1999;
 const SHIPPING_CHARGE = 100;
-const STATES_API_URL = "https://www.india-location-hub.in/api/locations/states";
-const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/districts";
+const LOCATIONS_DATA_URL =
+  "https://raw.githubusercontent.com/nshntarora/Indian-Cities-JSON/master/cities.json";
+const DISTRICTS_API_URL = "http://localhost:5000/districts";
 const STATES_CACHE_KEY = "aashaka_states_cache_v1";
 const STATE_FETCH_TIMEOUT_MS = 8000;
 const STATE_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
 const DISTRICT_FETCH_TIMEOUT_MS = 8000;
 const DISTRICT_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
-const FALLBACK_STATE_NAMES = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  "Andaman and Nicobar Islands",
-  "Chandigarh",
-  "Dadra and Nagar Haveli and Daman and Diu",
-  "Delhi",
-  "Jammu and Kashmir",
-  "Ladakh",
-  "Lakshadweep",
-  "Puducherry",
-];
 
 const formatLocationName = (value) => {
   if (!value || typeof value !== "string") return "";
@@ -123,43 +86,32 @@ const createConfettiParticles = (count) =>
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const parseStatesResponse = (statesJson) => {
-  const apiStates = Array.isArray(statesJson?.data?.states)
-    ? statesJson.data.states
-    : [];
+const parseLocationsResponse = (locationsJson) => {
+  const apiLocations = Array.isArray(locationsJson) ? locationsJson : [];
 
-  return apiStates
-    .map((state) => ({
-      rawName: state?.name || "",
-      label: formatLocationName(state?.name || ""),
+  const normalizedDistricts = apiLocations
+    .map((item) => ({
+      name: formatLocationName(item?.name || ""),
+      rawStateName: item?.state || "",
     }))
-    .filter((state) => state.rawName && state.label)
-    .sort((a, b) => a.label.localeCompare(b.label));
-};
+    .filter((district) => district.name && district.rawStateName);
 
-const buildFallbackStates = () =>
-  FALLBACK_STATE_NAMES.map((name) => ({
-    rawName: name,
-    label: formatLocationName(name),
-  })).sort((a, b) => a.label.localeCompare(b.label));
-
-const loadFallbackDistrictsFromLocalData = async (selectedStateRawName) => {
-  const response = await fetch(`${process.env.PUBLIC_URL}/data/users.json`, {
-    cache: "no-store",
+  const stateMap = new Map();
+  normalizedDistricts.forEach((district) => {
+    const key = normalizeLocationText(district.rawStateName);
+    if (!stateMap.has(key)) {
+      stateMap.set(key, {
+        rawName: district.rawStateName,
+        label: formatLocationName(district.rawStateName),
+      });
+    }
   });
-  if (!response.ok) return [];
-  const json = await response.json();
-  const addresses = Array.isArray(json?.addresses) ? json.addresses : [];
-  const targetState = normalizeLocationText(selectedStateRawName);
 
-  return addresses
-    .filter(
-      (addr) => normalizeLocationText(addr?.state || "") === targetState && addr?.city
-    )
-    .map((addr) => ({
-      name: formatLocationName(addr.city),
-      rawStateName: selectedStateRawName,
-    }));
+  const normalizedStates = Array.from(stateMap.values()).sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
+
+  return { normalizedStates, normalizedDistricts };
 };
 
 export default function PlaceOrder() {
@@ -268,7 +220,7 @@ export default function PlaceOrder() {
     setLocationError("");
 
     try {
-      let statesJson = null;
+      let locationsJson = null;
       let lastError = null;
 
       for (let attempt = 0; attempt < STATE_FETCH_RETRY_DELAYS_MS.length; attempt += 1) {
@@ -281,14 +233,14 @@ export default function PlaceOrder() {
         const timeoutId = setTimeout(() => controller.abort(), STATE_FETCH_TIMEOUT_MS);
 
         try {
-          const statesRes = await fetch(STATES_API_URL, {
+          const statesRes = await fetch(LOCATIONS_DATA_URL, {
             signal: controller.signal,
             cache: "no-store",
           });
           if (!statesRes.ok) {
             throw new Error(`Failed to load states (${statesRes.status})`);
           }
-          statesJson = await statesRes.json();
+          locationsJson = await statesRes.json();
           lastError = null;
           break;
         } catch (err) {
@@ -298,16 +250,18 @@ export default function PlaceOrder() {
         }
       }
 
-      if (!statesJson) {
+      if (!locationsJson) {
         throw lastError || new Error("Failed to load states");
       }
 
-      const normalizedStates = parseStatesResponse(statesJson);
+      const { normalizedStates, normalizedDistricts } =
+        parseLocationsResponse(locationsJson);
       if (normalizedStates.length === 0) {
         throw new Error("State API returned an empty list");
       }
 
       setStateOptions(normalizedStates);
+      allDistrictsRef.current = normalizedDistricts;
       setLocationError("");
 
       try {
@@ -336,12 +290,9 @@ export default function PlaceOrder() {
         setStateOptions(cachedStates);
         setLocationError("Live states service is slow. Showing saved state list.");
       } else {
-        const fallbackStates = buildFallbackStates();
-        setStateOptions(fallbackStates);
+        setStateOptions([]);
         setDistrictOptions([]);
-        setLocationError(
-          "Live states service is unavailable. Showing offline state list."
-        );
+        setLocationError("Unable to load states right now. Please tap Retry.");
       }
     } finally {
       setLocationLoading(false);
@@ -405,9 +356,7 @@ export default function PlaceOrder() {
 
           try {
             const districtsRes = await fetch(
-              `${DISTRICTS_API_URL}?state_name=${encodeURIComponent(
-                selectedStateRawName
-              )}`,
+              `${DISTRICTS_API_URL}?state_name=${encodeURIComponent(selectedStateRawName)}`,
               {
                 signal: controller.signal,
                 cache: "no-store",
@@ -464,32 +413,8 @@ export default function PlaceOrder() {
         }
       } catch (err) {
         if (!ignore) {
-          try {
-            const fallbackDistricts = await loadFallbackDistrictsFromLocalData(
-              selectedStateRawName
-            );
-            const uniqueFallbackDistricts = Array.from(
-              new Map(
-                fallbackDistricts.map((district) => [
-                  normalizeLocationText(district.name),
-                  district,
-                ])
-              ).values()
-            );
-
-            if (uniqueFallbackDistricts.length > 0) {
-              setDistrictOptions(uniqueFallbackDistricts);
-              setCityError(
-                "Live cities service is unavailable. Showing saved city list."
-              );
-            } else {
-              setDistrictOptions([]);
-              setCityError("Unable to load cities right now. Please tap Retry.");
-            }
-          } catch {
-            setDistrictOptions([]);
-            setCityError("Unable to load cities right now. Please tap Retry.");
-          }
+          setDistrictOptions([]);
+          setCityError("Unable to load cities right now. Please tap Retry.");
         }
       } finally {
         if (!ignore) {

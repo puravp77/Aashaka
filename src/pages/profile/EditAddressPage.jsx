@@ -10,9 +10,46 @@ import {
   shouldUseLocalCheckoutStore,
 } from "../../utils/localCheckoutData";
 
-const STATES_API_URL = "https://www.india-location-hub.in/api/locations/states";
-const DISTRICTS_API_URL =
-  "https://www.india-location-hub.in/api/locations/districts";
+const STATES_API_URL =    "https://www.india-location-hub.in/api/locations/states";
+const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/districts";
+const FALLBACK_STATE_NAMES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry",
+];
 
 const formatLocationName = (value) => {
   if (!value || typeof value !== "string") return "";
@@ -44,6 +81,31 @@ const normalizeLocationText = (value) =>
     .replace(/\s+/g, " ")
     .replace(/&/g, "and")
     .trim();
+
+const buildFallbackStates = () =>
+  FALLBACK_STATE_NAMES.map((name) => ({
+    rawName: name,
+    label: formatLocationName(name),
+  })).sort((a, b) => a.label.localeCompare(b.label));
+
+const loadFallbackDistrictsFromLocalData = async (selectedStateRawName) => {
+  const response = await fetch(`${process.env.PUBLIC_URL}/data/users.json`, {
+    cache: "no-store",
+  });
+  if (!response.ok) return [];
+  const json = await response.json();
+  const addresses = Array.isArray(json?.addresses) ? json.addresses : [];
+  const targetState = normalizeLocationText(selectedStateRawName);
+
+  return addresses
+    .filter(
+      (addr) => normalizeLocationText(addr?.state || "") === targetState && addr?.city
+    )
+    .map((addr) => ({
+      name: formatLocationName(addr.city),
+      rawStateName: selectedStateRawName,
+    }));
+};
 
 const EditAddressPage = () => {
   const { user } = useAuth();
@@ -194,8 +256,8 @@ const EditAddressPage = () => {
         }
       } catch (err) {
         if (!ignore) {
-          setLocationError("Unable to load states right now.");
-          setStateOptions([]);
+          setLocationError("Live states service unavailable. Showing offline list.");
+          setStateOptions(buildFallbackStates());
           setDistrictOptions([]);
         }
       } finally {
@@ -430,8 +492,30 @@ const EditAddressPage = () => {
         }
       } catch (err) {
         if (!ignore) {
-          setDistrictOptions([]);
-          setCityError("Unable to load cities right now.");
+          try {
+            const fallbackDistricts = await loadFallbackDistrictsFromLocalData(
+              selectedStateRawName
+            );
+            const uniqueFallbackDistricts = Array.from(
+              new Map(
+                fallbackDistricts.map((district) => [
+                  normalizeLocationText(district.name),
+                  district,
+                ])
+              ).values()
+            );
+
+            if (uniqueFallbackDistricts.length > 0) {
+              setDistrictOptions(uniqueFallbackDistricts);
+              setCityError("Live cities service unavailable. Showing saved city list.");
+            } else {
+              setDistrictOptions([]);
+              setCityError("Unable to load cities right now.");
+            }
+          } catch {
+            setDistrictOptions([]);
+            setCityError("Unable to load cities right now.");
+          }
         }
       } finally {
         if (!ignore) {
