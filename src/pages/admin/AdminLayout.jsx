@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import {
   Bell,
@@ -9,6 +9,7 @@ import {
   LogOut,
   Mail,
   Menu,
+  Moon,
   Package,
   ShoppingCart,
   Sun,
@@ -42,6 +43,14 @@ export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    try {
+      return localStorage.getItem("admin_theme") === "dark";
+    } catch {
+      return false;
+    }
+  });
 
   const pageTitle = useMemo(() => {
     return TITLES[location.pathname] || "Admin";
@@ -52,10 +61,18 @@ export default function AdminLayout() {
     navigate("/admin-login", { replace: true });
   };
 
+  useEffect(() => {
+    try {
+      localStorage.setItem("admin_theme", isDarkMode ? "dark" : "light");
+    } catch {
+      // ignore storage errors
+    }
+  }, [isDarkMode]);
+
   return (
-    <section className="adm-page">
-      <div className="adm-shell">
-        <aside className="adm-sidebar">
+    <section className={`adm-page ${isDarkMode ? "dark-mode" : ""}`}>
+      <div className={`adm-shell ${isSidebarOpen ? "" : "sidebar-collapsed"}`}>
+        <aside className="adm-sidebar" id="admin-sidebar">
           <div className="adm-logo-wrap">
             <div>
               <div className="adm-logo">Aashaka</div>
@@ -82,7 +99,14 @@ export default function AdminLayout() {
         <main className="adm-main">
           <header className="adm-topbar">
             <div className="adm-topbar-left">
-              <button type="button" className="adm-icon-btn" aria-label="Menu">
+              <button
+                type="button"
+                className="adm-icon-btn"
+                aria-label="Toggle menu"
+                aria-controls="admin-sidebar"
+                aria-expanded={isSidebarOpen}
+                onClick={() => setIsSidebarOpen((prev) => !prev)}
+              >
                 <Menu size={20} />
               </button>
               <nav className="adm-quick-nav" aria-label="Header links">
@@ -110,8 +134,13 @@ export default function AdminLayout() {
               <button type="button" className="adm-icon-btn" aria-label="Messages">
                 <Mail size={19} />
               </button>
-              <button type="button" className="adm-icon-btn" aria-label="Theme">
-                <Sun size={19} />
+              <button
+                type="button"
+                className="adm-icon-btn"
+                aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+                onClick={() => setIsDarkMode((prev) => !prev)}
+              >
+                {isDarkMode ? <Sun size={19} /> : <Moon size={19} />}
               </button>
               <button type="button" className="adm-icon-btn" aria-label="Logout" onClick={handleLogout}>
                 <LogOut size={19} />

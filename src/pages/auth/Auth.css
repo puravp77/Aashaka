@@ -121,8 +121,8 @@
 
 .auth-page input:focus,
 .auth-page .field input:focus {
-  border-color: rgba(139, 13, 43, 0.5);
-  box-shadow: 0 0 0 4px rgba(139, 13, 43, 0.12);
+  border-color: #cdb9a9;
+  box-shadow: 0 0 0 3px rgba(139, 13, 43, 0.08);
   background: #fffefc;
 }
 
@@ -139,6 +139,10 @@
 }
 
 .auth-page .password-wrapper {
+  display: block;
+}
+
+.auth-page .password-input-wrap {
   position: relative;
 }
 
@@ -146,14 +150,20 @@
   padding-right: 46px;
 }
 
+.auth-page .password-wrapper .error {
+  display: block;
+  margin-top: 6px;
+}
+
 .auth-page .eye-toggle-btn {
+  all: unset;
+  box-sizing: border-box;
   position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
   width: 30px;
   height: 30px;
-  border: none;
   background: transparent;
   color: #44372f;
   display: grid;
@@ -162,6 +172,7 @@
   opacity: 0.8;
   transition: opacity 0.2s ease, color 0.2s ease;
   padding: 0;
+  z-index: 2;
 }
 
 .auth-page .eye-toggle-btn:hover {
@@ -210,7 +221,7 @@
   border-radius: inherit;
 }
 
-.auth-page button:not(.auth-inline-link),
+.auth-page button:not(.auth-inline-link):not(.eye-toggle-btn),
 .auth-btn {
   width: 100%;
   margin-top: 8px;
@@ -228,14 +239,14 @@
   box-shadow: 0 12px 24px rgba(139, 13, 43, 0.24);
 }
 
-.auth-page button:not(.auth-inline-link):hover,
+.auth-page button:not(.auth-inline-link):not(.eye-toggle-btn):hover,
 .auth-btn:hover {
   transform: translateY(-1px);
   filter: saturate(1.08);
   box-shadow: 0 15px 28px rgba(111, 10, 35, 0.28);
 }
 
-.auth-page button:not(.auth-inline-link):active,
+.auth-page button:not(.auth-inline-link):not(.eye-toggle-btn):active,
 .auth-btn:active {
   transform: translateY(0);
 }
@@ -426,7 +437,7 @@
     height: 28px;
   }
 
-  .auth-page button,
+  .auth-page button:not(.eye-toggle-btn),
   .auth-btn {
     padding: 12px 14px;
     font-size: 12px;

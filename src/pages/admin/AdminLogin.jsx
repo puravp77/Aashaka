@@ -1,4 +1,4 @@
-import "./AdminLogin.css";
+import "../auth/Auth.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -45,42 +45,39 @@ export default function AdminLogin() {
   };
 
   return (
-    <section className="admin-login-page">
-      <form className="admin-login-card" onSubmit={handleSubmit}>
-        <p className="admin-login-kicker">Aashaka Admin</p>
-        <h1>Secure Login</h1>
-        <p className="admin-login-sub">Sign in to access the admin dashboard.</p>
+    <div className="auth-shell">
+      <div className="auth-page">
+        <h2>Admin Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="field">
+            <input
+              type="email"
+              name="id"
+              value={form.id}
+              onChange={handleChange}
+              placeholder="Admin Email"
+              autoComplete="username"
+            />
+          </div>
 
-        <label>
-          Admin Email
-          <input
-            type="email"
-            name="id"
-            value={form.id}
-            onChange={handleChange}
-            placeholder="admin@aashaka.com"
-            autoComplete="username"
-          />
-        </label>
+          <div className="field">
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Password"
+              autoComplete="current-password"
+            />
+          </div>
 
-        <label>
-          Password
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="Enter password"
-            autoComplete="current-password"
-          />
-        </label>
+          {error && <span className="error">{error}</span>}
 
-        {error && <p className="admin-login-error">{error}</p>}
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Signing in..." : "Sign In"}
-        </button>
-      </form>
-    </section>
+          <button type="submit" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }

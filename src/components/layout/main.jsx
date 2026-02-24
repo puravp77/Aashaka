@@ -135,7 +135,8 @@ export default function Main() {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
   const isAdminRoute =
-    location.pathname.startsWith("/admin") ||
+    location.pathname === "/admin" ||
+    location.pathname.startsWith("/admin/") ||
     location.pathname.startsWith("/admin-dashboard");
 
   useEffect(() => {

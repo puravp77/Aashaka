@@ -1,5 +1,5 @@
 import "./Auth.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
@@ -33,6 +33,14 @@ export default function Login() {
   const [errors, setErrors] = useState({});
   const [showPass, setShowPass] = useState(false);
   const [shakeKey, setShakeKey] = useState(0);
+
+  useEffect(() => {
+    // Force clean fields on page open even if browser tries to autofill.
+    const clear = () => setForm({ id: "", password: "" });
+    clear();
+    const t = setTimeout(clear, 0);
+    return () => clearTimeout(t);
+  }, []);
 
   /* ---------------- HANDLERS ---------------- */
 
@@ -98,7 +106,7 @@ export default function Login() {
       >
         <h2>Login</h2>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} autoComplete="off">
           <motion.div key={shakeKey} variants={shake} animate="animate">
             {/* EMAIL */}
             <div className="field">
@@ -109,32 +117,34 @@ export default function Login() {
                 value={form.id}
                 onChange={handleChange}
                 className={errors.id ? "error-input" : ""}
+                autoComplete="off"
               />
               {errors.id && <span className="error">{errors.id}</span>}
             </div>
 
             {/* PASSWORD */}
             <div className="field password-wrapper">
-              <input
-                type={showPass ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                value={form.password}
-                onChange={handleChange}
-                className={errors.password ? "error-input" : ""}
-              />
+              <div className="password-input-wrap">
+                <input
+                  type={showPass ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={handleChange}
+                  className={errors.password ? "error-input" : ""}
+                  autoComplete="new-password"
+                />
 
-              <motion.button
-                type="button"
-                className="eye-toggle-btn"
-                onClick={() => setShowPass((p) => !p)}
-                aria-label={showPass ? "Hide password" : "Show password"}
-                aria-pressed={showPass}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
-              </motion.button>
+                <button
+                  type="button"
+                  className="eye-toggle-btn"
+                  onClick={() => setShowPass((p) => !p)}
+                  aria-label={showPass ? "Hide password" : "Show password"}
+                  aria-pressed={showPass}
+                >
+                  {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
 
               {errors.password && (
                 <span className="error">{errors.password}</span>

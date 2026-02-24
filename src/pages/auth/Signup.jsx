@@ -1,10 +1,11 @@
 import "./Auth.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { authPageVariants } from "../../components/auth/authPageMotion";
 import { isStaticHost, loadLocalUsers, saveLocalUsers } from "../../utils/localAuth";
+import { Eye, EyeOff } from "lucide-react";
 
 /* ---------------- HELPERS ---------------- */
 
@@ -42,6 +43,15 @@ export default function Signup() {
   const [errors, setErrors] = useState({});
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+  useEffect(() => {
+    // Force clean fields on page open even if browser tries to autofill.
+    const clear = () =>
+      setForm({ email: "", password: "", confirmPassword: "" });
+    clear();
+    const t = setTimeout(clear, 0);
+    return () => clearTimeout(t);
+  }, []);
 
   const strength = getPasswordStrength(form.password);
 
@@ -158,7 +168,7 @@ export default function Signup() {
       >
         <h2>Create Account</h2>
 
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handleSignup} autoComplete="off">
           {/* EMAIL */}
           <motion.div
             className="field"
@@ -172,6 +182,7 @@ export default function Signup() {
               value={form.email}
               onChange={handleChange}
               className={errors.email ? "error-input" : ""}
+              autoComplete="off"
             />
             {errors.email && <span className="error">{errors.email}</span>}
           </motion.div>
@@ -183,27 +194,27 @@ export default function Signup() {
           >
             {/* PASSWORD */}
             <div className="field password-wrapper">
-              <input
-                type={showPass ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                value={form.password}
-                onChange={handleChange}
-                className={errors.password ? "error-input" : ""}
-              />
+              <div className="password-input-wrap">
+                <input
+                  type={showPass ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={handleChange}
+                  className={errors.password ? "error-input" : ""}
+                  autoComplete="new-password"
+                />
 
-              <motion.img
-                src={
-                  showPass
-                    ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
-                    : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
-                }
-                alt="toggle password"
-                className="eye-icon-img"
-                onClick={() => setShowPass((p) => !p)}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9, rotate: 15 }}
-              />
+                <button
+                  type="button"
+                  className="eye-toggle-btn"
+                  onClick={() => setShowPass((p) => !p)}
+                  aria-label={showPass ? "Hide password" : "Show password"}
+                  aria-pressed={showPass}
+                >
+                  {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
 
               {form.password && (
                 <div className="password-strength">
@@ -228,27 +239,27 @@ export default function Signup() {
 
             {/* CONFIRM PASSWORD */}
             <div className="field password-wrapper">
-              <input
-                type={showConfirm ? "text" : "password"}
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={form.confirmPassword}
-                onChange={handleChange}
-                className={errors.confirmPassword ? "error-input" : ""}
-              />
+              <div className="password-input-wrap">
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  className={errors.confirmPassword ? "error-input" : ""}
+                  autoComplete="new-password"
+                />
 
-              <motion.img
-                src={
-                  showConfirm
-                    ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
-                    : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
-                }
-                alt="toggle confirm password"
-                className="eye-icon-img"
-                onClick={() => setShowConfirm((p) => !p)}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9, rotate: -15 }}
-              />
+                <button
+                  type="button"
+                  className="eye-toggle-btn"
+                  onClick={() => setShowConfirm((p) => !p)}
+                  aria-label={showConfirm ? "Hide confirm password" : "Show confirm password"}
+                  aria-pressed={showConfirm}
+                >
+                  {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
 
               {errors.confirmPassword && (
                 <span className="error">{errors.confirmPassword}</span>
