@@ -223,21 +223,29 @@ export default function AdminDashboard() {
 
   const pageVisitsRows = useMemo(() => {
     const pageBuckets = {
-      "/kurti": { visitors: 0, users: new Set() },
-      "/jewellery/oxidised": { visitors: 0, users: new Set() },
-      "/jewellery/bangles": { visitors: 0, users: new Set() },
-      "/jewellery/earrings": { visitors: 0, users: new Set() },
-      "/jewellery/necklace": { visitors: 0, users: new Set() },
+      kurti: { visitors: 0, users: new Set() },
+      oxidised: { visitors: 0, users: new Set() },
+      bangles: { visitors: 0, users: new Set() },
+      earrings: { visitors: 0, users: new Set() },
+      necklace: { visitors: 0, users: new Set() },
+    };
+
+    const pageLabels = {
+      kurti: "Kurti",
+      oxidised: "Oxidised",
+      bangles: "Bangles",
+      earrings: "Earrings",
+      necklace: "Necklace",
     };
 
     const mapItemToPage = (itemId = "") => {
       const id = String(itemId).toLowerCase();
-      if (id.startsWith("k")) return "/kurti";
-      if (id.startsWith("o")) return "/jewellery/oxidised";
-      if (id.startsWith("b")) return "/jewellery/bangles";
-      if (id.startsWith("e")) return "/jewellery/earrings";
-      if (id.startsWith("n") || id.startsWith("c")) return "/jewellery/necklace";
-      return "/kurti";
+      if (id.startsWith("k")) return "kurti";
+      if (id.startsWith("o")) return "oxidised";
+      if (id.startsWith("b")) return "bangles";
+      if (id.startsWith("e")) return "earrings";
+      if (id.startsWith("n") || id.startsWith("c")) return "necklace";
+      return "kurti";
     };
 
     orders.forEach((order) => {
@@ -252,12 +260,12 @@ export default function AdminDashboard() {
     });
 
     return Object.entries(pageBuckets)
-      .map(([page, data]) => {
+      .map(([pageKey, data]) => {
         const uniqueUsers = data.users.size;
         const repeatFactor = data.visitors > 0 ? uniqueUsers / data.visitors : 0;
         const bounce = Math.max(12, Math.min(88, Math.round((1 - repeatFactor) * 100)));
         return {
-          page,
+          page: pageLabels[pageKey] || "Unknown",
           visitors: data.visitors,
           uniqueUsers,
           bounceRate: `${bounce}%`,

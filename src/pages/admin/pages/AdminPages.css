@@ -271,9 +271,9 @@
   height: 38px;
   border-radius: 12px;
   padding: 8px 12px 8px 14px;
-  border-color: #2c3f61;
-  background-color: #0c1730;
-  color: #eef4ff;
+  border-color: #cfdaf0;
+  background-color: #ffffff;
+  color: #2f4362;
   font-size: 13px;
   font-weight: 600;
   line-height: 1;
@@ -282,22 +282,24 @@
   justify-content: space-between;
   gap: 10px;
   cursor: pointer;
-  background-image: linear-gradient(180deg, #0e1d3a 0%, #091428 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 2px rgba(2, 8, 23, 0.35);
+  background-image: linear-gradient(180deg, #ffffff 0%, #f4f8ff 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 3px 10px rgba(42, 72, 122, 0.12);
 }
 
 .adm-select-inline:hover {
-  border-color: #3a5f95;
+  border-color: #9cb7e3;
 }
 
 .adm-select-inline:focus {
   border-color: #4b76c2;
-  box-shadow: 0 0 0 3px rgba(67, 106, 173, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 3px rgba(67, 106, 173, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .adm-page.dark-mode .adm-select-inline {
   border-color: #2c3f61;
+  color: #eef4ff;
   background-image: linear-gradient(180deg, #0e1d3a 0%, #091428 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 2px rgba(2, 8, 23, 0.35);
 }
 
 .adm-status-menu {
@@ -339,12 +341,18 @@
   box-shadow: 0 14px 28px rgba(2, 6, 23, 0.55);
 }
 
+.adm-page:not(.dark-mode) .adm-status-menu-list {
+  border: 1px solid #ccdaf2;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f8ff 100%);
+  box-shadow: 0 12px 24px rgba(30, 54, 96, 0.18);
+}
+
 .adm-status-option {
   width: 100%;
   border: 0;
   border-radius: 9px;
   background: transparent;
-  color: #e8f0ff;
+  color: #2f4362;
   padding: 9px 10px;
   font-size: 13px;
   text-align: left;
@@ -355,7 +363,7 @@
 }
 
 .adm-status-option:hover {
-  background: rgba(72, 119, 196, 0.35);
+  background: rgba(72, 119, 196, 0.16);
 }
 
 .adm-status-option.active {
@@ -369,21 +377,41 @@
 }
 
 .adm-select-status-pending {
+  border-color: #efc6c1;
+  color: #a14f47;
+}
+
+.adm-select-status-processing {
+  border-color: #efdca9;
+  color: #8a6521;
+}
+
+.adm-select-status-shipped {
+  border-color: #bed4f3;
+  color: #2e5f9d;
+}
+
+.adm-select-status-delivered {
+  border-color: #bde3cf;
+  color: #2f6e4c;
+}
+
+.adm-page.dark-mode .adm-select-status-pending {
   border-color: #874e4a;
   color: #ffd8d3;
 }
 
-.adm-select-status-processing {
+.adm-page.dark-mode .adm-select-status-processing {
   border-color: #8a6a31;
   color: #ffe7b7;
 }
 
-.adm-select-status-shipped {
+.adm-page.dark-mode .adm-select-status-shipped {
   border-color: #2f5f9d;
   color: #cfe4ff;
 }
 
-.adm-select-status-delivered {
+.adm-page.dark-mode .adm-select-status-delivered {
   border-color: #2f6e4c;
   color: #d5f3e4;
 }
