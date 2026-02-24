@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./SignatureSection.css";
 import { withPublicUrl } from "../../utils/assetPath";
 
@@ -23,8 +23,33 @@ const SIGNATURE_IMAGES = [
   },
 ];
 
+const SLOT_CLASSES = ["slot-left", "slot-center", "slot-right"];
+const INITIAL_SLOT_ORDER = [2, 0, 1];
+
 export default function SignatureSection() {
   const sectionRef = useRef(null);
+  const cycleRef = useRef(null);
+  const [slotOrder, setSlotOrder] = useState(INITIAL_SLOT_ORDER);
+  const [isCycling, setIsCycling] = useState(false);
+
+  const rotateSlots = () => {
+    setSlotOrder(([left, center, right]) => [center, right, left]);
+  };
+
+  const handleGalleryEnter = () => {
+    if (cycleRef.current) return;
+    setIsCycling(true);
+    rotateSlots();
+    cycleRef.current = setInterval(rotateSlots, 2200);
+  };
+
+  const handleGalleryLeave = () => {
+    if (cycleRef.current) {
+      clearInterval(cycleRef.current);
+      cycleRef.current = null;
+    }
+    setIsCycling(false);
+  };
 
   useEffect(() => {
     const sectionNode = sectionRef.current;
@@ -39,7 +64,13 @@ export default function SignatureSection() {
 
     observer.observe(sectionNode);
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (cycleRef.current) {
+        clearInterval(cycleRef.current);
+        cycleRef.current = null;
+      }
+    };
   }, []);
 
   return (
@@ -87,17 +118,26 @@ export default function SignatureSection() {
           </div>
         </div>
 
-        <div className="signature-gallery" aria-label="Signature style gallery">
+        <div
+          className={`signature-gallery ${isCycling ? "is-cycling" : ""}`}
+          aria-label="Signature style gallery"
+          onMouseEnter={handleGalleryEnter}
+          onMouseLeave={handleGalleryLeave}
+        >
           <span className="signature-orbit" aria-hidden="true" />
-          {SIGNATURE_IMAGES.map((image) => (
+          {slotOrder.map((imageIndex, slotIndex) => {
+            const image = SIGNATURE_IMAGES[imageIndex];
+            const slotClass = SLOT_CLASSES[slotIndex];
+            return (
             <figure
               key={image.src}
-              className={`signature-frame ${image.className}`}
+              className={`signature-frame ${slotClass}`}
             >
               <img src={withPublicUrl(image.src)} alt={image.alt} />
               <figcaption>{image.label}</figcaption>
             </figure>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

@@ -255,6 +255,15 @@
 .signature-gallery {
   position: relative;
   min-height: 560px;
+  --frame-width: min(340px, 62vw);
+  --frame-height: min(470px, 74vw);
+  --center-left: 145px;
+  --center-top: 58px;
+  --slot-left-x: -120px;
+  --slot-left-y: -70px;
+  --slot-right-x: 170px;
+  --slot-right-y: 128px;
+  --slot-side-scale: 0.7;
 }
 
 .signature-orbit {
@@ -275,6 +284,21 @@
   background: #fdf9f5;
   box-shadow: 0 20px 38px rgba(27, 15, 9, 0.2);
   opacity: 0;
+  width: var(--frame-width);
+  height: var(--frame-height);
+  left: var(--center-left);
+  top: var(--center-top);
+  --tx: 0px;
+  --ty: 0px;
+  --rot: 0deg;
+  --scale: 1;
+  transform: translate3d(var(--tx), var(--ty), 0) rotate(var(--rot))
+    scale(var(--scale));
+  transition:
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.45s ease,
+    opacity 0.5s ease;
+  will-change: transform;
 }
 
 .signature-frame img {
@@ -301,30 +325,33 @@
   backdrop-filter: blur(4px);
 }
 
-.frame-main {
-  width: min(340px, 62vw);
-  height: min(470px, 74vw);
-  left: 145px;
-  top: 58px;
+.signature-section.animate .signature-frame {
+  opacity: 1;
+}
+
+.slot-center {
+  --tx: 0px;
+  --ty: 0px;
+  --rot: 0deg;
+  --scale: 1;
   z-index: 3;
+  box-shadow: 0 24px 44px rgba(27, 15, 9, 0.25);
 }
 
-.frame-top {
-  width: min(238px, 42vw);
-  height: min(320px, 58vw);
-  left: 34px;
-  top: -6px;
-  transform: rotate(-8deg);
-  z-index: 2;
-}
-
-.frame-bottom {
-  width: min(238px, 42vw);
-  height: min(320px, 58vw);
-  left: 362px;
-  top: 244px;
-  transform: rotate(8deg);
+.slot-left {
+  --tx: var(--slot-left-x);
+  --ty: var(--slot-left-y);
+  --rot: -8deg;
+  --scale: var(--slot-side-scale);
   z-index: 1;
+}
+
+.slot-right {
+  --tx: var(--slot-right-x);
+  --ty: var(--slot-right-y);
+  --rot: 8deg;
+  --scale: var(--slot-side-scale);
+  z-index: 2;
 }
 
 .signature-section.animate .signature-copy {
@@ -332,25 +359,7 @@
 }
 
 .signature-section.animate .signature-orbit {
-  animation: sig-fade-up 0.8s ease forwards, sig-pulse 5s ease-in-out 1.1s infinite;
-}
-
-.signature-section.animate .frame-main {
-  animation:
-    sig-pop-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards 0.15s,
-    sig-float-main 6.5s ease-in-out infinite 1.15s;
-}
-
-.signature-section.animate .frame-top {
-  animation:
-    sig-slide-left 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards 0.28s,
-    sig-float-top 7.2s ease-in-out infinite 1.22s;
-}
-
-.signature-section.animate .frame-bottom {
-  animation:
-    sig-slide-right 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards 0.42s,
-    sig-float-bottom 7.8s ease-in-out infinite 1.34s;
+  animation: sig-fade-up 0.8s ease forwards;
 }
 
 @keyframes sig-fade-up {
@@ -362,86 +371,6 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes sig-pop-in {
-  from {
-    opacity: 0;
-    transform: scale(0.88) translateY(28px);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes sig-slide-left {
-  from {
-    opacity: 0;
-    transform: rotate(-13deg) translateX(-84px) translateY(26px);
-  }
-
-  to {
-    opacity: 1;
-    transform: rotate(-8deg) translateX(0) translateY(0);
-  }
-}
-
-@keyframes sig-slide-right {
-  from {
-    opacity: 0;
-    transform: rotate(13deg) translateX(84px) translateY(26px);
-  }
-
-  to {
-    opacity: 1;
-    transform: rotate(8deg) translateX(0) translateY(0);
-  }
-}
-
-@keyframes sig-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.03);
-  }
-}
-
-@keyframes sig-float-main {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  50% {
-    transform: translateY(-14px) rotate(0.7deg);
-  }
-}
-
-@keyframes sig-float-top {
-  0%,
-  100% {
-    transform: rotate(-8deg) translateY(0);
-  }
-
-  50% {
-    transform: rotate(-6.4deg) translateY(-12px);
-  }
-}
-
-@keyframes sig-float-bottom {
-  0%,
-  100% {
-    transform: rotate(8deg) translateY(0);
-  }
-
-  50% {
-    transform: rotate(6.2deg) translateY(-10px);
   }
 }
 
@@ -461,6 +390,15 @@
     max-width: 640px;
     width: 100%;
     margin: 0 auto;
+    --frame-width: min(305px, 54vw);
+    --frame-height: min(420px, 69vw);
+    --center-left: 160px;
+    --center-top: 28px;
+    --slot-left-x: -116px;
+    --slot-left-y: -36px;
+    --slot-right-x: 146px;
+    --slot-right-y: 160px;
+    --slot-side-scale: 0.72;
   }
 
   .signature-copy {
@@ -471,26 +409,6 @@
     max-width: 42ch;
   }
 
-  .frame-main {
-    width: min(305px, 54vw);
-    height: min(420px, 69vw);
-    left: 160px;
-    top: 28px;
-  }
-
-  .frame-top {
-    width: min(220px, 40vw);
-    height: min(290px, 54vw);
-    left: 44px;
-    top: -8px;
-  }
-
-  .frame-bottom {
-    width: min(220px, 40vw);
-    height: min(290px, 54vw);
-    left: 336px;
-    top: 188px;
-  }
 }
 
 @media (max-width: 768px) {
@@ -591,6 +509,15 @@
   .signature-gallery {
     min-height: 370px;
     max-width: 360px;
+    --frame-width: 194px;
+    --frame-height: 276px;
+    --center-left: 86px;
+    --center-top: 50px;
+    --slot-left-x: -76px;
+    --slot-left-y: -52px;
+    --slot-right-x: 118px;
+    --slot-right-y: 98px;
+    --slot-side-scale: 0.73;
   }
 
   .signature-orbit {
@@ -611,28 +538,6 @@
     font-size: 9px;
   }
 
-  .frame-main {
-    width: 194px;
-    height: 276px;
-    left: 86px;
-    top: 50px;
-  }
-
-  .frame-top {
-    width: 142px;
-    height: 204px;
-    left: 10px;
-    top: 0;
-    transform: rotate(-6deg);
-  }
-
-  .frame-bottom {
-    width: 142px;
-    height: 204px;
-    left: 204px;
-    top: 148px;
-    transform: rotate(6deg);
-  }
 }
 
 @media (max-width: 430px) {
@@ -657,27 +562,15 @@
   .signature-gallery {
     max-width: 300px;
     min-height: 338px;
-  }
-
-  .frame-main {
-    width: 172px;
-    height: 246px;
-    left: 66px;
-    top: 46px;
-  }
-
-  .frame-top {
-    width: 130px;
-    height: 186px;
-    left: 0;
-    top: 2px;
-  }
-
-  .frame-bottom {
-    width: 130px;
-    height: 186px;
-    left: 172px;
-    top: 140px;
+    --frame-width: 172px;
+    --frame-height: 246px;
+    --center-left: 66px;
+    --center-top: 46px;
+    --slot-left-x: -66px;
+    --slot-left-y: -44px;
+    --slot-right-x: 106px;
+    --slot-right-y: 94px;
+    --slot-side-scale: 0.75;
   }
 }
 
