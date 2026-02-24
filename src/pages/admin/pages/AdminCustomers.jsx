@@ -2,17 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 
-const FALLBACK_ROWS = [
-  { name: "Neha Sharma", email: "neha@gmail.com", orders: 16 },
-  { name: "Riya Das", email: "riya@gmail.com", orders: 8 },
-  { name: "Kavya Patel", email: "kavya@gmail.com", orders: 13 },
-  { name: "Sonia Verma", email: "sonia@gmail.com", orders: 2 },
-  { name: "Aarti Gupta", email: "aarti@gmail.com", orders: 6 },
-];
-
 export default function AdminCustomers() {
   const [search, setSearch] = useState("");
-  const [rows, setRows] = useState(FALLBACK_ROWS);
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
     let mounted = true;
@@ -52,7 +44,7 @@ export default function AdminCustomers() {
         }
       } catch {
         if (mounted) {
-          setRows(FALLBACK_ROWS);
+          setRows([]);
         }
       }
     };

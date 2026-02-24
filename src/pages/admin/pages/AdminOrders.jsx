@@ -2,19 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 
-const FALLBACK_ROWS = [
-  { id: "#AAS-1092", customer: "Neha Sharma", payment: "Paid", status: "Processing", amount: "?3,490" },
-  { id: "#AAS-1088", customer: "Riya Das", payment: "Paid", status: "Shipped", amount: "?2,120" },
-  { id: "#AAS-1087", customer: "Kavya Patel", payment: "Paid", status: "Delivered", amount: "?5,640" },
-  { id: "#AAS-1085", customer: "Sonia Verma", payment: "COD", status: "Pending", amount: "?1,780" },
-  { id: "#AAS-1084", customer: "Aarti Gupta", payment: "Paid", status: "Delivered", amount: "?4,240" },
-];
-
 const STATUS_ROTATION = ["Pending", "Processing", "Shipped", "Delivered"];
 
 export default function AdminOrders() {
   const [status, setStatus] = useState("All");
-  const [rows, setRows] = useState(FALLBACK_ROWS);
+  const [rows, setRows] = useState([]);
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
   const filterMenuRef = useRef(null);
@@ -63,7 +55,7 @@ export default function AdminOrders() {
         }
       } catch {
         if (mounted) {
-          setRows(FALLBACK_ROWS);
+          setRows([]);
         }
       }
     };
