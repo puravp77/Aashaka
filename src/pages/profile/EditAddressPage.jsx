@@ -12,44 +12,6 @@ import {
 
 const STATES_API_URL =    "https://www.india-location-hub.in/api/locations/states";
 const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/districts";
-const FALLBACK_STATE_NAMES = [
-  "Andhra Pradesh",
-  "Arunachal Pradesh",
-  "Assam",
-  "Bihar",
-  "Chhattisgarh",
-  "Goa",
-  "Gujarat",
-  "Haryana",
-  "Himachal Pradesh",
-  "Jharkhand",
-  "Karnataka",
-  "Kerala",
-  "Madhya Pradesh",
-  "Maharashtra",
-  "Manipur",
-  "Meghalaya",
-  "Mizoram",
-  "Nagaland",
-  "Odisha",
-  "Punjab",
-  "Rajasthan",
-  "Sikkim",
-  "Tamil Nadu",
-  "Telangana",
-  "Tripura",
-  "Uttar Pradesh",
-  "Uttarakhand",
-  "West Bengal",
-  "Andaman and Nicobar Islands",
-  "Chandigarh",
-  "Dadra and Nagar Haveli and Daman and Diu",
-  "Delhi",
-  "Jammu and Kashmir",
-  "Ladakh",
-  "Lakshadweep",
-  "Puducherry",
-];
 
 const formatLocationName = (value) => {
   if (!value || typeof value !== "string") return "";
@@ -81,12 +43,6 @@ const normalizeLocationText = (value) =>
     .replace(/\s+/g, " ")
     .replace(/&/g, "and")
     .trim();
-
-const buildFallbackStates = () =>
-  FALLBACK_STATE_NAMES.map((name) => ({
-    rawName: name,
-    label: formatLocationName(name),
-  })).sort((a, b) => a.label.localeCompare(b.label));
 
 const loadFallbackDistrictsFromLocalData = async (selectedStateRawName) => {
   const response = await fetch(`${process.env.PUBLIC_URL}/data/users.json`, {
@@ -256,8 +212,8 @@ const EditAddressPage = () => {
         }
       } catch (err) {
         if (!ignore) {
-          setLocationError("Live states service unavailable. Showing offline list.");
-          setStateOptions(buildFallbackStates());
+          setLocationError("Unable to load states right now.");
+          setStateOptions([]);
           setDistrictOptions([]);
         }
       } finally {

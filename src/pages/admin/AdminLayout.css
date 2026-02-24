@@ -25,14 +25,48 @@
   transition: grid-template-columns 0.24s ease;
 }
 
+@keyframes admFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes admNavReveal {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes admPulseGlow {
+  0%,
+  100% {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 rgba(133, 180, 255, 0);
+  }
+  50% {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 18px rgba(133, 180, 255, 0.22);
+  }
+}
+
 .adm-sidebar {
   border-right: 1px solid #252c3a;
-  background: linear-gradient(180deg, #303c54 0%, #293449 100%);
+  background:
+    radial-gradient(120% 70% at 0% 0%, rgba(97, 130, 224, 0.18) 0%, rgba(97, 130, 224, 0) 45%),
+    linear-gradient(180deg, #111d36 0%, #0d1a32 54%, #0b1730 100%);
   color: #f5f7fb;
-  padding: 16px 12px 18px;
+  padding: 18px 14px 20px;
   position: relative;
   min-height: 100%;
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.04);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.05);
   transition: opacity 0.2s ease, padding 0.2s ease;
 }
 
@@ -63,55 +97,83 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
+  padding: 4px 2px 8px;
+  border-bottom: 1px solid rgba(175, 193, 230, 0.14);
+  animation: admFadeUp 0.45s ease both;
 }
 
 .adm-logo {
   font-size: 28px;
   font-weight: 800;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  text-shadow: 0 2px 16px rgba(56, 103, 202, 0.24);
 }
 
 .adm-logo-sub {
-  margin: 2px 0 0;
-  color: #b8c0d4;
+  margin: 4px 0 0;
+  color: #bcd0f4;
   font-size: 12px;
 }
 
 .adm-nav {
   display: grid;
-  gap: 6px;
+  gap: 7px;
 }
 
 .adm-nav-item {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   text-align: left;
   text-decoration: none;
   border: 1px solid transparent;
-  border-radius: 9px;
-  padding: 10px 11px;
-  background: transparent;
-  color: #d9dfeb;
+  border-radius: 12px;
+  padding: 11px 12px;
+  background: rgba(16, 28, 50, 0.3);
+  color: #dee8fb;
   font-size: 13px;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  animation: admNavReveal 0.35s ease forwards;
 }
 
+.adm-nav-item:nth-child(1) { animation-delay: 0.06s; }
+.adm-nav-item:nth-child(2) { animation-delay: 0.1s; }
+.adm-nav-item:nth-child(3) { animation-delay: 0.14s; }
+.adm-nav-item:nth-child(4) { animation-delay: 0.18s; }
+.adm-nav-item:nth-child(5) { animation-delay: 0.22s; }
+
 .adm-nav-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(75, 110, 183, 0.2);
+  border-color: rgba(127, 166, 239, 0.38);
   color: #fff;
+  transform: translateX(2px);
 }
 
 .adm-nav-item.active {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
+  position: relative;
+  background: linear-gradient(90deg, rgba(86, 113, 193, 0.34) 0%, rgba(86, 113, 193, 0.16) 100%);
+  border-color: rgba(139, 175, 246, 0.44);
   color: #fff;
-  box-shadow: none;
+  opacity: 1;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: admNavReveal 0.35s ease forwards, admPulseGlow 2.4s ease-in-out infinite 0.35s;
+}
+
+.adm-nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 9px;
+  width: 3px;
+  height: calc(100% - 18px);
+  border-radius: 99px;
+  background: #85b4ff;
 }
 
 .adm-main {
@@ -330,19 +392,49 @@
   box-shadow: 0 6px 18px rgba(35, 49, 78, 0.07);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .adm-logo-wrap,
+  .adm-topbar,
+  .adm-page-head,
+  .adm-nav-item,
+  .adm-nav-item.active {
+    animation: none !important;
+  }
+
+  .adm-nav-item,
+  .adm-nav-item:hover,
+  .adm-icon-btn,
+  .adm-btn {
+    transition: none !important;
+  }
+}
+
 .adm-breadcrumb {
   margin: 0;
   font-size: 13px;
-  color: var(--adm-muted);
+  color: #5f6f86;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid #d7e0ef;
+  background: linear-gradient(180deg, #f9fbff 0%, #f1f5fc 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .adm-breadcrumb a {
-  color: #4f5edc;
+  color: #335ecc;
   text-decoration: none;
+  font-weight: 600;
 }
 
 .adm-breadcrumb span {
-  color: #5b6577;
+  color: #4c5a70;
+}
+
+.adm-breadcrumb a:hover {
+  color: #274fae;
 }
 
 .adm-page-head h1 {
@@ -581,6 +673,20 @@
   color: #9ca3af;
 }
 
+.adm-page.dark-mode .adm-breadcrumb {
+  border-color: #314465;
+  background: linear-gradient(180deg, #12203b 0%, #0d182e 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.adm-page.dark-mode .adm-breadcrumb a {
+  color: #89adff;
+}
+
+.adm-page.dark-mode .adm-breadcrumb a:hover {
+  color: #aac3ff;
+}
+
 .adm-page.dark-mode .adm-widget-head h2,
 .adm-page.dark-mode .adm-table td,
 .adm-page.dark-mode .adm-card h3,
@@ -640,6 +746,11 @@
 @media (max-width: 1100px) {
   .adm-shell {
     grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .adm-shell.sidebar-collapsed {
+    grid-template-columns: 1fr;
   }
 
   .adm-sidebar {
@@ -672,6 +783,8 @@
 
   .adm-main {
     padding: 10px 10px 18px;
+    width: 100%;
+    min-width: 0;
   }
 
   .adm-nav {
@@ -696,6 +809,7 @@
   .adm-topbar {
     flex-wrap: nowrap;
     padding: 8px 10px;
+    width: 100%;
   }
 
   .adm-topbar-left,

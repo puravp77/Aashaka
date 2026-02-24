@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 
@@ -15,7 +15,18 @@ const STATUS_ROTATION = ["Pending", "Processing", "Shipped", "Delivered"];
 export default function AdminOrders() {
   const [status, setStatus] = useState("All");
   const [rows, setRows] = useState(FALLBACK_ROWS);
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const filterMenuRef = useRef(null);
+  const rowMenuRef = useRef(null);
   const statusOptions = ["Pending", "Processing", "Shipped", "Delivered"];
+  const filterOptions = ["All", ...statusOptions];
+
+  const updateOrderStatus = (orderId, nextStatus) => {
+    setRows((prev) =>
+      prev.map((row) => (row.id === orderId ? { ...row, status: nextStatus } : row))
+    );
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -68,21 +79,61 @@ export default function AdminOrders() {
     return rows.filter((row) => row.status === status);
   }, [rows, status]);
 
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (filterMenuRef.current && !filterMenuRef.current.contains(event.target)) {
+        setIsFilterMenuOpen(false);
+      }
+
+      if (rowMenuRef.current && !rowMenuRef.current.contains(event.target)) {
+        setOpenMenuId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
   return (
     <section className="adm-widget">
       <div className="adm-widget-head">
         <h2>Orders</h2>
-        <span>From users.json</span>
       </div>
 
       <div className="adm-controls">
-        <select className="adm-select" value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option>All</option>
-          <option>Pending</option>
-          <option>Processing</option>
-          <option>Shipped</option>
-          <option>Delivered</option>
-        </select>
+        <div className="adm-status-menu" ref={filterMenuRef}>
+          <button
+            type="button"
+            className="adm-select adm-select-inline"
+            onClick={() => setIsFilterMenuOpen((prev) => !prev)}
+            aria-haspopup="listbox"
+            aria-expanded={isFilterMenuOpen}
+          >
+            {status}
+            <span className={`adm-select-caret ${isFilterMenuOpen ? "open" : ""}`} />
+          </button>
+          {isFilterMenuOpen && (
+            <ul className="adm-status-menu-list" role="listbox" aria-label="Filter orders">
+              {filterOptions.map((option) => (
+                <li key={option}>
+                  <button
+                    type="button"
+                    className={`adm-status-option ${option === status ? "active" : ""}`}
+                    onClick={() => {
+                      setStatus(option);
+                      setIsFilterMenuOpen(false);
+                    }}
+                    role="option"
+                    aria-selected={option === status}
+                  >
+                    <span>{option}</span>
+                    {option === status && <span className="adm-status-check">v</span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
 
       <div className="adm-table-wrap">
@@ -110,22 +161,41 @@ export default function AdminOrders() {
                 </td>
                 <td>{order.amount}</td>
                 <td>
-                  <select
-                    className="adm-select adm-select-inline"
-                    value={order.status}
-                    onChange={(e) => {
-                      const nextStatus = e.target.value;
-                      setRows((prev) =>
-                        prev.map((row) =>
-                          row.id === order.id ? { ...row, status: nextStatus } : row
-                        )
-                      );
-                    }}
-                  >
-                    {statusOptions.map((option) => (
-                      <option key={option}>{option}</option>
-                    ))}
-                  </select>
+                  <div className="adm-status-menu" ref={openMenuId === order.id ? rowMenuRef : null}>
+                    <button
+                      type="button"
+                      className={`adm-select adm-select-inline adm-select-status-${order.status.toLowerCase()}`}
+                      onClick={() =>
+                        setOpenMenuId((prev) => (prev === order.id ? null : order.id))
+                      }
+                      aria-haspopup="listbox"
+                      aria-expanded={openMenuId === order.id}
+                    >
+                      {order.status}
+                      <span className={`adm-select-caret ${openMenuId === order.id ? "open" : ""}`} />
+                    </button>
+                    {openMenuId === order.id && (
+                      <ul className="adm-status-menu-list" role="listbox" aria-label="Update status">
+                        {statusOptions.map((option) => (
+                          <li key={option}>
+                            <button
+                              type="button"
+                              className={`adm-status-option ${option === order.status ? "active" : ""}`}
+                              onClick={() => {
+                                updateOrderStatus(order.id, option);
+                                setOpenMenuId(null);
+                              }}
+                              role="option"
+                              aria-selected={option === order.status}
+                            >
+                              <span>{option}</span>
+                              {option === order.status && <span className="adm-status-check">v</span>}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

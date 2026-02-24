@@ -3,18 +3,12 @@ import "../AdminLayout.css";
 import "./AdminPages.css";
 
 const FALLBACK_ROWS = [
-  { name: "Neha Sharma", email: "neha@gmail.com", segment: "VIP", orders: 16 },
-  { name: "Riya Das", email: "riya@gmail.com", segment: "Regular", orders: 8 },
-  { name: "Kavya Patel", email: "kavya@gmail.com", segment: "VIP", orders: 13 },
-  { name: "Sonia Verma", email: "sonia@gmail.com", segment: "New", orders: 2 },
-  { name: "Aarti Gupta", email: "aarti@gmail.com", segment: "Regular", orders: 6 },
+  { name: "Neha Sharma", email: "neha@gmail.com", orders: 16 },
+  { name: "Riya Das", email: "riya@gmail.com", orders: 8 },
+  { name: "Kavya Patel", email: "kavya@gmail.com", orders: 13 },
+  { name: "Sonia Verma", email: "sonia@gmail.com", orders: 2 },
+  { name: "Aarti Gupta", email: "aarti@gmail.com", orders: 6 },
 ];
-
-const getSegment = (ordersCount) => {
-  if (ordersCount >= 10) return "VIP";
-  if (ordersCount >= 3) return "Regular";
-  return "New";
-};
 
 export default function AdminCustomers() {
   const [search, setSearch] = useState("");
@@ -49,7 +43,6 @@ export default function AdminCustomers() {
             return {
               name: email.split("@")[0] || email || "User",
               email,
-              segment: getSegment(ordersCount),
               orders: ordersCount,
             };
           });
@@ -99,7 +92,6 @@ export default function AdminCustomers() {
             <tr>
               <th>Name</th>
               <th>Email</th>
-              <th>Segment</th>
               <th>Orders</th>
             </tr>
           </thead>
@@ -108,7 +100,6 @@ export default function AdminCustomers() {
               <tr key={row.email}>
                 <td>{row.name}</td>
                 <td>{row.email}</td>
-                <td>{row.segment}</td>
                 <td>{row.orders}</td>
               </tr>
             ))}

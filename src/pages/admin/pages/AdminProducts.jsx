@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 import allProducts from "../../../data/allProducts";
@@ -9,6 +9,8 @@ export default function AdminProducts() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [page, setPage] = useState(1);
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
+  const categoryMenuRef = useRef(null);
 
   const productRows = useMemo(() => {
     return allProducts.map((product) => {
@@ -45,6 +47,17 @@ export default function AdminProducts() {
   const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (categoryMenuRef.current && !categoryMenuRef.current.contains(event.target)) {
+        setIsCategoryMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
   return (
     <section className="adm-widget">
       <div className="adm-widget-head">
@@ -62,20 +75,40 @@ export default function AdminProducts() {
             setPage(1);
           }}
         />
-        <select
-          className="adm-select"
-          value={category}
-          onChange={(e) => {
-            setCategory(e.target.value);
-            setPage(1);
-          }}
-        >
-          {categories.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+        <div className="adm-status-menu" ref={categoryMenuRef}>
+          <button
+            type="button"
+            className="adm-select adm-select-inline"
+            onClick={() => setIsCategoryMenuOpen((prev) => !prev)}
+            aria-haspopup="listbox"
+            aria-expanded={isCategoryMenuOpen}
+          >
+            {category}
+            <span className={`adm-select-caret ${isCategoryMenuOpen ? "open" : ""}`} />
+          </button>
+          {isCategoryMenuOpen && (
+            <ul className="adm-status-menu-list" role="listbox" aria-label="Filter products by category">
+              {categories.map((item) => (
+                <li key={item}>
+                  <button
+                    type="button"
+                    className={`adm-status-option ${item === category ? "active" : ""}`}
+                    onClick={() => {
+                      setCategory(item);
+                      setPage(1);
+                      setIsCategoryMenuOpen(false);
+                    }}
+                    role="option"
+                    aria-selected={item === category}
+                  >
+                    <span>{item}</span>
+                    {item === category && <span className="adm-status-check">v</span>}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
 
       <div className="adm-table-wrap">
