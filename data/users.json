@@ -1,6 +1,11 @@
 {
   "users": [
     {
+      "id": "admin@aashaka.com",
+      "password": "Admin@123",
+      "role": "admin"
+    },
+    {
       "id": "purav",
       "password": "Test12345",
       "role": "user"
