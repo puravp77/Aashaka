@@ -16,6 +16,11 @@
   isolation: isolate;
 }
 
+.page-content.page-content-admin {
+  margin-bottom: 0;
+  background: #f3f4f7;
+}
+
 .home {
   position: relative;
   overflow: hidden;

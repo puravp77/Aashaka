@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
 import { authPageVariants } from "../../components/auth/authPageMotion";
+import { Eye, EyeOff } from "lucide-react";
 
 /* ---------------- ANIMATIONS ---------------- */
 
@@ -123,18 +124,17 @@ export default function Login() {
                 className={errors.password ? "error-input" : ""}
               />
 
-              <motion.img
-                src={
-                  showPass
-                    ? `${process.env.PUBLIC_URL}/assets/eye-open.png`
-                    : `${process.env.PUBLIC_URL}/assets/eye-closed.png`
-                }
-                alt="toggle password"
-                className="eye-icon-img"
+              <motion.button
+                type="button"
+                className="eye-toggle-btn"
                 onClick={() => setShowPass((p) => !p)}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9, rotate: 15 }}
-              />
+                aria-label={showPass ? "Hide password" : "Show password"}
+                aria-pressed={showPass}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+              </motion.button>
 
               {errors.password && (
                 <span className="error">{errors.password}</span>
@@ -160,4 +160,3 @@ export default function Login() {
     </div>
   );
 }
-

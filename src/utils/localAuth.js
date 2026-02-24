@@ -8,11 +8,12 @@ export const isStaticHost = () => {
 };
 
 export const loadLocalUsers = async () => {
+  let storedUsers = [];
   try {
     const stored = localStorage.getItem(LOCAL_USERS_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
-      return Array.isArray(parsed)
+      storedUsers = Array.isArray(parsed)
         ? parsed.map((user) => ({
             ...user,
             image: withPublicUrl(user.image),
@@ -29,18 +30,22 @@ export const loadLocalUsers = async () => {
     const data = await res.json();
     const users = Array.isArray(data) ? data : data?.users;
     if (Array.isArray(users)) {
-      const normalized = users.map((user) => ({
+      const normalizedFromFile = users.map((user) => ({
         ...user,
         image: withPublicUrl(user.image),
       }));
-      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(normalized));
-      return normalized;
+      const byId = new Map(
+        [...storedUsers, ...normalizedFromFile].map((user) => [user.id, user])
+      );
+      const mergedUsers = Array.from(byId.values());
+      localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(mergedUsers));
+      return mergedUsers;
     }
   } catch {
     // ignore fetch errors
   }
 
-  return [];
+  return storedUsers;
 };
 
 export const saveLocalUsers = (users) => {

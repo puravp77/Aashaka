@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (id, password) => {
-    if (isStaticHost()) {
+    const loginFromLocalUsers = async () => {
       const users = await loadLocalUsers();
       const user = users.find((u) => u.id === id);
       if (!user) {
@@ -29,32 +29,39 @@ export function AuthProvider({ children }) {
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
       return user;
+    };
+
+    if (isStaticHost()) {
+      return loginFromLocalUsers();
     }
 
-    const res = await fetch(
-      `http://localhost:5000/users?id=${id}`
-    );
+    try {
+      const res = await fetch(`http://localhost:5000/users?id=${id}`);
 
-    if (!res.ok) {
-      throw new Error("Server error");
+      if (!res.ok) {
+        throw new Error("SERVER_ERROR");
+      }
+
+      const users = await res.json();
+
+      if (users.length === 0) {
+        throw new Error("EMAIL_NOT_FOUND");
+      }
+
+      const user = users[0];
+
+      if (user.password !== password) {
+        throw new Error("WRONG_PASSWORD");
+      }
+
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
+
+      return user;
+    } catch {
+      // Fallback for local-only development without json-server backend.
+      return loginFromLocalUsers();
     }
-
-    const users = await res.json();
-
-    if (users.length === 0) {
-      throw new Error("EMAIL_NOT_FOUND");
-    }
-
-    const user = users[0];
-
-    if (user.password !== password) {
-      throw new Error("WRONG_PASSWORD");
-    }
-
-    localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
-
-    return user;
   };
 
 

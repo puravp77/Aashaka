@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 
 import AnimatedRoute from "./AnimatedRoute";
@@ -9,6 +9,7 @@ import Footer from "./Footer";
 
 import HeroVideo from "../home/HeroVideo";
 import ProtectedRoute from "./ProtectedRoute";
+import AdminRoute from "./AdminRoute";
 
 import CategorySection from "../home/CategorySection";
 import SignatureSection from "../home/SignatureSection";
@@ -44,6 +45,13 @@ import ForgotPassword from "../../pages/auth/ForgotPassword";
 import UserProfile from "../../pages/profile/UserProfilePage";
 import EditAddressPage from "../../pages/profile/EditAddressPage";
 import UserProfileOrders from "../../pages/profile/UserProfileOrdersPage";
+import AdminLayout from "../../pages/admin/AdminLayout";
+import AdminDashboard from "../../pages/admin/pages/AdminDashboard";
+import AdminProducts from "../../pages/admin/pages/AdminProducts";
+import AdminOrders from "../../pages/admin/pages/AdminOrders";
+import AdminCustomers from "../../pages/admin/pages/AdminCustomers";
+import AdminContent from "../../pages/admin/pages/AdminContent";
+import AdminLogin from "../../pages/admin/AdminLogin";
 
 
 import PageLoader from "../../pages/order/PageLoader";
@@ -126,6 +134,9 @@ function Home() {
 export default function Main() {
   const location = useLocation();
   const [loading, setLoading] = useState(false);
+  const isAdminRoute =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/admin-dashboard");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -142,9 +153,9 @@ export default function Main() {
       {loading && <PageLoader />}
 
       <div className="app-layout">
-        <Header />
+        {!isAdminRoute && <Header />}
 
-        <main className="page-content">
+        <main className={`page-content ${isAdminRoute ? "page-content-admin" : ""}`}>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
 
@@ -153,6 +164,15 @@ export default function Main() {
                 element={
                   <AnimatedRoute>
                     <Home />
+                  </AnimatedRoute>
+                }
+              />
+
+              <Route
+                path="/admin-login"
+                element={
+                  <AnimatedRoute>
+                    <AdminLogin />
                   </AnimatedRoute>
                 }
               />
@@ -284,14 +304,26 @@ export default function Main() {
               <Route path="/refundpolicy" element={<AnimatedRoute><RefundPolicy /></AnimatedRoute>} />
               <Route path="/termscondition" element={<AnimatedRoute><TermsCondition /></AnimatedRoute>} />
               <Route path="/faq" element={<AnimatedRoute><FAQ /></AnimatedRoute>} />
+              <Route path="/admin-dashboard" element={<Navigate to="/admin/dashboard" replace />} />
+              <Route path="/admin" element={<AdminRoute><AnimatedRoute><AdminLayout /></AnimatedRoute></AdminRoute>}>
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="orders" element={<AdminOrders />} />
+                <Route path="customers" element={<AdminCustomers />} />
+                <Route path="content" element={<AdminContent />} />
+              </Route>
               <Route path="/forget-password" element={<AnimatedRoute><ForgotPassword /></AnimatedRoute>} />
 
             </Routes>
           </AnimatePresence>
         </main>
 
-        <Footer />
+        {!isAdminRoute && <Footer />}
       </div>
     </>
   );
 }
+
+
+
