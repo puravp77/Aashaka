@@ -1,0 +1,7 @@
+git add .
+git commit -m "Update content"
+git push
+npm run deploy
+
+
+npx json-server public/data/users.json --port 5000
