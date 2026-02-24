@@ -23,7 +23,6 @@ const FREE_SHIPPING_THRESHOLD = 1999;
 const SHIPPING_CHARGE = 100;
 const LOCATIONS_DATA_URL =
   "https://raw.githubusercontent.com/nshntarora/Indian-Cities-JSON/master/cities.json";
-const DISTRICTS_API_URL = "http://localhost:5000/districts";
 const STATES_CACHE_KEY = "aashaka_states_cache_v1";
 const STATE_FETCH_TIMEOUT_MS = 8000;
 const STATE_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
@@ -355,13 +354,10 @@ export default function PlaceOrder() {
           const timeoutId = setTimeout(() => controller.abort(), DISTRICT_FETCH_TIMEOUT_MS);
 
           try {
-            const districtsRes = await fetch(
-              `${DISTRICTS_API_URL}?state_name=${encodeURIComponent(selectedStateRawName)}`,
-              {
-                signal: controller.signal,
-                cache: "no-store",
-              }
-            );
+            const districtsRes = await fetch(LOCATIONS_DATA_URL, {
+              signal: controller.signal,
+              cache: "no-store",
+            });
 
             if (!districtsRes.ok) {
               throw new Error(`Failed to load districts (${districtsRes.status})`);
@@ -381,16 +377,7 @@ export default function PlaceOrder() {
           throw lastError || new Error("Failed to load districts");
         }
 
-        const apiDistricts = Array.isArray(districtsJson?.data?.districts)
-          ? districtsJson.data.districts
-          : [];
-
-        const normalizedDistricts = apiDistricts
-          .map((district) => ({
-            name: formatLocationName(district?.name || ""),
-            rawStateName: district?.state_name || "",
-          }))
-          .filter((district) => district.name && district.rawStateName);
+        const { normalizedDistricts } = parseLocationsResponse(districtsJson);
 
         const uniqueStates = new Set(
           normalizedDistricts.map((district) =>
@@ -1195,5 +1182,4 @@ export default function PlaceOrder() {
     </section>
   );
 }
-
 
