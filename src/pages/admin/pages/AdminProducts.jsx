@@ -1,31 +1,46 @@
 import { useMemo, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
+import allProducts from "../../../data/allProducts";
 
-const PRODUCT_ROWS = [
-  { id: "PRD-204", name: "Oxidised Temple Set", category: "Jewellery", price: "\u20B93,490", stock: 26, status: "Active" },
-  { id: "PRD-198", name: "Ruby Choker", category: "Jewellery", price: "\u20B92,760", stock: 12, status: "Active" },
-  { id: "PRD-175", name: "Floral Kurti Set", category: "Kurti", price: "\u20B91,980", stock: 8, status: "Low" },
-  { id: "PRD-162", name: "Kundan Earrings", category: "Jewellery", price: "\u20B91,260", stock: 35, status: "Active" },
-  { id: "PRD-144", name: "Mirror Work Kurti", category: "Kurti", price: "\u20B92,150", stock: 4, status: "Low" },
-  { id: "PRD-139", name: "Festive Kada", category: "Bangles", price: "\u20B91,420", stock: 18, status: "Active" },
-  { id: "PRD-121", name: "Layer Necklace", category: "Necklace", price: "\u20B92,890", stock: 0, status: "Draft" },
-];
-
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 20;
 
 export default function AdminProducts() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [page, setPage] = useState(1);
 
+  const productRows = useMemo(() => {
+    return allProducts.map((product) => {
+      const sizes = product?.sizes && typeof product.sizes === "object" ? product.sizes : {};
+      const stock = Object.values(sizes).reduce((sum, qty) => sum + (Number(qty) || 0), 0);
+      const status = stock === 0 ? "Draft" : stock <= 8 ? "Low" : "Active";
+      const categoryLabel =
+        product?.category?.charAt(0).toUpperCase() + product?.category?.slice(1);
+
+      return {
+        id: String(product?.id || "").toUpperCase(),
+        name: product?.title || "Untitled Product",
+        category: categoryLabel || "Uncategorized",
+        price: `\u20B9${Number(product?.price || 0).toLocaleString("en-IN")}`,
+        stock,
+        status,
+      };
+    });
+  }, []);
+
+  const categories = useMemo(() => {
+    const unique = Array.from(new Set(productRows.map((row) => row.category)));
+    return ["All", ...unique];
+  }, [productRows]);
+
   const filtered = useMemo(() => {
-    return PRODUCT_ROWS.filter((row) => {
+    return productRows.filter((row) => {
       const matchSearch = row.name.toLowerCase().includes(search.toLowerCase());
       const matchCategory = category === "All" || row.category === category;
       return matchSearch && matchCategory;
     });
-  }, [search, category]);
+  }, [productRows, search, category]);
 
   const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -34,7 +49,7 @@ export default function AdminProducts() {
     <section className="adm-widget">
       <div className="adm-widget-head">
         <h2>Products</h2>
-        <span>Static preview</span>
+        
       </div>
 
       <div className="adm-controls">
@@ -55,11 +70,11 @@ export default function AdminProducts() {
             setPage(1);
           }}
         >
-          <option>All</option>
-          <option>Jewellery</option>
-          <option>Kurti</option>
-          <option>Bangles</option>
-          <option>Necklace</option>
+          {categories.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
         </select>
       </div>
 

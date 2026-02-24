@@ -178,6 +178,15 @@
   place-items: center;
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.adm-icon-btn:focus {
+  outline: none;
+}
+
+.adm-icon-btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(79, 94, 220, 0.22);
 }
 
 .adm-icon-btn:hover {
@@ -509,6 +518,10 @@
   color: #e5e7eb;
 }
 
+.adm-page.dark-mode .adm-line-legend {
+  color: #cbd5e1;
+}
+
 .adm-page.dark-mode .adm-input,
 .adm-page.dark-mode .adm-select,
 .adm-page.dark-mode .adm-page-btn {
@@ -532,6 +545,7 @@
   }
 
   .adm-sidebar {
+    display: none;
     position: fixed;
     left: 0;
     top: 0;
@@ -544,10 +558,12 @@
   }
 
   .adm-sidebar.is-open {
+    display: block;
     transform: translateX(0);
   }
 
   .adm-shell.sidebar-collapsed .adm-sidebar {
+    display: none;
     transform: translateX(-100%);
     opacity: 1;
     pointer-events: none;
@@ -580,19 +596,39 @@
   }
 
   .adm-topbar {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    padding: 8px 10px;
+  }
+
+  .adm-topbar-left,
+  .adm-topbar-right {
+    width: auto;
+  }
+
+  .adm-topbar-left {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .adm-topbar-right {
+    justify-content: flex-end;
+    flex-shrink: 0;
+    gap: 6px;
   }
 
   .adm-quick-nav {
-    width: 100%;
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 2px;
+    display: none;
+  }
+
+  .adm-topbar-right .adm-icon-btn:nth-child(2),
+  .adm-topbar-right .adm-icon-btn:nth-child(3) {
+    display: none;
   }
 
   .adm-page-head {
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
   }
 
   .adm-top-actions {

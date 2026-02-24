@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 
-const ORDER_ROWS = [
+const FALLBACK_ROWS = [
   { id: "#AAS-1092", customer: "Neha Sharma", payment: "Paid", status: "Processing", amount: "?3,490" },
   { id: "#AAS-1088", customer: "Riya Das", payment: "Paid", status: "Shipped", amount: "?2,120" },
   { id: "#AAS-1087", customer: "Kavya Patel", payment: "Paid", status: "Delivered", amount: "?5,640" },
@@ -10,19 +10,68 @@ const ORDER_ROWS = [
   { id: "#AAS-1084", customer: "Aarti Gupta", payment: "Paid", status: "Delivered", amount: "?4,240" },
 ];
 
+const STATUS_ROTATION = ["Pending", "Processing", "Shipped", "Delivered"];
+
 export default function AdminOrders() {
   const [status, setStatus] = useState("All");
+  const [rows, setRows] = useState(FALLBACK_ROWS);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadOrders = async () => {
+      try {
+        const res = await fetch(`${process.env.PUBLIC_URL}/data/users.json`, {
+          cache: "no-store",
+        });
+        if (!res.ok) throw new Error("Failed to fetch orders data");
+        const data = await res.json();
+        const orders = Array.isArray(data?.orders) ? data.orders : [];
+
+        const mapped = orders.map((order, index) => {
+          const email = String(order?.userId || "");
+          const nameFromAddress = order?.shippingAddress?.firstName
+            ? `${order.shippingAddress.firstName} ${order.shippingAddress.lastName || ""}`.trim()
+            : "";
+          const customerName = nameFromAddress || (email.split("@")[0] || "User");
+          const statusValue = STATUS_ROTATION[index % STATUS_ROTATION.length];
+          const amountValue = Number(order?.total || 0);
+
+          return {
+            id: order?.orderId || order?.id || `ORD-${index + 1}`,
+            customer: customerName,
+            payment: order?.paymentMode || "COD",
+            status: statusValue,
+            amount: `\u20B9${amountValue.toLocaleString("en-IN")}`,
+          };
+        });
+
+        if (mounted && mapped.length > 0) {
+          setRows(mapped);
+        }
+      } catch {
+        if (mounted) {
+          setRows(FALLBACK_ROWS);
+        }
+      }
+    };
+
+    loadOrders();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const visible = useMemo(() => {
-    if (status === "All") return ORDER_ROWS;
-    return ORDER_ROWS.filter((row) => row.status === status);
-  }, [status]);
+    if (status === "All") return rows;
+    return rows.filter((row) => row.status === status);
+  }, [rows, status]);
 
   return (
     <section className="adm-widget">
       <div className="adm-widget-head">
         <h2>Orders</h2>
-        <span>Static preview</span>
+        <span>From users.json</span>
       </div>
 
       <div className="adm-controls">
@@ -36,7 +85,7 @@ export default function AdminOrders() {
       </div>
 
       <div className="adm-table-wrap">
-        <table className="adm-table">
+        <table className="adm-table adm-orders-table">
           <thead>
             <tr>
               <th>Order ID</th>

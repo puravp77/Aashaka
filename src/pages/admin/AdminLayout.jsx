@@ -44,10 +44,14 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth <= 1100 : false
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 1100px)").matches
+      : false
   );
   const [isSidebarOpen, setIsSidebarOpen] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth > 1100 : true
+    typeof window !== "undefined"
+      ? !window.matchMedia("(max-width: 1100px)").matches
+      : true
   );
   const [isDarkMode, setIsDarkMode] = useState(() => {
     try {
@@ -75,15 +79,16 @@ export default function AdminLayout() {
   }, [isDarkMode]);
 
   useEffect(() => {
+    const media = window.matchMedia("(max-width: 1100px)");
     const syncViewport = () => {
-      const mobile = window.innerWidth <= 1100;
+      const mobile = media.matches;
       setIsMobile(mobile);
       setIsSidebarOpen(!mobile);
     };
 
     syncViewport();
-    window.addEventListener("resize", syncViewport);
-    return () => window.removeEventListener("resize", syncViewport);
+    media.addEventListener("change", syncViewport);
+    return () => media.removeEventListener("change", syncViewport);
   }, []);
 
   useEffect(() => {
