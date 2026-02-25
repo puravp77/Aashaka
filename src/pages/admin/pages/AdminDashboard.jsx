@@ -10,7 +10,7 @@ const pctDelta = (current, previous) => {
   return `${delta >= 0 ? "+" : ""}${delta.toFixed(1)}%`;
 };
 
-export default function AdminDashboard() {
+export default function   AdminDashboard() {
   const navigate = useNavigate();
   const [range, setRange] = useState("month");
   const [orders, setOrders] = useState([]);
