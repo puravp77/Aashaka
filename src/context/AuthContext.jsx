@@ -12,18 +12,27 @@ export function AuthProvider({ children }) {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-    setAuthReady(true); 
+    setAuthReady(true);
   }, []);
 
   const login = async (id, password) => {
     const loginFromLocalUsers = async () => {
       const users = await loadLocalUsers();
       const user = users.find((u) => u.id === id);
-      if (!user) {
-        throw new Error("EMAIL_NOT_FOUND");
-      }
-      if (user.password !== password) {
-        throw new Error("WRONG_PASSWORD");
+      if (!user) throw new Error("EMAIL_NOT_FOUND");
+      if (user.password !== password) throw new Error("WRONG_PASSWORD");
+
+      // Verify Admin Authorization against json-server
+      if (user.role === "admin") {
+        try {
+          const allowRes = await fetch("http://localhost:5000/allowlist");
+          const allowList = await allowRes.json();
+          user.isAuthorized = allowList.some(
+            a => a.email.toLowerCase() === user.id.toLowerCase()
+          );
+        } catch (e) {
+          user.isAuthorized = false;
+        }
       }
 
       localStorage.setItem("user", JSON.stringify(user));
@@ -37,29 +46,33 @@ export function AuthProvider({ children }) {
 
     try {
       const res = await fetch(`http://localhost:5000/users?id=${id}`);
-
-      if (!res.ok) {
-        throw new Error("SERVER_ERROR");
-      }
-
+      if (!res.ok) throw new Error("SERVER_ERROR");
       const users = await res.json();
-
-      if (users.length === 0) {
-        throw new Error("EMAIL_NOT_FOUND");
-      }
-
+      if (users.length === 0) throw new Error("EMAIL_NOT_FOUND");
       const user = users[0];
+      if (user.password !== password) throw new Error("WRONG_PASSWORD");
 
-      if (user.password !== password) {
-        throw new Error("WRONG_PASSWORD");
+      // Verify Admin Authorization against json-server
+      if (user.role === "admin") {
+        try {
+          const allowRes = await fetch("http://localhost:5000/allowlist");
+          const allowList = await allowRes.json();
+          user.isAuthorized = allowList.some(
+            a => a.email.toLowerCase() === user.id.toLowerCase()
+          );
+        } catch (e) {
+          console.error("Allowlist check failed:", e);
+          user.isAuthorized = false; // Err on side of caution
+        }
       }
 
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
-
       return user;
-    } catch {
-      // Fallback for local-only development without json-server backend.
+    } catch (err) {
+      if (err instanceof Error && (err.message === "EMAIL_NOT_FOUND" || err.message === "WRONG_PASSWORD")) {
+        throw err;
+      }
       return loginFromLocalUsers();
     }
   };
@@ -71,7 +84,7 @@ export function AuthProvider({ children }) {
   };
 
   if (!authReady) {
-    return null; 
+    return null;
   }
 
   return (

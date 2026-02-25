@@ -2,7 +2,6 @@ import "./AdminLogin.css";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { hasAdminAccess } from "./adminAccess";
 import { FiLock, FiMail, FiArrowLeft, FiEye, FiEyeOff, FiShield } from "react-icons/fi";
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -34,15 +33,27 @@ export default function AdminLogin() {
 
     setLoading(true);
     try {
+      // 1. Authenticate credentials
       const user = await login(form.id.trim(), form.password);
-      if (user.role !== "admin" || !hasAdminAccess(user)) {
-        setError("This account does not have admin access.");
+
+      // 2. Fetch latest allowlist to verify access
+      const allowlistRes = await fetch("http://localhost:5000/allowlist");
+      const allowlistData = await allowlistRes.json();
+
+      const isAuthorized = allowlistData.some(
+        admin => admin.email.toLowerCase() === user.id.toLowerCase() || admin.email.toLowerCase() === user.email?.toLowerCase()
+      );
+
+      if (user.role !== "admin" || !isAuthorized) {
+        setError("This account does not have authorization to access the Admin Portal.");
         setLoading(false);
         return;
       }
+
       navigate("/admin/dashboard", { replace: true });
-    } catch {
-      setError("Invalid admin credentials.");
+    } catch (err) {
+      console.error("Login verification failed:", err);
+      setError("Invalid admin credentials or connection error.");
       setLoading(false);
     }
   };

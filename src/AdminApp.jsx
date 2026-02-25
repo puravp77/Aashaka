@@ -7,6 +7,8 @@ import AdminOrders from "./pages/admin/pages/AdminOrders";
 import AdminCustomers from "./pages/admin/pages/AdminCustomers";
 import AdminContent from "./pages/admin/pages/AdminContent";
 import AdminAllowlist from "./pages/admin/pages/AdminAllowlist";
+import AdminProfile from "./pages/admin/pages/AdminProfile";
+import AdminSettings from "./pages/admin/pages/AdminSettings";
 import AdminLogin from "./pages/admin/AdminLogin";
 import { AnimatePresence } from "framer-motion";
 
@@ -32,6 +34,8 @@ export default function AdminApp() {
                         <Route path="customers" element={<AdminCustomers />} />
                         <Route path="content" element={<AdminContent />} />
                         <Route path="allowlist" element={<AdminAllowlist />} />
+                        <Route path="profile" element={<AdminProfile />} />
+                        <Route path="settings" element={<AdminSettings />} />
                         <Route path="*" element={<Navigate to="dashboard" replace />} />
                     </Route>
                 </Routes>

@@ -35,18 +35,19 @@ const TITLES = {
   "/admin/customers": "Customers",
   "/admin/content": "Content",
   "/admin/allowlist": "Admin Allowlist",
+  "/admin/profile": "Profile",
 };
 
 const QUICK_LINKS = [
   { to: "/admin/dashboard", label: "Dashboard" },
-  { to: "/admin/allowlist", label: "Users" },
+  { to: "/admin/allowlist", label: "Allow List" },
   { to: "/admin/content", label: "Settings" },
 ];
 
 export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const profileMenuRef = useRef(null);
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined"
@@ -194,7 +195,7 @@ export default function AdminLayout() {
                   aria-expanded={isProfileMenuOpen}
                   onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                 >
-                  A
+                  {user?.username ? user.username.charAt(0).toUpperCase() : (user?.id ? user.id.charAt(0).toUpperCase() : "A")}
                 </button>
 
                 {isProfileMenuOpen && (
@@ -214,9 +215,13 @@ export default function AdminLayout() {
                     </button>
 
                     <p className="adm-menu-title">Settings</p>
-                    <button type="button" className="adm-menu-item">
+                    <Link
+                      to="/admin/profile"
+                      className="adm-menu-item"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
                       <User size={16} /> Profile
-                    </button>
+                    </Link>
                     <button type="button" className="adm-menu-item">
                       <Settings size={16} /> Settings
                     </button>
@@ -225,6 +230,9 @@ export default function AdminLayout() {
                       <FileText size={16} /> Projects
                     </button>
 
+                    <button type="button" className="adm-menu-item" onClick={logout}>
+                      <LogOut size={16} /> Logout
+                    </button>
                   </div>
                 )}
               </div>
