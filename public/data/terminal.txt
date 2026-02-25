@@ -13,7 +13,6 @@ npx json-server public/data/users.json --port 5000
 25-02-2026
 
 
-
 1. Diagnosed and fixed checkout state and city API issue by replacing deprecated paid endpoint with GitHub-hosted India dataset in PlaceOrder.jsx.
 
 2. Converted Admin Content page into a functional module by implementing controlled form state, Save and Reset actions, and localStorage persistence.
