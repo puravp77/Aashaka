@@ -9,6 +9,8 @@ import {
   getLocalAddresses,
   shouldUseLocalCheckoutStore,
 } from "../../utils/localCheckoutData";
+import { useSettings } from "../../context/SettingsContext";
+
 
 
 /* =============================
@@ -19,8 +21,8 @@ const COUPONS = [
   { code: "SAVE10", type: "percent", value: 10, minCart: 1999 },
 ];
 
-const FREE_SHIPPING_THRESHOLD = 1999;
-const SHIPPING_CHARGE = 100;
+
+
 const LOCATIONS_DATA_URL =
   "https://raw.githubusercontent.com/nshntarora/Indian-Cities-JSON/master/cities.json";
 const STATES_CACHE_KEY = "aashaka_states_cache_v1";
@@ -119,6 +121,9 @@ export default function PlaceOrder() {
 
   const { cartItems, total, clearCart } = useCart();
   const { user } = useAuth();
+  const { settings } = useSettings();
+  const { flatRate, freeShippingThreshold } = settings.shippingRates;
+
   const storedUser = (() => {
     try {
       const raw = localStorage.getItem("user");
@@ -730,7 +735,7 @@ export default function PlaceOrder() {
   };
 
   const shippingCharge =
-    total >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_CHARGE;
+    total >= freeShippingThreshold ? 0 : flatRate;
 
   const finalTotal = Math.max(
     total + shippingCharge - discount,
@@ -940,12 +945,11 @@ export default function PlaceOrder() {
                       <button
                         key={stateOption.rawName}
                         type="button"
-                        className={`place-select-option ${
-                          normalizeLocationText(form.state) ===
+                        className={`place-select-option ${normalizeLocationText(form.state) ===
                           normalizeLocationText(stateOption.label)
-                            ? "selected"
-                            : ""
-                        }`}
+                          ? "selected"
+                          : ""
+                          }`}
                         onClick={() => handleSelectState(stateOption)}
                       >
                         {stateOption.label}
@@ -973,9 +977,8 @@ export default function PlaceOrder() {
 
           <label>City <span style={{ color: "red" }}>*</span></label>
           <div
-            className={`place-select ${!selectedStateRawName ? "disabled" : ""} ${
-              errors.city ? "invalid" : ""
-            }`}
+            className={`place-select ${!selectedStateRawName ? "disabled" : ""} ${errors.city ? "invalid" : ""
+              }`}
             ref={cityDropdownRef}
           >
             <button
@@ -1020,12 +1023,11 @@ export default function PlaceOrder() {
                       <button
                         key={city}
                         type="button"
-                        className={`place-select-option ${
-                          normalizeLocationText(form.city) ===
+                        className={`place-select-option ${normalizeLocationText(form.city) ===
                           normalizeLocationText(city)
-                            ? "selected"
-                            : ""
-                        }`}
+                          ? "selected"
+                          : ""
+                          }`}
                         onClick={() => handleSelectCity(city)}
                       >
                         {city}

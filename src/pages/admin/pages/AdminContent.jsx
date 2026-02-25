@@ -16,14 +16,29 @@ export default function AdminContent() {
   const [savedAt, setSavedAt] = useState("");
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(CONTENT_STORAGE_KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw);
-      setForm({ ...DEFAULT_CONTENT, ...parsed });
-    } catch {
-      setForm(DEFAULT_CONTENT);
-    }
+    const fetchContent = async () => {
+      try {
+        // 1. Try server first
+        if (!window.location.hostname.includes("github.io")) {
+          const response = await fetch("http://localhost:5000/content");
+          if (response.ok) {
+            const data = await response.json();
+            setForm(data);
+            localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(data));
+            return;
+          }
+        }
+
+        // 2. Fallback to localStorage
+        const raw = localStorage.getItem(CONTENT_STORAGE_KEY);
+        if (raw) {
+          setForm(JSON.parse(raw));
+        }
+      } catch (err) {
+        console.error("Failed to fetch content:", err);
+      }
+    };
+    fetchContent();
   }, []);
 
   const isDirty = useMemo(() => {
@@ -34,14 +49,44 @@ export default function AdminContent() {
     setForm((prev) => ({ ...prev, [key]: e.target.value }));
   };
 
-  const handleSave = () => {
-    localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(form));
-    setSavedAt(new Date().toLocaleTimeString());
+  const handleSave = async () => {
+    try {
+      localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(form));
+
+      if (!window.location.hostname.includes("github.io")) {
+        const response = await fetch("http://localhost:5000/content", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+        if (!response.ok) throw new Error("Server save failed");
+      }
+
+      setSavedAt(new Date().toLocaleTimeString());
+      alert("Changes saved successfully!");
+    } catch (err) {
+      console.error("Save error:", err);
+      alert("Failed to save to server, saved locally instead.");
+      setSavedAt(new Date().toLocaleTimeString() + " (Local)");
+    }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    if (!window.confirm("Are you sure you want to reset to default content?")) return;
+
     setForm(DEFAULT_CONTENT);
     localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(DEFAULT_CONTENT));
+    try {
+      if (!window.location.hostname.includes("github.io")) {
+        await fetch("http://localhost:5000/content", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(DEFAULT_CONTENT),
+        });
+      }
+    } catch (err) {
+      console.error("Reset failed on server:", err);
+    }
     setSavedAt("");
   };
 

@@ -8,11 +8,13 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  Hammer,
   MessageSquare,
   Menu,
   Moon,
   Package,
   Settings,
+  ShieldCheck,
   User,
   ShoppingCart,
   Sun,
@@ -26,6 +28,8 @@ const NAV_ITEMS = [
   { to: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { to: "/admin/customers", label: "Customers", icon: Users },
   { to: "/admin/content", label: "Content", icon: FileText },
+  { to: "/admin/allowlist", label: "Allow List", icon: ShieldCheck },
+  { to: "/admin/maintenance-room", label: "Maintenance Room", icon: Hammer },
 ];
 
 const TITLES = {
@@ -34,14 +38,15 @@ const TITLES = {
   "/admin/orders": "Orders",
   "/admin/customers": "Customers",
   "/admin/content": "Content",
-  "/admin/allowlist": "Admin Allowlist",
+  "/admin/allowlist": "Allow List",
   "/admin/profile": "Profile",
+  "/admin/maintenance-room": "Maintenance Room",
 };
 
 const QUICK_LINKS = [
   { to: "/admin/dashboard", label: "Dashboard" },
   { to: "/admin/allowlist", label: "Allow List" },
-  { to: "/admin/content", label: "Settings" },
+  { to: "/admin/maintenance-room", label: "Maintenance Room" },
 ];
 
 export default function AdminLayout() {
@@ -214,7 +219,7 @@ export default function AdminLayout() {
                       <MessageSquare size={16} /> Comments
                     </button>
 
-                    <p className="adm-menu-title">Settings</p>
+                    <p className="adm-menu-title">Configuration</p>
                     <Link
                       to="/admin/profile"
                       className="adm-menu-item"
@@ -222,9 +227,13 @@ export default function AdminLayout() {
                     >
                       <User size={16} /> Profile
                     </Link>
-                    <button type="button" className="adm-menu-item">
-                      <Settings size={16} /> Settings
-                    </button>
+                    <Link
+                      to="/admin/maintenance-room"
+                      className="adm-menu-item"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      <Hammer size={16} /> Maintenance Room
+                    </Link>
 
                     <button type="button" className="adm-menu-item">
                       <FileText size={16} /> Projects

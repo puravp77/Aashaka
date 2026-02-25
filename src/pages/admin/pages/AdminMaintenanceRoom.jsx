@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Truck, Activity, Save, Loader2, AlertCircle, Info } from "lucide-react";
+import { useSettings } from "../../../context/SettingsContext";
 import "./AdminPages.css";
 
-export default function AdminSettings() {
+export default function AdminMaintenanceRoom() {
+    const { refreshSettings } = useSettings();
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
     const [settings, setSettings] = useState({
@@ -16,10 +18,31 @@ export default function AdminSettings() {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                // In a real app, this would be an API call
-                const response = await fetch("/data/settings.json");
-                const data = await response.json();
-                setSettings(data);
+                // 1. Try to load from localStorage first (most recent user changes)
+                const localData = localStorage.getItem("aashaka_settings");
+                if (localData) {
+                    setSettings(JSON.parse(localData));
+                    setFetching(false);
+                    // Continue to sync from server in background if not static
+                }
+
+                // 2. Try server if not on static host
+                if (!window.location.hostname.includes("github.io")) {
+                    const response = await fetch("http://localhost:5000/settings");
+                    if (response.ok) {
+                        const data = await response.json();
+                        setSettings(data);
+                        localStorage.setItem("aashaka_settings", JSON.stringify(data));
+                        return;
+                    }
+                }
+
+                // 3. Fallback to public file if server fails or is static host
+                if (!localData) {
+                    const response = await fetch("/data/settings.json");
+                    const data = await response.json();
+                    setSettings(data);
+                }
             } catch (error) {
                 console.error("Failed to fetch settings:", error);
             } finally {
@@ -34,12 +57,25 @@ export default function AdminSettings() {
         setLoading(true);
 
         try {
-            // Simulation of saving settings
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            console.log("Settings saved:", settings);
+            // 1. Save to localStorage immediately
+            localStorage.setItem("aashaka_settings", JSON.stringify(settings));
+
+            // 2. Try to save to server if not on static host
+            if (!window.location.hostname.includes("github.io")) {
+                const response = await fetch("http://localhost:5000/settings", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(settings)
+                });
+
+                if (!response.ok) throw new Error("Server save failed");
+            }
+
+            refreshSettings();
             alert("Settings updated successfully!");
         } catch (error) {
-            alert("Failed to save settings.");
+            console.error("Save error:", error);
+            alert("Settings saved locally, but server update failed.");
         } finally {
             setLoading(false);
         }

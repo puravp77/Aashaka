@@ -1,10 +1,14 @@
+import React from "react";
 import "./HeroVideo.css";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { withPublicUrl } from "../../utils/assetPath";
+import { useSettings } from "../../context/SettingsContext";
 
 export default function HeroVideo() {
   const navigate = useNavigate();
+  const { content } = useSettings();
+
   const container = {
     hidden: { opacity: 0, y: 8 },
     visible: {
@@ -13,6 +17,7 @@ export default function HeroVideo() {
       transition: { staggerChildren: 0.11, delayChildren: 0.12, duration: 0.55 },
     },
   };
+
   const item = {
     hidden: { opacity: 0, y: 12 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.45 } },
@@ -46,19 +51,23 @@ export default function HeroVideo() {
             Aashaka
           </motion.p>
           <motion.h1 className="hero-title" variants={item}>
-            Timeless Jewellery, <br />
-            Modern Grace
+            {content.heroHeading.split("\n").map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                {i !== content.heroHeading.split("\n").length - 1 && <br />}
+              </React.Fragment>
+            ))}
           </motion.h1>
           <motion.p className="hero-subtitle" variants={item}>
-            Discover curated pieces crafted to elevate every day.
+            {content.heroSubtitle}
           </motion.p>
           <motion.button
             className="hero-cta"
             type="button"
             variants={item}
-            onClick={() => navigate("/jewellery/oxidised")}
+            onClick={() => navigate(content.ctaLink)}
           >
-            Explore Collection
+            {content.ctaLabel}
           </motion.button>
         </motion.div>
       </div>

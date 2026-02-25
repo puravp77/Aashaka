@@ -18,27 +18,38 @@ export default function AdminDashboard() {
 
     const loadData = async () => {
       try {
-        const res = await fetch(`${process.env.PUBLIC_URL}/data/users.json`, {
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error("Failed to fetch dashboard data");
-        const data = await res.json();
+        const isLocal = !window.location.hostname.includes("github.io");
+        const usersUrl = isLocal ? "http://localhost:5000/users" : `${process.env.PUBLIC_URL}/data/users.json`;
+
+        // Fetch users and orders (orders are inside users.json in some models, let's check)
+        const uRes = await fetch(usersUrl, { cache: "no-store" });
+        if (!uRes.ok) throw new Error("Failed to fetch users");
+        const uData = await uRes.json();
+
+        // If users.json is the full db (has orders/products)
+        const fullData = uData.users ? uData : null;
+
         if (mounted) {
-          setOrders(Array.isArray(data?.orders) ? data.orders : []);
-          setUsers(Array.isArray(data?.users) ? data.users : []);
+          if (fullData) {
+            setOrders(fullData.orders || []);
+            setUsers(fullData.users || []);
+          } else {
+            // Assuming uData is just the users array if fetched from /users
+            setUsers(uData);
+            // Fetch orders separately if they exist as a resource
+            if (isLocal) {
+              const oRes = await fetch("http://localhost:5000/orders");
+              if (oRes.ok) setOrders(await oRes.json());
+            }
+          }
         }
-      } catch {
-        if (mounted) {
-          setOrders([]);
-          setUsers([]);
-        }
+      } catch (err) {
+        console.error("Dashboard load error:", err);
       }
     };
 
     loadData();
-    return () => {
-      mounted = false;
-    };
+    return () => { mounted = false; };
   }, []);
 
   const metrics = useMemo(() => {
@@ -149,8 +160,8 @@ export default function AdminDashboard() {
         const match =
           range === "day"
             ? od.getFullYear() === d.getFullYear() &&
-              od.getMonth() === d.getMonth() &&
-              od.getDate() === d.getDate()
+            od.getMonth() === d.getMonth() &&
+            od.getDate() === d.getDate()
             : range === "month"
               ? od.getFullYear() === d.getFullYear() && od.getMonth() === d.getMonth()
               : od.getFullYear() === d.getFullYear();

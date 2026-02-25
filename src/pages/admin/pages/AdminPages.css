@@ -267,6 +267,14 @@
   border-color: #17753d;
 }
 
+.adm-btn-save-content:disabled {
+  background: #94a3b8;
+  border-color: #94a3b8;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 .adm-table-compact th,
 .adm-table-compact td {
   padding-top: 9px;

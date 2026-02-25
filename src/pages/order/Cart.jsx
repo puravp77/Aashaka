@@ -14,19 +14,25 @@ import {
   FiShield,
   FiTruck,
 } from "react-icons/fi";
+import { useSettings } from "../../context/SettingsContext";
+
+
+
 
 const MAX_QTY_PER_PRODUCT = 10;
-const FREE_SHIPPING_THRESHOLD = 1999;
-const SHIPPING_CHARGE = 100;
 const RECENTLY_VIEWED_STORAGE_KEY = "aashaka_recently_viewed";
 
 export default function Cart() {
   const navigate = useNavigate();
   const { products } = useProducts();
+  const { settings } = useSettings();
   const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
 
   const { cartItems, updateQty, removeFromCart } = useCart();
   const isCartEmpty = cartItems.length === 0;
+
+  const { flatRate, freeShippingThreshold } = settings.shippingRates;
+
   const cartIds = useMemo(
     () => new Set(cartItems.map((item) => String(item.id))),
     [cartItems]
@@ -39,18 +45,19 @@ export default function Cart() {
 
   const shipping = isCartEmpty
     ? 0
-    : subtotal >= FREE_SHIPPING_THRESHOLD
+    : subtotal >= freeShippingThreshold
       ? 0
-      : SHIPPING_CHARGE;
+      : flatRate;
 
   const grandTotal = subtotal + shipping;
   const freeShippingRemaining = Math.max(
     0,
-    FREE_SHIPPING_THRESHOLD - subtotal
+    freeShippingThreshold - subtotal
   );
   const shippingProgress = isCartEmpty
     ? 0
-    : Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
+    : Math.min(100, Math.round((subtotal / freeShippingThreshold) * 100));
+
 
   const shippingMessage = isCartEmpty
     ? "Add items to your bag to start checkout."
