@@ -1,7 +1,5 @@
-import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AdminRoute from "./components/layout/AdminRoute";
-import AnimatedRoute from "./components/layout/AnimatedRoute";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/pages/AdminDashboard";
 import AdminProducts from "./pages/admin/pages/AdminProducts";
