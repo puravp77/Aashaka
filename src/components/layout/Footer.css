@@ -4,13 +4,11 @@
   --footer-accent: #c79a58;
   --footer-maroon: #8b0d2b;
   --footer-ink: #1f130e;
-  background: linear-gradient(
-    120deg,
-    #f2ddc7 0%,
-    #e5c2a4 18%,
-    var(--footer-bg-2) 40%,
-    #5d323a 100%
-  );
+  background: linear-gradient(120deg,
+      #f2ddc7 0%,
+      #e5c2a4 18%,
+      var(--footer-bg-2) 40%,
+      #5d323a 100%);
   color: #fff;
   font-family: "Times New Roman", serif;
   position: fixed;
@@ -270,18 +268,14 @@
     position: static;
     transform: none;
     background:
-      radial-gradient(
-        circle at 14% 12%,
+      radial-gradient(circle at 14% 12%,
         rgba(255, 239, 216, 0.52) 0%,
-        rgba(255, 239, 216, 0) 44%
-      ),
-      linear-gradient(
-        155deg,
+        rgba(255, 239, 216, 0) 44%),
+      linear-gradient(155deg,
         #f3dfca 0%,
         #e7c8aa 36%,
         #8a4e50 70%,
-        #603242 100%
-      );
+        #603242 100%);
   }
 
   .footer-inner::before,
@@ -329,11 +323,9 @@
 
   .footer-subscribe {
     border-color: rgba(255, 236, 216, 0.34);
-    background: linear-gradient(
-      180deg,
-      rgba(106, 61, 71, 0.58) 0%,
-      rgba(88, 49, 60, 0.64) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(106, 61, 71, 0.58) 0%,
+        rgba(88, 49, 60, 0.64) 100%);
     box-shadow:
       0 10px 24px rgba(25, 13, 12, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.14);
@@ -388,18 +380,14 @@
 @media (max-width: 520px) {
   .footer {
     background:
-      radial-gradient(
-        circle at 18% 10%,
+      radial-gradient(circle at 18% 10%,
         rgba(255, 240, 220, 0.5) 0%,
-        rgba(255, 240, 220, 0) 42%
-      ),
-      linear-gradient(
-        180deg,
+        rgba(255, 240, 220, 0) 42%),
+      linear-gradient(180deg,
         #f2ddc6 0%,
         #e4c4a7 34%,
         #81505a 68%,
-        #5a3244 100%
-      );
+        #5a3244 100%);
   }
 
   .footer-links-grid {
@@ -411,11 +399,9 @@
 
   .footer-subscribe {
     border-color: rgba(255, 236, 216, 0.4);
-    background: linear-gradient(
-      180deg,
-      rgba(118, 72, 82, 0.62) 0%,
-      rgba(91, 52, 65, 0.7) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(118, 72, 82, 0.62) 0%,
+        rgba(91, 52, 65, 0.7) 100%);
   }
 
   .subscribe-input input {

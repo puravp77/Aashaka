@@ -73,7 +73,7 @@ export default function AdminLayout() {
 
   const handleLogout = () => {
     logout();
-    navigate("/admin-login", { replace: true });
+    navigate("/admin/login", { replace: true });
   };
 
   useEffect(() => {
@@ -220,11 +220,11 @@ export default function AdminLayout() {
                     <button type="button" className="adm-menu-item">
                       <Settings size={16} /> Settings
                     </button>
-                   
+
                     <button type="button" className="adm-menu-item">
                       <FileText size={16} /> Projects
                     </button>
-                    
+
                   </div>
                 )}
               </div>

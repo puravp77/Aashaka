@@ -40,7 +40,7 @@ export default function SignatureSection() {
     if (cycleRef.current) return;
     setIsCycling(true);
     rotateSlots();
-    cycleRef.current = setInterval(rotateSlots, 2200);
+    cycleRef.current = setInterval(rotateSlots, 3500);
   };
 
   const handleGalleryLeave = () => {
@@ -129,13 +129,18 @@ export default function SignatureSection() {
             const image = SIGNATURE_IMAGES[imageIndex];
             const slotClass = SLOT_CLASSES[slotIndex];
             return (
-            <figure
-              key={image.src}
-              className={`signature-frame ${slotClass}`}
-            >
-              <img src={withPublicUrl(image.src)} alt={image.alt} />
-              <figcaption>{image.label}</figcaption>
-            </figure>
+              <figure
+                key={image.src}
+                className={`signature-frame ${slotClass}`}
+              >
+                <img
+                  src={withPublicUrl(image.src)}
+                  alt={image.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>{image.label}</figcaption>
+              </figure>
             );
           })}
         </div>

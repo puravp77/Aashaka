@@ -1,0 +1,14 @@
+.store-root {
+    font-family: "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #1a1a1a;
+}
+
+/* Ensure all interactive elements inherit the store font */
+.store-root button,
+.store-root input,
+.store-root select,
+.store-root textarea {
+    font-family: inherit;
+}

@@ -1,7 +1,4 @@
-/* =========================
-   GLOBAL RESET (SAFE)
-========================= */
-
+/* Global variables and safe resets only */
 *,
 *::before,
 *::after {
@@ -10,27 +7,18 @@
   box-sizing: border-box;
 }
 
-/* Do NOT force height: 100% */
-html, body {
+html,
+body {
   width: 100%;
   overflow-x: hidden;
-}
-
-/* Base font */
-body {
-  font-family: "Times New Roman", serif;
   background: #fff;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Prevent inline image gaps */
 img {
   display: block;
   max-width: 100%;
 }
 
-/* Code font */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

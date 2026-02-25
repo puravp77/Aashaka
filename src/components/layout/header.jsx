@@ -19,7 +19,6 @@ export default function Header() {
   const [openDesktopDropdown, setOpenDesktopDropdown] = useState(null);
   const desktopNavRef = useRef(null);
 
-  // ✅ CORRECT: get unique product count
   const { uniqueItemCount } = useCart();
   const { logout } = useAuth();
 
