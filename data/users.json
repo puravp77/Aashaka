@@ -46,16 +46,16 @@
       "role": "user"
     },
     {
-      "id": "admin@aashaka.com",
+      "id": "purav@aashaka.com",
       "username": "Purav",
       "password": "Purav@123",
       "role": "admin",
       "isAuthorized": true
     },
     {
-      "id": "purav@aashaka.com",
-      "username": "Purav",
-      "password": "Purav@123",
+      "id": "admin@aashaka.com",
+      "username": "Admin",
+      "password": "Admin@123",
       "role": "admin",
       "isAuthorized": true
     }
@@ -878,14 +878,27 @@
   ],
   "allowlist": [
     {
-      "id": "1",
-      "username": "admin",
-      "email": "admin@aashaka.com"
-    },
-    {
       "id": "79dc",
       "username": "Purav",
       "email": "purav@aashaka.com"
+    },
+    {
+      "id": "7284",
+      "username": "Admin",
+      "email": "admin@aashaka.com"
     }
-  ]
+  ],
+  "settings": {
+    "maintenanceMode": false,
+    "shippingRates": {
+      "flatRate": 50,
+      "freeShippingThreshold": 1000
+    }
+  },
+  "content": {
+    "heroHeading": "Timeless Jewellery, Modern Grace",
+    "heroSubtitle": "Discover curated pieces crafted to elevate every day.",
+    "ctaLabel": "Explore Collection",
+    "ctaLink": "/jewellery/oxidised"
+  }
 }
