@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Plus, Edit, Hammer, ExternalLink, Zap } from "lucide-react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 
@@ -9,9 +11,11 @@ const pctDelta = (current, previous) => {
 };
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [range, setRange] = useState("month");
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     let mounted = true;
@@ -38,8 +42,16 @@ export default function AdminDashboard() {
             setUsers(uData);
             // Fetch orders separately if they exist as a resource
             if (isLocal) {
-              const oRes = await fetch("http://localhost:5000/orders");
+              const [oRes, pRes] = await Promise.all([
+                fetch("http://localhost:5000/orders"),
+                fetch("http://localhost:5000/products")
+              ]);
               if (oRes.ok) setOrders(await oRes.json());
+              if (pRes.ok) setProducts(await pRes.json());
+            } else {
+              // Fallback for static host
+              const pRes = await fetch(`${process.env.PUBLIC_URL}/data/products.json`);
+              if (pRes.ok) setProducts(await pRes.json());
             }
           }
         }
@@ -86,6 +98,15 @@ export default function AdminDashboard() {
     const currentPending = current.filter((o) => o.paymentMode.toUpperCase() === "COD").length;
     const previousPending = previous.filter((o) => o.paymentMode.toUpperCase() === "COD").length;
 
+    const lowStockCount = products.filter(p => {
+      if (!p.sizes) return false;
+      return Object.values(p.sizes).some(stock => stock > 0 && stock <= 3);
+    }).length;
+
+    const outOfStockCount = products.filter(p => {
+      if (!p.sizes) return true;
+      return Object.values(p.sizes).every(stock => stock === 0);
+    }).length;
     const totalCustomers = users.filter(
       (u) => String(u?.role || "").toLowerCase() !== "admin"
     ).length;
@@ -104,19 +125,19 @@ export default function AdminDashboard() {
         tone: "info",
       },
       {
+        label: "Low Stock",
+        value: lowStockCount.toString(),
+        delta: outOfStockCount > 0 ? `${outOfStockCount} Out` : "All Good",
+        tone: lowStockCount > 0 || outOfStockCount > 0 ? "warning" : "success",
+      },
+      {
         label: "Customers",
         value: totalCustomers.toLocaleString("en-IN"),
         delta: pctDelta(currentActiveCustomers, previousActiveCustomers),
         tone: "success",
       },
-      {
-        label: "Pending",
-        value: currentPending.toLocaleString("en-IN"),
-        delta: pctDelta(currentPending, previousPending),
-        tone: "warning",
-      },
     ];
-  }, [orders, users]);
+  }, [orders, users, products]);
 
   const traffic = useMemo(() => {
     const safeOrders = orders
@@ -198,96 +219,75 @@ export default function AdminDashboard() {
       })
       .join(" ");
 
-  const socialTrafficRows = useMemo(() => {
-    const buckets = {
-      Instagram: 0,
-      Facebook: 0,
-      WhatsApp: 0,
-    };
-
-    orders.forEach((order) => {
-      const userId = String(order?.userId || "").toLowerCase();
-      if (!userId) {
-        buckets.Direct += 1;
-        return;
-      }
-
-      if (userId.includes("@gmail.")) {
-        buckets.Instagram += 1;
-      } else if (userId.includes("@yahoo.") || userId.includes("@hotmail.")) {
-        buckets.Facebook += 1;
-      } else if (userId.includes("@outlook.") || userId.includes("@live.")) {
-        buckets.WhatsApp += 1;
-      }
-    });
-
-    const total = Math.max(1, Object.values(buckets).reduce((sum, v) => sum + v, 0));
-
-    return Object.entries(buckets)
-      .map(([source, visitors]) => ({
-        source,
-        visitors,
-        share: (visitors / total) * 100,
-      }))
-      .sort((a, b) => b.visitors - a.visitors);
+  const recentOrders = useMemo(() => {
+    return [...orders]
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 5);
   }, [orders]);
 
-  const pageVisitsRows = useMemo(() => {
-    const pageBuckets = {
-      kurti: { visitors: 0, users: new Set() },
-      oxidised: { visitors: 0, users: new Set() },
-      bangles: { visitors: 0, users: new Set() },
-      earrings: { visitors: 0, users: new Set() },
-      necklace: { visitors: 0, users: new Set() },
-    };
-
-    const pageLabels = {
-      kurti: "Kurti",
-      oxidised: "Oxidised",
-      bangles: "Bangles",
-      earrings: "Earrings",
-      necklace: "Necklace",
-    };
-
-    const mapItemToPage = (itemId = "") => {
-      const id = String(itemId).toLowerCase();
-      if (id.startsWith("k")) return "kurti";
-      if (id.startsWith("o")) return "oxidised";
-      if (id.startsWith("b")) return "bangles";
-      if (id.startsWith("e")) return "earrings";
-      if (id.startsWith("n") || id.startsWith("c")) return "necklace";
-      return "kurti";
-    };
-
-    orders.forEach((order) => {
-      const userId = String(order?.userId || "").toLowerCase();
-      const items = Array.isArray(order?.items) ? order.items : [];
-      items.forEach((item) => {
-        const page = mapItemToPage(item?.id);
-        const qty = Number(item?.qty || 1);
-        pageBuckets[page].visitors += qty;
-        if (userId) pageBuckets[page].users.add(userId);
+  const topProducts = useMemo(() => {
+    const counts = {};
+    orders.forEach(o => {
+      o.items?.forEach(item => {
+        counts[item.id] = (counts[item.id] || 0) + (item.qty || 1);
       });
     });
 
-    return Object.entries(pageBuckets)
-      .map(([pageKey, data]) => {
-        const uniqueUsers = data.users.size;
-        const repeatFactor = data.visitors > 0 ? uniqueUsers / data.visitors : 0;
-        const bounce = Math.max(12, Math.min(88, Math.round((1 - repeatFactor) * 100)));
+    return Object.entries(counts)
+      .map(([id, sales]) => {
+        const product = products.find(p => p.id === id);
         return {
-          page: pageLabels[pageKey] || "Unknown",
-          visitors: data.visitors,
-          uniqueUsers,
-          bounceRate: `${bounce}%`,
+          id,
+          name: product?.title || id,
+          sales,
         };
       })
-      .sort((a, b) => b.visitors - a.visitors);
-  }, [orders]);
+      .sort((a, b) => b.sales - a.sales)
+      .slice(0, 5);
+  }, [orders, products]);
 
   return (
     <>
+      <section className="adm-quick-actions">
+        <div className="adm-widget-head">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Zap size={20} color="var(--adm-primary)" fill="var(--adm-primary)" style={{ opacity: 0.8 }} />
+            <h2 style={{ fontSize: '18px' }}>Quick Actions</h2>
+          </div>
+        </div>
+        <div className="adm-action-btns">
+          <button onClick={() => navigate('/admin/products')} className="adm-action-btn">
+            <div className="btn-icon" style={{ background: 'rgba(50, 31, 219, 0.1)', color: '#321fdb' }}>
+              <Plus size={20} />
+            </div>
+            <span>Add Product</span>
+          </button>
+
+          <button onClick={() => navigate('/admin/content')} className="adm-action-btn">
+            <div className="btn-icon" style={{ background: 'rgba(56, 150, 240, 0.1)', color: '#3896f0' }}>
+              <Edit size={20} />
+            </div>
+            <span>Edit Content</span>
+          </button>
+
+          <button onClick={() => navigate('/admin/maintenance-room')} className="adm-action-btn">
+            <div className="btn-icon" style={{ background: 'rgba(222, 90, 89, 0.1)', color: '#de5a59' }}>
+              <Hammer size={20} />
+            </div>
+            <span>Maintenance</span>
+          </button>
+
+          <button onClick={() => window.open('/', '_blank')} className="adm-action-btn">
+            <div className="btn-icon" style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
+              <ExternalLink size={20} />
+            </div>
+            <span>View Shop</span>
+          </button>
+        </div>
+      </section>
+
       <section className="adm-metric-grid" aria-label="Admin metrics">
+
         {metrics.map((item) => (
           <article key={item.label} className={`adm-metric-card ${item.tone}`}>
             <p>{item.label}</p>
@@ -298,7 +298,68 @@ export default function AdminDashboard() {
       </section>
 
       <section className="adm-widgets">
+        <article className="adm-widget">
+          <div className="adm-widget-head">
+            <div>
+              <h2>Recent Orders</h2>
+              <span>Track your latest shop activity</span>
+            </div>
+          </div>
+          <div className="adm-table-wrap">
+            <table className="adm-table adm-table-compact">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Total</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentOrders.map((o) => (
+                  <tr key={o.id}>
+                    <td style={{ fontWeight: 600, color: 'var(--adm-primary)' }}>#{o.id.slice(-6)}</td>
+                    <td>{o.address?.firstName || 'Guest'}</td>
+                    <td>₹{o.total.toLocaleString("en-IN")}</td>
+                    <td>{new Date(o.date).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article className="adm-widget">
+          <div className="adm-widget-head">
+            <div>
+              <h2>Top Products</h2>
+              <span>Your best sellers this period</span>
+            </div>
+          </div>
+          <div className="adm-table-wrap">
+            <table className="adm-table adm-table-compact">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>ID</th>
+                  <th>Sales</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topProducts.map((p) => (
+                  <tr key={p.id}>
+                    <td style={{ fontWeight: 500 }}>{p.name}</td>
+                    <td style={{ fontSize: '12px', color: '#64748b' }}>{p.id}</td>
+                    <td style={{ fontWeight: 600 }}>{p.sales} Sold</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </article>
+
         <article className="adm-widget adm-chart-widget">
+
           <div className="adm-widget-head">
             <div>
               <h2>Traffic</h2>
@@ -341,75 +402,6 @@ export default function AdminDashboard() {
           </div>
         </article>
 
-        <article className="adm-widget">
-          <div className="adm-widget-head">
-            <div>
-              <h2>Social Traffic</h2>
-              <span>Inferred from order activity</span>
-            </div>
-          </div>
-          <div className="adm-table-wrap">
-            <table className="adm-table adm-table-compact">
-              <thead>
-                <tr>
-                  <th>Source</th>
-                  <th>Visitors</th>
-                  <th>Share</th>
-                </tr>
-              </thead>
-              <tbody>
-                {socialTrafficRows.map((row) => (
-                  <tr key={row.source}>
-                    <td>{row.source}</td>
-                    <td>{row.visitors.toLocaleString("en-IN")}</td>
-                    <td>
-                      <div className="adm-progress-row">
-                        <span>{row.share.toFixed(1)}%</span>
-                        <div className="adm-progress-track">
-                          <div
-                            className="adm-progress-fill"
-                            style={{ width: `${Math.max(4, row.share)}%` }}
-                          />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
-
-        <article className="adm-widget">
-          <div className="adm-widget-head">
-            <div>
-              <h2>Page Visits</h2>
-              <span>Derived from ordered product categories</span>
-            </div>
-          </div>
-          <div className="adm-table-wrap">
-            <table className="adm-table adm-table-compact">
-              <thead>
-                <tr>
-                  <th>Page</th>
-                  <th>Visitors</th>
-                  <th>Unique Users</th>
-                  <th>Bounce Rate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pageVisitsRows.map((row) => (
-                  <tr key={row.page}>
-                    <td>{row.page}</td>
-                    <td>{row.visitors.toLocaleString("en-IN")}</td>
-                    <td>{row.uniqueUsers.toLocaleString("en-IN")}</td>
-                    <td>{row.bounceRate}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
       </section>
     </>
   );
