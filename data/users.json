@@ -1,11 +1,6 @@
 {
   "users": [
     {
-      "id": "admin@aashaka.com",
-      "password": "Admin@123",
-      "role": "admin"
-    },
-    {
       "id": "purav",
       "password": "Test12345",
       "role": "user"
@@ -49,6 +44,20 @@
       "id": "patelpura44@gmail.com",
       "password": "puravP12345",
       "role": "user"
+    },
+    {
+      "id": "admin@aashaka.com",
+      "username": "Purav",
+      "password": "Purav@123",
+      "role": "admin",
+      "isAuthorized": true
+    },
+    {
+      "id": "purav@aashaka.com",
+      "username": "Purav",
+      "password": "Purav@123",
+      "role": "admin",
+      "isAuthorized": true
     }
   ],
   "addresses": [
@@ -865,6 +874,18 @@
         "pincode": "395002",
         "phone": "9106618331"
       }
+    }
+  ],
+  "allowlist": [
+    {
+      "id": "1",
+      "username": "admin",
+      "email": "admin@aashaka.com"
+    },
+    {
+      "id": "79dc",
+      "username": "Purav",
+      "email": "purav@aashaka.com"
     }
   ]
 }

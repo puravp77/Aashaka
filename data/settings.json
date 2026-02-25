@@ -1,0 +1,7 @@
+{
+    "maintenanceMode": false,
+    "shippingRates": {
+        "flatRate": 50,
+        "freeShippingThreshold": 1000
+    }
+}
