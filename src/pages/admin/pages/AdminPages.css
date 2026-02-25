@@ -190,6 +190,31 @@
   }
 }
 
+.adm-page.dark-mode .adm-quick-actions {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.adm-page.dark-mode .adm-action-btn {
+  background: #111827;
+  border-color: #374151;
+  color: #e5e7eb;
+}
+
+.adm-page.dark-mode .adm-action-btn:hover {
+  border-color: var(--adm-primary);
+  background: #1a2541;
+}
+
+.adm-page.dark-mode .adm-action-btn span {
+  color: #e5e7eb;
+}
+
+.adm-page.dark-mode .adm-action-btn .btn-icon {
+  background: rgba(139, 92, 246, 0.15) !important;
+  color: #a78bfa !important;
+}
+
 .adm-page.dark-mode .adm-range-tabs {
   border-color: #31466a;
   background: linear-gradient(180deg, #101f3b 0%, #0a1529 100%);
@@ -492,6 +517,7 @@
   background: #111827;
   border-color: #374151;
   color: #e2e8f0;
+  color-scheme: dark;
 }
 
 .adm-page.dark-mode .adm-user-info strong {

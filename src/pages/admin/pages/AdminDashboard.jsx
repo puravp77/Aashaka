@@ -94,10 +94,6 @@ export default function AdminDashboard() {
     const currentActiveCustomers = new Set(current.map((o) => o.userId).filter(Boolean)).size;
     const previousActiveCustomers = new Set(previous.map((o) => o.userId).filter(Boolean)).size;
 
-    // No status field in users.json orders; using COD as pending fulfillment.
-    const currentPending = current.filter((o) => o.paymentMode.toUpperCase() === "COD").length;
-    const previousPending = previous.filter((o) => o.paymentMode.toUpperCase() === "COD").length;
-
     const lowStockCount = products.filter(p => {
       if (!p.sizes) return false;
       return Object.values(p.sizes).some(stock => stock > 0 && stock <= 3);
