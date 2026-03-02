@@ -18,3 +18,28 @@ npx json-server public/data/users.json --port 5000
 2. Converted Admin Content page into a functional module by implementing controlled form state, Save and Reset actions, and localStorage persistence.
 
 3. Performed multiple npm run build verifications after major changes to ensure final compilation success.
+
+
+
+2-3-2026
+
+1. Removed the three top-right header icon buttons (notifications, activity, messages).  
+2. Cleaned related icon imports after removing those buttons.  
+3. Fixed mobile CSS index-based hide rules affected by header button removal.  
+4. Synced `Update` dropdown with `Status` badge in Admin Orders.  
+5. Converted row status selector to controlled state handling.  
+6. Upgraded row status dropdown UI to a custom styled menu.  
+7. Fixed dropdown arrow visibility issue in dark mode.  
+8. Applied the same custom dropdown UI to the top Orders filter (`All/Pending/...`).  
+9. Applied the same custom dropdown UI to Products category filter (`All/Kurti/...`).  
+10. Improved `Day / Month / Year` range tabs styling in dashboard.  
+11. Enhanced breadcrumb (`Home / ...`) UI styling for light and dark themes.  
+12. Refreshed sidebar visual design (background depth, active indicator, nav hover states).  
+13. Added subtle admin animations (sidebar reveal, active glow, card/tab motion).  
+14. Fixed animation-related sidebar visibility bug (active item disappearing).  
+15. Removed/Restored header quick links segment based on your revert requests.  
+16. Removed `Segment` column from Admin Customers table and related logic.  
+17. Fixed mobile layout width/overflow issues for admin dashboard/widgets.  
+18. Removed `FALLBACK_STATE_NAMES` from Edit Address page and adjusted fallback behavior.  
+19. Switched Admin Products to use `public/data/products.json` instead of `allProducts.jsx`.  
+20. Added admin allowlist access control (username + email), plus new Admin Allowlist page and routed `Users` quick-link to it.

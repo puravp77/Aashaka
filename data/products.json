@@ -1081,8 +1081,8 @@
 
   {
     "id": "n6",
-    "title": "Blue Stone with Silver Bead Necklace and Earring",
-    "price": 1499,
+    "title": "Moonlit Pearl Cascade Necklace",
+    "price": 1699,
     "oldPrice": 2000,
     "images": [
       "images/n6.jpg",
@@ -1091,7 +1091,258 @@
       "images/n6-3.jpg"
     ],
     "category": "necklace",
-    "alsoBought": ["WS1", "WS4", "c1"],
+    "alsoBought": ["e1", "c2", "b3"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n7",
+    "title": "Royal Kundan Bloom Necklace",
+    "price": 1899,
+    "oldPrice": 2000,
+    "images": [
+      "images/n7.jpg",
+      "images/n7-1.jpg",
+      "images/n7-2.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["o1", "e4", "b1"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n8",
+    "title": "Emerald Charm Layered Necklace",
+    "price": 1599,
+    "oldPrice": 2000,
+    "images": [
+      "images/n8.jpg",
+      "images/n8-1.jpg",
+      "images/n8-2.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["c3", "o2", "e6"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n9",
+    "title": "Antique Gold Lotus Necklace",
+    "price": 2099,
+    "oldPrice": 2000,
+    "images": [
+      "images/n9.jpg",
+      "images/n9-1.jpg",
+      "images/n9-2.jpg",
+      "images/n9-3.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["b5", "e2", "o4"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n10",
+    "title": "Ruby Drop Statement Necklace",
+    "price": 1799,
+    "oldPrice": 2000,
+    "images": [
+      "images/n10.jpg",
+      "images/n10-1.jpg",
+      "images/n10-2.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["c1", "b2", "e5"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n11",
+    "title": "Silver Mist Choker Necklace",
+    "price": 1499,
+    "oldPrice": 2000,
+    "images": [
+      "images/n11.jpg",
+      "images/n11-1.jpg",
+      "images/n11-2.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["o3", "c4", "e3"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n12",
+    "title": "Sunset Meenakari Necklace Set",
+    "price": 2199,
+    "oldPrice": 2000,
+    "images": [
+      "images/n12.jpg",
+      "images/n12-1.jpg",
+      "images/n12-2.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["b4", "o5", "e7"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n13",
+    "title": "Ivory Bead Festival Necklace",
+    "price": 1399,
+    "oldPrice": 2000,
+    "images": [
+      "images/n13.jpg",
+      "images/n13-1.jpg",
+      "images/n13-2.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["c2", "o6", "b6"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n14",
+    "title": "Temple Coin Heritage Necklace",
+    "price": 1999,
+    "oldPrice": 2000,
+    "images": [
+      "images/n14.jpg",
+      "images/n14-1.jpg",
+      "images/n14-2.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["e8", "b7", "o2"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n15",
+    "title": "Crystal Vine Party Necklace",
+    "price": 1749,
+    "oldPrice": 2000,
+    "images": [
+      "images/n15.jpg",
+      "images/n15-1.jpg",
+      "images/n15-2.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["c4", "b8", "e1"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n16",
+    "title": "Ocean Blue Stone Necklace",
+    "price": 1649,
+    "oldPrice": 2000,
+    "images": [
+      "images/n16.jpg",
+      "images/n16-1.jpg",
+      "images/n16-3.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["o7", "e5", "c1"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n17",
+    "title": "Rose Quartz Grace Necklace",
+    "price": 1549,
+    "oldPrice": 2000,
+    "images": [
+      "images/n17.jpg",
+      "images/n17-1.jpg",
+      "images/n17-3.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["b1", "c3", "o8"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n18",
+    "title": "Midnight Black Onyx Necklace",
+    "price": 2249,
+    "oldPrice": 2000,
+    "images": [
+      "images/n18.jpg",
+      "images/n18-1.jpg",
+      "images/n18-2.jpg",
+      "images/n18-3.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["e2", "o4", "b2"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n19",
+    "title": "Floral Filigree Pearl Necklace",
+    "price": 1849,
+    "oldPrice": 2000,
+    "images": [
+      "images/n19.jpg"
+     ],
+    "category": "necklace",
+    "alsoBought": ["c1", "e6", "o1"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
+      "size": "Free Size"
+    }
+  },
+  {
+    "id": "n20",
+    "title": "Classic Polki Bridal Necklace",
+    "price": 2499,
+    "oldPrice": 2000,
+    "images": [
+      "images/n20.jpg",
+      "images/n20-1.jpg"      
+    ],
+    "category": "necklace",
+    "alsoBought": ["b3", "o3", "e4"],
     "details": {
       "colour": "Baby Blue",
       "material": "Beads, Moti, Lightweight Metal",
@@ -1357,6 +1608,9 @@
     }
   }
 ]
+
+
+
 
 
 
