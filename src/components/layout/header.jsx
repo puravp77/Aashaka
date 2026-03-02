@@ -109,6 +109,21 @@ export default function Header() {
     };
   }, [logoutOpen]);
 
+  useEffect(() => {
+    if (!menuOpen) {
+      setClothsOpen(false);
+      setJewelleryOpen(false);
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
   /* =========================
      SEARCH SUBMIT
   ========================= */
@@ -346,6 +361,8 @@ export default function Header() {
             className="hamburger"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Open menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav-menu"
           >
             <HiOutlineMenu />
           </button>
@@ -353,7 +370,7 @@ export default function Header() {
       </nav>
 
       {/* MOBILE MENU */}
-      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+      <div id="mobile-nav-menu" className={`mobile-menu ${menuOpen ? "open" : ""}`}>
         <NavLink to="/" onClick={() => setMenuOpen(false)}>HOME</NavLink>
         <NavLink to="/about" onClick={() => setMenuOpen(false)}>ABOUT</NavLink>
 

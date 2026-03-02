@@ -127,7 +127,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <span>
-            (c) {year} Aashaka Fashion. By Purav Patel | S M Techno Consultants Pvt. Ltd.
+            (c) {year} Aashaka Fashion. S M Techno Consultants Pvt. Ltd.
           </span>
         </div>
       </div>
