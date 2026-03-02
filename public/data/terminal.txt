@@ -9,30 +9,8 @@ npx json-server public/data/users.json --port 5000
 
 
 
-
-25-02-2026
-
-
-1. Diagnosed and fixed checkout state and city API issue by replacing deprecated paid endpoint with GitHub-hosted India dataset in PlaceOrder.jsx.
-
-2. Converted Admin Content page into a functional module by implementing controlled form state, Save and Reset actions, and localStorage persistence.
-
-3. Performed multiple npm run build verifications after major changes to ensure final compilation success.
-
-
-
-2-3-2026
-
-1. Removed the three top-right header icon buttons (notifications, activity, messages).  
-2. Cleaned related icon imports after removing those buttons.  
-3. Fixed mobile CSS index-based hide rules affected by header button removal.  
-4. Synced `Update` dropdown with `Status` badge in Admin Orders.  
-5. Converted row status selector to controlled state handling.  
-6. Upgraded row status dropdown UI to a custom styled menu.  
-7. Fixed dropdown arrow visibility issue in dark mode.  
-8. Applied the same custom dropdown UI to the top Orders filter (`All/Pending/...`).  
-9. Applied the same custom dropdown UI to Products category filter (`All/Kurti/...`).  
-10. Improved `Day / Month / Year` range tabs styling in dashboard.  
+2-3-2026 
+  
 11. Enhanced breadcrumb (`Home / ...`) UI styling for light and dark themes.  
 12. Refreshed sidebar visual design (background depth, active indicator, nav hover states).  
 13. Added subtle admin animations (sidebar reveal, active glow, card/tab motion).  
