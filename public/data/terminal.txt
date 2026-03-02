@@ -43,3 +43,23 @@ npx json-server public/data/users.json --port 5000
 18. Removed `FALLBACK_STATE_NAMES` from Edit Address page and adjusted fallback behavior.  
 19. Switched Admin Products to use `public/data/products.json` instead of `allProducts.jsx`.  
 20. Added admin allowlist access control (username + email), plus new Admin Allowlist page and routed `Users` quick-link to it.
+
+
+
+2-3-2026
+
+1. Updated necklace products `n6` to `n20` with new random names and prices in `public/data/products.json` and `src/data/allProducts.jsx`.  
+2. Fixed a temporary JSON syntax break caused during first replacement attempt and restored valid structure.  
+3. Re-verified `n6` to `n20` data consistency across both files after repair.  
+4. Updated `alsoBought` for `n6` to `n20` so each product has different recommendations.  
+5. Removed scroll-reveal animation logic from `Bangles.jsx`, `Oxidised.jsx`, `Necklace.jsx`, and `Earrings.jsx`.  
+6. Confirmed `Kurti.jsx` already had no scroll-reveal animation, so no edit was needed there.  
+7. Located and shared admin login credentials from project data for testing.  
+8. Updated oxidised products `o8` to `o12` (name, price, alsoBought) in `products.json` and `allProducts.jsx`.  
+9. Verified `o8` to `o12` values are synced across both files.  
+10. Updated bangles `b7` to `b15` with distinct names and prices in `products.json`, `allProducts.jsx`, and `Bangles.jsx`.  
+11. Validated `b7` to `b15` consistency across all three files.  
+12. Updated earrings `e9` to `e12` with different names and prices in `products.json` and `allProducts.jsx`.  
+13. Added a floating WhatsApp button on Home page linked to `+91 92651 69947` (`wa.me` link).  
+14. Reduced WhatsApp icon size and added a separate scroll-to-top floating button below it; made arrow appear only after scrolling down.  
+15. Improved mobile header/menu UI and fixed hamburger issues by correcting mobile menu interaction/positioning (`pointer-events`, fixed panel placement, compact spacing/typography polish).
