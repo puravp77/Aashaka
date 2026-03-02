@@ -739,6 +739,147 @@ const banglesProducts = [
           }
 
   },
+  {
+    id: "b7",
+    title: "Antique Peacock Engraved Kada",
+    price: 279,
+    oldPrice: 2500,
+    images: ["images/b7.jpg", "images/b7-1.jpg", "images/b7-2.jpg"],
+    category: "bangles",
+        alsoBought: ["c3", "o1", "b3", "n1"],
+        details: {
+          colour: "Black",
+          material: "Oxidized Silver Metal",
+          size: "Free Size"
+          }
+
+  },
+  {
+    id: "b8",
+    title: "Royal Coin Charm Cuff Kada",
+    price: 749,
+    oldPrice: 2500,
+    images: ["images/b8.jpg", "images/b8-1.jpg", "images/b8-2.jpg"],
+    category: "bangles",
+        alsoBought: ["c3", "o1", "b3", "n1"],
+        details: {
+          colour: "Black",
+          material: "Oxidized Silver Metal",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "b9",
+    title: "Mirror Work Tribal Bracelet Kada",
+    price: 799,
+    oldPrice: 2500,
+    images: ["images/b9.jpg", "images/b9-1.jpg", "images/b9-2.jpg"],
+    category: "bangles",
+        alsoBought: ["c3", "o1", "b3", "n1"],
+        details: {
+          colour: "Black",
+          material: "Oxidized Silver Metal",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "b10",
+    title: "Lotus Motif Oxidised Kada",
+    price: 829,
+    oldPrice: 2500,
+    images: ["images/b10.jpg", "images/b10-1.jpg", "images/b10-2.jpg"],
+    category: "bangles",
+        alsoBought: ["c3", "o1", "b3", "n1"],
+        details: {
+          colour: "Black",
+          material: "Oxidized Silver Metal",
+          size: "Free Size"
+          }
+
+  },
+  {
+    id: "b11",
+    title: "Temple Bell Ghungroo Kada",
+    price: 869,
+    oldPrice: 2500,
+    images: ["images/b11.jpg", "images/b11-1.jpg", "images/b11-2.jpg"],
+    category: "bangles",
+        alsoBought: ["c3", "o1", "b3", "n1"],
+        details: {
+          colour: "Black",
+          material: "Oxidized Silver Metal",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "b12",
+    title: "Floral Jaali Open Cuff Kada",
+    price: 919,
+    oldPrice: 2500,
+    images: ["images/b12.jpg", "images/b12-1.jpg", "images/b12-2.jpg"],
+    category: "bangles",
+        alsoBought: ["c3", "o1", "b3", "n1"],
+        details: {
+          colour: "Black",
+          material: "Oxidized Silver Metal",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "b13",
+    title: "Dual Tone Hammered Kada",
+    price: 969,
+    oldPrice: 2500,
+    images: ["images/b13.jpg", "images/b13-1.jpg", "images/b13-2.jpg"],
+    category: "bangles",
+        alsoBought: ["c3", "o1", "b3", "n1"],
+        details: {
+          colour: "Black",
+          material: "Oxidized Silver Metal",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "b14",
+    title: "Regal Elephant Carved Kada",
+    price: 1029,
+    oldPrice: 2500,
+    images: ["images/b14.jpg", "images/b14-1.jpg", "images/b14-2.jpg"],
+    category: "bangles",
+        alsoBought: ["c3", "o1", "b3", "n1"],
+        details: {
+          colour: "Black",
+          material: "Oxidized Silver Metal",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "b15",
+    title: "Vintage Crescent Statement Kada",
+    price: 1099,
+    oldPrice: 2500,
+    images: ["images/b15.jpg", "images/b15-1.jpg", "images/b15-2.jpg"],
+    category: "bangles",
+        alsoBought: ["c3", "o1", "b3", "n1"],
+        details: {
+          colour: "Black",
+          material: "Oxidized Silver Metal",
+          size: "Free Size"
+          }
+
+  },
 ];
 
 /* =========================
@@ -857,6 +998,70 @@ const earringsProducts = [
     price: 399,
     oldPrice: 800,
     images: ["images/e8.jpg", "images/e8-1.jpg", "images/e8-2.jpg"],
+    category: "earrings",
+        alsoBought: ["WS2", "WS3", "e1", "c2"],
+        details: {
+          colour: "Black",
+          material: "High-Quality Brass Alloy with an Oxidized Silver-Toned Finish",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "e9",
+    title: "Moon Petal Oxidised Earrings",
+    price: 429,
+    oldPrice: 800,
+    images: ["images/e9.jpg", "images/e9-1.jpg", "images/e9-2.jpg"],
+    category: "earrings",
+        alsoBought: ["WS2", "WS3", "e1", "c2"],
+        details: {
+          colour: "Black",
+          material: "High-Quality Brass Alloy with an Oxidized Silver-Toned Finish",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "e10",
+    title: "Riwaayat Mirror Drop Earrings",
+    price: 479,
+    oldPrice: 800,
+    images: ["images/e10.jpg", "images/e10-1.jpg", "images/e10-2.jpg"],
+    category: "earrings",
+        alsoBought: ["WS2", "WS3", "e1", "c2"],
+        details: {
+          colour: "Black",
+          material: "High-Quality Brass Alloy with an Oxidized Silver-Toned Finish",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "e11",
+    title: "Noor Jhumki Pearl Earrings",
+    price: 519,
+    oldPrice: 800,
+    images: ["images/e11.jpg", "images/e11-1.jpg", "images/e11-2.jpg"],
+    category: "earrings",
+        alsoBought: ["WS2", "WS3", "e1", "c2"],
+        details: {
+          colour: "Black",
+          material: "High-Quality Brass Alloy with an Oxidized Silver-Toned Finish",
+          size: "Free Size"
+          }
+
+  },
+
+  {
+    id: "e12",
+    title: "Amber Stone Chandbali Earrings",
+    price: 559,
+    oldPrice: 800,
+    images: ["images/e12.jpg", "images/e12-1.jpg", "images/e12-2.jpg"],
     category: "earrings",
         alsoBought: ["WS2", "WS3", "e1", "c2"],
         details: {
@@ -1285,12 +1490,76 @@ const oxidisedProducts = [
   },
   {
     id: "o8",
-    title: "Artisanal Floral Jewelry Set",
-    price: 1799,
+    title: "Noor Jaal Oxidised Set",
+    price: 1899,
     oldPrice: 3000,
     images: ["images/j8.jpg", "images/j8-1.jpg", "images/j8-2.jpg"],
     category: "oxidised",
-        alsoBought: ["WS2", "WS3", "e1", "c2"],
+        alsoBought: ["e2", "c1", "b4"],
+        details: {
+          colour: "Black",
+          material: "High-Quality Brass Alloy with an Oxidized Silver-Toned Finish",
+          size: "Free Size"
+          }
+
+
+  },
+  {
+    id: "o9",
+    title: "Rajsi Mirror Oxidised Set",
+    price: 1749,
+    oldPrice: 3000,
+    images: ["images/j9.jpg", "images/j9-1.jpg", "images/j9-2.jpg"],
+    category: "oxidised",
+        alsoBought: ["n3", "e6", "b2"],
+        details: {
+          colour: "Black",
+          material: "High-Quality Brass Alloy with an Oxidized Silver-Toned Finish",
+          size: "Free Size"
+          }
+
+
+  },
+  {
+    id: "o10",
+    title: "Meher Tribal Silver Set",
+    price: 1999,
+    oldPrice: 3000,
+    images: ["images/j10.jpg", "images/j10-1.jpg", "images/j10-2.jpg"],
+    category: "oxidised",
+        alsoBought: ["c4", "n5", "e1"],
+        details: {
+          colour: "Black",
+          material: "High-Quality Brass Alloy with an Oxidized Silver-Toned Finish",
+          size: "Free Size"
+          }
+
+
+  },
+  {
+    id: "o11",
+    title: "Gulnaar Antique Charm Set",
+    price: 1699,
+    oldPrice: 3000,
+    images: ["images/j11.jpg", "images/j11-1.jpg", "images/j11-2.jpg"],
+    category: "oxidised",
+        alsoBought: ["b1", "e4", "n2"],
+        details: {
+          colour: "Black",
+          material: "High-Quality Brass Alloy with an Oxidized Silver-Toned Finish",
+          size: "Free Size"
+          }
+
+
+  },
+  {
+    id: "o12",
+    title: "Zarika Stone Oxidised Set",
+    price: 2149,
+    oldPrice: 3000,
+    images: ["images/j12.jpg", "images/j12-1.jpg", "images/j12-2.jpg"],
+    category: "oxidised",
+        alsoBought: ["c2", "b6", "e8"],
         details: {
           colour: "Black",
           material: "High-Quality Brass Alloy with an Oxidized Silver-Toned Finish",

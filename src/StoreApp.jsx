@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { FaArrowUp, FaWhatsapp } from "react-icons/fa";
 
 import AnimatedRoute from "./components/layout/AnimatedRoute";
 import Header from "./components/layout/header";
@@ -46,8 +47,13 @@ import "./StoreStyles.css";
 
 function Home() {
   const { scrollY } = useScroll();
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const orbY1 = useTransform(scrollY, [0, 1200], [0, -80]);
   const orbY2 = useTransform(scrollY, [0, 1200], [0, 120]);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setShowScrollTop(latest > 220);
+  });
 
   const reveal = {
     hidden: { opacity: 0, y: 24 },
@@ -114,6 +120,27 @@ function Home() {
       >
         <AboutSection />
       </motion.section>
+
+      <a
+        className="home-whatsapp-fab"
+        href="https://wa.me/919265169947?text=Hi%20Aashaka%2C%20I%20need%20help."
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+      >
+        <FaWhatsapp />
+      </a>
+
+      {showScrollTop && (
+        <button
+          type="button"
+          className="home-scrolltop-fab"
+          aria-label="Scroll to top"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
+          <FaArrowUp />
+        </button>
+      )}
     </div>
   );
 }
