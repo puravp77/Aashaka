@@ -990,6 +990,7 @@
     flex-wrap: nowrap;
     padding: 8px 10px;
     width: 100%;
+    border-radius: 12px;
   }
 
   .adm-topbar-left,
@@ -1008,6 +1009,17 @@
     gap: 6px;
   }
 
+  .adm-icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+  }
+
+  .adm-avatar {
+    width: 34px;
+    height: 34px;
+  }
+
   .adm-quick-nav {
     display: none;
   }
@@ -1016,6 +1028,16 @@
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
+    padding: 10px 12px;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .adm-breadcrumb {
+    width: 100%;
+    flex-wrap: wrap;
+    row-gap: 4px;
+    min-width: 0;
+    font-size: 12px;
   }
 
   .adm-top-actions {
@@ -1024,5 +1046,15 @@
 
   .adm-btn {
     flex: 1;
+  }
+}
+
+@media (max-width: 420px) {
+  .adm-main {
+    padding: 8px 8px 16px;
+  }
+
+  .adm-topbar-right {
+    gap: 4px;
   }
 }

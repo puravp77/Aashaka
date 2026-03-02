@@ -94,7 +94,7 @@ export default function AdminMaintenanceRoom() {
         <div className="adm-settings-container">
             <div className="adm-settings-grid">
                 {/* Maintenance Mode Card */}
-                <div className="adm-card">
+                <div className="adm-card adm-maint-card">
                     <div className="adm-card-head">
                         <div className="adm-card-icon" style={{ background: settings.maintenanceMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)', color: settings.maintenanceMode ? '#ef4444' : '#10b981' }}>
                             <Activity size={20} />
@@ -105,7 +105,7 @@ export default function AdminMaintenanceRoom() {
                         </div>
                     </div>
 
-                    <div className="adm-card-body p-24">
+                    <div className="adm-card-body p-24 adm-maint-body">
                         <div className="adm-setting-row">
                             <div className="adm-setting-info">
                                 <strong>Enable Maintenance Mode</strong>
@@ -127,13 +127,20 @@ export default function AdminMaintenanceRoom() {
                                 <span>The website is currently hidden from the public. Only admins can view it.</span>
                             </div>
                         )}
+
+                        {!settings.maintenanceMode && (
+                            <div className="adm-alert info mt-16">
+                                <Info size={18} />
+                                <span>Maintenance mode is currently off. Customers can access the storefront normally.</span>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Shipping Rates Card */}
-                <div className="adm-card">
+                <div className="adm-card adm-shipping-card">
                     <div className="adm-card-head">
-                        <div className="adm-card-icon" style={{ background: 'rgba(50, 31, 219, 0.1)', color: '#321fdb' }}>
+                        <div className="adm-card-icon adm-card-icon-primary-soft">
                             <Truck size={20} />
                         </div>
                         <div>
@@ -142,16 +149,15 @@ export default function AdminMaintenanceRoom() {
                         </div>
                     </div>
 
-                    <div className="adm-card-body p-24">
-                        <div className="adm-form-grid" style={{ gridTemplateColumns: '1fr', gap: '20px', padding: 0 }}>
+                    <div className="adm-card-body p-24 adm-shipping-body">
+                        <div className="adm-form-grid adm-shipping-grid">
                             <div className="adm-input-group">
                                 <label>Standard Flat Rate (₹)</label>
                                 <div className="adm-input-with-icon">
-                                    <span style={{ position: 'absolute', left: '14px', zIndex: 2, color: '#64748b', fontWeight: 600 }}>₹</span>
+                                    <span className="adm-currency-prefix">₹</span>
                                     <input
                                         type="number"
-                                        className="adm-input"
-                                        style={{ paddingLeft: '30px' }}
+                                        className="adm-input adm-input-with-currency"
                                         value={settings.shippingRates.flatRate}
                                         onChange={(e) => setSettings({
                                             ...settings,
@@ -165,11 +171,10 @@ export default function AdminMaintenanceRoom() {
                             <div className="adm-input-group">
                                 <label>Free Shipping Threshold (₹)</label>
                                 <div className="adm-input-with-icon">
-                                    <span style={{ position: 'absolute', left: '14px', zIndex: 2, color: '#64748b', fontWeight: 600 }}>₹</span>
+                                    <span className="adm-currency-prefix">₹</span>
                                     <input
                                         type="number"
-                                        className="adm-input"
-                                        style={{ paddingLeft: '30px' }}
+                                        className="adm-input adm-input-with-currency"
                                         value={settings.shippingRates.freeShippingThreshold}
                                         onChange={(e) => setSettings({
                                             ...settings,
@@ -181,7 +186,7 @@ export default function AdminMaintenanceRoom() {
                             </div>
                         </div>
 
-                        <div className="adm-alert info mt-16">
+                        <div className="adm-alert info">
                             <Info size={18} />
                             <span>Setting the threshold to 0 will make all orders free shipping.</span>
                         </div>
@@ -189,12 +194,11 @@ export default function AdminMaintenanceRoom() {
                 </div>
             </div>
 
-            <div className="adm-form-footer mt-24">
+            <div className="adm-form-footer adm-settings-actions mt-24">
                 <button
-                    className="adm-btn primary"
+                    className="adm-btn primary adm-btn-min-w"
                     onClick={handleSave}
                     disabled={loading}
-                    style={{ minWidth: '160px' }}
                 >
                     {loading ? <Loader2 className="adm-spinner" size={18} /> : <Save size={18} />}
                     <span>Save Configuration</span>

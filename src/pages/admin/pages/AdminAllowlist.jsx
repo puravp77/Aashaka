@@ -131,13 +131,13 @@ export default function AdminAllowlist() {
       {isAdding && (
         <form className="adm-card adm-add-admin-form" onSubmit={handleAdd}>
           <div className="adm-form-header-row">
-            <h3 style={{ marginBottom: '5px' }}>Create New Administrator</h3>
-            <p style={{ color: '#64748b', fontSize: '13px', marginBottom: '20px' }}>
+            <h3 className="adm-add-admin-title">Create New Administrator</h3>
+            <p className="adm-add-admin-subtitle">
               This will create a login account and grant dashboard access.
             </p>
           </div>
 
-          <div className="adm-input-row" style={{ gridTemplateColumns: "1fr 1fr 1fr", gap: "15px", marginBottom: '15px' }}>
+          <div className="adm-input-row adm-input-row-3col">
             <div className="adm-input-group">
               <label htmlFor="new-admin-username">Full Name</label>
               <div className="adm-input-with-icon">
@@ -187,7 +187,6 @@ export default function AdminAllowlist() {
                   type="button"
                   className="adm-input-append"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ position: 'absolute', right: '10px', background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -195,7 +194,7 @@ export default function AdminAllowlist() {
             </div>
           </div>
 
-          <div className="adm-form-footer" style={{ borderTop: "1px solid #f1f5f9", paddingTop: "20px", display: 'flex', gap: '10px' }}>
+          <div className="adm-form-footer adm-form-footer-bordered">
             <button type="submit" className="adm-btn primary">Create Admin Account</button>
             <button type="button" className="adm-btn ghost" onClick={() => setIsAdding(false)}>Cancel</button>
           </div>
