@@ -902,8 +902,6 @@ const necklaceProducts = [
           material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
           size: "Free Size"
           }
-
-
   },
   {
     id: "n3",
@@ -953,6 +951,219 @@ const necklaceProducts = [
 
 
   },
+
+  {
+    id: "n6",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n6.jpg", "images/n6-1.jpg", "images/n6-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n7",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n7.jpg", "images/n7-1.jpg", "images/n7-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n8",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n8.jpg", "images/n8-1.jpg", "images/n8-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n9",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n9.jpg", "images/n9-1.jpg", "images/n9-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n10",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n10.jpg", "images/n10-1.jpg", "images/n10-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n11",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n11.jpg", "images/n11-1.jpg", "images/n11-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n12",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n12.jpg", "images/n12-1.jpg", "images/n12-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n13",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n13.jpg", "images/n13-1.jpg", "images/n13-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n14",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n14.jpg", "images/n14-1.jpg", "images/n14-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n15",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n15.jpg", "images/n15-1.jpg", "images/n15-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n16",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n16.jpg", "images/n16-1.jpg", "images/n16-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n17",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n17.jpg", "images/n17-1.jpg", "images/n17-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n18",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n18.jpg", "images/n18-1.jpg", "images/n18-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n19",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n19.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  {
+    id: "n20",
+    title: "Rakta Kundan Set",
+    price: 1999,
+    oldPrice: 5000,
+    images: ["images/n20.jpg", "images/n20-1.jpg", "images/n20-2.jpg"],
+    category: "necklace",
+        alsoBought: ["e1", "e2", "o3", "n1"],
+        details: {
+          colour: "Red",
+          material: "Handcrafted on a premium red fabric base adorned with sparkling Kundan stones, antique gold dholki beads, and delicate pearl accents.",
+          size: "Free Size"
+          }
+  },
+  
+  
 ];
 
 /* =========================

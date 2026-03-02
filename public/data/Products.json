@@ -801,6 +801,44 @@
     }
   },
 
+  {
+    "id": "b7",
+    "title": "Rajwadi Ghungroo Kada Set",
+    "price": 234,
+    "oldPrice": 300,
+    "images": [
+      "images/b7.jpg",
+      "images/b7-1.jpg",
+      "images/b7-2.jpg"
+    ],
+    "category": "bangles",
+    "alsoBought": ["c4", "o2", "b8", "n4"],
+    "details": {
+      "colour": "Black",
+      "material": "Oxidized Silver Metal",
+      "size": "Free Size"
+    }
+  },
+
+  {
+    "id": "b8",
+    "title": "Replica Rajwadi Sahiba Openable Bracelet & Kada, Oxidised Hand-Cuff Tribal Bangle, Traditional and Antique finish",
+    "price": 769,
+    "oldPrice": 1399,
+    "images": [
+      "images/b8.jpg",
+      "images/b8-1.jpg",
+      "images/b8-2.jpg"
+    ],
+    "category": "bangles",
+    "alsoBought": ["c4", "o2", "b8", "n4"],
+    "details": {
+      "colour": "Black",
+      "material": "Oxidized Silver Metal",
+      "size": "Free Size"
+    }
+  },
+
   
   {
     "id": "e1",
@@ -1037,6 +1075,26 @@
     "details": {
       "colour": "Parrot Green",
       "material": "Metal, Moti, Glass",
+      "size": "Free Size"
+    }
+  },
+
+  {
+    "id": "n6",
+    "title": "Blue Stone with Silver Bead Necklace and Earring",
+    "price": 1499,
+    "oldPrice": 2000,
+    "images": [
+      "images/n6.jpg",
+      "images/n6-1.jpg",
+      "images/n6-2.jpg",
+      "images/n6-3.jpg"
+    ],
+    "category": "necklace",
+    "alsoBought": ["WS1", "WS4", "c1"],
+    "details": {
+      "colour": "Baby Blue",
+      "material": "Beads, Moti, Lightweight Metal",
       "size": "Free Size"
     }
   },

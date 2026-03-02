@@ -45,6 +45,20 @@ const banglesData = [
     oldPrice: 2500,
     image: "images/b6.jpg",
   },
+  {
+    id: "b7",
+    name: "Rajwadi Ghungroo Kada Set",
+    price: 234,
+    oldPrice: 300,
+    image: "images/b7.jpg",
+  },
+  {
+    id: "b8",
+    name: "Rajwadi Ghungroo Kada Set",
+    price: 769,
+    oldPrice: 1399,
+    image: "images/b8.jpg",
+  },
 ];
 
 function Bangles() {
