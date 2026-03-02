@@ -1,7 +1,6 @@
 import "./Bangles.css";
 import { withPublicUrl } from "../../utils/assetPath";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 const banglesData = [
   {
     id: "b1",
@@ -63,31 +62,16 @@ const banglesData = [
 
 function Bangles() {
   const navigate = useNavigate();
-    const container = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.08 } },
-  };
-  const itemMotion = {
-    hidden: { opacity: 0, y: 18 },
-    visible: { opacity: 1, y: 0 },
-  };
 
   return (
     <section className="bangles-section">
-      <motion.div
-        className="bangles-grid"
-        variants={container}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.2 }}
-      >
+      <div className="bangles-grid">
         {banglesData.map((product) => (
-          <motion.div
+          <div
             className="product-card"
             key={product.id}
             onClick={() => navigate(`/product/${product.id}`)}
             style={{ cursor: "pointer" }}
-            variants={itemMotion}
           >
             <div className="product-image">
               <img src={withPublicUrl(product.image)} alt={product.name} />
@@ -101,9 +85,9 @@ function Bangles() {
                 <span className="old-price">₹{product.oldPrice}</span>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }

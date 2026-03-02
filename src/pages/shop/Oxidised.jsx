@@ -1,7 +1,6 @@
 import "./Oxidised.css";
 import { withPublicUrl } from "../../utils/assetPath";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import allProducts from "../../data/allProducts";
 
 function Oxidised() {
@@ -11,31 +10,15 @@ function Oxidised() {
     (item) => item.category === "oxidised"
   );
 
-  const container = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.08 } },
-  };
-  const itemMotion = {
-    hidden: { opacity: 0, y: 18 },
-    visible: { opacity: 1, y: 0 },
-  };
-
   return (
     <section className="oxidised-section">
-      <motion.div
-        className="oxidised-grid"
-        variants={container}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.2 }}
-      >
+      <div className="oxidised-grid">
         {oxidised.map((product) => (
-          <motion.div
+          <div
             className="product-card"
             key={product.id}
             onClick={() => navigate(`/product/${product.id}`)}
             style={{ cursor: "pointer" }}
-            variants={itemMotion}
           >
             <div className="product-image">
               <img src={withPublicUrl(product.images[0])} alt={product.title} />
@@ -49,9 +32,9 @@ function Oxidised() {
                 <span className="old-price">₹{product.oldPrice}</span>
               </div>
             </div>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 }
