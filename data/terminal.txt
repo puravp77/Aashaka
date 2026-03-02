@@ -63,3 +63,15 @@ npx json-server public/data/users.json --port 5000
 13. Added a floating WhatsApp button on Home page linked to `+91 92651 69947` (`wa.me` link).  
 14. Reduced WhatsApp icon size and added a separate scroll-to-top floating button below it; made arrow appear only after scrolling down.  
 15. Improved mobile header/menu UI and fixed hamburger issues by correcting mobile menu interaction/positioning (`pointer-events`, fixed panel placement, compact spacing/typography polish).
+
+
+
+2-3-2026 (after 2:30pm)
+
+1. Fixed mobile UI for admin dashboard (`/admin/dashboard`): topbar, breadcrumb, quick actions, card spacing.  
+2. Applied responsive fixes across all admin pages for consistency (Dashboard, Products, Orders, Customers, Content, Allow List, Profile, Maintenance Room).  
+3. Removed inline layout styles and moved them into reusable CSS classes for cleaner responsive behavior.  
+4. Improved Maintenance Room layout (`/admin/maintenance-room`): toggle alignment/size, card balance, shipping form spacing, action button placement.  
+5. Fixed dark mode mismatches in maintenance/shipping cards (text, icon tile, alerts, field-related colors).  
+6. Fixed dark mode mismatch in dashboard traffic chart (chart panel, grid lines, legend contrast).  
+7. Rebuilt the project after each major change (`npm run build`) and confirmed successful compilation.
