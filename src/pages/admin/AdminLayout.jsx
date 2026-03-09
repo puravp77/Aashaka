@@ -32,6 +32,7 @@ const NAV_ITEMS = [
 const TITLES = {
   "/admin/dashboard": "Dashboard",
   "/admin/products": "Products",
+  "/admin/products/add": "Add Product",
   "/admin/orders": "Orders",
   "/admin/customers": "Customers",
   "/admin/content": "Content",
@@ -69,7 +70,9 @@ export default function AdminLayout() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const pageTitle = useMemo(() => {
-    return TITLES[location.pathname] || "Admin";
+    if (TITLES[location.pathname]) return TITLES[location.pathname];
+    if (location.pathname.startsWith("/admin/products/")) return "Products";
+    return "Admin";
   }, [location.pathname]);
 
   const handleLogout = () => {

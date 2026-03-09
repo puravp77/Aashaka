@@ -298,7 +298,7 @@ export default function AdminDashboard() {
           </div>
         </div>
         <div className="adm-action-btns">
-          <button onClick={() => navigate("/admin/products")} className="adm-action-btn">
+          <button onClick={() => navigate("/admin/products/add")} className="adm-action-btn">
             <div className="btn-icon" style={{ background: "rgba(50, 31, 219, 0.1)", color: "#321fdb" }}>
               <Plus size={20} />
             </div>
