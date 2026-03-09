@@ -83,8 +83,7 @@ export default function AdminProducts() {
     if (!window.confirm(`Are you sure you want to delete product ${productId}?`)) return;
 
     try {
-      // JSON server uses the actual ID field. 
-      // If our displayed ID is upper-cased, we should use the one from products state.
+     
       const originalProduct = products.find(p => String(p.id).toUpperCase() === productId);
       const targetId = originalProduct ? originalProduct.id : productId;
 
