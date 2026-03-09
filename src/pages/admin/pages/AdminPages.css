@@ -20,6 +20,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .adm-metric-card p {
@@ -914,13 +916,30 @@
 }
 
 @media (max-width: 680px) {
+  .adm-metric-grid,
+  .adm-widgets {
+    gap: 10px;
+  }
+
+  .adm-page .adm-widgets {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .adm-page .adm-widgets > .adm-widget,
+  .adm-page .adm-widgets > .adm-widget.adm-chart-widget {
+    grid-column: 1 / -1 !important;
+    width: 100%;
+  }
+
   .adm-widget {
-    padding: 12px;
+    padding: 10px;
+    border-radius: 12px;
   }
 
   .adm-quick-actions {
-    padding: 14px;
-    margin-bottom: 14px;
+    padding: 12px;
+    margin-bottom: 12px;
   }
 
   .adm-action-btns {
@@ -931,7 +950,8 @@
 
   .adm-action-btn {
     padding: 10px 8px;
-    min-height: 118px;
+    min-height: 104px;
+    border-radius: 12px;
   }
 
   .adm-action-btn .btn-icon {
@@ -955,20 +975,32 @@
   }
 
   .adm-metric-card {
-    padding: 14px;
+    padding: 12px 14px;
+    min-height: 100px;
+    border-radius: 12px;
   }
 
   .adm-metric-card strong {
-    font-size: 34px;
+    font-size: 30px;
+  }
+
+  .adm-metric-card p {
+    font-size: 13px;
+  }
+
+  .adm-metric-card span {
+    font-size: 11px;
+    margin-top: 4px;
   }
 
   .adm-widget-head {
     flex-direction: column;
     align-items: flex-start;
+    gap: 8px;
   }
 
   .adm-widget-head h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .adm-controls {
@@ -982,6 +1014,21 @@
   .adm-mix-row {
     grid-template-columns: 1fr;
     gap: 6px;
+  }
+
+  .adm-table-wrap {
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .adm-table.adm-table-compact {
+    min-width: 0;
+  }
+
+  .adm-table.adm-table-compact th,
+  .adm-table.adm-table-compact td {
+    padding: 8px 6px;
+    font-size: 12px;
   }
 
   .adm-controls .adm-status-menu {
@@ -1105,8 +1152,26 @@
 }
 
 @media (max-width: 420px) {
+  .adm-metric-grid,
+  .adm-widgets {
+    gap: 8px;
+  }
+
+  .adm-metric-grid.adm-metric-grid-analytics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .adm-page .adm-widgets {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .adm-page .adm-widgets > .adm-widget,
+  .adm-page .adm-widgets > .adm-widget.adm-chart-widget {
+    grid-column: 1 / -1 !important;
+  }
+
   .adm-widget-head h2 {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .adm-btn-min-w {
@@ -1119,7 +1184,101 @@
   }
 
   .adm-action-btn {
-    min-height: 96px;
+    min-height: 88px;
+    padding: 9px 8px;
+    gap: 6px;
+  }
+
+  .adm-action-btn .btn-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .adm-action-btn span {
+    font-size: 11px;
+  }
+
+  .adm-metric-card {
+    min-height: 76px;
+    padding: 10px 10px;
+  }
+
+  .adm-metric-grid.adm-metric-grid-analytics .adm-metric-card {
+    min-height: 76px;
+  }
+
+  .adm-metric-card p {
+    font-size: 11px;
+  }
+
+  .adm-metric-grid.adm-metric-grid-analytics .adm-metric-card {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .adm-metric-card strong,
+  .adm-metric-grid.adm-metric-grid-analytics .adm-metric-card strong {
+    font-size: 20px;
+    margin-top: 2px;
+    line-height: 1;
+  }
+
+  .adm-metric-card span {
+    font-size: 9px;
+    margin-top: 3px;
+  }
+
+  .adm-widget-head span {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .adm-table-wrap {
+    overflow: visible;
+  }
+
+  .adm-table.adm-table-compact {
+    min-width: 0;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+  }
+
+  .adm-table.adm-table-compact thead {
+    display: none;
+  }
+
+  .adm-table.adm-table-compact tbody,
+  .adm-table.adm-table-compact tr,
+  .adm-table.adm-table-compact td {
+    display: block;
+    width: 100%;
+  }
+
+  .adm-table.adm-table-compact tr {
+    border: 1px solid #e5ebf4;
+    border-radius: 12px;
+    background: #fbfcff;
+    padding: 10px 12px;
+  }
+
+  .adm-table.adm-table-compact td {
+    border: 0;
+    padding: 0;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .adm-table.adm-table-compact td + td {
+    margin-top: 6px;
+  }
+
+  .adm-page.dark-mode .adm-table.adm-table-compact tr {
+    border-color: #334155;
+    background: #182234;
+  }
+
+  .adm-page.dark-mode .adm-table.adm-table-compact td {
+    color: #dbe4f3;
   }
 
   .adm-switch {
@@ -1973,6 +2132,19 @@
 }
 
 @media (max-width: 680px) {
+  .adm-add-product-page {
+    padding: 10px;
+  }
+
+  .adm-add-product-form {
+    gap: 14px;
+  }
+
+  .adm-add-section,
+  .adm-product-content-section,
+  .adm-color-variant-card {
+    padding: 12px;
+  }
 
   .adm-add-grid-2,
   .adm-add-grid-3,
@@ -1982,6 +2154,67 @@
     grid-template-columns: 1fr;
   }
 
+  .adm-section-head,
+  .adm-color-variant-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .adm-section-head .adm-btn,
+  .adm-color-variant-head .adm-btn {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+  }
+
+  .adm-color-variant-media > :first-child {
+    grid-column: auto;
+  }
+
+  .adm-inventory-row {
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .adm-inventory-row > :nth-child(1),
+  .adm-inventory-row > :nth-child(2) {
+    grid-column: 1 / -1;
+  }
+
+  .adm-circle-btn {
+    width: 34px;
+    height: 34px;
+    justify-self: start;
+  }
+
+  .adm-inventory-row > .adm-circle-btn.add {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: end;
+  }
+
+  .adm-inventory-row > .adm-circle-btn.remove {
+    grid-column: 3;
+    grid-row: 3;
+    justify-self: end;
+  }
+
+  .adm-inventory-row > .adm-circle-btn {
+    display: inline-grid;
+    margin-right: 0;
+  }
+
+  .adm-upload-box {
+    overflow: hidden;
+  }
+
+  .adm-input-file {
+    width: 100%;
+    max-width: 100%;
+    font-size: 13px;
+  }
+
   .adm-add-actions {
     flex-direction: column;
     align-items: stretch;
@@ -1989,6 +2222,8 @@
 
   .adm-add-actions .adm-btn {
     width: 100%;
+    min-width: 0;
+    justify-content: center;
   }
 }
 
