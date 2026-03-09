@@ -44,18 +44,18 @@ export default function HeroVideo() {
         Your browser does not support the video tag.
       </motion.video>
 
-      <div className="hero-overlay">
+      <div className="hero-video-overlay">
         <motion.div
-          className="hero-content"
+          className="hero-video-content"
           variants={container}
           initial="hidden"
           animate="visible"
           style={{ y: textY, opacity: textOpacity }}
         >
-          <motion.p className="hero-kicker" variants={item}>
+          <motion.p className="hero-video-kicker" variants={item}>
             Aashaka
           </motion.p>
-          <motion.h1 className="hero-title" variants={item}>
+          <motion.h1 className="hero-video-title" variants={item}>
             {content.heroHeading.split("\n").map((line, i) => (
               <React.Fragment key={i}>
                 {line}
@@ -63,11 +63,11 @@ export default function HeroVideo() {
               </React.Fragment>
             ))}
           </motion.h1>
-          <motion.p className="hero-subtitle" variants={item}>
+          <motion.p className="hero-video-subtitle" variants={item}>
             {content.heroSubtitle}
           </motion.p>
           <motion.button
-            className="hero-cta"
+            className="hero-video-cta"
             type="button"
             variants={item}
             onClick={() => navigate("/shop/all")}

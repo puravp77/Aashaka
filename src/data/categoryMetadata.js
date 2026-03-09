@@ -8,25 +8,25 @@ export const categoryMetadata = {
     oxidised: {
         title: "Timeless Oxidised Jewellery",
         description: "Embrace the vintage charm with our signature oxidised collection. Each piece is meticulously handcrafted to add a touch of rustic elegance to your ethnic and contemporary outfits.",
-        bannerImage: "images/banners/oxidised-banner.jpg",
+        bannerImage: "images/bannerOxi.jpg",
         seoTitle: "Aashaka | Timeless Oxidised Jewellery Collection",
     },
     bangles: {
         title: "Exquisite Bangles & Kadas",
         description: "Add a rhythmic charm to your wrists. From traditional ghungroo kadas to modern minimalist bangles, find the perfect match for your style.",
-        bannerImage: "images/banners/bangles-banner.jpg",
+        bannerImage: "images/bannerBang.jpg",
         seoTitle: "Aashaka | Handcrafted Bangles & Kadas",
     },
     earrings: {
         title: "Mesmerizing Earrings",
         description: "Make a statement with our diverse range of earrings. Explore jhumkas, studs, and drops that capture the essence of Indian heritage.",
-        bannerImage: "images/banners/earrings-banner.jpg",
+        bannerImage: "images/banner1.jpg",
         seoTitle: "Aashaka | Stunning Handcrafted Earrings",
     },
     necklace: {
         title: "Statement Necklaces",
         description: "Complete your look with our breathtaking necklaces. Whether you prefer heavy chokers or elegant pendants, our collection has something for everyone.",
-        bannerImage: "images/banners/necklace-banner.jpg",
+        bannerImage: "images/bannerNeck.jpg",
         seoTitle: "Aashaka | Statement Necklaces & Chokers",
     },
     all: {

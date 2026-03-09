@@ -5,15 +5,17 @@
 
 /* Hero Section */
 .category-hero {
+    --hero-height: clamp(320px, 46vw, 620px);
     position: relative;
-    height: 450px;
+    height: var(--hero-height);
     width: 100%;
     overflow: hidden;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: clamp(22px, 4vw, 52px) clamp(18px, 7vw, 90px);
     color: white;
+    isolation: isolate;
 }
 
 .hero-overlay {
@@ -22,8 +24,20 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    background: linear-gradient(110deg, rgba(16, 12, 9, 0.86) 0%, rgba(16, 12, 9, 0.64) 36%, rgba(16, 12, 9, 0.22) 60%, rgba(16, 12, 9, 0.08) 100%);
     z-index: 1;
+}
+
+.category-hero::before {
+    content: "";
+    position: absolute;
+    left: clamp(14px, 5vw, 52px);
+    top: clamp(24px, 7vw, 72px);
+    width: min(46vw, 380px);
+    height: 1px;
+    background: linear-gradient(90deg, rgba(224, 173, 132, 0.98), rgba(224, 173, 132, 0));
+    z-index: 2;
+    pointer-events: none;
 }
 
 .hero-img {
@@ -33,33 +47,65 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.8s ease;
+    object-position: center 35%;
+    transform: scale(1.06);
+    transition: transform 1.4s ease;
 }
 
 .category-hero:hover .hero-img {
-    transform: scale(1.05);
+    transform: scale(1.12);
 }
 
 .hero-content {
     position: relative;
     z-index: 2;
-    max-width: 800px;
-    padding: 0 20px;
+    max-width: min(74ch, 70%);
+    padding: 0;
+    text-align: left;
+}
+
+.hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Outfit", "Inter", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(255, 235, 216, 0.95);
+    margin-bottom: 12px;
+}
+
+.hero-kicker::after {
+    content: "";
+    width: 64px;
+    height: 1px;
+    background: rgba(255, 218, 182, 0.92);
 }
 
 .hero-content h1 {
-    font-family: "Times New Roman", serif;
-    font-size: 3.5rem;
-    margin-bottom: 15px;
-    letter-spacing: 2px;
+    font-family: "Cormorant Garamond", "Times New Roman", serif;
+    font-size: clamp(2.35rem, 5.8vw, 5.2rem);
+    margin-bottom: 10px;
+    letter-spacing: 0.6px;
+    font-weight: 500;
     text-transform: uppercase;
+    line-height: 0.98;
+    text-wrap: balance;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.46);
 }
 
 .hero-content p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    opacity: 0.9;
-    font-weight: 300;
+    font-size: clamp(0.92rem, 1.35vw, 1.12rem);
+    line-height: 1.58;
+    letter-spacing: 0.14px;
+    opacity: 0.94;
+    font-weight: 400;
+    font-family: "Outfit", "Inter", sans-serif;
+    max-width: 62ch;
+    margin: 0;
+    text-shadow: 0 6px 22px rgba(0, 0, 0, 0.36);
 }
 
 /* Container */
@@ -185,8 +231,9 @@
 
 /* Responsiveness */
 @media (max-width: 1024px) {
-    .hero-content h1 {
-        font-size: 2.5rem;
+    .category-hero {
+        --hero-height: clamp(290px, 56vw, 500px);
+        padding: 24px clamp(16px, 4vw, 40px);
     }
 }
 
@@ -196,11 +243,8 @@
     }
 
     .category-hero {
-        height: 350px;
-    }
-
-    .hero-content h1 {
-        font-size: 2rem;
+        --hero-height: clamp(260px, 70vw, 410px);
+        padding: 24px 16px;
     }
 
     .filter-bar {
@@ -217,6 +261,30 @@
     .image-wrapper {
         height: 300px;
     }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .hero-kicker {
+        font-size: 0.66rem;
+        letter-spacing: 2.1px;
+        margin-bottom: 10px;
+    }
+
+    .hero-kicker::after {
+        width: 44px;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(1.9rem, 8.8vw, 3.2rem);
+        line-height: 1;
+    }
+
+    .hero-content p {
+        max-width: 100%;
+        font-size: 0.88rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -226,5 +294,10 @@
 
     .image-wrapper {
         height: 350px;
+    }
+
+    .hero-content p {
+        font-size: 0.84rem;
+        line-height: 1.52;
     }
 }

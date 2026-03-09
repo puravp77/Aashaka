@@ -36,6 +36,24 @@ const CategoryPage = () => {
         return result;
     }, [products, categoryName, sortBy]);
 
+    const bannerImage = useMemo(() => {
+        if (metadata.bannerImage) {
+            return metadata.bannerImage;
+        }
+
+        const categoryProducts = categoryName === "all"
+            ? products
+            : products.filter(
+                (product) => (product.category || "").toLowerCase() === categoryName.toLowerCase()
+            );
+
+        const firstProductImage = categoryProducts.find(
+            (product) => Array.isArray(product.images) && product.images[0]
+        )?.images?.[0];
+
+        return firstProductImage || "images/bannernewasaga2.jpeg";
+    }, [products, categoryName, metadata.bannerImage]);
+
     if (loading) return <div className="loading-container">Loading...</div>;
 
     return (
@@ -44,12 +62,16 @@ const CategoryPage = () => {
             <div className="category-hero">
                 <div className="hero-overlay"></div>
                 <img
-                    src={withPublicUrl(metadata.bannerImage)}
+                    src={withPublicUrl(bannerImage)}
                     alt={metadata.title}
-                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?auto=format&fit=crop&q=80&w=1500'; }}
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = withPublicUrl("images/bannernewasaga2.jpeg");
+                    }}
                     className="hero-img"
                 />
                 <div className="hero-content">
+                    <span className="hero-kicker">Aashaka Curated Edit</span>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

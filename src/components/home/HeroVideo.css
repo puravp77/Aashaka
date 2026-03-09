@@ -14,7 +14,7 @@
   transform: translateZ(0);
 }
 
-.hero-overlay {
+.hero-video-overlay {
   position: absolute;
   inset: 0;
   display: flex;
@@ -29,7 +29,7 @@
   z-index: 2;
 }
 
-.hero-content {
+.hero-video-content {
   max-width: 650px;
   color: #1a1a1a;
   padding: 0;
@@ -38,7 +38,7 @@
   will-change: transform, opacity;
 }
 
-.hero-kicker {
+.hero-video-kicker {
   margin: 0 0 16px;
   font-family: 'Outfit', sans-serif;
   font-size: 11px;
@@ -49,7 +49,7 @@
   opacity: 0.9;
 }
 
-.hero-title {
+.hero-video-title {
   margin: 0;
   font-family: "Cormorant Garamond", serif !important;
   font-size: clamp(38px, 6vw, 84px);
@@ -58,10 +58,9 @@
   letter-spacing: -0.8px;
   color: #1f130e;
   text-transform: none !important;
-  /* Preserves sentence case from data */
 }
 
-.hero-subtitle {
+.hero-video-subtitle {
   margin: 18px 0 0;
   max-width: 48ch;
   font-family: 'Outfit', sans-serif;
@@ -71,7 +70,7 @@
   opacity: 0.85;
 }
 
-.hero-cta {
+.hero-video-cta {
   margin-top: 36px;
   padding: 14px 28px;
   border-radius: 99px;
@@ -88,7 +87,7 @@
   box-shadow: 0 4px 15px rgba(139, 13, 43, 0.15);
 }
 
-.hero-cta:hover {
+.hero-video-cta:hover {
   background: #6f0a22;
   border-color: #6f0a22;
   transform: translateY(-2px);
@@ -102,7 +101,7 @@
 }
 
 @media (max-width: 1024px) {
-  .hero-title {
+  .hero-video-title {
     font-size: clamp(32px, 8vw, 64px);
   }
 }
@@ -119,7 +118,7 @@
     object-position: center 28%;
   }
 
-  .hero-overlay {
+  .hero-video-overlay {
     position: static;
     justify-content: center;
     text-align: center;
@@ -127,16 +126,16 @@
     background: #fff;
   }
 
-  .hero-content {
+  .hero-video-content {
     max-width: 100%;
     text-align: center;
   }
 
-  .hero-title {
+  .hero-video-title {
     font-size: 36px;
   }
 
-  .hero-subtitle {
+  .hero-video-subtitle {
     margin: 14px auto 0;
     font-size: 14px;
     max-width: 100%;
@@ -144,11 +143,11 @@
 }
 
 @media (max-width: 480px) {
-  .hero-title {
+  .hero-video-title {
     font-size: 30px;
   }
 
-  .hero-overlay {
+  .hero-video-overlay {
     padding: 30px 16px 50px;
   }
 }
