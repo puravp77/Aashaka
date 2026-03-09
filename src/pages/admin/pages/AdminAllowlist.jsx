@@ -52,7 +52,7 @@ export default function AdminAllowlist() {
 
         // 2. Create the User account (for Authentication)
         const userAccount = {
-          id: newAdmin.email, // Using email as ID consistent with users.json
+          id: newAdmin.email,
           username: newAdmin.username, // Added username here
           password: newAdmin.password,
           role: "admin",
