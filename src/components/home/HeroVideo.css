@@ -2,8 +2,7 @@
   width: 100%;
   position: relative;
   overflow: hidden;
-  background: transparent;
-  contain: paint;
+  background: #fff;
 }
 
 .hero-video video {
@@ -13,8 +12,6 @@
   object-fit: cover;
   object-position: center 38%;
   transform: translateZ(0);
-  will-change: transform;
-  backface-visibility: hidden;
 }
 
 .hero-overlay {
@@ -23,86 +20,90 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 8%;
-  background:
-    linear-gradient(95deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.46) 40%, rgba(255, 255, 255, 0.12) 70%, rgba(255, 255, 255, 0) 100%);
+  padding: 0 5%;
+  background: linear-gradient(95deg,
+      rgba(255, 250, 245, 0.94) 0%,
+      rgba(255, 250, 245, 0.6) 25%,
+      rgba(255, 250, 245, 0.1) 60%,
+      rgba(255, 250, 245, 0) 100%);
+  z-index: 2;
 }
 
 .hero-content {
-  max-width: 560px;
+  max-width: 650px;
   color: #1a1a1a;
   padding: 0;
   border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  backdrop-filter: none;
+  text-align: left !important;
+  will-change: transform, opacity;
 }
 
 .hero-kicker {
-  margin: 0 0 10px;
+  margin: 0 0 16px;
+  font-family: 'Outfit', sans-serif;
   font-size: 11px;
-  letter-spacing: 2.8px;
-  text-transform: uppercase;
-  color: #8b0d2b;
+  letter-spacing: 5px;
+  text-transform: uppercase !important;
+  color: #8b0a23;
+  font-weight: 600;
+  opacity: 0.9;
 }
 
 .hero-title {
   margin: 0;
-  font-family: "Cormorant Garamond", "Times New Roman", serif;
-  font-size: clamp(42px, 5.2vw, 74px);
-  line-height: 0.88;
-  font-weight: 600;
-  letter-spacing: 0.3px;
+  font-family: "Cormorant Garamond", serif !important;
+  font-size: clamp(38px, 6vw, 84px);
+  line-height: 1.05;
+  font-weight: 500;
+  letter-spacing: -0.8px;
   color: #1f130e;
+  text-transform: none !important;
+  /* Preserves sentence case from data */
 }
 
 .hero-subtitle {
-  margin: 14px 0 0;
-  max-width: 44ch;
-  font-size: 15px;
-  line-height: 1.7;
-  color: #413428;
+  margin: 18px 0 0;
+  max-width: 48ch;
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4a3e35;
+  opacity: 0.85;
 }
 
 .hero-cta {
-  margin-top: 22px;
-  padding: 12px 22px;
-  border-radius: 999px;
+  margin-top: 36px;
+  padding: 14px 28px;
+  border-radius: 99px;
   border: 1px solid #8b0d2b;
   background: #8b0d2b;
   color: #fff;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   font-size: 11px;
-  text-transform: uppercase;
+  font-family: 'Outfit', sans-serif;
+  text-transform: uppercase !important;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(139, 13, 43, 0.15);
 }
 
 .hero-cta:hover {
   background: #6f0a22;
   border-color: #6f0a22;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(139, 13, 43, 0.25);
 }
 
 @media (min-width: 769px) {
   .hero-video {
-    height: 80vh;
+    height: 85vh;
   }
 }
 
 @media (max-width: 1024px) {
   .hero-title {
-    font-size: 32px;
-  }
-
-  .hero-overlay {
-    padding: 0 6%;
-    background: linear-gradient(95deg, rgba(255, 255, 255, 0.84) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 82%);
-  }
-
-  .hero-video video {
-    object-position: center 34%;
+    font-size: clamp(32px, 8vw, 64px);
   }
 }
 
@@ -115,42 +116,30 @@
 
   .hero-video video {
     height: auto;
-    object-fit: cover;
     object-position: center 28%;
-    background: transparent;
   }
 
   .hero-overlay {
     position: static;
     justify-content: center;
     text-align: center;
-    padding: 16px 8% 18px;
-    background: transparent;
+    padding: 40px 20px 60px;
+    background: #fff;
   }
 
   .hero-content {
     max-width: 100%;
-    padding: 0;
+    text-align: center;
   }
 
   .hero-title {
-    font-size: clamp(30px, 10vw, 42px);
-    line-height: 0.94;
+    font-size: 36px;
   }
 
   .hero-subtitle {
-    font-size: 13px;
-    line-height: 1.58;
-  }
-
-  .hero-cta {
-    margin-top: 16px;
-    font-size: 10px;
-    padding: 10px 14px;
-  }
-
-  .hero-video {
-    height: auto;
+    margin: 14px auto 0;
+    font-size: 14px;
+    max-width: 100%;
   }
 }
 
@@ -159,19 +148,11 @@
     font-size: 30px;
   }
 
-  .hero-video video {
-    object-position: center 24%;
-  }
-
-  .hero-subtitle {
-    font-size: 12px;
-  }
-
-  .hero-video {
-    height: auto;
+  .hero-overlay {
+    padding: 30px 16px 50px;
   }
 }
 
-.hero-video + section {
+.hero-video+section {
   margin-top: 0 !important;
 }

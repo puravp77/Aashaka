@@ -16,11 +16,7 @@ import ExploreCollection from "./components/home/ExploreCollecetion";
 import WatchShopSection from "./components/home/WatchShopSection";
 import AboutSection from "./components/home/AboutSection";
 
-import Kurti from "./pages/shop/Kurti";
-import Oxidised from "./pages/shop/Oxidised";
-import Bangles from "./pages/shop/Bangles";
-import Earrings from "./pages/shop/Earrings";
-import Necklace from "./pages/shop/Necklace";
+import CategoryPage from "./pages/shop/CategoryPage";
 import ProductDetails from "./pages/shop/ProductDetails";
 import Account from "./pages/account/Account";
 import Cart from "./pages/order/Cart";
@@ -177,11 +173,9 @@ export default function StoreApp() {
               <Route path="/wishlist" element={<ProtectedRoute><AnimatedRoute><Wishlist /></AnimatedRoute></ProtectedRoute>} />
               <Route path="/order-history" element={<ProtectedRoute><AnimatedRoute><OrderHistory /></AnimatedRoute></ProtectedRoute>} />
 
-              <Route path="/kurti" element={<AnimatedRoute><Kurti /></AnimatedRoute>} />
-              <Route path="/jewellery/oxidised" element={<AnimatedRoute><Oxidised /></AnimatedRoute>} />
-              <Route path="/jewellery/bangles" element={<AnimatedRoute><Bangles /></AnimatedRoute>} />
-              <Route path="/jewellery/earrings" element={<AnimatedRoute><Earrings /></AnimatedRoute>} />
-              <Route path="/jewellery/necklace" element={<AnimatedRoute><Necklace /></AnimatedRoute>} />
+              <Route path="/kurti" element={<AnimatedRoute><CategoryPage /></AnimatedRoute>} />
+              <Route path="/jewellery/:categoryName" element={<AnimatedRoute><CategoryPage /></AnimatedRoute>} />
+              <Route path="/shop/:categoryName" element={<AnimatedRoute><CategoryPage /></AnimatedRoute>} />
               <Route path="/product/:id" element={<AnimatedRoute><ProductDetails /></AnimatedRoute>} />
 
               <Route path="/about" element={<AnimatedRoute><AboutSection /></AnimatedRoute>} />
