@@ -129,6 +129,14 @@ export default function AdminAddProduct() {
 
   const finalPriceValue = form.finalPrice || String(computedFinalPrice || "");
 
+  useEffect(() => {
+    if (form.category === "JEWELLERY") {
+      setInventoryRows((prev) =>
+        prev.map(row => ({ ...row, size: "Free" }))
+      );
+    }
+  }, [form.category]);
+
   const onChangeField = (field) => (event) => {
     const { value } = event.target;
     setForm((prev) => {
@@ -156,7 +164,8 @@ export default function AdminAddProduct() {
   };
 
   const addInventoryRow = () => {
-    setInventoryRows((prev) => [...prev, { size: "", stock: "" }]);
+    const defaultSize = form.category === "JEWELLERY" ? "Free" : "";
+    setInventoryRows((prev) => [...prev, { size: defaultSize, stock: "" }]);
   };
 
   const removeInventoryRow = (index) => {
@@ -301,6 +310,7 @@ export default function AdminAddProduct() {
                     onChange={(nextValue) => onInventoryChange(index, "size", nextValue)}
                     hideLabel
                     openUp
+                    disabled={form.category === "JEWELLERY"}
                   />
                   <input
                     className="adm-input adm-add-input"
