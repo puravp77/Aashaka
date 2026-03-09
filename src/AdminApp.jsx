@@ -32,6 +32,7 @@ export default function AdminApp() {
                         <Route path="dashboard" element={<AdminDashboard />} />
                         <Route path="products" element={<AdminProducts />} />
                         <Route path="products/add" element={<AdminAddProduct />} />
+                        <Route path="products/edit/:id" element={<AdminAddProduct editMode={true} />} />
                         <Route path="orders" element={<AdminOrders />} />
                         <Route path="customers" element={<AdminCustomers />} />
                         <Route path="content" element={<AdminContent />} />

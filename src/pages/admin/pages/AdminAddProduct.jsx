@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 
@@ -93,8 +93,9 @@ function AdminCustomSelect({
   );
 }
 
-export default function AdminAddProduct() {
+export default function AdminAddProduct({ editMode = false }) {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [form, setForm] = useState({
     category: "",
     subCategory: "",
@@ -113,6 +114,58 @@ export default function AdminAddProduct() {
   const [multiImageNames, setMultiImageNames] = useState([]);
   const [inventoryRows, setInventoryRows] = useState([{ size: "", stock: "" }]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(editMode);
+
+  useEffect(() => {
+    if (editMode && id) {
+      const fetchProduct = async () => {
+        try {
+          const res = await fetch(`http://localhost:5000/products/${id}`);
+          if (!res.ok) throw new Error("Product not found");
+          const data = await res.json();
+
+          // Map data to form state
+          setForm({
+            category: data.category === "kurti" ? "CLOTH" : "JEWELLERY",
+            subCategory: Object.keys(subCategoryPrefixMap).find(key => subCategoryPrefixMap[key].category === data.category) || "",
+            itemName: data.title || "",
+            itemPrice: data.oldPrice || data.price || "",
+            percentage: "", // We don't store these separately, usually calc'd
+            discount: "",
+            color: data.details?.colour || "",
+            description: data.details?.description || "",
+            material: data.details?.material || "",
+            specification: data.details?.specification || "",
+            styleNotes: data.details?.styleNotes || "",
+            finalPrice: data.price || "",
+          });
+
+          // Handle images
+          if (data.images?.length > 0) {
+            const firstImage = data.images[0].replace("images/", "");
+            setItemImageName(firstImage);
+            setMultiImageNames(data.images.slice(1).map(img => img.replace("images/", "")));
+          }
+
+          // Handle inventory
+          if (data.sizes && typeof data.sizes === "object") {
+            const rows = Object.entries(data.sizes).map(([size, stock]) => ({
+              size,
+              stock: String(stock),
+            }));
+            setInventoryRows(rows.length > 0 ? rows : [{ size: "", stock: "" }]);
+          }
+
+          setIsLoading(false);
+        } catch (err) {
+          console.error(err);
+          alert("Error loading product");
+          navigate("/admin/products");
+        }
+      };
+      fetchProduct();
+    }
+  }, [editMode, id, navigate, subCategoryPrefixMap]);
 
   const subCategoryPrefixMap = useMemo(() => ({
     "Kurti": { prefix: "k", category: "kurti" },
@@ -191,25 +244,35 @@ export default function AdminAddProduct() {
     try {
       setIsSubmitting(true);
 
-      // 1. Fetch current products to generate ID
-      const res = await fetch("http://localhost:5000/products");
-      if (!res.ok) throw new Error("Could not fetch current products");
-      const currentProducts = await res.json();
+      let targetId = id;
+      let finalCategory = "other";
+      let finalSubCategory = form.subCategory;
 
-      const config = subCategoryPrefixMap[form.subCategory] || { prefix: "p", category: "other" };
-      const prefix = config.prefix;
+      if (!editMode) {
+        // 1. Fetch current products to generate ID
+        const res = await fetch("http://localhost:5000/products");
+        if (!res.ok) throw new Error("Could not fetch current products");
+        const currentProducts = await res.json();
 
-      // Find highest number for this prefix
-      const regex = new RegExp(`^${prefix}(\\d+)$`, 'i');
-      let maxNum = 0;
-      currentProducts.forEach(p => {
-        const match = p.id.match(regex);
-        if (match) {
-          const num = parseInt(match[1], 10);
-          if (num > maxNum) maxNum = num;
-        }
-      });
-      const newId = `${prefix}${maxNum + 1}`;
+        const config = subCategoryPrefixMap[form.subCategory] || { prefix: "p", category: "other" };
+        const prefix = config.prefix;
+        finalCategory = config.category;
+
+        // Find highest number for this prefix
+        const regex = new RegExp(`^${prefix}(\\d+)$`, 'i');
+        let maxNum = 0;
+        currentProducts.forEach(p => {
+          const match = p.id.match(regex);
+          if (match) {
+            const num = parseInt(match[1], 10);
+            if (num > maxNum) maxNum = num;
+          }
+        });
+        targetId = `${prefix}${maxNum + 1}`;
+      } else {
+        const config = subCategoryPrefixMap[form.subCategory] || { category: "other" };
+        finalCategory = config.category;
+      }
 
       // 2. Prepare payload
       const sizesObj = {};
@@ -220,7 +283,7 @@ export default function AdminAddProduct() {
       });
 
       const payload = {
-        id: newId,
+        id: targetId,
         title: form.itemName,
         images: [
           itemImageName ? `images/${itemImageName}` : "",
@@ -228,7 +291,7 @@ export default function AdminAddProduct() {
         ].filter(Boolean),
         price: parseNumber(finalPriceValue),
         oldPrice: parseNumber(form.itemPrice),
-        category: config.category,
+        category: finalCategory,
         sizes: sizesObj,
         details: {
           colour: form.color,
@@ -240,20 +303,23 @@ export default function AdminAddProduct() {
         }
       };
 
-      // 3. POST to JSON Server
-      const postRes = await fetch("http://localhost:5000/products", {
-        method: "POST",
+      // 3. POST or PUT to JSON Server
+      const url = editMode ? `http://localhost:5000/products/${id}` : "http://localhost:5000/products";
+      const method = editMode ? "PUT" : "POST";
+
+      const postRes = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
 
       if (!postRes.ok) throw new Error("Failed to save product");
 
-      alert(`Product ${newId} added successfully!`);
+      alert(`Product ${targetId} ${editMode ? "updated" : "added"} successfully!`);
       navigate("/admin/products");
     } catch (err) {
       console.error(err);
-      alert("Error adding product: " + err.message);
+      alert("Error saving product: " + err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -262,8 +328,9 @@ export default function AdminAddProduct() {
   return (
     <section className="adm-widget adm-add-product-page">
       <div className="adm-widget-head">
-        <h2>Add Product</h2>
+        <h2>{editMode ? "Edit Product" : "Add Product"}</h2>
       </div>
+      {isLoading && <div className="adm-loading-overlay">Loading Product Data...</div>}
 
       <form className="adm-add-product-form" onSubmit={handleSubmit}>
         {isSubmitting && (

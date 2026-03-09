@@ -2070,3 +2070,48 @@ tr:hover .adm-row-actions {
 .adm-page.dark-mode .adm-search-input-wrap .adm-input {
   background: #0f172a;
 }
+
+/* Overlays */
+.adm-submitting-overlay,
+.adm-loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  font-weight: 600;
+  color: var(--adm-primary);
+  border-radius: 14px;
+}
+
+.adm-loading-overlay {
+  color: #64748b;
+  background: rgba(248, 250, 252, 0.9);
+}
+
+.adm-page.dark-mode .adm-submitting-overlay,
+.adm-page.dark-mode .adm-loading-overlay {
+  background: rgba(15, 23, 42, 0.85);
+  color: #818cf8;
+}
+
+.adm-loading-overlay::after {
+  content: "";
+  width: 24px;
+  height: 24px;
+  border: 3px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: admRotate 1s linear infinite;
+}
+
+@keyframes admRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}

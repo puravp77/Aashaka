@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Search, Filter, Edit2, Trash2, ExternalLink } from "lucide-react";
+import { Plus, Search, Filter, Edit2, Trash2 } from "lucide-react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 

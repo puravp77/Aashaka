@@ -71,6 +71,7 @@ export default function AdminLayout() {
 
   const pageTitle = useMemo(() => {
     if (TITLES[location.pathname]) return TITLES[location.pathname];
+    if (location.pathname.includes("/admin/products/edit/")) return "Edit Product";
     if (location.pathname.startsWith("/admin/products/")) return "Products";
     return "Admin";
   }, [location.pathname]);
