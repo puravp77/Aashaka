@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
+import { fetchSingleton, getApiBaseUrl, isStaticDataMode } from "../../../utils/api";
 
 const CONTENT_STORAGE_KEY = "admin_content_config";
 
@@ -18,18 +19,12 @@ export default function AdminContent() {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        // 1. Try server first
-        if (!window.location.hostname.includes("github.io")) {
-          const response = await fetch("http://localhost:5000/content");
-          if (response.ok) {
-            const data = await response.json();
-            setForm(data);
-            localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(data));
-            return;
-          }
+        const data = await fetchSingleton("content");
+        if (data) {
+          setForm(data);
+          localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(data));
+          return;
         }
-
-        // 2. Fallback to localStorage
         const raw = localStorage.getItem(CONTENT_STORAGE_KEY);
         if (raw) {
           setForm(JSON.parse(raw));
@@ -53,8 +48,8 @@ export default function AdminContent() {
     try {
       localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(form));
 
-      if (!window.location.hostname.includes("github.io")) {
-        const response = await fetch("http://localhost:5000/content", {
+      if (!isStaticDataMode()) {
+        const response = await fetch(`${getApiBaseUrl()}/content`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(form),
@@ -77,8 +72,8 @@ export default function AdminContent() {
     setForm(DEFAULT_CONTENT);
     localStorage.setItem(CONTENT_STORAGE_KEY, JSON.stringify(DEFAULT_CONTENT));
     try {
-      if (!window.location.hostname.includes("github.io")) {
-        await fetch("http://localhost:5000/content", {
+      if (!isStaticDataMode()) {
+        await fetch(`${getApiBaseUrl()}/content`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(DEFAULT_CONTENT),

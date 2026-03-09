@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { mapImageList, withPublicUrl } from "../utils/assetPath";
+import { fetchCollection } from "../utils/api";
 
 const ProductContext = createContext();
 
@@ -10,18 +11,8 @@ export function ProductProvider({ children }) {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const url = process.env.NODE_ENV === "development"
-          ? "http://localhost:5000/products"
-          : `${process.env.PUBLIC_URL}/data/products.json`;
-
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Load failed");
-
-        const data = await res.json();
-        // Handle both flat array and keyed object formats
-        const rawData = Array.isArray(data) ? data : (data.products || []);
-
-        const normalized = rawData.map((product) => ({
+        const data = await fetchCollection("products");
+        const normalized = data.map((product) => ({
           ...product,
           images: mapImageList(product.images),
           image: withPublicUrl(product.image),

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
+import { fetchCollection } from "../../../utils/api";
 
 export default function AdminCustomers() {
   const [search, setSearch] = useState("");
@@ -11,22 +12,10 @@ export default function AdminCustomers() {
 
     const loadUsers = async () => {
       try {
-        const isLocal = process.env.NODE_ENV === "development";
-        const usersUrl = isLocal ? "http://localhost:5000/users" : `${process.env.PUBLIC_URL}/data/users.json`;
-        const ordersUrl = isLocal ? "http://localhost:5000/orders" : `${process.env.PUBLIC_URL}/data/users.json`;
-
-        const [uRes, oRes] = await Promise.all([
-          fetch(usersUrl, { cache: "no-store" }),
-          fetch(ordersUrl, { cache: "no-store" }),
+        const [users, orders] = await Promise.all([
+          fetchCollection("users"),
+          fetchCollection("orders"),
         ]);
-
-        if (!uRes.ok || !oRes.ok) throw new Error("Failed to fetch data");
-
-        const uData = await uRes.json();
-        const oData = await oRes.json();
-
-        const users = Array.isArray(uData) ? uData : (uData.users || []);
-        const orders = Array.isArray(oData) ? oData : (oData.orders || []);
 
         const orderCountByUser = orders.reduce((acc, order) => {
           const userId = String(order?.userId || "").toLowerCase();

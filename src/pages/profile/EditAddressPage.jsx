@@ -9,6 +9,7 @@ import {
   setLocalAddresses,
   shouldUseLocalCheckoutStore,
 } from "../../utils/localCheckoutData";
+import { fetchCollection } from "../../utils/api";
 
 const STATES_API_URL =    "https://www.india-location-hub.in/api/locations/states";
 const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/districts";
@@ -45,12 +46,7 @@ const normalizeLocationText = (value) =>
     .trim();
 
 const loadFallbackDistrictsFromLocalData = async (selectedStateRawName) => {
-  const response = await fetch(`${process.env.PUBLIC_URL}/data/users.json`, {
-    cache: "no-store",
-  });
-  if (!response.ok) return [];
-  const json = await response.json();
-  const addresses = Array.isArray(json?.addresses) ? json.addresses : [];
+  const addresses = await fetchCollection("addresses");
   const targetState = normalizeLocationText(selectedStateRawName);
 
   return addresses

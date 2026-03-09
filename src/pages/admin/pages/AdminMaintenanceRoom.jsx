@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Truck, Activity, Save, Loader2, AlertCircle, Info } from "lucide-react";
 import { useSettings } from "../../../context/SettingsContext";
 import "./AdminPages.css";
+import { fetchSingleton, getApiBaseUrl, isStaticDataMode } from "../../../utils/api";
 
 export default function AdminMaintenanceRoom() {
     const { refreshSettings } = useSettings();
@@ -26,22 +27,11 @@ export default function AdminMaintenanceRoom() {
                     // Continue to sync from server in background if not static
                 }
 
-                // 2. Try server if not on static host
-                if (!window.location.hostname.includes("github.io")) {
-                    const response = await fetch("http://localhost:5000/settings");
-                    if (response.ok) {
-                        const data = await response.json();
-                        setSettings(data);
-                        localStorage.setItem("aashaka_settings", JSON.stringify(data));
-                        return;
-                    }
-                }
-
-                // 3. Fallback to public file if server fails or is static host
-                if (!localData) {
-                    const response = await fetch("/data/settings.json");
-                    const data = await response.json();
+                const data = await fetchSingleton("settings");
+                if (data) {
                     setSettings(data);
+                    localStorage.setItem("aashaka_settings", JSON.stringify(data));
+                    return;
                 }
             } catch (error) {
                 console.error("Failed to fetch settings:", error);
@@ -60,9 +50,8 @@ export default function AdminMaintenanceRoom() {
             // 1. Save to localStorage immediately
             localStorage.setItem("aashaka_settings", JSON.stringify(settings));
 
-            // 2. Try to save to server if not on static host
-            if (!window.location.hostname.includes("github.io")) {
-                const response = await fetch("http://localhost:5000/settings", {
+            if (!isStaticDataMode()) {
+                const response = await fetch(`${getApiBaseUrl()}/settings`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(settings)

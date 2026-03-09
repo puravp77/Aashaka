@@ -3,11 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Search, Filter, Edit2, Trash2 } from "lucide-react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
+import { fetchCollection, getApiBaseUrl, isStaticDataMode } from "../../../utils/api";
 
 const PAGE_SIZE = 15;
-const PRODUCTS_API_URL = process.env.NODE_ENV === "development"
-  ? "http://localhost:5000/products"
-  : `${process.env.PUBLIC_URL}/data/products.json`;
 
 const toTitleCase = (value = "") =>
   String(value)
@@ -64,11 +62,10 @@ export default function AdminProducts() {
 
   const loadProducts = async () => {
     try {
-      const res = await fetch(`${PRODUCTS_API_URL}?_sort=id&_order=desc`, { cache: "no-store" });
-      if (!res.ok) throw new Error("Failed to load products");
-      const data = await res.json();
-      const finalData = Array.isArray(data) ? data : (data.products || []);
-      setProducts(finalData);
+      const data = await fetchCollection("products", {
+        query: { _sort: "id", _order: "desc" },
+      });
+      setProducts(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error loading products:", err);
       setProducts([]);
@@ -81,13 +78,17 @@ export default function AdminProducts() {
 
   const handleDelete = async (productId) => {
     if (!window.confirm(`Are you sure you want to delete product ${productId}?`)) return;
+    if (isStaticDataMode()) {
+      alert("Delete is only available when json-server is running.");
+      return;
+    }
 
     try {
      
       const originalProduct = products.find(p => String(p.id).toUpperCase() === productId);
       const targetId = originalProduct ? originalProduct.id : productId;
 
-      const res = await fetch(`http://localhost:5000/products/${targetId}`, {
+      const res = await fetch(`${getApiBaseUrl()}/products/${targetId}`, {
         method: "DELETE"
       });
 

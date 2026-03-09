@@ -1,4 +1,5 @@
 import { withPublicUrl } from "./assetPath";
+import { fetchCollection } from "./api";
 
 const LOCAL_USERS_KEY = "aashaka_users";
 
@@ -25,10 +26,7 @@ export const loadLocalUsers = async () => {
   }
 
   try {
-    const res = await fetch(`${process.env.PUBLIC_URL}/data/users.json`);
-    if (!res.ok) return [];
-    const data = await res.json();
-    const users = Array.isArray(data) ? data : data?.users;
+    const users = await fetchCollection("users");
     if (Array.isArray(users)) {
       const normalizedFromFile = users.map((user) => ({
         ...user,

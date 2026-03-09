@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
+import { fetchCollection } from "../../../utils/api";
 
 const STATUS_ROTATION = ["Pending", "Processing", "Shipped", "Delivered"];
 
@@ -25,15 +26,7 @@ export default function AdminOrders() {
 
     const loadOrders = async () => {
       try {
-        const url = process.env.NODE_ENV === "development"
-          ? "http://localhost:5000/orders"
-          : `${process.env.PUBLIC_URL}/data/users.json`;
-
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) throw new Error("Failed to fetch orders data");
-
-        const data = await res.json();
-        const orders = Array.isArray(data) ? data : (data.orders || []);
+        const orders = await fetchCollection("orders");
 
         const mapped = orders.map((order, index) => {
           const email = String(order?.userId || "");

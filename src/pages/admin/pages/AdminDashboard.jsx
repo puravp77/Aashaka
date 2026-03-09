@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Edit, Hammer, ExternalLink, Zap } from "lucide-react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
+import { fetchCollection } from "../../../utils/api";
 
 const pctDelta = (current, previous) => {
   if (previous === 0) return current === 0 ? "0.0%" : "+100.0%";
@@ -49,31 +50,14 @@ export default function AdminDashboard() {
 
     const loadData = async () => {
       try {
-        const isLocal = !window.location.hostname.includes("github.io");
-        const usersUrl = isLocal ? "http://localhost:5000/users" : `${process.env.PUBLIC_URL}/data/users.json`;
-
-        const uRes = await fetch(usersUrl, { cache: "no-store" });
-        if (!uRes.ok) throw new Error("Failed to fetch users");
-        const uData = await uRes.json();
-
-        const fullData = uData.users ? uData : null;
+        const [ordersData, productsData] = await Promise.all([
+          fetchCollection("orders"),
+          fetchCollection("products"),
+        ]);
 
         if (mounted) {
-          if (fullData) {
-            setOrders(fullData.orders || []);
-          } else {
-            if (isLocal) {
-              const [oRes, pRes] = await Promise.all([
-                fetch("http://localhost:5000/orders"),
-                fetch("http://localhost:5000/products")
-              ]);
-              if (oRes.ok) setOrders(await oRes.json());
-              if (pRes.ok) setProducts(await pRes.json());
-            } else {
-              const pRes = await fetch(`${process.env.PUBLIC_URL}/data/products.json`);
-              if (pRes.ok) setProducts(await pRes.json());
-            }
-          }
+          setOrders(Array.isArray(ordersData) ? ordersData : []);
+          setProducts(Array.isArray(productsData) ? productsData : []);
         }
       } catch (err) {
         console.error("Dashboard load error:", err);
@@ -339,7 +323,7 @@ export default function AdminDashboard() {
       </section>
 
       <section className="adm-widgets">
-        <article className="adm-widget">
+        <article className="adm-widget adm-dashboard-list-widget">
           <div className="adm-widget-head">
             <div>
               <h2>Recent Orders</h2>
@@ -347,7 +331,7 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="adm-table-wrap">
-            <table className="adm-table adm-table-compact">
+            <table className="adm-table adm-table-compact adm-dashboard-mobile-table">
               <thead>
                 <tr>
                   <th>Order ID</th>
@@ -359,10 +343,10 @@ export default function AdminDashboard() {
               <tbody>
                 {recentOrders.map((o) => (
                   <tr key={`${o.id}-${o.date.toISOString()}`}>
-                    <td style={{ fontWeight: 600, color: "var(--adm-primary)" }}>#{String(o.id || "ORDER").slice(-6)}</td>
-                    <td>{o.address?.firstName || "Guest"}</td>
-                    <td>{"\u20B9"}{o.total.toLocaleString("en-IN")}</td>
-                    <td>{new Date(o.date).toLocaleDateString()}</td>
+                    <td data-label="Order ID" style={{ fontWeight: 600, color: "var(--adm-primary)" }}>#{String(o.id || "ORDER").slice(-6)}</td>
+                    <td data-label="Customer">{o.address?.firstName || "Guest"}</td>
+                    <td data-label="Total">{"\u20B9"}{o.total.toLocaleString("en-IN")}</td>
+                    <td data-label="Date">{new Date(o.date).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -370,7 +354,7 @@ export default function AdminDashboard() {
           </div>
         </article>
 
-        <article className="adm-widget">
+        <article className="adm-widget adm-dashboard-list-widget">
           <div className="adm-widget-head">
             <div>
               <h2>Top Products</h2>
@@ -378,7 +362,7 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="adm-table-wrap">
-            <table className="adm-table adm-table-compact">
+            <table className="adm-table adm-table-compact adm-dashboard-mobile-table">
               <thead>
                 <tr>
                   <th>Product</th>
@@ -389,9 +373,9 @@ export default function AdminDashboard() {
               <tbody>
                 {topProducts.map((p) => (
                   <tr key={p.id}>
-                    <td style={{ fontWeight: 500 }}>{p.name}</td>
-                    <td style={{ fontSize: "12px", color: "#64748b" }}>{p.id}</td>
-                    <td style={{ fontWeight: 600 }}>{p.sales} Sold</td>
+                    <td data-label="Product" style={{ fontWeight: 500 }}>{p.name}</td>
+                    <td data-label="ID" style={{ fontSize: "12px", color: "#64748b" }}>{p.id}</td>
+                    <td data-label="Sales" style={{ fontWeight: 600 }}>{p.sales} Sold</td>
                   </tr>
                 ))}
               </tbody>
