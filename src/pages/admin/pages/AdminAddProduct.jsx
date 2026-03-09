@@ -96,6 +96,13 @@ function AdminCustomSelect({
 export default function AdminAddProduct({ editMode = false }) {
   const navigate = useNavigate();
   const { id } = useParams();
+  const subCategoryPrefixMap = useMemo(() => ({
+    "Kurti": { prefix: "k", category: "kurti" },
+    "Oxidised Set": { prefix: "o", category: "oxidised" },
+    "Bangles-Kada": { prefix: "b", category: "bangles" },
+    "Earrings": { prefix: "e", category: "earrings" },
+    "Necklace": { prefix: "n", category: "necklace" },
+  }), []);
   const [form, setForm] = useState({
     category: "",
     subCategory: "",
@@ -166,14 +173,6 @@ export default function AdminAddProduct({ editMode = false }) {
       fetchProduct();
     }
   }, [editMode, id, navigate, subCategoryPrefixMap]);
-
-  const subCategoryPrefixMap = useMemo(() => ({
-    "Kurti": { prefix: "k", category: "kurti" },
-    "Oxidised Set": { prefix: "o", category: "oxidised" },
-    "Bangles-Kada": { prefix: "b", category: "bangles" },
-    "Earrings": { prefix: "e", category: "earrings" },
-    "Necklace": { prefix: "n", category: "necklace" },
-  }), []);
 
   const computedFinalPrice = useMemo(() => {
     const price = parseNumber(form.itemPrice);
