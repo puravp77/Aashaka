@@ -8,12 +8,12 @@ import "./index.css";
 
 function App() {
    const { settings } = useSettings();
-   const { user } = useAuth();
+   const { adminUser } = useAuth();
 
    // If maintenance mode is ON and user is NOT an admin, show maintenance page
    // But ALWAYS allow access to /admin routes for management
    const isMaintenance = settings.maintenanceMode;
-   const isAdmin = user?.role === 'admin';
+   const isAdmin = adminUser?.role === 'admin';
 
    return (
       <Routes>

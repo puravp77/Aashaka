@@ -70,22 +70,12 @@ const HeaderTop = ({ userName }) => {
       )
       .join(" ");
   };
-
-  let displayName = normalizeName(userName);
-  if (!displayName) {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        const parsed = JSON.parse(storedUser);
-        displayName =
-          normalizeName(parsed?.name) ||
-          normalizeName(parsed?.firstName) ||
-          normalizeName(parsed?.id);
-      }
-    } catch (err) {
-      displayName = "";
-    }
-  }
+  
+  let displayName =
+    normalizeName(userName) ||
+    normalizeName(user?.name) ||
+    normalizeName(user?.firstName) ||
+    normalizeName(user?.id);
 
   const isLoginPage =
     location.pathname === "/login" ||

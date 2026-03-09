@@ -8,7 +8,7 @@ const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export default function AdminLogin() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { adminLogin } = useAuth();
 
   const [form, setForm] = useState({ id: "", password: "" });
   const [error, setError] = useState("");
@@ -34,7 +34,7 @@ export default function AdminLogin() {
     setLoading(true);
     try {
       // 1. Authenticate credentials
-      const user = await login(form.id.trim(), form.password);
+      const user = await adminLogin(form.id.trim(), form.password);
 
       // 2. Fetch latest allowlist to verify access
       const allowlistRes = await fetch("http://localhost:5000/allowlist");

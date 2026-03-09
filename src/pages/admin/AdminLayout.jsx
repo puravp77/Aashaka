@@ -47,7 +47,7 @@ const QUICK_LINKS = [
 export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { adminUser, adminLogout } = useAuth();
   const profileMenuRef = useRef(null);
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined"
@@ -73,7 +73,7 @@ export default function AdminLayout() {
   }, [location.pathname]);
 
   const handleLogout = () => {
-    logout();
+    adminLogout();
     navigate("/admin/login", { replace: true });
   };
 
@@ -195,7 +195,7 @@ export default function AdminLayout() {
                   aria-expanded={isProfileMenuOpen}
                   onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                 >
-                  {user?.username ? user.username.charAt(0).toUpperCase() : (user?.id ? user.id.charAt(0).toUpperCase() : "A")}
+                  {adminUser?.username ? adminUser.username.charAt(0).toUpperCase() : (adminUser?.id ? adminUser.id.charAt(0).toUpperCase() : "A")}
                 </button>
 
                 {isProfileMenuOpen && (
@@ -228,7 +228,7 @@ export default function AdminLayout() {
                       <FileText size={16} /> Projects
                     </button>
 
-                    <button type="button" className="adm-menu-item" onClick={logout}>
+                    <button type="button" className="adm-menu-item" onClick={handleLogout}>
                       <LogOut size={16} /> Logout
                     </button>
                   </div>

@@ -32,7 +32,7 @@ export const categoryMetadata = {
     all: {
         title: "Complete Collection",
         description: "Explore the entire world of Aashaka. From elegant kurtis to handcrafted jewellery, find everything you need to express your unique style.",
-        bannerImage: "images/banners/all-banner.jpg",
+        bannerImage: "images/kurtibanner.jpg",
         seoTitle: "Aashaka | Shop All Products",
     }
 };

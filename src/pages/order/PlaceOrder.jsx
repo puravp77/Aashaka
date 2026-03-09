@@ -126,7 +126,7 @@ export default function PlaceOrder() {
 
   const storedUser = (() => {
     try {
-      const raw = localStorage.getItem("user");
+      const raw = localStorage.getItem("store_user");
       return raw ? JSON.parse(raw) : null;
     } catch (err) {
       return null;
@@ -1184,4 +1184,3 @@ export default function PlaceOrder() {
     </section>
   );
 }
-

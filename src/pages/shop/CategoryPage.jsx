@@ -117,9 +117,6 @@ const CategoryPage = () => {
                             >
                                 <div className="image-wrapper">
                                     <img src={withPublicUrl(product.images?.[0])} alt={product.title} />
-                                    {product.oldPrice > product.price && (
-                                        <span className="sale-tag">SALE</span>
-                                    )}
                                 </div>
                                 <div className="info">
                                     <h3>{product.title}</h3>

@@ -5,7 +5,7 @@ import "../../admin/AdminLayout.css";
 import "./AdminPages.css";
 
 export default function AdminProfile() {
-    const { user } = useAuth();
+    const { adminUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [tab, setTab] = useState("profile"); // profile, security
 
@@ -17,14 +17,14 @@ export default function AdminProfile() {
     });
 
     useEffect(() => {
-        if (user) {
+        if (adminUser) {
             setFormData({
-                username: user.username || "Purav",
-                email: user.id || user.email || "",
-                role: user.role || "Administrator",
+                username: adminUser.username || "Purav",
+                email: adminUser.id || adminUser.email || "",
+                role: adminUser.role || "Administrator",
             });
         }
-    }, [user]);
+    }, [adminUser]);
 
     const [securityData, setSecurityData] = useState({
         currentPassword: "",

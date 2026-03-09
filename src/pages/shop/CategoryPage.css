@@ -186,18 +186,6 @@
     transform: scale(1.1);
 }
 
-.sale-tag {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: #c0392b;
-    color: white;
-    padding: 4px 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 20px;
-}
-
 .info {
     padding: 15px 5px;
     text-align: center;

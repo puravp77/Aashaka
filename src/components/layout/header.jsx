@@ -20,7 +20,7 @@ export default function Header() {
   const desktopNavRef = useRef(null);
 
   const { uniqueItemCount } = useCart();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,33 +58,26 @@ export default function Header() {
   }, [openDesktopDropdown]);
 
   const getDisplayName = () => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (!storedUser) return "";
-      const parsed = JSON.parse(storedUser);
-      const raw = parsed?.name || parsed?.firstName || parsed?.id || "";
-      if (!raw) return "";
-      if (raw.includes("@")) {
-        const localPart = raw.split("@")[0] || "";
-        const cleaned = localPart.replace(/\d+/g, "");
-        const surname = cleaned.toLowerCase().startsWith("patel")
-          ? cleaned.slice(5)
-          : cleaned;
-        if (!surname) return "";
-        return surname.charAt(0).toUpperCase() + surname.slice(1);
-      }
-      return raw
-        .replace(/[._-]+/g, " ")
-        .replace(/\s+/g, " ")
-        .trim()
-        .split(" ")
-        .map((word) =>
-          word ? word.charAt(0).toUpperCase() + word.slice(1) : ""
-        )
-        .join(" ");
-    } catch (err) {
-      return "";
+    const raw = user?.name || user?.firstName || user?.id || "";
+    if (!raw) return "";
+    if (raw.includes("@")) {
+      const localPart = raw.split("@")[0] || "";
+      const cleaned = localPart.replace(/\d+/g, "");
+      const surname = cleaned.toLowerCase().startsWith("patel")
+        ? cleaned.slice(5)
+        : cleaned;
+      if (!surname) return "";
+      return surname.charAt(0).toUpperCase() + surname.slice(1);
     }
+    return raw
+      .replace(/[._-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .split(" ")
+      .map((word) =>
+        word ? word.charAt(0).toUpperCase() + word.slice(1) : ""
+      )
+      .join(" ");
   };
 
   const displayName = getDisplayName();

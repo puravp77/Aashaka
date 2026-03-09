@@ -77,12 +77,13 @@ export default function Login() {
     if (!validate()) return;
 
     try {
-      const user = await login(form.id.trim(), form.password);
-      navigate(user.role === "admin" ? "/admin-dashboard" : "/");
+      await login(form.id.trim(), form.password);
+      navigate("/");
     } catch (err) {
-
       if (err.message === "EMAIL_NOT_FOUND") {
         setErrors({ id: "Email does not exist" });
+      } else if (err.message === "ADMIN_USE_ADMIN_PORTAL") {
+        setErrors({ id: "Use the Admin Portal for admin accounts" });
       } else if (err.message === "WRONG_PASSWORD") {
         setErrors({ password: "Incorrect password" });
       } else {

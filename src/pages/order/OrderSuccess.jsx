@@ -35,7 +35,7 @@ export default function OrderSuccess() {
 
   const fallbackUser = useMemo(() => {
     try {
-      const raw = localStorage.getItem("user");
+      const raw = localStorage.getItem("store_user");
       return raw ? JSON.parse(raw) : null;
     } catch {
       return null;

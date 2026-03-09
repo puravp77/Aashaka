@@ -181,13 +181,28 @@ export default function ForgotPassword() {
         updated[idx] = { ...updated[idx], password: newPassword };
         saveLocalUsers(updated);
 
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
+        const storedCustomer = localStorage.getItem("store_user");
+        if (storedCustomer) {
           try {
-            const parsed = JSON.parse(storedUser);
+            const parsed = JSON.parse(storedCustomer);
             if (parsed?.id === email.trim()) {
               localStorage.setItem(
-                "user",
+                "store_user",
+                JSON.stringify({ ...parsed, password: newPassword })
+              );
+            }
+          } catch {
+            // ignore
+          }
+        }
+
+        const storedAdmin = localStorage.getItem("admin_user");
+        if (storedAdmin) {
+          try {
+            const parsed = JSON.parse(storedAdmin);
+            if (parsed?.id === email.trim()) {
+              localStorage.setItem(
+                "admin_user",
                 JSON.stringify({ ...parsed, password: newPassword })
               );
             }
