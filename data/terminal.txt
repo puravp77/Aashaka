@@ -5,9 +5,3 @@ npm run deploy
 
 
 npx json-server public/data/users.json --port 5000
-
-
-
-
-
-
