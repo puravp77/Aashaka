@@ -52,3 +52,35 @@ npx json-server public/data/db.json --port 5000
 
 20. Addressed multiple warnings and regressions during the session, including runtime errors, lint warnings, hook-order issues, id-routing mismatches, stock-validation gaps, and UI alignment issues.
 
+
+CONTINUE
+
+1. Fixed the unused `allowListPath` warning in [merge_db.jsx](d:/Project/aashaka/merge_db.jsx).
+
+2. Added a CLOTH-specific color-variant structure in the admin add/edit product form in [AdminAddProduct.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx).
+
+3. Updated the admin product payload so CLOTH products can save `variants` with color, images, and size/stock combinations.
+
+4. Preserved compatibility by still filling legacy top-level product fields from the first color variant when saving CLOTH products.
+
+5. Added supporting styles for the new CLOTH color-variant cards and controls in [AdminPages.css](d:/Project/aashaka/src/pages/admin/pages/AdminPages.css).
+
+6. Fixed the initial layout of the new CLOTH color-variant section so the color field, image upload, gallery upload, and size/stock rows render in a cleaner grid.
+
+7. Added dark-mode styling for the new color-variant card so it no longer showed a white/light block inside the dark admin theme.
+
+8. Added dark-mode styling for the `Add Color` and `Remove` buttons so they match the rest of the admin panel in dark mode.
+
+9. Moved the `Color Variants` section to appear after `Product Content` on the add-product page, as requested.
+
+10. Improved spacing and textarea presentation in the `Product Content` section by adding a dedicated section class and adjusting padding, gaps, and textarea height.
+
+11. Styled the `Add Color` and `Remove` buttons with distinct visual colors rather than leaving them as plain neutral buttons.
+
+12. Investigated duplicate image thumbnails on the product page and confirmed the issue came from the saved data containing the same image twice.
+
+13. Fixed the storefront product image loader in [assetPath.js](d:/Project/aashaka/src/utils/assetPath.js) to de-duplicate image arrays before rendering.
+
+14. Fixed the admin save logic in [AdminAddProduct.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx) so duplicate image paths are removed before storing product data.
+
+15. Ensured existing products with duplicate saved image entries no longer show repeated thumbnails on the product details page after reload.
