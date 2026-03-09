@@ -10,42 +10,45 @@ npx json-server public/data/db.json --port 5000
 
 9-03-2026
 
-1. Fixed the runtime error on the admin add/edit product page caused by `subCategoryPrefixMap` being used before initialization in [AdminAddProduct.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx).
+**Daily Report**
 
-2. Added size-wise stock enforcement on the product detail page so quantity cannot go beyond the selected size’s available stock in [ProductDetails.jsx](d:/Project/aashaka/src/pages/shop/ProductDetails.jsx).
+1. Resolved the admin add/edit product page runtime crash caused by `subCategoryPrefixMap` being referenced before initialization in [AdminAddProduct.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx).
 
-3. Added out-of-stock handling on product details with the message `Out of stock for this size` when the user tries to exceed available quantity.
+2. Implemented size-based stock validation on the product detail page so users cannot increase quantity beyond the stock available for the selected size in [ProductDetails.jsx](d:/Project/aashaka/src/pages/shop/ProductDetails.jsx).
 
-4. Updated the product detail page to show size-specific stock context like selected stock count and disabled unavailable sizes.
+3. Added `Out of stock for this size` feedback on the product detail page when users try to exceed the available quantity.
 
-5. Fixed the React hooks lint error in the product detail page by moving hook usage before early returns in [ProductDetails.jsx](d:/Project/aashaka/src/pages/shop/ProductDetails.jsx).
+4. Updated the product detail page so unavailable sizes stay disabled and selected-size stock information is shown more clearly.
 
-6. Removed stock text from size buttons because it was breaking the UI layout, and kept the stock information in helper text / tooltip instead.
+5. Fixed the React hook order issue on the product detail page by ensuring hooks run before any early return conditions in [ProductDetails.jsx](d:/Project/aashaka/src/pages/shop/ProductDetails.jsx).
 
-7. Updated Kurti stock data so products no longer shared the same size inventory pattern in the JSON data.
+6. Removed stock labels from inside size buttons because they were breaking the UI layout and kept the stock messaging in a cleaner helper area.
 
-8. Applied those stock updates specifically to [products.json](d:/Project/aashaka/public/data/products.json) so each Kurti product has different size availability.
+7. Updated Kurti inventory data so products no longer share the same size stock pattern across all items.
 
-9. Cleaned up the admin add/edit product page warning by removing the unused `finalSubCategory` variable in [AdminAddProduct.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx).
+8. Applied the revised Kurti stock data to [products.json](d:/Project/aashaka/public/data/products.json) so each product now has distinct size availability.
 
-10. Adjusted the admin dashboard metric card colors to better match the storefront brand palette in [AdminPages.css](d:/Project/aashaka/src/pages/admin/pages/AdminPages.css).
+9. Removed the unused `finalSubCategory` variable from [AdminAddProduct.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx) to clear the lint warning.
 
-11. Fixed the admin products page edit-button routing so it uses the real product id instead of the uppercased display id in [AdminProducts.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminProducts.jsx).
+10. Updated the admin dashboard metric-card colors to better match the website’s brand styling in [AdminPages.css](d:/Project/aashaka/src/pages/admin/pages/AdminPages.css).
 
-12. Fixed cart-page quantity logic so cart quantity cannot exceed the actual available stock for the selected size in [Cart.jsx](d:/Project/aashaka/src/pages/order/Cart.jsx).
+11. Fixed the admin products page edit-button navigation so it uses the real backend product id instead of the uppercase display id in [AdminProducts.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminProducts.jsx).
 
-13. Updated cart-state logic in [CartContext.jsx](d:/Project/aashaka/src/context/CartContext.jsx) so even programmatic add-to-cart operations cannot exceed available size stock.
+12. Corrected cart-page quantity behavior so users cannot increase cart quantity beyond the stock available for the selected size in [Cart.jsx](d:/Project/aashaka/src/pages/order/Cart.jsx).
 
-14. Applied the same stock-aware quantity restriction to the cart drawer in [CartDrawer.jsx](d:/Project/aashaka/src/components/layout/CartDrawer.jsx).
+13. Strengthened cart-state handling in [CartContext.jsx](d:/Project/aashaka/src/context/CartContext.jsx) so add-to-cart operations cannot push quantity beyond available stock.
 
-15. Locked the quantity stepper on the product detail page until the user selects a size for size-based products in [ProductDetails.jsx](d:/Project/aashaka/src/pages/shop/ProductDetails.jsx).
+14. Applied the same stock-aware quantity restriction logic to the cart drawer in [CartDrawer.jsx](d:/Project/aashaka/src/components/layout/CartDrawer.jsx).
 
-16. Fixed the admin edit-product pricing logic so changing percentage recalculates the final price correctly instead of staying stuck on the saved value in [AdminAddProduct.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx).
+15. Locked the quantity controls on the product detail page until a size is selected for size-based products in [ProductDetails.jsx](d:/Project/aashaka/src/pages/shop/ProductDetails.jsx).
 
-17. Added derived percentage loading on the edit-product page based on `oldPrice` and `price`, so existing discount values load more accurately.
+16. Fixed the admin edit-product pricing calculation so updating the percentage field correctly recalculates the final price in [AdminAddProduct.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx).
 
-18. Fixed the alignment issue on the products table so the `Actions` header lines up properly with the edit/delete buttons in [AdminPages.css](d:/Project/aashaka/src/pages/admin/pages/AdminPages.css).
+17. Added logic to derive the initial percentage on the edit-product page from saved `oldPrice` and `price`, making the edit form more accurate.
 
-19. Verified and iterated across admin product listing, product details, cart page, and cart drawer so stock rules and product-edit behavior stay consistent across the main shopping/admin flows.
+18. Fixed the alignment mismatch between the `Actions` table header and the edit/delete buttons on the admin products list in [AdminPages.css](d:/Project/aashaka/src/pages/admin/pages/AdminPages.css).
 
-20. Worked through multiple UI regressions and warnings during the session, including runtime errors, lint warnings, hook ordering issues, stock-validation gaps, route id mismatches, and table/header alignment.
+19. Verified consistency across the main storefront and admin flows so stock limits, size selection rules, and product-edit behavior now work together more reliably.
+
+20. Addressed multiple warnings and regressions during the session, including runtime errors, lint warnings, hook-order issues, id-routing mismatches, stock-validation gaps, and UI alignment issues.
+
