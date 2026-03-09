@@ -4,4 +4,5 @@ git push
 npm run deploy
 
 
-npx json-server public/data/users.json --port 5000
+Merged Command:
+npx json-server public/data/db.json --port 5000

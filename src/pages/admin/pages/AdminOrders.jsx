@@ -25,12 +25,15 @@ export default function AdminOrders() {
 
     const loadOrders = async () => {
       try {
-        const res = await fetch(`${process.env.PUBLIC_URL}/data/users.json`, {
-          cache: "no-store",
-        });
+        const url = process.env.NODE_ENV === "development"
+          ? "http://localhost:5000/orders"
+          : `${process.env.PUBLIC_URL}/data/users.json`;
+
+        const res = await fetch(url, { cache: "no-store" });
         if (!res.ok) throw new Error("Failed to fetch orders data");
+
         const data = await res.json();
-        const orders = Array.isArray(data?.orders) ? data.orders : [];
+        const orders = Array.isArray(data) ? data : (data.orders || []);
 
         const mapped = orders.map((order, index) => {
           const email = String(order?.userId || "");

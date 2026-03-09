@@ -11,14 +11,22 @@ export default function AdminCustomers() {
 
     const loadUsers = async () => {
       try {
-        const res = await fetch(`${process.env.PUBLIC_URL}/data/users.json`, {
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error("Failed to fetch users data");
+        const isLocal = process.env.NODE_ENV === "development";
+        const usersUrl = isLocal ? "http://localhost:5000/users" : `${process.env.PUBLIC_URL}/data/users.json`;
+        const ordersUrl = isLocal ? "http://localhost:5000/orders" : `${process.env.PUBLIC_URL}/data/users.json`;
 
-        const data = await res.json();
-        const users = Array.isArray(data?.users) ? data.users : [];
-        const orders = Array.isArray(data?.orders) ? data.orders : [];
+        const [uRes, oRes] = await Promise.all([
+          fetch(usersUrl, { cache: "no-store" }),
+          fetch(ordersUrl, { cache: "no-store" }),
+        ]);
+
+        if (!uRes.ok || !oRes.ok) throw new Error("Failed to fetch data");
+
+        const uData = await uRes.json();
+        const oData = await oRes.json();
+
+        const users = Array.isArray(uData) ? uData : (uData.users || []);
+        const orders = Array.isArray(oData) ? oData : (oData.orders || []);
 
         const orderCountByUser = orders.reduce((acc, order) => {
           const userId = String(order?.userId || "").toLowerCase();
@@ -66,7 +74,7 @@ export default function AdminCustomers() {
     <section className="adm-widget">
       <div className="adm-widget-head">
         <h2>Customers</h2>
-        
+
       </div>
 
       <div className="adm-controls">

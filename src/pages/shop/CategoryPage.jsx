@@ -116,7 +116,14 @@ const CategoryPage = () => {
                                 onClick={() => navigate(`/product/${product.id}`)}
                             >
                                 <div className="image-wrapper">
-                                    <img src={withPublicUrl(product.images?.[0])} alt={product.title} />
+                                    <img
+                                        src={withPublicUrl(product.images?.[0])}
+                                        alt={product.title}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = withPublicUrl("images/placeholder-product.jpg");
+                                        }}
+                                    />
                                 </div>
                                 <div className="info">
                                     <h3>{product.title}</h3>

@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Plus, Search, Filter, Edit2, Trash2, ExternalLink } from "lucide-react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
 
 const PAGE_SIZE = 15;
-const PRODUCTS_API_URL = `${process.env.PUBLIC_URL}/data/products.json`;
+const PRODUCTS_API_URL = process.env.NODE_ENV === "development"
+  ? "http://localhost:5000/products"
+  : `${process.env.PUBLIC_URL}/data/products.json`;
 
 const toTitleCase = (value = "") =>
   String(value)
@@ -35,7 +38,7 @@ export default function AdminProducts() {
         id: String(product?.id || "").toUpperCase(),
         name: product?.title || "Untitled Product",
         category: categoryLabel || "Uncategorized",
-        price: `\u20B9${Number(product?.price || 0).toLocaleString("en-IN")}`,
+        price: `₹${Number(product?.price || 0).toLocaleString("en-IN")}`,
         stock,
         status,
       };
@@ -58,29 +61,45 @@ export default function AdminProducts() {
   const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+  const loadProducts = async () => {
+    try {
+      const res = await fetch(`${PRODUCTS_API_URL}?_sort=id&_order=desc`, { cache: "no-store" });
+      if (!res.ok) throw new Error("Failed to load products");
+      const data = await res.json();
+      const finalData = Array.isArray(data) ? data : (data.products || []);
+      setProducts(finalData);
+    } catch (err) {
+      console.error("Error loading products:", err);
+      setProducts([]);
+    }
+  };
+
   useEffect(() => {
-    let ignore = false;
-
-    const loadProducts = async () => {
-      try {
-        const res = await fetch(PRODUCTS_API_URL, { cache: "no-store" });
-        if (!res.ok) throw new Error("Failed to load products");
-        const data = await res.json();
-        if (!ignore) {
-          setProducts(Array.isArray(data) ? data : []);
-        }
-      } catch {
-        if (!ignore) {
-          setProducts([]);
-        }
-      }
-    };
-
     loadProducts();
-    return () => {
-      ignore = true;
-    };
   }, []);
+
+  const handleDelete = async (productId) => {
+    if (!window.confirm(`Are you sure you want to delete product ${productId}?`)) return;
+
+    try {
+      // JSON server uses the actual ID field. 
+      // If our displayed ID is upper-cased, we should use the one from products state.
+      const originalProduct = products.find(p => String(p.id).toUpperCase() === productId);
+      const targetId = originalProduct ? originalProduct.id : productId;
+
+      const res = await fetch(`http://localhost:5000/products/${targetId}`, {
+        method: "DELETE"
+      });
+
+      if (!res.ok) throw new Error("Delete failed");
+
+      setProducts(prev => prev.filter(p => p.id !== targetId));
+      alert("Product deleted successfully");
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting product: " + err.message);
+    }
+  };
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -102,20 +121,24 @@ export default function AdminProducts() {
           className="adm-btn primary"
           onClick={() => navigate("/admin/products/add")}
         >
-          Add Product
+          <Plus size={18} />
+          <span>Add Product</span>
         </button>
       </div>
 
       <div className="adm-controls">
-        <input
-          className="adm-input"
-          placeholder="Search product"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
-        />
+        <div className="adm-search-input-wrap">
+          <Search size={18} className="adm-search-icon" />
+          <input
+            className="adm-input"
+            placeholder="Search product..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+          />
+        </div>
         <div className="adm-status-menu" ref={categoryMenuRef}>
           <button
             type="button"
@@ -124,6 +147,7 @@ export default function AdminProducts() {
             aria-haspopup="listbox"
             aria-expanded={isCategoryMenuOpen}
           >
+            <Filter size={16} style={{ marginRight: "8px", opacity: 0.7 }} />
             {category}
             <span className={`adm-select-caret ${isCategoryMenuOpen ? "open" : ""}`} />
           </button>
@@ -162,13 +186,14 @@ export default function AdminProducts() {
               <th>Price</th>
               <th>Stock</th>
               <th>Status</th>
+              <th className="adm-text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {visible.map((row) => (
               <tr key={row.id}>
-                <td>{row.id}</td>
-                <td>{row.name}</td>
+                <td className="adm-font-mono">{row.id}</td>
+                <td style={{ fontWeight: 500 }}>{row.name}</td>
                 <td>{row.category}</td>
                 <td>{row.price}</td>
                 <td>{row.stock}</td>
@@ -176,6 +201,24 @@ export default function AdminProducts() {
                   <span className={`adm-status ${row.status.toLowerCase()}`}>
                     {row.status}
                   </span>
+                </td>
+                <td className="adm-text-right">
+                  <div className="adm-row-actions">
+                    <button
+                      className="adm-icon-btn"
+                      title="Edit"
+                      onClick={() => navigate(`/admin/products/edit/${row.id}`)}
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                    <button
+                      className="adm-icon-btn danger"
+                      title="Delete"
+                      onClick={() => handleDelete(row.id)}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

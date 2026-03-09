@@ -112,6 +112,15 @@ export default function AdminAddProduct() {
   const [itemImageName, setItemImageName] = useState("");
   const [multiImageNames, setMultiImageNames] = useState([]);
   const [inventoryRows, setInventoryRows] = useState([{ size: "", stock: "" }]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const subCategoryPrefixMap = useMemo(() => ({
+    "Kurti": { prefix: "k", category: "kurti" },
+    "Oxidised Set": { prefix: "o", category: "oxidised" },
+    "Bangles-Kada": { prefix: "b", category: "bangles" },
+    "Earrings": { prefix: "e", category: "earrings" },
+    "Necklace": { prefix: "n", category: "necklace" },
+  }), []);
 
   const computedFinalPrice = useMemo(() => {
     const price = parseNumber(form.itemPrice);
@@ -175,9 +184,79 @@ export default function AdminAddProduct() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    navigate("/admin/products");
+    if (isSubmitting) return;
+
+    try {
+      setIsSubmitting(true);
+
+      // 1. Fetch current products to generate ID
+      const res = await fetch("http://localhost:5000/products");
+      if (!res.ok) throw new Error("Could not fetch current products");
+      const currentProducts = await res.json();
+
+      const config = subCategoryPrefixMap[form.subCategory] || { prefix: "p", category: "other" };
+      const prefix = config.prefix;
+
+      // Find highest number for this prefix
+      const regex = new RegExp(`^${prefix}(\\d+)$`, 'i');
+      let maxNum = 0;
+      currentProducts.forEach(p => {
+        const match = p.id.match(regex);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      });
+      const newId = `${prefix}${maxNum + 1}`;
+
+      // 2. Prepare payload
+      const sizesObj = {};
+      inventoryRows.forEach(row => {
+        if (row.size) {
+          sizesObj[row.size] = parseNumber(row.stock);
+        }
+      });
+
+      const payload = {
+        id: newId,
+        title: form.itemName,
+        images: [
+          itemImageName ? `images/${itemImageName}` : "",
+          ...multiImageNames.map(name => `images/${name}`)
+        ].filter(Boolean),
+        price: parseNumber(finalPriceValue),
+        oldPrice: parseNumber(form.itemPrice),
+        category: config.category,
+        sizes: sizesObj,
+        details: {
+          colour: form.color,
+          material: form.material,
+          size: inventoryRows.map(r => r.size).filter(Boolean).join(", "),
+          description: form.description,
+          specification: form.specification,
+          styleNotes: form.styleNotes
+        }
+      };
+
+      // 3. POST to JSON Server
+      const postRes = await fetch("http://localhost:5000/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!postRes.ok) throw new Error("Failed to save product");
+
+      alert(`Product ${newId} added successfully!`);
+      navigate("/admin/products");
+    } catch (err) {
+      console.error(err);
+      alert("Error adding product: " + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -187,6 +266,11 @@ export default function AdminAddProduct() {
       </div>
 
       <form className="adm-add-product-form" onSubmit={handleSubmit}>
+        {isSubmitting && (
+          <div className="adm-submitting-overlay">
+            <p>Saving Product...</p>
+          </div>
+        )}
         <div className="adm-add-section">
           <h3>Basic Details</h3>
           <div className="adm-add-grid adm-add-grid-4">
