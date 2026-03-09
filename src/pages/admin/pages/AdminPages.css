@@ -1598,7 +1598,7 @@
   gap: 8px;
 }
 
-.adm-add-field > span {
+.adm-add-field>span {
   font-size: 12px;
   color: #5f708d;
   font-weight: 700;
@@ -1700,7 +1700,21 @@
   list-style: none;
   max-height: 240px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 18px 34px rgba(30, 53, 96, 0.2);
+}
+
+.adm-custom-select-menu.open-up {
+  top: auto;
+  bottom: calc(100% + 5px);
+  box-shadow: 0 -12px 28px rgba(30, 53, 96, 0.18);
+}
+
+/* Ensure the blue bar appears at the bottom when opening upwards */
+.adm-custom-select-menu.open-up::before {
+  order: 2;
+  margin-top: auto;
 }
 
 .adm-custom-select-menu::before {
@@ -1847,7 +1861,7 @@
   color: #d7e4ff;
 }
 
-.adm-page.dark-mode .adm-add-field > span {
+.adm-page.dark-mode .adm-add-field>span {
   color: #a8b3c6;
 }
 
@@ -1920,6 +1934,7 @@
 }
 
 @media (max-width: 680px) {
+
   .adm-add-grid-2,
   .adm-add-grid-4,
   .adm-inventory-row {

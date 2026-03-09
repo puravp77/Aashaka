@@ -9,7 +9,7 @@ const subCategoryMap = {
   JEWELLERY: ["Oxidised Set", "Bangles-Kada", "Earrings", "Necklace"],
 };
 const colorOptions = ["Red", "Blue", "Green", "Black", "White", "Pink", "Yellow"];
-const sizeOptions = ["XS", "S", "M", "L", "XL", "XXL", "Free"];
+const sizeOptions = ["XS", "S", "M", "L", "XL", "XXL", "XXXL", "Free"];
 
 const parseNumber = (value) => {
   const parsed = Number(value);
@@ -24,6 +24,7 @@ function AdminCustomSelect({
   onChange,
   disabled = false,
   hideLabel = false,
+  openUp = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef(null);
@@ -42,7 +43,7 @@ function AdminCustomSelect({
   const selectedLabel = value || placeholder;
 
   return (
-    <label className={`adm-add-field ${hideLabel ? "adm-add-field-no-label" : ""}`}>
+    <div className={`adm-add-field ${hideLabel ? "adm-add-field-no-label" : ""}`}>
       {!hideLabel && <span>{label}</span>}
       <div className={`adm-custom-select ${disabled ? "is-disabled" : ""}`} ref={rootRef}>
         <button
@@ -56,12 +57,13 @@ function AdminCustomSelect({
         </button>
 
         {isOpen && !disabled && (
-          <ul className="adm-custom-select-menu" role="listbox" aria-label={label}>
+          <ul className={`adm-custom-select-menu ${openUp ? "open-up" : ""}`} role="listbox" aria-label={label}>
             <li>
               <button
                 type="button"
                 className={`adm-custom-option ${!value ? "active" : ""}`}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   onChange("");
                   setIsOpen(false);
                 }}
@@ -74,7 +76,8 @@ function AdminCustomSelect({
                 <button
                   type="button"
                   className={`adm-custom-option ${item === value ? "active" : ""}`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     onChange(item);
                     setIsOpen(false);
                   }}
@@ -86,7 +89,7 @@ function AdminCustomSelect({
           </ul>
         )}
       </div>
-    </label>
+    </div>
   );
 }
 
@@ -242,7 +245,7 @@ export default function AdminAddProduct() {
             <label className="adm-add-field">
               <span>Item Image</span>
               <div className="adm-upload-box">
-                <input className="adm-input adm-input-file" type="file"  onChange={onChangeItemImage} />
+                <input className="adm-input adm-input-file" type="file" onChange={onChangeItemImage} />
                 <small className="adm-file-hint">{itemImageName || "Upload single cover image"}</small>
               </div>
             </label>
@@ -297,6 +300,7 @@ export default function AdminAddProduct() {
                     options={sizeOptions}
                     onChange={(nextValue) => onInventoryChange(index, "size", nextValue)}
                     hideLabel
+                    openUp
                   />
                   <input
                     className="adm-input adm-add-input"
