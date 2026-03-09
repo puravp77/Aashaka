@@ -19,7 +19,6 @@ import { useSettings } from "../../context/SettingsContext";
 
 
 
-const MAX_QTY_PER_PRODUCT = 10;
 const RECENTLY_VIEWED_STORAGE_KEY = "aashaka_recently_viewed";
 
 export default function Cart() {
@@ -37,6 +36,17 @@ export default function Cart() {
     () => new Set(cartItems.map((item) => String(item.id))),
     [cartItems]
   );
+
+  const getAvailableStock = (item) => {
+    const product = products.find(
+      (candidate) => String(candidate.id) === String(item.id)
+    );
+
+    if (!product) return item.qty;
+    if (!product.sizes || !item.size) return Number.POSITIVE_INFINITY;
+
+    return Math.max(0, Number(product.sizes[item.size]) || 0);
+  };
 
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.qty,
@@ -65,9 +75,10 @@ export default function Cart() {
       ? "You unlocked free shipping."
       : `Add Rs. ${freeShippingRemaining} for free shipping.`;
 
-  const hasOutOfStockItem = cartItems.some(
-    (item) => item.qty >= MAX_QTY_PER_PRODUCT
-  );
+  const hasOutOfStockItem = cartItems.some((item) => {
+    const availableStock = getAvailableStock(item);
+    return Number.isFinite(availableStock) && item.qty > availableStock;
+  });
 
   const disableCheckout = isCartEmpty || hasOutOfStockItem;
 
@@ -261,15 +272,23 @@ export default function Cart() {
 
                     <motion.button
                       onClick={() => {
-                        if (item.qty >= MAX_QTY_PER_PRODUCT) {
-                          toast.error("Out of stock", {
+                        const availableStock = getAvailableStock(item);
+
+                        if (
+                          Number.isFinite(availableStock) &&
+                          item.qty >= availableStock
+                        ) {
+                          toast.error("Out of stock for this size", {
                             toastId: "cart-out-of-stock",
                           });
                           return;
                         }
                         updateQty(item.id, item.size, item.qty + 1);
                       }}
-                      disabled={item.qty >= MAX_QTY_PER_PRODUCT}
+                      disabled={
+                        Number.isFinite(getAvailableStock(item)) &&
+                        item.qty >= getAvailableStock(item)
+                      }
                       whileTap={{ scale: 0.9 }}
                       aria-label="Increase quantity"
                     >
@@ -277,8 +296,9 @@ export default function Cart() {
                     </motion.button>
                   </div>
 
-                  {item.qty >= MAX_QTY_PER_PRODUCT && (
-                    <p className="stock-warning">Out Of Stock</p>
+                  {Number.isFinite(getAvailableStock(item)) &&
+                    item.qty >= getAvailableStock(item) && (
+                    <p className="stock-warning">Out of stock for this size</p>
                   )}
                 </div>
 

@@ -36,6 +36,7 @@ export default function AdminProducts() {
 
       return {
         id: String(product?.id || "").toUpperCase(),
+        rawId: String(product?.id || ""),
         name: product?.title || "Untitled Product",
         category: categoryLabel || "Uncategorized",
         price: `₹${Number(product?.price || 0).toLocaleString("en-IN")}`,
@@ -207,14 +208,14 @@ export default function AdminProducts() {
                     <button
                       className="adm-icon-btn"
                       title="Edit"
-                      onClick={() => navigate(`/admin/products/edit/${row.id}`)}
+                      onClick={() => navigate(`/admin/products/edit/${row.rawId}`)}
                     >
                       <Edit2 size={16} />
                     </button>
                     <button
                       className="adm-icon-btn danger"
                       title="Delete"
-                      onClick={() => handleDelete(row.id)}
+                      onClick={() => handleDelete(row.rawId)}
                     >
                       <Trash2 size={16} />
                     </button>

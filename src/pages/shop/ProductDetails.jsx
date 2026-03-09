@@ -26,6 +26,17 @@ export default function ProductDetails() {
   const product = !loading
     ? products.find(p => String(p.id) === String(id))
     : null;
+  const hasSizes = Boolean(product?.sizes);
+  const requiresSizeSelection = hasSizes && !selectedSize;
+  const selectedStock = useMemo(() => {
+    if (!hasSizes || !selectedSize || !product) return null;
+    const raw = product.sizes[selectedSize];
+    return Number.isFinite(Number(raw)) ? Number(raw) : 0;
+  }, [hasSizes, product, selectedSize]);
+  useEffect(() => {
+    if (selectedStock === null) return;
+    setQty((prev) => Math.min(Math.max(1, prev), selectedStock || 1));
+  }, [selectedStock]);
 
   /* SCROLL TOP */
   useEffect(() => {
@@ -109,7 +120,6 @@ export default function ProductDetails() {
   const price = product.price;
   const oldPrice = product.oldPrice;
   const inWishlist = isInWishlist(product.id);
-  const hasSizes = Boolean(product.sizes);
 
   const discountPercent =
     oldPrice && price
@@ -219,6 +229,7 @@ export default function ProductDetails() {
                     `}
                     disabled={stock === 0}
                     onClick={() => setSelectedSize(size)}
+                    title={stock === 0 ? `${size} out of stock` : `${size} — ${stock} left`}
                   >
                     {size}
                   </button>
@@ -226,7 +237,7 @@ export default function ProductDetails() {
               </div>
               <div className="size-help">
                 {selectedSize
-                  ? `Selected: ${selectedSize}`
+                  ? `Selected: ${selectedSize}${selectedStock !== null ? ` • ${selectedStock} in stock` : ""}`
                   : "Select a size to continue"}
               </div>
             </div>
@@ -239,17 +250,20 @@ export default function ProductDetails() {
               <button
                 type="button"
                 aria-label="Decrease quantity"
+                disabled={requiresSizeSelection}
                 onClick={() => setQty(q => Math.max(1, q - 1))}
               >
                 -
               </button>
-              <span>{qty}</span>
+              <span>{requiresSizeSelection ? "-" : qty}</span>
               <button
                 type="button"
                 aria-label="Increase quantity"
+                disabled={requiresSizeSelection}
                 onClick={() => {
-                  if (qty >= 9) {
-                    toast.error("Out of stock", { toastId: "out-of-stock" });
+                  const limit = selectedStock ?? 9;
+                  if (qty >= limit) {
+                    toast.error("Out of stock for this size", { toastId: "out-of-stock" });
                     return;
                   }
                   setQty(q => q + 1);
@@ -268,6 +282,11 @@ export default function ProductDetails() {
                 toast.error("Please select a size", { toastId: "select-size" });
                 return;
               }
+              if (selectedStock !== null && qty > selectedStock) {
+                toast.error(`Only ${selectedStock} available for ${selectedSize}`, { toastId: "qty-too-high" });
+                setQty(selectedStock);
+                return;
+              }
 
               addToCart(product, qty, selectedSize || null);
               toast.success("Added to Cart", {
@@ -284,6 +303,11 @@ export default function ProductDetails() {
             onClick={() => {
               if (product.sizes && !selectedSize) {
                 toast.error("Please select a size", { toastId: "select-size" });
+                return;
+              }
+              if (selectedStock !== null && qty > selectedStock) {
+                toast.error(`Only ${selectedStock} available for ${selectedSize}`, { toastId: "qty-too-high" });
+                setQty(selectedStock);
                 return;
               }
 

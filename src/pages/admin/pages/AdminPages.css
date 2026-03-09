@@ -52,19 +52,23 @@
 }
 
 .adm-metric-card.primary {
-  background: linear-gradient(135deg, #5459db 0%, #4a51ce 100%);
+  /* Brand primary: deep maroon tones */
+  background: linear-gradient(135deg, #9d2a2a 0%, #7f1f24 100%);
 }
 
 .adm-metric-card.info {
-  background: linear-gradient(135deg, #3896f0 0%, #2f87de 100%);
+  /* Cool accent to complement maroon */
+  background: linear-gradient(135deg, #3f5c8a 0%, #2f4c73 100%);
 }
 
 .adm-metric-card.success {
-  background: linear-gradient(135deg, #f4b015 0%, #ecab16 100%);
+  /* Gold accent drawn from storefront highlights */
+  background: linear-gradient(135deg, #c59b3a 0%, #b18421 100%);
 }
 
 .adm-metric-card.warning {
-  background: linear-gradient(135deg, #de5a59 0%, #d64f4e 100%);
+  /* Alert / low stock state in warm terracotta */
+  background: linear-gradient(135deg, #c44c4c 0%, #b23c3c 100%);
 }
 
 /* Quick Actions Styles */
@@ -643,6 +647,11 @@
 
 .adm-text-right {
   text-align: right;
+}
+
+.adm-table th.adm-text-right,
+.adm-table td.adm-text-right {
+  text-align: center;
 }
 
 .adm-table-empty {
@@ -1990,7 +1999,7 @@
 .adm-row-actions {
   display: flex;
   gap: 8px;
-  justify-content: flex-end;
+  justify-content: center;
   opacity: 0.8;
   transition: opacity 0.2s ease;
 }

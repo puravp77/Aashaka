@@ -16,6 +16,17 @@ const parseNumber = (value) => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const derivePercentageFromPrices = (oldPrice, finalPrice) => {
+  const basePrice = parseNumber(oldPrice);
+  const salePrice = parseNumber(finalPrice);
+
+  if (basePrice <= 0 || salePrice <= 0 || salePrice >= basePrice) {
+    return "";
+  }
+
+  return String(Math.round(((basePrice - salePrice) / basePrice) * 100));
+};
+
 function AdminCustomSelect({
   label,
   value,
@@ -137,14 +148,14 @@ export default function AdminAddProduct({ editMode = false }) {
             subCategory: Object.keys(subCategoryPrefixMap).find(key => subCategoryPrefixMap[key].category === data.category) || "",
             itemName: data.title || "",
             itemPrice: data.oldPrice || data.price || "",
-            percentage: "", // We don't store these separately, usually calc'd
+            percentage: derivePercentageFromPrices(data.oldPrice, data.price),
             discount: "",
             color: data.details?.colour || "",
             description: data.details?.description || "",
             material: data.details?.material || "",
             specification: data.details?.specification || "",
             styleNotes: data.details?.styleNotes || "",
-            finalPrice: data.price || "",
+            finalPrice: "",
           });
 
           // Handle images
@@ -245,7 +256,6 @@ export default function AdminAddProduct({ editMode = false }) {
 
       let targetId = id;
       let finalCategory = "other";
-      let finalSubCategory = form.subCategory;
 
       if (!editMode) {
         // 1. Fetch current products to generate ID

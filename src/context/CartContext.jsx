@@ -39,16 +39,29 @@ export function CartProvider({ children }) {
   ========================= */
   const addToCart = (product, qty = 1, size = null, showToast = false) => {
     setCartItems((prev) => {
+      const maxQty =
+        product?.sizes && size
+          ? Math.max(0, Number(product.sizes[size]) || 0)
+          : Infinity;
       const existing = prev.find(
         (item) => item.id === product.id && item.size === size
       );
 
       if (existing) {
+        const nextQty = Math.min(existing.qty + qty, maxQty);
+        if (nextQty <= 0) {
+          return prev;
+        }
         return prev.map((item) =>
           item.id === product.id && item.size === size
-            ? { ...item, qty: item.qty + qty }
+            ? { ...item, qty: nextQty }
             : item
         );
+      }
+
+      const nextQty = Math.min(qty, maxQty);
+      if (nextQty <= 0) {
+        return prev;
       }
 
       return [
@@ -58,7 +71,7 @@ export function CartProvider({ children }) {
           title: product.title,
           price: product.price,
           image: product.images?.[0],
-          qty,
+          qty: nextQty,
           size,
         },
       ];

@@ -11,17 +11,17 @@
     "oldPrice": 4000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 0,
-      "XL": 3,
-      "XXL": 0,
+      "S": 7,
+      "M": 9,
+      "L": 7,
+      "XL": 2,
+      "XXL": 4,
       "3XL": 2
     },
     "details": {
       "colour": "Purple",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -36,17 +36,17 @@
     "oldPrice": 4000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 1
+      "S": 7,
+      "M": 10,
+      "L": 3,
+      "XL": 2,
+      "XXL": 2,
+      "3XL": 0
     },
     "details": {
       "colour": "Peach Pink",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL"
     }
   },
   {
@@ -61,17 +61,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
+      "S": 7,
       "M": 12,
-      "L": 8,
+      "L": 11,
       "XL": 3,
-      "XXL": 5,
-      "3XL": 0
+      "XXL": 0,
+      "3XL": 5
     },
     "details": {
       "colour": "Red",
       "material": "Cotton Blend",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, 3XL"
     }
   },
   {
@@ -86,17 +86,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
+      "S": 7,
+      "M": 13,
+      "L": 7,
       "XL": 3,
-      "XXL": 10,
-      "3XL": 2
+      "XXL": 4,
+      "3XL": 3
     },
     "details": {
       "colour": "Navy Blue",
       "material": "Cotton Blend",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -111,17 +111,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
+      "S": 7,
+      "M": 15,
+      "L": 3,
       "XL": 3,
-      "XXL": 0,
+      "XXL": 2,
       "3XL": 2
     },
     "details": {
       "colour": "Red",
       "material": "Printed Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -135,17 +135,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 7,
+      "M": 0,
+      "L": 12,
+      "XL": 4,
       "XXL": 0,
-      "3XL": 2
+      "3XL": 0
     },
     "details": {
       "colour": "Blue",
       "material": "Printed Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, L, XL"
     }
   },
   {
@@ -160,17 +160,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
+      "S": 7,
+      "M": 2,
       "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "XL": 4,
+      "XXL": 4,
+      "3XL": 5
     },
     "details": {
       "colour": "Dark Green",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -185,17 +185,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 7,
+      "M": 3,
+      "L": 4,
+      "XL": 4,
+      "XXL": 2,
+      "3XL": 3
     },
     "details": {
       "colour": "Olive Green",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -210,17 +210,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 7,
+      "M": 5,
+      "L": 0,
+      "XL": 5,
       "XXL": 0,
       "3XL": 2
     },
     "details": {
       "colour": "Pink",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, XL, 3XL"
     }
   },
   {
@@ -236,17 +236,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 9,
+      "M": 3,
+      "L": 3,
+      "XL": 8,
+      "XXL": 3,
+      "3XL": 0
     },
     "details": {
       "colour": "Yellow",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL"
     }
   },
   {
@@ -262,17 +262,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 9,
+      "M": 4,
+      "L": 12,
+      "XL": 8,
       "XXL": 0,
-      "3XL": 2
+      "3XL": 5
     },
     "details": {
       "colour": "Baby Pink",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, 3XL"
     }
   },
   {
@@ -287,17 +287,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
+      "S": 9,
+      "M": 6,
       "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "XL": 0,
+      "XXL": 5,
+      "3XL": 3
     },
     "details": {
       "colour": "Parrot Green",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XXL, 3XL"
     }
   },
   {
@@ -312,17 +312,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
+      "S": 9,
+      "M": 7,
+      "L": 4,
+      "XL": 0,
+      "XXL": 3,
       "3XL": 2
     },
     "details": {
       "colour": "White",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XXL, 3XL"
     }
   },
   {
@@ -337,17 +337,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 9,
+      "M": 9,
+      "L": 12,
+      "XL": 0,
       "XXL": 0,
-      "3XL": 2
+      "3XL": 0
     },
     "details": {
       "colour": "Clay Blue",
       "material": "Cotton Blend",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L"
     }
   },
   {
@@ -363,17 +363,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
+      "S": 9,
+      "M": 10,
       "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "XL": 1,
+      "XXL": 5,
+      "3XL": 5
     },
     "details": {
       "colour": "Red",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -388,17 +388,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
+      "S": 9,
       "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "L": 4,
+      "XL": 1,
+      "XXL": 3,
+      "3XL": 3
     },
     "details": {
       "colour": "Rosewood Red",
       "material": "Cotton Anarkali",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -413,17 +413,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 9,
+      "M": 13,
+      "L": 0,
+      "XL": 1,
       "XXL": 0,
       "3XL": 2
     },
     "details": {
       "colour": "Baby Blue",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, XL, 3XL"
     }
   },
   {
@@ -438,17 +438,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 9,
+      "M": 14,
+      "L": 9,
+      "XL": 2,
+      "XXL": 5,
+      "3XL": 0
     },
     "details": {
       "colour": "Pink",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL"
     }
   },
   {
@@ -464,17 +464,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 9,
+      "M": 0,
+      "L": 5,
+      "XL": 2,
+      "XXL": 3,
+      "3XL": 5
     },
     "details": {
       "colour": "Yellow",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, L, XL, XXL, 3XL"
     }
   },
   {
@@ -490,17 +490,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 9,
+      "M": 0,
+      "L": 6,
+      "XL": 0,
       "XXL": 0,
-      "3XL": 2
+      "3XL": 1
     },
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, L, 3XL"
     }
   },
   {
@@ -513,17 +513,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 9,
+      "M": 1,
+      "L": 2,
+      "XL": 1,
+      "XXL": 5,
+      "3XL": 0
     },
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL"
     }
   },
   {
@@ -536,17 +536,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 9,
+      "M": 3,
+      "L": 11,
+      "XL": 1,
+      "XXL": 3,
+      "3XL": 4
     },
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -559,17 +559,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 9,
+      "M": 4,
+      "L": 6,
+      "XL": 1,
       "XXL": 0,
-      "3XL": 2
+      "3XL": 3
     },
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, 3XL"
     }
   },
   {
@@ -582,17 +582,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 9,
+      "M": 6,
+      "L": 2,
+      "XL": 2,
+      "XXL": 5,
+      "3XL": 1
     },
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -605,17 +605,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 9,
+      "M": 7,
+      "L": 11,
+      "XL": 2,
+      "XXL": 3,
+      "3XL": 0
     },
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL"
     }
   },
   {
@@ -628,17 +628,17 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 9,
+      "M": 9,
+      "L": 7,
+      "XL": 2,
       "XXL": 0,
-      "3XL": 2
+      "3XL": 4
     },
     "details": {
       "colour": "Red",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, 3XL"
     }
   },
   {
@@ -2078,12 +2078,12 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 8,
+      "M": 9,
+      "L": 6,
+      "XL": 4,
       "XXL": 0,
-      "3XL": 2
+      "3XL": 5
     },
     "alsoBought": [
       "WS1",
@@ -2093,7 +2093,7 @@
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, 3XL"
     }
   },
   {
@@ -2106,12 +2106,12 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 8,
+      "M": 10,
+      "L": 2,
+      "XL": 5,
+      "XXL": 5,
+      "3XL": 4
     },
     "alsoBought": [
       "c2",
@@ -2121,7 +2121,7 @@
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -2134,11 +2134,11 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
+      "S": 8,
       "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
+      "L": 11,
+      "XL": 5,
+      "XXL": 3,
       "3XL": 2
     },
     "alsoBought": [
@@ -2149,7 +2149,7 @@
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   },
   {
@@ -2162,12 +2162,12 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
+      "S": 8,
+      "M": 13,
+      "L": 7,
+      "XL": 5,
       "XXL": 0,
-      "3XL": 2
+      "3XL": 1
     },
     "alsoBought": [
       "c4",
@@ -2177,7 +2177,7 @@
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, 3XL"
     }
   },
   {
@@ -2190,12 +2190,12 @@
     "oldPrice": 3000,
     "category": "kurti",
     "sizes": {
-      "S": 5,
-      "M": 12,
-      "L": 8,
-      "XL": 3,
-      "XXL": 0,
-      "3XL": 2
+      "S": 8,
+      "M": 14,
+      "L": 3,
+      "XL": 6,
+      "XXL": 5,
+      "3XL": 5
     },
     "alsoBought": [
       "c2",
@@ -2206,7 +2206,7 @@
     "details": {
       "colour": "Black",
       "material": "Cotton",
-      "size": "M, L, XL, XXL, 3XL"
+      "size": "S, M, L, XL, XXL, 3XL"
     }
   }
 ]
