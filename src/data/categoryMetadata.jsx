@@ -2,7 +2,7 @@ export const categoryMetadata = {
     kurti: {
         title: "Elegant Kurti Sets",
         description: "Discover our exclusive collection of handcrafted kurti sets, blending traditional Indian craftsmanship with modern silhouettes. Perfect for every occasion, from casual outings to festive celebrations.",
-        bannerImage: "images/banners/kurti-banner.jpg",
+        bannerImage: "images/kurtibanner.jpg",
         seoTitle: "Aashaka | Elegant Kurti Sets & Ethnic Wear",
     },
     oxidised: {
