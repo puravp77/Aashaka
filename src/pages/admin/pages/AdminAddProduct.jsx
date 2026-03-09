@@ -16,6 +16,17 @@ const parseNumber = (value) => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const uniqueValues = (values) => Array.from(new Set(values.filter(Boolean)));
+
+const createInventoryRow = (size = "", stock = "") => ({ size, stock });
+
+const createColorVariant = () => ({
+  color: "",
+  itemImageName: "",
+  multiImageNames: [],
+  inventoryRows: [createInventoryRow()],
+});
+
 const derivePercentageFromPrices = (oldPrice, finalPrice) => {
   const basePrice = parseNumber(oldPrice);
   const salePrice = parseNumber(finalPrice);
@@ -131,6 +142,7 @@ export default function AdminAddProduct({ editMode = false }) {
   const [itemImageName, setItemImageName] = useState("");
   const [multiImageNames, setMultiImageNames] = useState([]);
   const [inventoryRows, setInventoryRows] = useState([{ size: "", stock: "" }]);
+  const [colorVariants, setColorVariants] = useState([createColorVariant()]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(editMode);
 
@@ -158,20 +170,34 @@ export default function AdminAddProduct({ editMode = false }) {
             finalPrice: "",
           });
 
-          // Handle images
-          if (data.images?.length > 0) {
-            const firstImage = data.images[0].replace("images/", "");
-            setItemImageName(firstImage);
-            setMultiImageNames(data.images.slice(1).map(img => img.replace("images/", "")));
-          }
+          const normalizedImages = (data.images || []).map((img) => img.replace("images/", ""));
+          const normalizedRows = data.sizes && typeof data.sizes === "object"
+            ? Object.entries(data.sizes).map(([size, stock]) => createInventoryRow(size, String(stock)))
+            : [createInventoryRow()];
 
-          // Handle inventory
-          if (data.sizes && typeof data.sizes === "object") {
-            const rows = Object.entries(data.sizes).map(([size, stock]) => ({
-              size,
-              stock: String(stock),
-            }));
-            setInventoryRows(rows.length > 0 ? rows : [{ size: "", stock: "" }]);
+          if (data.category === "kurti") {
+            const variants = Array.isArray(data.variants) && data.variants.length > 0
+              ? data.variants.map((variant) => ({
+                color: variant.color || "",
+                itemImageName: variant.images?.[0]?.replace("images/", "") || "",
+                multiImageNames: (variant.images || []).slice(1).map((img) => img.replace("images/", "")),
+                inventoryRows: variant.sizes && typeof variant.sizes === "object"
+                  ? Object.entries(variant.sizes).map(([size, stock]) => createInventoryRow(size, String(stock)))
+                  : [createInventoryRow()],
+              }))
+              : [{
+                color: data.details?.colour || "",
+                itemImageName: normalizedImages[0] || "",
+                multiImageNames: normalizedImages.slice(1),
+                inventoryRows: normalizedRows,
+              }];
+
+            setColorVariants(variants);
+          } else {
+            setColorVariants([createColorVariant()]);
+            setItemImageName(normalizedImages[0] || "");
+            setMultiImageNames(normalizedImages.slice(1));
+            setInventoryRows(normalizedRows);
           }
 
           setIsLoading(false);
@@ -209,6 +235,12 @@ export default function AdminAddProduct({ editMode = false }) {
     }
   }, [form.category]);
 
+  useEffect(() => {
+    if (form.category === "CLOTH") {
+      setColorVariants((prev) => (prev.length > 0 ? prev : [createColorVariant()]));
+    }
+  }, [form.category]);
+
   const onChangeField = (field) => (event) => {
     const { value } = event.target;
     setForm((prev) => {
@@ -232,6 +264,76 @@ export default function AdminAddProduct({ editMode = false }) {
   const onInventoryChange = (index, key, value) => {
     setInventoryRows((prev) =>
       prev.map((row, i) => (i === index ? { ...row, [key]: value } : row))
+    );
+  };
+
+  const onVariantChange = (variantIndex, key, value) => {
+    setColorVariants((prev) =>
+      prev.map((variant, index) =>
+        index === variantIndex ? { ...variant, [key]: value } : variant
+      )
+    );
+  };
+
+  const onVariantItemImageChange = (variantIndex, event) => {
+    const file = event.target.files?.[0];
+    onVariantChange(variantIndex, "itemImageName", file ? file.name : "");
+  };
+
+  const onVariantMultiImageChange = (variantIndex, event) => {
+    const files = Array.from(event.target.files || []);
+    onVariantChange(
+      variantIndex,
+      "multiImageNames",
+      files.map((file) => file.name)
+    );
+  };
+
+  const onVariantInventoryChange = (variantIndex, rowIndex, key, value) => {
+    setColorVariants((prev) =>
+      prev.map((variant, index) => {
+        if (index !== variantIndex) return variant;
+        return {
+          ...variant,
+          inventoryRows: variant.inventoryRows.map((row, currentRowIndex) =>
+            currentRowIndex === rowIndex ? { ...row, [key]: value } : row
+          ),
+        };
+      })
+    );
+  };
+
+  const addColorVariant = () => {
+    setColorVariants((prev) => [...prev, createColorVariant()]);
+  };
+
+  const removeColorVariant = (variantIndex) => {
+    setColorVariants((prev) => {
+      if (prev.length === 1) return prev;
+      return prev.filter((_, index) => index !== variantIndex);
+    });
+  };
+
+  const addVariantInventoryRow = (variantIndex) => {
+    setColorVariants((prev) =>
+      prev.map((variant, index) =>
+        index === variantIndex
+          ? { ...variant, inventoryRows: [...variant.inventoryRows, createInventoryRow()] }
+          : variant
+      )
+    );
+  };
+
+  const removeVariantInventoryRow = (variantIndex, rowIndex) => {
+    setColorVariants((prev) =>
+      prev.map((variant, index) => {
+        if (index !== variantIndex) return variant;
+        if (variant.inventoryRows.length === 1) return variant;
+        return {
+          ...variant,
+          inventoryRows: variant.inventoryRows.filter((_, currentRowIndex) => currentRowIndex !== rowIndex),
+        };
+      })
     );
   };
 
@@ -291,21 +393,50 @@ export default function AdminAddProduct({ editMode = false }) {
         }
       });
 
+      const normalizedVariants = form.category === "CLOTH"
+        ? colorVariants.map((variant) => {
+          const variantSizes = {};
+          variant.inventoryRows.forEach((row) => {
+            if (row.size) {
+              variantSizes[row.size] = parseNumber(row.stock);
+            }
+          });
+
+          return {
+            color: variant.color,
+            images: uniqueValues([
+              variant.itemImageName ? `images/${variant.itemImageName}` : "",
+              ...variant.multiImageNames.map((name) => `images/${name}`),
+            ]),
+            sizes: variantSizes,
+          };
+        }).filter((variant) => variant.color || variant.images.length > 0 || Object.keys(variant.sizes).length > 0)
+        : [];
+
+      const primaryVariant = normalizedVariants[0] || null;
+
       const payload = {
         id: targetId,
         title: form.itemName,
-        images: [
-          itemImageName ? `images/${itemImageName}` : "",
-          ...multiImageNames.map(name => `images/${name}`)
-        ].filter(Boolean),
+        images: form.category === "CLOTH"
+          ? (primaryVariant?.images || [])
+          : uniqueValues([
+            itemImageName ? `images/${itemImageName}` : "",
+            ...multiImageNames.map(name => `images/${name}`)
+          ]),
         price: parseNumber(finalPriceValue),
         oldPrice: parseNumber(form.itemPrice),
         category: finalCategory,
-        sizes: sizesObj,
+        sizes: form.category === "CLOTH" ? (primaryVariant?.sizes || {}) : sizesObj,
+        variants: normalizedVariants,
         details: {
-          colour: form.color,
+          colour: form.category === "CLOTH"
+            ? normalizedVariants.map((variant) => variant.color).filter(Boolean).join(", ")
+            : form.color,
           material: form.material,
-          size: inventoryRows.map(r => r.size).filter(Boolean).join(", "),
+          size: form.category === "CLOTH"
+            ? Object.keys(primaryVariant?.sizes || {}).join(", ")
+            : inventoryRows.map(r => r.size).filter(Boolean).join(", "),
           description: form.description,
           specification: form.specification,
           styleNotes: form.styleNotes
@@ -347,7 +478,7 @@ export default function AdminAddProduct({ editMode = false }) {
             <p>Saving Product...</p>
           </div>
         )}
-        <div className="adm-add-section">
+        <div className="adm-add-section adm-product-content-section">
           <h3>Basic Details</h3>
           <div className="adm-add-grid adm-add-grid-4">
             <AdminCustomSelect
@@ -398,37 +529,41 @@ export default function AdminAddProduct({ editMode = false }) {
               <span>Final Price</span>
               <input className="adm-input adm-add-input" value={finalPriceValue} readOnly placeholder="Final price" />
             </label>
-            <AdminCustomSelect
-              label="Color"
-              value={form.color}
-              placeholder="---Select Color---"
-              options={colorOptions}
-              onChange={(nextValue) => setForm((prev) => ({ ...prev, color: nextValue }))}
-            />
+            {form.category !== "CLOTH" && (
+              <AdminCustomSelect
+                label="Color"
+                value={form.color}
+                placeholder="---Select Color---"
+                options={colorOptions}
+                onChange={(nextValue) => setForm((prev) => ({ ...prev, color: nextValue }))}
+              />
+            )}
           </div>
         </div>
 
-        <div className="adm-add-section">
-          <h3>Media Uploads</h3>
-          <div className="adm-add-grid adm-add-grid-2">
-            <label className="adm-add-field">
-              <span>Item Image</span>
-              <div className="adm-upload-box">
-                <input className="adm-input adm-input-file" type="file" onChange={onChangeItemImage} />
-                <small className="adm-file-hint">{itemImageName || "Upload single cover image"}</small>
-              </div>
-            </label>
-            <label className="adm-add-field">
-              <span>Multiple Image</span>
-              <div className="adm-upload-box">
-                <input className="adm-input adm-input-file" type="file" multiple onChange={onChangeMultipleImages} />
-                <small className="adm-file-hint">
-                  {multiImageNames.length > 0 ? `${multiImageNames.length} files uploaded` : "Upload gallery images"}
-                </small>
-              </div>
-            </label>
+        {form.category !== "CLOTH" && (
+          <div className="adm-add-section">
+            <h3>Media Uploads</h3>
+            <div className="adm-add-grid adm-add-grid-2">
+              <label className="adm-add-field">
+                <span>Item Image</span>
+                <div className="adm-upload-box">
+                  <input className="adm-input adm-input-file" type="file" onChange={onChangeItemImage} />
+                  <small className="adm-file-hint">{itemImageName || "Upload single cover image"}</small>
+                </div>
+              </label>
+              <label className="adm-add-field">
+                <span>Multiple Image</span>
+                <div className="adm-upload-box">
+                  <input className="adm-input adm-input-file" type="file" multiple onChange={onChangeMultipleImages} />
+                  <small className="adm-file-hint">
+                    {multiImageNames.length > 0 ? `${multiImageNames.length} files uploaded` : "Upload gallery images"}
+                  </small>
+                </div>
+              </label>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="adm-add-section">
           <h3>Product Content</h3>
@@ -440,7 +575,7 @@ export default function AdminAddProduct({ editMode = false }) {
             <label className="adm-add-field">
               <span>Material</span>
               <textarea className="adm-input adm-rich-text" value={form.material} onChange={onChangeField("material")} placeholder="Write material details..." />
-            </label>
+            </label><br></br>
           </div>
 
           <div className="adm-add-grid adm-add-grid-2">
@@ -455,47 +590,143 @@ export default function AdminAddProduct({ editMode = false }) {
           </div>
         </div>
 
-        <div className="adm-add-section">
-          <h3>Inventory</h3>
-          <div className="adm-add-field">
-            <span>Size and Stock</span>
-            <div className="adm-inventory-list">
-              {inventoryRows.map((row, index) => (
-                <div className="adm-inventory-row" key={`${index}-${row.size}`}>
-                  <AdminCustomSelect
-                    label="Size"
-                    value={row.size}
-                    placeholder="Select size"
-                    options={sizeOptions}
-                    onChange={(nextValue) => onInventoryChange(index, "size", nextValue)}
-                    hideLabel
-                    openUp
-                    disabled={form.category === "JEWELLERY"}
-                  />
-                  <input
-                    className="adm-input adm-add-input"
-                    type="number"
-                    min="0"
-                    value={row.stock}
-                    onChange={(event) => onInventoryChange(index, "stock", event.target.value)}
-                    placeholder="Item total stock"
-                  />
-                  <button type="button" className="adm-circle-btn add" onClick={addInventoryRow}>
-                    +
-                  </button>
-                  <button
-                    type="button"
-                    className="adm-circle-btn remove"
-                    onClick={() => removeInventoryRow(index)}
-                    disabled={inventoryRows.length === 1}
-                  >
-                    -
-                  </button>
+        {form.category === "CLOTH" && (
+          <div className="adm-add-section">
+            <div className="adm-section-head">
+              <h3>Color Variants</h3>
+              <button type="button" className="adm-btn secondary adm-variant-add-btn" onClick={addColorVariant}>
+                Add Color
+              </button>
+            </div>
+            <div className="adm-color-variant-list">
+              {colorVariants.map((variant, variantIndex) => (
+                <div className="adm-color-variant-card" key={`variant-${variantIndex}`}>
+                  <div className="adm-color-variant-head">
+                    <strong>Color {variantIndex + 1}</strong>
+                    <button
+                      type="button"
+                      className="adm-btn ghost adm-variant-remove-btn"
+                      onClick={() => removeColorVariant(variantIndex)}
+                      disabled={colorVariants.length === 1}
+                    >
+                      Remove
+                    </button>
+                  </div>
+
+                  <div className="adm-color-variant-media">
+                    <AdminCustomSelect
+                      label="Color"
+                      value={variant.color}
+                      placeholder="---Select Color---"
+                      options={colorOptions}
+                      onChange={(nextValue) => onVariantChange(variantIndex, "color", nextValue)}
+                    />
+
+                    <label className="adm-add-field">
+                      <span>Color Image</span>
+                      <div className="adm-upload-box">
+                        <input className="adm-input adm-input-file" type="file" onChange={(event) => onVariantItemImageChange(variantIndex, event)} />
+                        <small className="adm-file-hint">{variant.itemImageName || "Upload single cover image"}</small>
+                      </div>
+                    </label>
+
+                    <label className="adm-add-field">
+                      <span>Color Multiple Image</span>
+                      <div className="adm-upload-box">
+                        <input className="adm-input adm-input-file" type="file" multiple onChange={(event) => onVariantMultiImageChange(variantIndex, event)} />
+                        <small className="adm-file-hint">
+                          {variant.multiImageNames.length > 0 ? `${variant.multiImageNames.length} files uploaded` : "Upload gallery images"}
+                        </small>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div className="adm-add-field">
+                    <span>Size and Stock</span>
+                    <div className="adm-inventory-list">
+                      {variant.inventoryRows.map((row, rowIndex) => (
+                        <div className="adm-inventory-row" key={`${variantIndex}-${rowIndex}-${row.size}`}>
+                          <AdminCustomSelect
+                            label="Size"
+                            value={row.size}
+                            placeholder="Select size"
+                            options={sizeOptions.filter((size) => size !== "Free")}
+                            onChange={(nextValue) => onVariantInventoryChange(variantIndex, rowIndex, "size", nextValue)}
+                            hideLabel
+                            openUp
+                          />
+                          <input
+                            className="adm-input adm-add-input"
+                            type="number"
+                            min="0"
+                            value={row.stock}
+                            onChange={(event) => onVariantInventoryChange(variantIndex, rowIndex, "stock", event.target.value)}
+                            placeholder="Item total stock"
+                          />
+                          <button type="button" className="adm-circle-btn add" onClick={() => addVariantInventoryRow(variantIndex)}>
+                            +
+                          </button>
+                          <button
+                            type="button"
+                            className="adm-circle-btn remove"
+                            onClick={() => removeVariantInventoryRow(variantIndex, rowIndex)}
+                            disabled={variant.inventoryRows.length === 1}
+                          >
+                            -
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        )}
+
+        {form.category !== "CLOTH" && (
+          <div className="adm-add-section">
+            <h3>Inventory</h3>
+            <div className="adm-add-field">
+              <span>Size and Stock</span>
+              <div className="adm-inventory-list">
+                {inventoryRows.map((row, index) => (
+                  <div className="adm-inventory-row" key={`${index}-${row.size}`}>
+                    <AdminCustomSelect
+                      label="Size"
+                      value={row.size}
+                      placeholder="Select size"
+                      options={sizeOptions}
+                      onChange={(nextValue) => onInventoryChange(index, "size", nextValue)}
+                      hideLabel
+                      openUp
+                      disabled={form.category === "JEWELLERY"}
+                    />
+                    <input
+                      className="adm-input adm-add-input"
+                      type="number"
+                      min="0"
+                      value={row.stock}
+                      onChange={(event) => onInventoryChange(index, "stock", event.target.value)}
+                      placeholder="Item total stock"
+                    />
+                    <button type="button" className="adm-circle-btn add" onClick={addInventoryRow}>
+                      +
+                    </button>
+                    <button
+                      type="button"
+                      className="adm-circle-btn remove"
+                      onClick={() => removeInventoryRow(index)}
+                      disabled={inventoryRows.length === 1}
+                    >
+                      -
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="adm-add-actions">
           <button type="submit" className="adm-btn primary">Submit</button>

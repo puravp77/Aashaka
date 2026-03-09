@@ -1589,6 +1589,22 @@
   color: #2f3f5f;
 }
 
+.adm-product-content-section {
+  padding: 18px;
+}
+
+.adm-product-content-section h3 {
+  margin-bottom: 16px;
+}
+
+.adm-product-content-section .adm-add-grid + .adm-add-grid {
+  margin-top: 18px;
+}
+
+.adm-product-content-section .adm-add-field {
+  gap: 10px;
+}
+
 .adm-add-grid {
   display: grid;
   gap: 14px;
@@ -1596,6 +1612,10 @@
 
 .adm-add-grid-4 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.adm-add-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .adm-add-grid-2 {
@@ -1787,9 +1807,10 @@
 }
 
 .adm-rich-text {
-  min-height: 132px;
+  min-height: 164px;
   resize: vertical;
   line-height: 1.45;
+  padding: 14px 16px;
 }
 
 .adm-upload-box {
@@ -1937,16 +1958,27 @@
 }
 
 @media (max-width: 1100px) {
+  .adm-add-grid-3,
   .adm-add-grid-4 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .adm-color-variant-media {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .adm-color-variant-media > :first-child {
+    grid-column: 1 / -1;
   }
 }
 
 @media (max-width: 680px) {
 
   .adm-add-grid-2,
+  .adm-add-grid-3,
   .adm-add-grid-4,
-  .adm-inventory-row {
+  .adm-inventory-row,
+  .adm-color-variant-media {
     grid-template-columns: 1fr;
   }
 
@@ -2051,6 +2083,145 @@ tr:hover .adm-row-actions {
 .adm-btn.primary span {
   font-weight: 600;
   margin-left: 8px;
+}
+
+.adm-btn.secondary,
+.adm-btn.ghost {
+  border: 1px solid #d7deea;
+  background: #ffffff;
+  color: #334155;
+}
+
+.adm-btn.secondary:hover,
+.adm-btn.ghost:hover {
+  border-color: #c2ccdb;
+  background: #f8fafc;
+}
+
+.adm-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.adm-section-head h3 {
+  margin: 0;
+}
+
+.adm-color-variant-list {
+  display: grid;
+  gap: 16px;
+}
+
+.adm-color-variant-card {
+  border: 1px solid #d8dde6;
+  border-radius: 14px;
+  background: #fbfcfe;
+  padding: 16px;
+}
+
+.adm-color-variant-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.adm-color-variant-media {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.9fr) minmax(260px, 1fr) minmax(260px, 1fr);
+  gap: 14px;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.adm-color-variant-card .adm-upload-box {
+  min-height: 76px;
+}
+
+.adm-color-variant-card .adm-add-field > span {
+  font-size: 13px;
+}
+
+.adm-color-variant-card .adm-inventory-row {
+  grid-template-columns: minmax(180px, 0.85fr) minmax(220px, 1.15fr) auto auto;
+}
+
+.adm-variant-add-btn {
+  background: linear-gradient(135deg, #9d2a2a 0%, #7f1f24 100%);
+  border-color: #7f1f24;
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(157, 42, 42, 0.18);
+}
+
+.adm-variant-add-btn:hover {
+  background: linear-gradient(135deg, #b13232 0%, #8f252b 100%);
+  border-color: #8f252b;
+}
+
+.adm-variant-remove-btn {
+  background: linear-gradient(135deg, #e8eef8 0%, #dbe5f4 100%);
+  border-color: #c5d2e6;
+  color: #2f466b;
+}
+
+.adm-variant-remove-btn:hover {
+  background: linear-gradient(135deg, #dbe7fb 0%, #cad9f2 100%);
+  border-color: #adc0df;
+}
+
+.adm-page.dark-mode .adm-btn.secondary,
+.adm-page.dark-mode .adm-btn.ghost {
+  background: linear-gradient(180deg, #16253f 0%, #122136 100%);
+  border-color: #3d5176;
+  color: #dbe7ff;
+}
+
+.adm-page.dark-mode .adm-btn.secondary:hover,
+.adm-page.dark-mode .adm-btn.ghost:hover {
+  background: linear-gradient(180deg, #1a2c49 0%, #162742 100%);
+  border-color: #5a77a8;
+}
+
+.adm-page.dark-mode .adm-btn.secondary:disabled,
+.adm-page.dark-mode .adm-btn.ghost:disabled {
+  opacity: 0.55;
+  color: #8ea0bf;
+  border-color: #31466a;
+}
+
+.adm-page.dark-mode .adm-color-variant-card {
+  background: linear-gradient(180deg, #16253f 0%, #122136 100%);
+  border-color: #354764;
+}
+
+.adm-page.dark-mode .adm-color-variant-head strong {
+  color: #d7e4ff;
+}
+
+.adm-page.dark-mode .adm-variant-add-btn {
+  background: linear-gradient(135deg, #9d2a2a 0%, #7f1f24 100%);
+  border-color: #a53b44;
+  color: #ffffff;
+}
+
+.adm-page.dark-mode .adm-variant-add-btn:hover {
+  background: linear-gradient(135deg, #b73737 0%, #92242b 100%);
+  border-color: #bb4d56;
+}
+
+.adm-page.dark-mode .adm-variant-remove-btn {
+  background: linear-gradient(180deg, #223a61 0%, #1a2e4e 100%);
+  border-color: #4d6895;
+  color: #e3eeff;
+}
+
+.adm-page.dark-mode .adm-variant-remove-btn:hover {
+  background: linear-gradient(180deg, #29446e 0%, #203658 100%);
+  border-color: #6483b5;
 }
 
 /* Dark Mode Adjustments */

@@ -10,5 +10,7 @@ export const withPublicUrl = (path) => {
   return `${base}/${normalized}`;
 };
 
+const dedupeList = (values) => Array.from(new Set(values.filter(Boolean)));
+
 export const mapImageList = (images) =>
-  Array.isArray(images) ? images.map(withPublicUrl) : images;
+  Array.isArray(images) ? dedupeList(images.map(withPublicUrl)) : images;
