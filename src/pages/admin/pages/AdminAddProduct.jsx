@@ -329,11 +329,12 @@ export default function AdminAddProduct({ editMode = false }) {
   const getVariantColorOptions = (variantIndex) => {
     const currentColor = colorVariants[variantIndex]?.color;
 
-    return colorOptions.map((color) => ({
-      value: color,
-      label: color,
-      disabled: color !== currentColor && selectedVariantColors.includes(color),
-    }));
+    return colorOptions
+      .filter((color) => color === currentColor || !selectedVariantColors.includes(color))
+      .map((color) => ({
+        value: color,
+        label: color,
+      }));
   };
 
   const getVariantSizeOptions = (variantIndex, rowIndex) => {
