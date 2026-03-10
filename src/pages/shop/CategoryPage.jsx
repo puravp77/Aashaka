@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useProducts } from "../../context/ProductContext";
 import { categoryMetadata } from "../../data/categoryMetadata";
@@ -20,6 +20,64 @@ const sortOptionMeta = {
         hint: "From premium to budget"
     }
 };
+
+function SortMenu({ value, onChange }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const rootRef = useRef(null);
+    const activeSortMeta = sortOptionMeta[value] || sortOptionMeta.newest;
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (rootRef.current && !rootRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleOutsideClick);
+        return () => document.removeEventListener("mousedown", handleOutsideClick);
+    }, []);
+
+    return (
+        <div className="sort-wrapper" ref={rootRef}>
+            <span className="sort-label">Sort By</span>
+            <div className="sort-copy">
+                <strong>{activeSortMeta.label}</strong>
+                <span>{activeSortMeta.hint}</span>
+            </div>
+            <div className={`sort-select-shell ${isOpen ? "is-open" : ""}`}>
+                <button
+                    type="button"
+                    className="sort-trigger"
+                    onClick={() => setIsOpen((prev) => !prev)}
+                    aria-haspopup="listbox"
+                    aria-expanded={isOpen}
+                >
+                    <span>{activeSortMeta.label}</span>
+                    <span className="sort-caret" aria-hidden="true" />
+                </button>
+
+                {isOpen && (
+                    <div className="sort-menu" role="listbox" aria-label="Sort products">
+                        {Object.entries(sortOptionMeta).map(([optionValue, option]) => (
+                            <button
+                                key={optionValue}
+                                type="button"
+                                className={`sort-option ${value === optionValue ? "active" : ""}`}
+                                onClick={() => {
+                                    onChange(optionValue);
+                                    setIsOpen(false);
+                                }}
+                            >
+                                <strong>{option.label}</strong>
+                                <span>{option.hint}</span>
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
 
 const CategoryPage = () => {
     const { categoryName: paramCategory } = useParams();
@@ -69,8 +127,6 @@ const CategoryPage = () => {
         return firstProductImage || "images/bannernewasaga2.jpeg";
     }, [products, categoryName, metadata.bannerImage]);
 
-    const activeSortMeta = sortOptionMeta[sortBy] || sortOptionMeta.newest;
-
     if (loading) return <div className="loading-container">Loading...</div>;
 
     return (
@@ -110,21 +166,7 @@ const CategoryPage = () => {
                 {/* Filter Bar */}
                 <div className="filter-bar">
                     <span className="count">{filteredProducts.length} PRODUCTS FOUND</span>
-                    <div className="sort-wrapper">
-                        <label htmlFor="category-sort">Sort By</label>
-                        <div className="sort-copy">
-                            <strong>{activeSortMeta.label}</strong>
-                            <span>{activeSortMeta.hint}</span>
-                        </div>
-                        <div className="sort-select-shell">
-                            <select id="category-sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                                <option value="newest">Newest arrivals</option>
-                                <option value="price-low">Price ascending</option>
-                                <option value="price-high">Price descending</option>
-                            </select>
-                            <span className="sort-caret" aria-hidden="true" />
-                        </div>
-                    </div>
+                    <SortMenu value={sortBy} onChange={setSortBy} />
                 </div>
 
                 {/* Product Grid */}
@@ -140,14 +182,38 @@ const CategoryPage = () => {
                                 onClick={() => navigate(`/product/${product.id}`)}
                             >
                                 <div className="image-wrapper">
-                                    <img
-                                        src={withPublicUrl(product.images?.[0])}
-                                        alt={product.title}
-                                        onError={(e) => {
-                                            e.target.onerror = null;
-                                            e.target.src = withPublicUrl("images/placeholder-product.jpg");
-                                        }}
-                                    />
+                                    {(() => {
+                                        const primaryImage = product.images?.[0];
+                                        const secondaryImage = product.images?.[1] || primaryImage;
+                                        const hasSecondaryImage = Boolean(
+                                            product.images?.[1] && product.images[1] !== product.images[0]
+                                        );
+
+                                        return (
+                                            <>
+                                                <img
+                                                    className="product-image product-image-primary"
+                                                    src={withPublicUrl(primaryImage)}
+                                                    alt={product.title}
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = withPublicUrl("images/placeholder-product.jpg");
+                                                    }}
+                                                />
+                                                {hasSecondaryImage && (
+                                                    <img
+                                                        className="product-image product-image-secondary"
+                                                        src={withPublicUrl(secondaryImage)}
+                                                        alt={`${product.title} alternate view`}
+                                                        onError={(e) => {
+                                                            e.target.onerror = null;
+                                                            e.target.src = withPublicUrl(primaryImage || "images/placeholder-product.jpg");
+                                                        }}
+                                                    />
+                                                )}
+                                            </>
+                                        );
+                                    })()}
                                 </div>
                                 <div className="info">
                                     <h3>{product.title}</h3>
