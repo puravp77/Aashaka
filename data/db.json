@@ -3111,63 +3111,6 @@
         "material": "Cotton",
         "size": "M, L, XL, XXL, 3XL"
       }
-    },
-    {
-      "id": "k28",
-      "title": "AABBCCDD",
-      "images": [
-        "images/e8-1.jpg",
-        "images/e5-1.jpg",
-        "images/e7-1.jpg",
-        "images/j2-3.jpg"
-      ],
-      "price": 700,
-      "oldPrice": 1000,
-      "category": "kurti",
-      "sizes": {
-        "XS": 100,
-        "S": 90,
-        "M": 80
-      },
-      "variants": [
-        {
-          "color": "Blue",
-          "images": [
-            "images/e8-1.jpg",
-            "images/e5-1.jpg",
-            "images/e7-1.jpg",
-            "images/j2-3.jpg"
-          ],
-          "sizes": {
-            "XS": 100,
-            "S": 90,
-            "M": 80
-          }
-        },
-        {
-          "color": "White",
-          "images": [
-            "images/b12-2.jpg",
-            "images/b12-1.jpg",
-            "images/b14.jpg",
-            "images/b15.jpg",
-            "images/b15-1.jpg"
-          ],
-          "sizes": {
-            "M": 100,
-            "S": 90,
-            "XXXL": 80
-          }
-        }
-      ],
-      "details": {
-        "colour": "Blue, White",
-        "material": "AAAABBBBBBBBCCCCCCCCDDDDDDDD",
-        "size": "XS, S, M",
-        "description": "AABBBCCDD",
-        "specification": "",
-        "styleNotes": ""
-      }
     }
   ]
 }
