@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { mapImageList, withPublicUrl } from "../utils/assetPath";
 import { fetchCollection } from "../utils/api";
+import allProducts from "../data/allProducts";
 
 const ProductContext = createContext();
 const KURTI_VARIANT_FAMILIES = [
@@ -139,6 +140,20 @@ const createGroupedProducts = (products) => {
   };
 };
 
+const mergeProductsById = (primaryProducts, fallbackProducts) => {
+  const merged = new Map();
+
+  fallbackProducts.forEach((product) => {
+    merged.set(String(product.id), product);
+  });
+
+  primaryProducts.forEach((product) => {
+    merged.set(String(product.id), product);
+  });
+
+  return Array.from(merged.values());
+};
+
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [groupedProducts, setGroupedProducts] = useState([]);
@@ -154,15 +169,17 @@ export function ProductProvider({ children }) {
           images: mapImageList(product.images),
           image: withPublicUrl(product.image),
         }));
-        const grouped = createGroupedProducts(normalized);
-        setProducts(normalized);
+        const mergedProducts = mergeProductsById(normalized, allProducts);
+        const grouped = createGroupedProducts(mergedProducts);
+        setProducts(mergedProducts);
         setGroupedProducts(grouped.products);
         setProductAliases(grouped.aliases);
       } catch (error) {
         console.error("Failed to load products:", error);
-        setProducts([]);
-        setGroupedProducts([]);
-        setProductAliases({});
+        const grouped = createGroupedProducts(allProducts);
+        setProducts(allProducts);
+        setGroupedProducts(grouped.products);
+        setProductAliases(grouped.aliases);
       } finally {
         setLoading(false);
       }

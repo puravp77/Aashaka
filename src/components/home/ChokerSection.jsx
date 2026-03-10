@@ -38,25 +38,25 @@ export default function ChokerSection() {
       >
         {chokers.map((product) => (
           <motion.div
-            className="product-card"
+            className="choker-card"
             key={product.id}
             onClick={() => navigate(`/product/${product.id}`)}
             style={{ cursor: "pointer" }}
             variants={item}
           >
-            <div className="product-image">
+            <div className="choker-image-wrap">
               <img src={withPublicUrl(product.images[0])} alt={product.title} />
-              <div className="hover-overlay" />
-              <span className="product-badge">Curated</span>
-              <span className="view-icon">View</span>
+              <div className="choker-hover-overlay" />
+              <span className="choker-badge">Curated</span>
+              <span className="choker-view-icon">View</span>
             </div>
 
-            <div className="product-info">
-              <p className="product-title">{product.title}</p>
+            <div className="choker-info">
+              <p className="choker-product-title">{product.title}</p>
 
-              <div className="product-price">
-                <span className="price">{"\u20B9"}{product.price}</span>
-                <span className="old-price">{"\u20B9"}{product.oldPrice}</span>
+              <div className="choker-price-row">
+                <span className="choker-price">{"\u20B9"}{product.price}</span>
+                <span className="choker-old-price">{"\u20B9"}{product.oldPrice}</span>
               </div>
             </div>
           </motion.div>

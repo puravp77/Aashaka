@@ -241,7 +241,10 @@ export default function ProductDetails() {
 
         {/* RIGHT */}
         <div className="product-info-panel">
-          <h1>{title}</h1>
+          <p className="product-kicker">
+            Aashaka Edit
+          </p>
+          <h1 className="product-title-heading">{title}</h1>
 
           <div className="product-meta">
             {product.category && (
@@ -262,6 +265,21 @@ export default function ProductDetails() {
           {savings > 0 && (
             <div className="savings">You save Rs. {savings}</div>
           )}
+
+          <div className="product-highlight-grid">
+            <div className="product-highlight-card">
+              <span className="product-highlight-label">Material</span>
+              <strong>{product.details?.material || "Premium finish"}</strong>
+            </div>
+            <div className="product-highlight-card">
+              <span className="product-highlight-label">Colour</span>
+              <strong>{selectedColor || product.details?.colour || "Classic"}</strong>
+            </div>
+            <div className="product-highlight-card">
+              <span className="product-highlight-label">Fit</span>
+              <strong>{hasSizes ? "Select your size" : product.details?.size || "Free Size"}</strong>
+            </div>
+          </div>
 
           {hasColorVariants && (
             <div className="color-section">

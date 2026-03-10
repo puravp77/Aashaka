@@ -1,12 +1,14 @@
+/* ===============================
+   SECTION
+================================ */
 .choker-section {
-  --choker-brand: #8b0d2b;
-  --choker-brand-deep: #6f0a22;
-  --choker-gold: #c89a58;
-  position: relative;
-  padding: 58px 20px 66px;
-  background: transparent;
+  background: #faf7f2;
+  padding: 40px 120px;
 }
 
+/* ===============================
+   TITLE
+================================ */
 .choker-head {
   max-width: 760px;
   margin: 0 auto 30px;
@@ -19,11 +21,12 @@
   font-weight: 600;
   letter-spacing: 2.2px;
   text-transform: uppercase;
-  color: var(--choker-brand);
+  color: #8b0d2b;
 }
 
 .choker-title {
   margin: 8px 0 8px;
+  text-align: center;
   font-family: "Cormorant Garamond", "Times New Roman", serif;
   font-size: clamp(34px, 4.5vw, 52px);
   font-weight: 600;
@@ -38,6 +41,9 @@
   color: #6e5f53;
 }
 
+/* ===============================
+   GRID
+================================ */
 .choker-grid {
   max-width: 1240px;
   margin: 0 auto;
@@ -47,102 +53,96 @@
   align-items: stretch;
 }
 
-.product-card {
+/* ===============================
+   CARD
+================================ */
+.choker-card {
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  border: 1px solid #e9d5c1;
-  border-radius: 18px;
-  background: linear-gradient(180deg, #fffdf9 0%, #fff6ec 100%);
-  box-shadow: 0 14px 30px rgba(34, 19, 11, 0.12);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  min-height: 100%;
+  border: 1px solid #e6d3bf;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #fffefb 44%, #fff6ec 100%);
+  box-shadow: 0 14px 30px rgba(37, 20, 10, 0.12);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
   cursor: pointer;
+  text-align: left;
 }
 
-.product-card::before {
+.choker-card::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0) 75%);
-  transform: translateX(-135%);
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.42) 52%, rgba(255, 255, 255, 0) 74%);
+  transform: translateX(-140%);
   opacity: 0;
-  z-index: 2;
   pointer-events: none;
+  z-index: 2;
 }
 
-.product-card:hover {
+.choker-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 36px rgba(34, 19, 11, 0.18);
-  border-color: #d7b38d;
+  box-shadow: 0 20px 34px rgba(37, 20, 10, 0.18);
+  border-color: #d9b790;
 }
 
-.product-card:hover::before {
-  opacity: 1;
+.choker-card:hover::before {
   animation: choker-sweep 0.9s ease forwards;
 }
 
-@keyframes choker-sweep {
-  from {
-    transform: translateX(-135%);
-    opacity: 0;
-  }
-
-  10% {
-    opacity: 1;
-  }
-
-  to {
-    transform: translateX(135%);
-    opacity: 0;
-  }
-}
-
-.product-image {
+/* ===============================
+   IMAGE
+================================ */
+.choker-image-wrap {
   position: relative;
   width: 100%;
+  height: 340px;
   overflow: hidden;
 }
 
-.product-image img {
+.choker-image-wrap img {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.45s ease;
+  transition: transform 0.42s ease;
 }
 
-.product-card:hover .product-image img {
+.choker-card:hover .choker-image-wrap img {
   transform: scale(1.06);
 }
 
-.hover-overlay {
+/* ===============================
+   OVERLAY
+================================ */
+.choker-hover-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(22, 12, 8, 0.04) 30%, rgba(22, 12, 8, 0.5) 100%);
+  background: linear-gradient(180deg, rgba(26, 13, 7, 0.05) 34%, rgba(20, 11, 7, 0.55) 100%);
 }
 
-.product-badge {
+.choker-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  border-radius: 999px;
-  padding: 4px 9px;
+  right: 10px;
+  bottom: 10px;
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #fff6ea;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  background: rgba(21, 11, 7, 0.44);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: rgba(24, 15, 9, 0.35);
   backdrop-filter: blur(3px);
   z-index: 3;
 }
 
-.view-icon {
+.choker-view-icon {
   position: absolute;
   right: 12px;
-  bottom: 12px;
+  bottom: 42px;
   border-radius: 999px;
   padding: 5px 10px;
   font-size: 10px;
@@ -159,125 +159,137 @@
   z-index: 3;
 }
 
-.product-card:hover .view-icon {
+.choker-card:hover .choker-view-icon {
   opacity: 1;
   transform: translateY(0);
 }
 
-.product-info {
+/* ===============================
+   INFO
+================================ */
+.choker-info {
   text-align: center;
   padding: 12px 12px 14px;
   margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.product-title {
+.choker-product-title {
   margin: 0;
   font-family: "Cormorant Garamond", "Times New Roman", serif;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 1.2;
+  min-height: 44px;
   color: #24180f;
+  text-wrap: balance;
 }
 
-.product-price {
+.choker-price-row {
   display: flex;
   justify-content: center;
   align-items: baseline;
   gap: 10px;
-  margin-top: 8px;
+  margin-top: 0;
 }
 
-.price {
+.choker-price {
   font-size: 15px;
   font-weight: 600;
-  color: var(--choker-brand);
+  color: #8b0d2b;
 }
 
-.old-price {
+.choker-old-price {
   font-size: 12px;
   text-decoration: line-through;
   color: #9f8f82;
 }
 
+@keyframes choker-sweep {
+  from {
+    transform: translateX(-140%);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(140%);
+    opacity: 0;
+  }
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
 @media (max-width: 1200px) {
+  .choker-section {
+    padding: 40px 60px;
+  }
+
   .choker-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
   }
 }
 
 @media (max-width: 900px) {
   .choker-section {
-    padding: 46px 14px 52px;
+    padding: 36px 24px;
   }
 
   .choker-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    gap: 16px;
   }
 }
 
 @media (max-width: 768px) {
   .home .choker-grid {
-    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    overflow: visible;
-    gap: 12px;
-    padding-bottom: 0;
+    gap: 14px;
   }
 
-  .home .choker-grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  .home .product-card {
+  .home .choker-card {
     min-width: 0;
-    border-radius: 14px;
+    border-radius: 16px;
   }
 
-  .home .product-title {
-    font-size: 18px;
+  .home .choker-image-wrap {
+    height: 248px;
   }
 
-  .home .price {
-    font-size: 13px;
-  }
-
-  .home .old-price {
-    font-size: 11px;
+  .home .choker-product-title {
+    font-size: 16px;
+    min-height: 38px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 420px) {
   .choker-section {
-    padding: 34px 12px 40px;
-  }
-
-  .choker-head {
-    margin-bottom: 18px;
-  }
-
-  .choker-kicker {
-    font-size: 10px;
-    letter-spacing: 1.8px;
+    padding: 24px 14px;
   }
 
   .choker-title {
-    font-size: clamp(30px, 9vw, 38px);
+    font-size: 22px;
+    margin-bottom: 26px;
   }
 
-  .choker-subtitle {
-    font-size: 12px;
-    line-height: 1.5;
-  }
-
-  .choker-grid,
   .home .choker-grid {
-    gap: 10px;
+    gap: 12px;
   }
 
-  .product-badge,
-  .view-icon {
-    font-size: 9px;
-    padding: 4px 8px;
+  .home .choker-image-wrap {
+    height: 232px;
+  }
+
+  .home .choker-product-title {
+    font-size: 15px;
+    min-height: 36px;
   }
 }

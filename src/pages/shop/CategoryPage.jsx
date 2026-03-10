@@ -128,13 +128,14 @@ const CategoryPage = () => {
     }, [products, categoryName, metadata.bannerImage]);
 
     const heroImageClassName = `hero-img ${categoryName === "all" ? "hero-img-all" : ""}`;
+    const heroClassName = `category-hero ${categoryName === "all" ? "category-hero-all" : ""}`;
 
     if (loading) return <div className="loading-container">Loading...</div>;
 
     return (
         <div className="category-page">
             {/* Category Banner */}
-            <div className="category-hero">
+            <div className={heroClassName}>
                 <div className="hero-overlay"></div>
                 <img
                     src={withPublicUrl(bannerImage)}

@@ -84,3 +84,27 @@ CONTINUE
 14. Fixed the admin save logic in [AdminAddProduct.jsx](d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx) so duplicate image paths are removed before storing product data.
 
 15. Ensured existing products with duplicate saved image entries no longer show repeated thumbnails on the product details page after reload.
+
+
+10-03-2026
+
+1. Investigated the product-card hover behavior on the kurti/category listing pages.
+2. Confirmed the listing card needed deterministic primary/secondary image handling instead of relying on implicit behavior.
+3. Updated the category product cards to render both primary and secondary images when available.
+4. Added hover crossfade behavior so cards switch to the second image only for products that actually have a second image.
+5. Fixed the white/blank hover issue for single-image products by restricting the fade swap to cards with a real secondary image.
+6. Verified the category-page hover-image changes with a successful production build.
+7. Checked the live Aashaka site structure for `Cloth -> Kurti` and reviewed how the live PDP handles color variants.
+8. Analyzed the live product-detail behavior and confirmed that kurti PDPs use shared design-level pages with color variants.
+9. Verified multiple live kurti detail pages and confirmed that the sampled/available kurti PDPs on Aashaka include a `Colors:` section.
+10. Added kurti product grouping logic so related kurti products can behave as one family with color variants on the PDP.
+11. Added alias resolution so old/raw product ids still open the correct grouped product detail page with the intended color preselected.
+12. Split product sources into two views: raw products for listing/search visibility and grouped products for PDP variant behavior.
+13. Preserved separate kurti cards on the listing page while routing them into grouped variant-aware product details.
+14. Improved PDP variant handling so images, sizes, stock, add-to-cart, and wishlist logic follow the selected color variant.
+15. Adjusted kurti title handling to avoid bad family-title normalization and keep single-color product titles intact.
+16. Audited kurti ids `k1` to `k26` for title-color vs `details.colour` mismatches.
+17. Changed kurti variant color labeling to prefer the color parsed from the product title, with fallback to `details.colour`.
+18. Hid the `Colors:` section on the PDP when a product has only one real color variant.
+19. Replaced loose title-based kurti grouping with an explicit family mapping for true color-family products only.
+20. Tuned the `shop/all` hero banner using `images/bannerk.png` by adjusting the dedicated hero height/crop so the face and outfit are more visible, and verified it with a successful build.
