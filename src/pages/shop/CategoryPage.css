@@ -314,11 +314,11 @@
     transform: scale(1.1);
 }
 
-.product-card:hover .product-image-primary {
+.product-card.has-secondary-image:hover .product-image-primary {
     opacity: 0;
 }
 
-.product-card:hover .product-image-secondary {
+.product-card.has-secondary-image:hover .product-image-secondary {
     opacity: 1;
 }
 

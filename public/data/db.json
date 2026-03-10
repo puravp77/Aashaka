@@ -3113,36 +3113,6 @@
       }
     },
     {
-      "id": "k27",
-      "title": "ABCDD",
-      "images": [
-        "images/j5.jpg",
-        "images/choker2.jpg",
-        "images/choker2-2.jpg",
-        "images/choker2-3.jpg"
-      ],
-      "price": 3600,
-      "oldPrice": 4500,
-      "category": "kurti",
-      "sizes": {
-        "XS": 10,
-        "S": 5,
-        "M": 20,
-        "L": 0,
-        "XL": 15,
-        "XXL": 0,
-        "XXXL": 0
-      },
-      "details": {
-        "colour": "Red",
-        "material": "RED KURTI",
-        "size": "XS, S, M, L, XL, XXL, XXXL",
-        "description": "ABCDD",
-        "specification": "",
-        "styleNotes": ""
-      }
-    },
-    {
       "id": "k28",
       "title": "AABBCCDD",
       "images": [

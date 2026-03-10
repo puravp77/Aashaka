@@ -175,7 +175,7 @@ const CategoryPage = () => {
                         {filteredProducts.map((product, index) => (
                             <motion.div
                                 key={product.id}
-                                className="product-card"
+                                className={`product-card ${product.images?.[1] && product.images[1] !== product.images[0] ? "has-secondary-image" : ""}`}
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.3, delay: index * 0.05 }}

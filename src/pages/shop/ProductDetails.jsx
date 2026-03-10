@@ -13,7 +13,7 @@ export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { products, loading } = useProducts();
+  const { products, groupedProducts, productAliases, loading } = useProducts();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   const [openAccordion, setOpenAccordion] = useState(null);
@@ -23,9 +23,11 @@ export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState(null);
   const RECENTLY_VIEWED_STORAGE_KEY = "aashaka_recently_viewed";
 
+  const canonicalId = productAliases?.[String(id)] || String(id);
+
   /* FIND PRODUCT */
   const product = !loading
-    ? products.find(p => String(p.id) === String(id))
+    ? groupedProducts.find(p => String(p.id) === canonicalId)
     : null;
   const productVariants = useMemo(
     () => (Array.isArray(product?.variants) ? product.variants.filter((variant) => variant && variant.color) : []),
@@ -73,6 +75,13 @@ export default function ProductDetails() {
   useEffect(() => {
     if (productVariants.length > 0) {
       setSelectedColor((prev) => {
+        const routeVariant = productVariants.find(
+          (variant) => String(variant.sourceId) === String(id)
+        );
+
+        if (routeVariant) {
+          return routeVariant.color;
+        }
         if (prev && productVariants.some((variant) => variant.color === prev)) {
           return prev;
         }
@@ -82,7 +91,7 @@ export default function ProductDetails() {
     }
 
     setSelectedColor(null);
-  }, [productVariants]);
+  }, [id, productVariants]);
 
   useEffect(() => {
     setSelectedSize(null);
@@ -114,12 +123,12 @@ export default function ProductDetails() {
 
     const manual =
       product.alsoBought
-        ?.map(pid => products.find(p => p.id === pid))
+        ?.map(pid => groupedProducts.find(p => p.id === pid) || products.find(p => p.id === pid))
         .filter(Boolean) || [];
 
     manual.forEach(p => usedIds.add(p.id));
 
-    const sameCategory = products
+    const sameCategory = groupedProducts
       .filter(
         p =>
           p.category === product.category &&
@@ -129,12 +138,12 @@ export default function ProductDetails() {
 
     sameCategory.forEach(p => usedIds.add(p.id));
 
-    const randomOthers = products
+    const randomOthers = groupedProducts
       .filter(p => !usedIds.has(p.id))
       .sort(() => Math.random() - 0.5);
 
     return [...manual, ...sameCategory, ...randomOthers].slice(0, 4);
-  }, [product, products]);
+  }, [groupedProducts, product, products]);
 
   /* LOADING */
   if (loading) {

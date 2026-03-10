@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, NavLink } from "react-router-dom";
-import allProducts from "../../data/allProducts";
+import { useProducts } from "../../context/ProductContext";
 import "./SearchResult.css";
 import { withPublicUrl } from "../../utils/assetPath";
 
 export default function SearchResult() {
   const location = useLocation();
   const [results, setResults] = useState([]);
+  const { products, loading } = useProducts();
 
   // 🔍 Get query from URL (?q=necklace)
   const params = new URLSearchParams(location.search);
   const query = params.get("q")?.toLowerCase().trim();
 
   useEffect(() => {
+    if (loading) return;
+
     if (!query) {
       setResults([]);
       return;
     }
 
-    const filtered = allProducts.filter((product) => {
+    const filtered = products.filter((product) => {
       const title = product.title?.toLowerCase() || "";
       const category = product.category?.toLowerCase() || "";
       const colour = product.details?.colour?.toLowerCase() || "";
@@ -31,7 +34,7 @@ export default function SearchResult() {
     });
 
     setResults(filtered);
-  }, [query]);
+  }, [loading, products, query]);
 
   return (
     <section className="search-page">
