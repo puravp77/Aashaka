@@ -336,6 +336,21 @@ export default function AdminAddProduct({ editMode = false }) {
     }));
   };
 
+  const getVariantSizeOptions = (variantIndex, rowIndex) => {
+    const selectedSizes = colorVariants[variantIndex]?.inventoryRows
+      .map((row) => row.size)
+      .filter(Boolean) || [];
+    const currentSize = colorVariants[variantIndex]?.inventoryRows?.[rowIndex]?.size;
+
+    return sizeOptions
+      .filter((size) => size !== "Free")
+      .map((size) => ({
+        value: size,
+        label: size,
+        disabled: size !== currentSize && selectedSizes.includes(size),
+      }));
+  };
+
   const addVariantInventoryRow = (variantIndex) => {
     setColorVariants((prev) =>
       prev.map((variant, index) =>
@@ -677,7 +692,7 @@ export default function AdminAddProduct({ editMode = false }) {
                             label="Size"
                             value={row.size}
                             placeholder="Select size"
-                            options={sizeOptions.filter((size) => size !== "Free")}
+                            options={getVariantSizeOptions(variantIndex, rowIndex)}
                             onChange={(nextValue) => onVariantInventoryChange(variantIndex, rowIndex, "size", nextValue)}
                             hideLabel
                             openUp
