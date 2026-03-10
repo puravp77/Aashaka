@@ -24,7 +24,6 @@ export default function ProductDetails() {
   const RECENTLY_VIEWED_STORAGE_KEY = "aashaka_recently_viewed";
 
   const canonicalId = productAliases?.[String(id)] || String(id);
-
   /* FIND PRODUCT */
   const product = !loading
     ? groupedProducts.find(p => String(p.id) === canonicalId)
@@ -33,6 +32,7 @@ export default function ProductDetails() {
     () => (Array.isArray(product?.variants) ? product.variants.filter((variant) => variant && variant.color) : []),
     [product]
   );
+  const hasColorVariants = productVariants.length > 1;
   const selectedVariant = useMemo(() => {
     if (!productVariants.length) return null;
     return (
@@ -165,8 +165,8 @@ export default function ProductDetails() {
 
   const images = activeImages;
   const title = product.title;
-  const price = product.price;
-  const oldPrice = product.oldPrice;
+  const price = selectedVariant?.price ?? product.price;
+  const oldPrice = selectedVariant?.oldPrice ?? product.oldPrice;
   const inWishlist = isInWishlist(product.id);
 
   const discountPercent =
@@ -263,7 +263,7 @@ export default function ProductDetails() {
             <div className="savings">You save Rs. {savings}</div>
           )}
 
-          {productVariants.length > 0 && (
+          {hasColorVariants && (
             <div className="color-section">
               <p className="color-title">Colors:</p>
               <div className="color-options">

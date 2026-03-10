@@ -3,6 +3,14 @@ import { mapImageList, withPublicUrl } from "../utils/assetPath";
 import { fetchCollection } from "../utils/api";
 
 const ProductContext = createContext();
+const KURTI_VARIANT_FAMILIES = [
+  { title: "Aadhya Kurti Set", ids: ["k1", "k2"] },
+  { title: "Amara Kurti Set", ids: ["k3", "k4", "k14"] },
+  { title: "Printed Kurti Set", ids: ["k5", "k6"] },
+  { title: "Phool Mahal", ids: ["k11", "k12"] },
+  { title: "Kusum Kurti Set", ids: ["k9", "k20"] },
+  { title: "Phool Kusum Kurti Set", ids: ["k18", "k19"] },
+];
 const COLOR_PREFIXES = [
   "Peach Pink",
   "Navy Blue",
@@ -24,24 +32,16 @@ const COLOR_PREFIXES = [
   "Red",
 ];
 
-const stripColorPrefix = (title = "") => {
-  const match = COLOR_PREFIXES
+const extractTitleColor = (title = "") =>
+  COLOR_PREFIXES
     .sort((a, b) => b.length - a.length)
-    .find((color) => title.toLowerCase().startsWith(`${color.toLowerCase()} `));
+    .find((color) => title.toLowerCase().startsWith(`${color.toLowerCase()} `)) || "";
 
-  if (!match) return title.trim();
-  return title.slice(match.length).trim();
-};
-
-const normalizeKurtiTitle = (title = "") => {
-  const withoutColor = stripColorPrefix(title);
-
-  return withoutColor
-    .replace(/\bkurti\b/gi, "")
-    .replace(/\s+set\b/gi, " Set")
-    .replace(/\s+/g, " ")
-    .trim();
-};
+const KURTI_FAMILY_LOOKUP = new Map(
+  KURTI_VARIANT_FAMILIES.flatMap((family) =>
+    family.ids.map((id) => [String(id), family])
+  )
+);
 
 const createGroupedProducts = (products) => {
   const aliasMap = {};
@@ -55,19 +55,21 @@ const createGroupedProducts = (products) => {
       return;
     }
 
-    const baseTitle = normalizeKurtiTitle(product.title || "");
-    const color = product.details?.colour || "Default";
-    const groupKey = baseTitle || product.title || String(product.id);
+    const family = KURTI_FAMILY_LOOKUP.get(String(product.id));
+    const groupKey = family?.title || String(product.id);
+    const color = extractTitleColor(product.title || "") || product.details?.colour || "Default";
     const group = kurtiGroups.get(groupKey) || [];
 
     group.push({
       ...product,
       variantColor: color,
+      familyTitle: family?.title || product.title,
     });
     kurtiGroups.set(groupKey, group);
   });
 
-  const groupedKurtiProducts = Array.from(kurtiGroups.entries()).map(([baseTitle, group]) => {
+  const groupedKurtiProducts = Array.from(kurtiGroups.entries()).map(([, group]) => {
+    const familyTitle = group[0]?.familyTitle || group[0]?.title || "";
     const variantsByColor = new Map();
     group.forEach((item) => {
       const colorKey = (item.variantColor || "Default").toLowerCase();
@@ -86,10 +88,22 @@ const createGroupedProducts = (products) => {
     if (uniqueVariants.length === 1) {
       const [single] = uniqueVariants;
       aliasMap[String(single.id)] = String(single.id);
+      const fallbackVariant = {
+        color: single.variantColor || single.details?.colour || "Default",
+        images: single.images || [],
+        sizes: single.sizes || {},
+        sourceId: single.id,
+        price: single.price,
+        oldPrice: single.oldPrice,
+      };
+
       return {
         ...single,
-        title: baseTitle || single.title,
-        variants: Array.isArray(single.variants) ? single.variants : [],
+        title: single.title,
+        variants:
+          Array.isArray(single.variants) && single.variants.length > 0
+            ? single.variants
+            : [fallbackVariant],
       };
     }
 
@@ -101,12 +115,14 @@ const createGroupedProducts = (products) => {
         images: item.images || [],
         sizes: item.sizes || {},
         sourceId: item.id,
+        price: item.price,
+        oldPrice: item.oldPrice,
       };
     });
 
     return {
       ...primary,
-      title: baseTitle || primary.title,
+      title: familyTitle || primary.title,
       details: {
         ...primary.details,
         colour: variants.map((variant) => variant.color).join(", "),

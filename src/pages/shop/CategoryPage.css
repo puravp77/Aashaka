@@ -52,8 +52,17 @@
     transition: transform 1.4s ease;
 }
 
+.hero-img-all {
+    object-position: center 18%;
+    transform: scale(1.02);
+}
+
 .category-hero:hover .hero-img {
     transform: scale(1.12);
+}
+
+.category-hero:hover .hero-img-all {
+    transform: scale(1.06);
 }
 
 .hero-content {

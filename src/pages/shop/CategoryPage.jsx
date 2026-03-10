@@ -127,6 +127,8 @@ const CategoryPage = () => {
         return firstProductImage || "images/bannernewasaga2.jpeg";
     }, [products, categoryName, metadata.bannerImage]);
 
+    const heroImageClassName = `hero-img ${categoryName === "all" ? "hero-img-all" : ""}`;
+
     if (loading) return <div className="loading-container">Loading...</div>;
 
     return (
@@ -141,7 +143,7 @@ const CategoryPage = () => {
                         e.target.onerror = null;
                         e.target.src = withPublicUrl("images/bannernewasaga2.jpeg");
                     }}
-                    className="hero-img"
+                    className={heroImageClassName}
                 />
                 <div className="hero-content">
                     <span className="hero-kicker">Aashaka Curated Edit</span>
