@@ -33,7 +33,7 @@ export function WishlistProvider({ children }) {
     localStorage.setItem(storageKey, JSON.stringify(wishlistItems));
   }, [wishlistItems, user, storageKey]);
 
-  const addToWishlist = (product, size = null, showToast = true) => {
+  const addToWishlist = (product, size = null, color = null, showToast = true) => {
     if (!user) {
       if (showToast) {
         toast.error("Please login first to add items to wishlist", {
@@ -56,6 +56,7 @@ export function WishlistProvider({ children }) {
           image: product.images?.[0],
           images: product.images || [],
           size: size || null,
+          color: color || null,
         },
       ];
     });

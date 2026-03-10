@@ -19,6 +19,7 @@ export default function ProductDetails() {
   const [openAccordion, setOpenAccordion] = useState(null);
   const [activeImg, setActiveImg] = useState("");
   const [qty, setQty] = useState(1);
+  const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const RECENTLY_VIEWED_STORAGE_KEY = "aashaka_recently_viewed";
 
@@ -26,13 +27,32 @@ export default function ProductDetails() {
   const product = !loading
     ? products.find(p => String(p.id) === String(id))
     : null;
-  const hasSizes = Boolean(product?.sizes);
+  const productVariants = useMemo(
+    () => (Array.isArray(product?.variants) ? product.variants.filter((variant) => variant && variant.color) : []),
+    [product]
+  );
+  const selectedVariant = useMemo(() => {
+    if (!productVariants.length) return null;
+    return (
+      productVariants.find((variant) => variant.color === selectedColor) ||
+      productVariants[0]
+    );
+  }, [productVariants, selectedColor]);
+  const activeSizes = useMemo(
+    () => selectedVariant?.sizes || product?.sizes || {},
+    [selectedVariant, product]
+  );
+  const hasSizes = Object.keys(activeSizes).length > 0;
+  const activeImages = useMemo(
+    () => ((selectedVariant?.images?.length ? selectedVariant.images : product?.images) || []).map(withPublicUrl),
+    [selectedVariant, product]
+  );
   const requiresSizeSelection = hasSizes && !selectedSize;
   const selectedStock = useMemo(() => {
-    if (!hasSizes || !selectedSize || !product) return null;
-    const raw = product.sizes[selectedSize];
+    if (!hasSizes || !selectedSize) return null;
+    const raw = activeSizes[selectedSize];
     return Number.isFinite(Number(raw)) ? Number(raw) : 0;
-  }, [hasSizes, product, selectedSize]);
+  }, [activeSizes, hasSizes, selectedSize]);
   useEffect(() => {
     if (selectedStock === null) return;
     setQty((prev) => Math.min(Math.max(1, prev), selectedStock || 1));
@@ -45,10 +65,29 @@ export default function ProductDetails() {
 
   /* DEFAULT IMAGE */
   useEffect(() => {
-    if (product?.images?.length) {
-      setActiveImg(withPublicUrl(product.images[0]));
+    if (activeImages.length) {
+      setActiveImg(activeImages[0]);
     }
-  }, [product]);
+  }, [activeImages]);
+
+  useEffect(() => {
+    if (productVariants.length > 0) {
+      setSelectedColor((prev) => {
+        if (prev && productVariants.some((variant) => variant.color === prev)) {
+          return prev;
+        }
+        return productVariants[0].color;
+      });
+      return;
+    }
+
+    setSelectedColor(null);
+  }, [productVariants]);
+
+  useEffect(() => {
+    setSelectedSize(null);
+    setQty(1);
+  }, [selectedColor, id]);
 
   useEffect(() => {
     if (!product?.id) return;
@@ -115,7 +154,7 @@ export default function ProductDetails() {
     );
   }
 
-  const images = (product.images || []).map(withPublicUrl);
+  const images = activeImages;
   const title = product.title;
   const price = product.price;
   const oldPrice = product.oldPrice;
@@ -215,12 +254,38 @@ export default function ProductDetails() {
             <div className="savings">You save Rs. {savings}</div>
           )}
 
+          {productVariants.length > 0 && (
+            <div className="color-section">
+              <p className="color-title">Colors:</p>
+              <div className="color-options">
+                {productVariants.map((variant) => {
+                  const variantImage = withPublicUrl(variant.images?.[0] || product.images?.[0]);
+                  const isActive = selectedColor === variant.color;
+
+                  return (
+                    <button
+                      key={variant.color}
+                      type="button"
+                      className={`color-card ${isActive ? "active" : ""}`}
+                      onClick={() => setSelectedColor(variant.color)}
+                    >
+                      {variantImage && (
+                        <img src={variantImage} alt={`${title} ${variant.color}`} />
+                      )}
+                      <span>{variant.color}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* SIZE */}
           {hasSizes && (
             <div className="size-section">
               <p className="size-title">Size:</p>
               <div className="size-options">
-                {Object.entries(product.sizes).map(([size, stock]) => (
+                {Object.entries(activeSizes).map(([size, stock]) => (
                   <button
                     key={size}
                     className={`size-btn 
@@ -234,11 +299,6 @@ export default function ProductDetails() {
                     {size}
                   </button>
                 ))}
-              </div>
-              <div className="size-help">
-                {selectedSize
-                  ? `Selected: ${selectedSize}${selectedStock !== null ? ` • ${selectedStock} in stock` : ""}`
-                  : "Select a size to continue"}
               </div>
             </div>
           )}
@@ -278,7 +338,7 @@ export default function ProductDetails() {
           <button
             className="add-cart"
             onClick={() => {
-              if (product.sizes && !selectedSize) {
+              if (hasSizes && !selectedSize) {
                 toast.error("Please select a size", { toastId: "select-size" });
                 return;
               }
@@ -288,7 +348,16 @@ export default function ProductDetails() {
                 return;
               }
 
-              addToCart(product, qty, selectedSize || null);
+              addToCart(
+                {
+                  ...product,
+                  images: selectedVariant?.images?.length ? selectedVariant.images : product.images,
+                  sizes: activeSizes,
+                },
+                qty,
+                selectedSize || null,
+                selectedColor || null
+              );
               toast.success("Added to Cart", {
                 toastId: "added-to-cart",
               });
@@ -301,7 +370,7 @@ export default function ProductDetails() {
           <button
             className="buy-now"
             onClick={() => {
-              if (product.sizes && !selectedSize) {
+              if (hasSizes && !selectedSize) {
                 toast.error("Please select a size", { toastId: "select-size" });
                 return;
               }
@@ -311,7 +380,16 @@ export default function ProductDetails() {
                 return;
               }
 
-              addToCart(product, qty, selectedSize || null);
+              addToCart(
+                {
+                  ...product,
+                  images: selectedVariant?.images?.length ? selectedVariant.images : product.images,
+                  sizes: activeSizes,
+                },
+                qty,
+                selectedSize || null,
+                selectedColor || null
+              );
               navigate("/cart");
             }}
           >
@@ -324,11 +402,18 @@ export default function ProductDetails() {
               if (inWishlist) {
                 removeFromWishlist(product.id);
               } else {
-                if (product.sizes && !selectedSize) {
+                if (hasSizes && !selectedSize) {
                   toast.error("Please select a size", { toastId: "select-size" });
                   return;
                 }
-                addToWishlist(product, selectedSize || null);
+                addToWishlist(
+                  {
+                    ...product,
+                    images: selectedVariant?.images?.length ? selectedVariant.images : product.images,
+                  },
+                  selectedSize || null,
+                  selectedColor || null
+                );
               }
             }}
           >

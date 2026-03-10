@@ -221,10 +221,10 @@ export default function AdminAddProduct({ editMode = false }) {
 
   const computedFinalPrice = useMemo(() => {
     const price = parseNumber(form.itemPrice);
-    const discount = parseNumber(form.discount);
     const percentage = parseNumber(form.percentage);
-    const discountByPercent = price * (percentage / 100);
-    const totalDiscount = discount + discountByPercent;
+    const totalDiscount = percentage > 0
+      ? price * (percentage / 100)
+      : parseNumber(form.discount);
     const finalValue = Math.max(0, price - totalDiscount);
     return finalValue > 0 ? Math.round(finalValue) : 0;
   }, [form.itemPrice, form.discount, form.percentage]);
@@ -233,6 +233,18 @@ export default function AdminAddProduct({ editMode = false }) {
     return subCategoryMap[form.category] || [];
   }, [form.category]);
 
+  const computedDiscountValue = useMemo(() => {
+    const price = parseNumber(form.itemPrice);
+    const percentage = parseNumber(form.percentage);
+
+    if (price <= 0 || percentage <= 0) {
+      return "";
+    }
+
+    return String(Math.round(price * (percentage / 100)));
+  }, [form.itemPrice, form.percentage]);
+
+  const discountValue = form.percentage ? computedDiscountValue : form.discount;
   const finalPriceValue = form.finalPrice || String(computedFinalPrice || "");
   const selectedVariantColors = useMemo(
     () => colorVariants.map((variant) => variant.color).filter(Boolean),
@@ -345,10 +357,10 @@ export default function AdminAddProduct({ editMode = false }) {
 
     return sizeOptions
       .filter((size) => size !== "Free")
+      .filter((size) => size === currentSize || !selectedSizes.includes(size))
       .map((size) => ({
         value: size,
         label: size,
-        disabled: size !== currentSize && selectedSizes.includes(size),
       }));
   };
 
@@ -561,7 +573,15 @@ export default function AdminAddProduct({ editMode = false }) {
             </label>
             <label className="adm-add-field">
               <span>Discount</span>
-              <input className="adm-input adm-add-input" type="number" min="0" value={form.discount} onChange={onChangeField("discount")} placeholder="Enter discount" />
+              <input
+                className="adm-input adm-add-input"
+                type="number"
+                min="0"
+                value={discountValue}
+                onChange={onChangeField("discount")}
+                placeholder="Enter discount"
+                readOnly={Boolean(form.percentage)}
+              />
             </label>
             <label className="adm-add-field">
               <span>Final Price</span>

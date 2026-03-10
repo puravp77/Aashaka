@@ -78,7 +78,7 @@ export default function OrderReview() {
           {cartItems.map((item) => (
             <div
               className="review-item"
-              key={`${item.id}-${item.size || "free"}`}
+              key={`${item.id}-${item.color || "nocolor"}-${item.size || "free"}`}
             >
               <img
                 src={withPublicUrl(item.image)}
@@ -88,7 +88,7 @@ export default function OrderReview() {
               <div className="review-info">
                 <p className="title">{item.title}</p>
                 <p className="meta">
-                  Qty: {item.qty} {item.size && `| Size: ${item.size}`}
+                  Qty: {item.qty} {item.color && `| Color: ${item.color}`} {item.size && `| Size: ${item.size}`}
                 </p>
               </div>
 

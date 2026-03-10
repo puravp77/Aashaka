@@ -52,7 +52,7 @@ export default function Wishlist() {
               {wishlistItems.map((item) => (
                 <motion.div
                   className="wishlist-item"
-                  key={item.id}
+                  key={`${item.id}-${item.color || "nocolor"}-${item.size || "nosize"}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -87,6 +87,9 @@ export default function Wishlist() {
                     <h4 onClick={() => navigate(`/product/${item.id}`)}>
                       {item.title}
                     </h4>
+                    {item.color && (
+                      <div className="wishlist-size">Color: {item.color}</div>
+                    )}
                     {item.size && (
                       <div className="wishlist-size">Size: {item.size}</div>
                     )}
@@ -130,6 +133,7 @@ export default function Wishlist() {
                           { ...item, images: item.images || [item.image] },
                           getQty(item.id),
                           item.size || null,
+                          item.color || null,
                           true
                         )
                       }

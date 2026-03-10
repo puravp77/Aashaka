@@ -6,6 +6,21 @@ import { withPublicUrl } from "../../utils/assetPath";
 import { motion } from "framer-motion";
 import "./CategoryPage.css";
 
+const sortOptionMeta = {
+    newest: {
+        label: "Newest arrivals",
+        hint: "Latest drops first"
+    },
+    "price-low": {
+        label: "Price ascending",
+        hint: "From budget to premium"
+    },
+    "price-high": {
+        label: "Price descending",
+        hint: "From premium to budget"
+    }
+};
+
 const CategoryPage = () => {
     const { categoryName: paramCategory } = useParams();
     const location = useLocation();
@@ -54,6 +69,8 @@ const CategoryPage = () => {
         return firstProductImage || "images/bannernewasaga2.jpeg";
     }, [products, categoryName, metadata.bannerImage]);
 
+    const activeSortMeta = sortOptionMeta[sortBy] || sortOptionMeta.newest;
+
     if (loading) return <div className="loading-container">Loading...</div>;
 
     return (
@@ -94,12 +111,19 @@ const CategoryPage = () => {
                 <div className="filter-bar">
                     <span className="count">{filteredProducts.length} PRODUCTS FOUND</span>
                     <div className="sort-wrapper">
-                        <label>SORT BY:</label>
-                        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                            <option value="newest">Newest First</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                        </select>
+                        <label htmlFor="category-sort">Sort By</label>
+                        <div className="sort-copy">
+                            <strong>{activeSortMeta.label}</strong>
+                            <span>{activeSortMeta.hint}</span>
+                        </div>
+                        <div className="sort-select-shell">
+                            <select id="category-sort" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                                <option value="newest">Newest arrivals</option>
+                                <option value="price-low">Price ascending</option>
+                                <option value="price-high">Price descending</option>
+                            </select>
+                            <span className="sort-caret" aria-hidden="true" />
+                        </div>
                     </div>
                 </div>
 

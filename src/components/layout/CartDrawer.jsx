@@ -17,9 +17,12 @@ export default function CartDrawer({ open, onClose }) {
     );
 
     if (!product) return item.qty;
-    if (!product.sizes || !item.size) return Number.POSITIVE_INFINITY;
+    const activeSizes = item.color
+      ? product.variants?.find((variant) => variant.color === item.color)?.sizes || product.sizes
+      : product.sizes;
+    if (!activeSizes || !item.size) return Number.POSITIVE_INFINITY;
 
-    return Math.max(0, Number(product.sizes[item.size]) || 0);
+    return Math.max(0, Number(activeSizes[item.size]) || 0);
   };
 
   useEffect(() => {
@@ -76,11 +79,16 @@ export default function CartDrawer({ open, onClose }) {
                 const availableStock = getAvailableStock(item);
 
                 return (
-                  <div className="drawer-item" key={`${item.id}-${item.size || "free"}`}>
+                  <div className="drawer-item" key={`${item.id}-${item.color || "nocolor"}-${item.size || "free"}`}>
                     <img src={withPublicUrl(item.image)} alt={item.title} />
 
                     <div className="drawer-text">
                       <h4>{item.title}</h4>
+                      {item.color && (
+                        <p className="drawer-size">
+                          Color <span>{item.color}</span>
+                        </p>
+                      )}
                       <p className="drawer-size">
                         Size <span>{item.size || "Free Size"}</span>
                       </p>
@@ -91,7 +99,7 @@ export default function CartDrawer({ open, onClose }) {
                             type="button"
                             aria-label="Decrease quantity"
                             onClick={() =>
-                              updateQty(item.id, item.size, Math.max(1, item.qty - 1))
+                              updateQty(item.id, item.size, item.color || null, Math.max(1, item.qty - 1))
                             }
                           >
                             -
@@ -113,7 +121,7 @@ export default function CartDrawer({ open, onClose }) {
                                 return;
                               }
 
-                              updateQty(item.id, item.size, item.qty + 1);
+                              updateQty(item.id, item.size, item.color || null, item.qty + 1);
                             }}
                             disabled={
                               Number.isFinite(availableStock) &&
@@ -131,7 +139,7 @@ export default function CartDrawer({ open, onClose }) {
                     <button
                       type="button"
                       className="drawer-remove"
-                      onClick={() => removeFromCart(item.id, item.size)}
+                      onClick={() => removeFromCart(item.id, item.size, item.color || null)}
                       aria-label={`Remove ${item.title}`}
                     >
                       x

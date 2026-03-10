@@ -37,14 +37,14 @@ export function CartProvider({ children }) {
   /* =========================
      ADD TO CART (MERGE BY ID + SIZE)
   ========================= */
-  const addToCart = (product, qty = 1, size = null, showToast = false) => {
+  const addToCart = (product, qty = 1, size = null, color = null, showToast = false) => {
     setCartItems((prev) => {
       const maxQty =
         product?.sizes && size
           ? Math.max(0, Number(product.sizes[size]) || 0)
           : Infinity;
       const existing = prev.find(
-        (item) => item.id === product.id && item.size === size
+        (item) => item.id === product.id && item.size === size && item.color === color
       );
 
       if (existing) {
@@ -53,7 +53,7 @@ export function CartProvider({ children }) {
           return prev;
         }
         return prev.map((item) =>
-          item.id === product.id && item.size === size
+          item.id === product.id && item.size === size && item.color === color
             ? { ...item, qty: nextQty }
             : item
         );
@@ -73,6 +73,7 @@ export function CartProvider({ children }) {
           image: product.images?.[0],
           qty: nextQty,
           size,
+          color,
         },
       ];
     });
@@ -87,25 +88,25 @@ export function CartProvider({ children }) {
   /* =========================
      REMOVE FROM CART
   ========================= */
-  const removeFromCart = (id, size) => {
+  const removeFromCart = (id, size, color = null) => {
     setCartItems((prev) =>
-      prev.filter((item) => !(item.id === id && item.size === size))
+      prev.filter((item) => !(item.id === id && item.size === size && item.color === color))
     );
   };
 
   /* =========================
      UPDATE QTY
   ========================= */
-  const updateQty = (id, size, newQty) => {
+  const updateQty = (id, size, color = null, newQty) => {
     setCartItems((prev) => {
       if (newQty < 1) {
         return prev.filter(
-          (item) => !(item.id === id && item.size === size)
+          (item) => !(item.id === id && item.size === size && item.color === color)
         );
       }
 
       return prev.map((item) =>
-        item.id === id && item.size === size
+        item.id === id && item.size === size && item.color === color
           ? { ...item, qty: newQty }
           : item
       );

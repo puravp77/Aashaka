@@ -43,9 +43,12 @@ export default function Cart() {
     );
 
     if (!product) return item.qty;
-    if (!product.sizes || !item.size) return Number.POSITIVE_INFINITY;
+    const activeSizes = item.color
+      ? product.variants?.find((variant) => variant.color === item.color)?.sizes || product.sizes
+      : product.sizes;
+    if (!activeSizes || !item.size) return Number.POSITIVE_INFINITY;
 
-    return Math.max(0, Number(product.sizes[item.size]) || 0);
+    return Math.max(0, Number(activeSizes[item.size]) || 0);
   };
 
   const subtotal = cartItems.reduce(
@@ -222,7 +225,7 @@ export default function Cart() {
             {cartItems.map((item) => (
               <motion.div
                 className="cart-item"
-                key={`${item.id}-${item.size || "nosize"}`}
+                key={`${item.id}-${item.color || "nocolor"}-${item.size || "nosize"}`}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
@@ -230,7 +233,7 @@ export default function Cart() {
               >
                 <motion.button
                   className="remove"
-                  onClick={() => removeFromCart(item.id, item.size)}
+                  onClick={() => removeFromCart(item.id, item.size, item.color || null)}
                   whileTap={{ scale: 0.9 }}
                   aria-label={`Remove ${item.title}`}
                 >
@@ -244,6 +247,11 @@ export default function Cart() {
                 <div className="cart-info">
                   <h4>{item.title}</h4>
                   <div className="cart-meta-chips">
+                    {item.color && (
+                      <span className="cart-chip">
+                        Color {item.color}
+                      </span>
+                    )}
                     <span className="cart-chip">
                       {item.size ? `Size ${item.size}` : "Free Size"}
                     </span>
@@ -259,7 +267,7 @@ export default function Cart() {
                   <div className="qty-stepper">
                     <motion.button
                       onClick={() =>
-                        updateQty(item.id, item.size, item.qty - 1)
+                        updateQty(item.id, item.size, item.color || null, item.qty - 1)
                       }
                       disabled={item.qty === 1}
                       whileTap={{ scale: 0.9 }}
@@ -283,7 +291,7 @@ export default function Cart() {
                           });
                           return;
                         }
-                        updateQty(item.id, item.size, item.qty + 1);
+                        updateQty(item.id, item.size, item.color || null, item.qty + 1);
                       }}
                       disabled={
                         Number.isFinite(getAvailableStock(item)) &&
