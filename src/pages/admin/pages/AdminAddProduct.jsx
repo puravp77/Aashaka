@@ -93,21 +93,29 @@ function AdminCustomSelect({
                 {placeholder}
               </button>
             </li>
-            {options.map((item) => (
-              <li key={item}>
-                <button
-                  type="button"
-                  className={`adm-custom-option ${item === value ? "active" : ""}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onChange(item);
-                    setIsOpen(false);
-                  }}
-                >
-                  {item}
-                </button>
-              </li>
-            ))}
+            {options.map((item) => {
+              const optionValue = typeof item === "string" ? item : item.value;
+              const optionLabel = typeof item === "string" ? item : item.label ?? item.value;
+              const optionDisabled = typeof item === "string" ? false : Boolean(item.disabled);
+
+              return (
+                <li key={optionValue}>
+                  <button
+                    type="button"
+                    className={`adm-custom-option ${optionValue === value ? "active" : ""} ${optionDisabled ? "is-disabled" : ""}`}
+                    disabled={optionDisabled}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (optionDisabled) return;
+                      onChange(optionValue);
+                      setIsOpen(false);
+                    }}
+                  >
+                    {optionLabel}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
@@ -226,6 +234,10 @@ export default function AdminAddProduct({ editMode = false }) {
   }, [form.category]);
 
   const finalPriceValue = form.finalPrice || String(computedFinalPrice || "");
+  const selectedVariantColors = useMemo(
+    () => colorVariants.map((variant) => variant.color).filter(Boolean),
+    [colorVariants]
+  );
 
   useEffect(() => {
     if (form.category === "JEWELLERY") {
@@ -304,7 +316,7 @@ export default function AdminAddProduct({ editMode = false }) {
   };
 
   const addColorVariant = () => {
-    setColorVariants((prev) => [...prev, createColorVariant()]);
+    setColorVariants((prev) => (prev.length >= colorOptions.length ? prev : [...prev, createColorVariant()]));
   };
 
   const removeColorVariant = (variantIndex) => {
@@ -312,6 +324,16 @@ export default function AdminAddProduct({ editMode = false }) {
       if (prev.length === 1) return prev;
       return prev.filter((_, index) => index !== variantIndex);
     });
+  };
+
+  const getVariantColorOptions = (variantIndex) => {
+    const currentColor = colorVariants[variantIndex]?.color;
+
+    return colorOptions.map((color) => ({
+      value: color,
+      label: color,
+      disabled: color !== currentColor && selectedVariantColors.includes(color),
+    }));
   };
 
   const addVariantInventoryRow = (variantIndex) => {
@@ -594,7 +616,12 @@ export default function AdminAddProduct({ editMode = false }) {
           <div className="adm-add-section">
             <div className="adm-section-head">
               <h3>Color Variants</h3>
-              <button type="button" className="adm-btn secondary adm-variant-add-btn" onClick={addColorVariant}>
+              <button
+                type="button"
+                className="adm-btn secondary adm-variant-add-btn"
+                onClick={addColorVariant}
+                disabled={colorVariants.length >= colorOptions.length}
+              >
                 Add Color
               </button>
             </div>
@@ -618,7 +645,7 @@ export default function AdminAddProduct({ editMode = false }) {
                       label="Color"
                       value={variant.color}
                       placeholder="---Select Color---"
-                      options={colorOptions}
+                      options={getVariantColorOptions(variantIndex)}
                       onChange={(nextValue) => onVariantChange(variantIndex, "color", nextValue)}
                     />
 
