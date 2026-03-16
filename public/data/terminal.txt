@@ -80,3 +80,49 @@ CONTINUE
 18. Hid the `Colors:` section on the PDP when a product has only one real color variant.
 19. Replaced loose title-based kurti grouping with an explicit family mapping for true color-family products only.
 20. Tuned the `shop/all` hero banner using `images/bannerk.png` by adjusting the dedicated hero height/crop so the face and outfit are more visible, and verified it with a successful build.
+
+
+
+
+
+16-03-2026
+
+1. Reviewed the existing Aashaka repo and confirmed it was a frontend-first React project using `json-server` and local JSON files for users, products, and orders.
+
+2. Inspected the current local data sources such as [public/data/db.json](/d:/Project/aashaka/public/data/db.json), [tmp_products.json](/d:/Project/aashaka/tmp_products.json), and [tmp_orders.json](/d:/Project/aashaka/tmp_orders.json) to understand the existing storefront data shape.
+
+3. Scanned frontend API usage to identify how the current app talks to the mock backend and where future integration work will be needed.
+
+4. Created a dedicated backend workspace under [backend](/d:/Project/aashaka/backend) with the requested MVC folder structure.
+
+5. Added backend package setup in [backend/package.json](/d:/Project/aashaka/backend/package.json) with Express, Mongoose, JWT, bcrypt, dotenv, cors, and nodemon.
+
+6. Implemented the initial Express server in [server.js](/d:/Project/aashaka/backend/server.js) with middleware, route registration, health check, fallback 404 handling, and centralized error handling.
+
+7. Added MongoDB connection logic in [db.js](/d:/Project/aashaka/backend/config/db.js) using Mongoose.
+
+8. Created initial backend models for User, Product, and Order under [backend/models](/d:/Project/aashaka/backend/models).
+
+9. Created initial route files for authentication, products, and orders under [backend/routes](/d:/Project/aashaka/backend/routes).
+
+10. Created controller files for auth, product, and order flows under [backend/controllers](/d:/Project/aashaka/backend/controllers), covering register/login, product CRUD, and order creation and retrieval.
+
+11. Added JWT authentication middleware in [authMiddleware.js](/d:/Project/aashaka/backend/middleware/authMiddleware.js) for protected routes and role-based checks.
+
+12. Installed all backend dependencies successfully with `npm install` inside [backend](/d:/Project/aashaka/backend).
+
+13. Updated the Mongoose models to match your revised schema requirements for User, Product, and Order, including nested addresses in User and product references inside Order.
+
+14. Realigned the controllers to match the new model structures, including bcrypt-based auth handling, product CRUD with the new fields, and order creation with `products[]`, `totalPrice`, and `orderStatus`.
+
+15. Configured MongoDB Atlas integration by updating [backend/.env](/d:/Project/aashaka/backend/.env) with the Atlas `MONGO_URI` and adjusting startup flow so the server connects to MongoDB before listening.
+
+16. Verified that the backend server now starts successfully with Atlas and logs both the MongoDB connection and server port.
+
+17. Audited route registration and confirmed [server.js](/d:/Project/aashaka/backend/server.js) mounts `/api/auth`, `/api/products`, and `/api/orders` correctly with JSON parsing enabled and fallback 404 response handling.
+
+18. Updated the auth route/controller naming to use `getMe` consistently so `/api/auth/me` matches the expected route contract.
+
+19. Adjusted [productRoutes.js](/d:/Project/aashaka/backend/routes/productRoutes.js) so `POST /api/products` is protected with `protect` exactly as requested for your JWT testing flow.
+
+20. Diagnosed the Thunder Client JWT issue end-to-end: first identified the malformed `Authorization` header format, then confirmed the backend correctly reads Bearer tokens, and finally verified that the remaining `"token invalid"` response is due to the token being stale, malformed, or pasted incorrectly rather than a backend route or middleware bug.
