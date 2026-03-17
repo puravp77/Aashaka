@@ -2,10 +2,11 @@ import "./ChokerSection.css";
 import { withPublicUrl } from "../../utils/assetPath";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import allProducts from "../../data/allProducts";
+import { useProducts } from "../../context/ProductContext";
 
 export default function ChokerSection() {
   const navigate = useNavigate();
+  const { products } = useProducts();
   const container = {
     hidden: {},
     visible: {
@@ -17,7 +18,7 @@ export default function ChokerSection() {
     visible: { opacity: 1, y: 0 },
   };
 
-  const chokers = allProducts.filter((product) => product.category === "choker");
+  const chokers = products.filter((product) => product.category === "choker");
 
   return (
     <section className="choker-section">
@@ -56,7 +57,9 @@ export default function ChokerSection() {
 
               <div className="choker-price-row">
                 <span className="choker-price">{"\u20B9"}{product.price}</span>
-                <span className="choker-old-price">{"\u20B9"}{product.oldPrice}</span>
+                {product.oldPrice && (
+                  <span className="choker-old-price">{"\u20B9"}{product.oldPrice}</span>
+                )}
               </div>
             </div>
           </motion.div>

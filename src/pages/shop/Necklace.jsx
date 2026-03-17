@@ -1,14 +1,13 @@
 import "./Necklace.css";
 import { withPublicUrl } from "../../utils/assetPath";
 import { useNavigate } from "react-router-dom";
-import allProducts from "../../data/allProducts";
+import { useProducts } from "../../context/ProductContext";
 
 function Necklace() {
   const navigate = useNavigate();
+  const { products } = useProducts();
 
-  const necklaces = allProducts.filter(
-    (item) => item.category === "necklace"
-  );
+  const necklaces = products.filter((item) => item.category === "necklace");
 
   return (
     <section className="necklace-section">
@@ -28,8 +27,10 @@ function Necklace() {
               <h3 className="product-title">{product.title}</h3>
 
               <div className="product-price">
-                <span className="price">₹{product.price}</span>
-                <span className="old-price">₹{product.oldPrice}</span>
+                <span className="price">Rs.{product.price}</span>
+                {product.oldPrice && (
+                  <span className="old-price">Rs.{product.oldPrice}</span>
+                )}
               </div>
             </div>
           </div>
@@ -40,4 +41,3 @@ function Necklace() {
 }
 
 export default Necklace;
-

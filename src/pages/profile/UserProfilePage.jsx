@@ -5,10 +5,10 @@ import "./UserProfilePage.css";
 import "../order/OrderHistory.css";
 import { useAuth } from "../../context/AuthContext";
 import { withPublicUrl } from "../../utils/assetPath";
+import { fetchMyOrders } from "../../utils/orderApi";
 import {
   createLocalRecordId,
   getLocalAddresses,
-  getLocalOrders,
   setLocalAddresses,
   shouldUseLocalCheckoutStore,
 } from "../../utils/localCheckoutData";
@@ -107,6 +107,7 @@ const UserProfile = ({ defaultTab = "address" }) => {
   const [errors, setErrors] = useState({});
 
   const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(true);
 
   useEffect(() => {
     setActiveTab(defaultTab === "orders" ? "orders" : "address");
@@ -128,30 +129,30 @@ const UserProfile = ({ defaultTab = "address" }) => {
   }, [location.pathname, location.state, navigate]);
 
   useEffect(() => {
-    if (!userId) {
+    if (!user) {
       setOrders([]);
+      setOrdersLoading(false);
       return;
     }
 
     let ignore = false;
 
     const loadOrders = async () => {
-      if (useLocalCheckoutStore) {
-        if (!ignore) {
-          setOrders(getLocalOrders(userId));
-        }
-        return;
-      }
-
+      setOrdersLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/orders?userId=${encodeURIComponent(userId)}`);
-        if (!res.ok) return;
-        const data = await res.json();
+        const data = await fetchMyOrders();
         if (!ignore) {
-          setOrders(Array.isArray(data) ? data : []);
+          setOrders(data);
         }
       } catch (err) {
-        if (!ignore) setOrders([]);
+        if (!ignore) {
+          setOrders([]);
+          toast.error(err.message || "Unable to load your orders.");
+        }
+      } finally {
+        if (!ignore) {
+          setOrdersLoading(false);
+        }
       }
     };
 
@@ -159,7 +160,7 @@ const UserProfile = ({ defaultTab = "address" }) => {
     return () => {
       ignore = true;
     };
-  }, [userId, useLocalCheckoutStore]);
+  }, [user]);
 
   useEffect(() => {
     if (!userId) {
@@ -769,8 +770,10 @@ const UserProfile = ({ defaultTab = "address" }) => {
           {activeTab === "orders" && (
             <div className="orders-section">
               <h2>Your Orders</h2>
-              {orders.length === 0 ? (
-                <p>No orders placed yet.</p>
+              {ordersLoading ? (
+                <p>Loading orders...</p>
+              ) : orders.length === 0 ? (
+                <p>No orders yet</p>
               ) : (
                 <div className="order-history-list">
                   {orders.map((order) => (
@@ -782,6 +785,12 @@ const UserProfile = ({ defaultTab = "address" }) => {
                             {new Date(order.date).toLocaleString()}
                           </div>
                         </div>
+                      </div>
+
+                      <div className="order-history-summary">
+                        <div>Status: {order.statusLabel}</div>
+                        <div>{order.isDelivered ? "Delivered" : "Not delivered yet"}</div>
+                        <div>{order.isPaid ? "Paid" : "Payment pending"}</div>
                       </div>
 
                       <div className="order-history-items">

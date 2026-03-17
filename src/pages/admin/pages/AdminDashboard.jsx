@@ -1,9 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Edit, Hammer, ExternalLink, Zap } from "lucide-react";
+import {
+  Plus,
+  Edit,
+  Hammer,
+  ExternalLink,
+  Zap,
+  CircleDollarSign,
+  ShoppingBag,
+  Users,
+  RefreshCw,
+  AlertTriangle,
+  ArrowUpRight,
+  ArrowDownRight,
+} from "lucide-react";
 import "../AdminLayout.css";
 import "./AdminPages.css";
-import { fetchCollection } from "../../../utils/api";
+import { fetchAdminOrders, fetchAdminProducts } from "../../../utils/adminApi";
 
 const pctDelta = (current, previous) => {
   if (previous === 0) return current === 0 ? "0.0%" : "+100.0%";
@@ -51,8 +64,8 @@ export default function AdminDashboard() {
     const loadData = async () => {
       try {
         const [ordersData, productsData] = await Promise.all([
-          fetchCollection("orders"),
-          fetchCollection("products"),
+          fetchAdminOrders(),
+          fetchAdminProducts(),
         ]);
 
         if (mounted) {
@@ -72,13 +85,21 @@ export default function AdminDashboard() {
     () =>
       orders
         .map((order) => ({
-          date: new Date(order?.date),
-          total: Number(order?.total || 0),
-          paymentMode: String(order?.paymentMode || ""),
-          userId: String(order?.userId || "").toLowerCase(),
-          id: String(order?.id || order?.orderId || ""),
-          items: Array.isArray(order?.items) ? order.items : [],
-          address: order?.address || order?.shippingAddress || {},
+          date: new Date(order?.createdAt || order?.updatedAt || order?.date),
+          total: Number(order?.totalPrice || order?.total || 0),
+          paymentMode: String(order?.paymentMethod || order?.paymentMode || ""),
+          userId: String(order?.user?.email || order?.user?._id || order?.userId || "").toLowerCase(),
+          id: String(order?._id || order?.id || order?.orderId || ""),
+          items: Array.isArray(order?.orderItems)
+            ? order.orderItems.map((item, index) => ({
+                id: String(item?.product?.productId || item?.product?._id || index),
+                qty: Number(item?.quantity || 0),
+                name: item?.name || item?.product?.name || "Product",
+              }))
+            : Array.isArray(order?.items)
+              ? order.items
+              : [],
+          address: order?.shippingAddress || order?.address || {},
         }))
         .filter((order) => !Number.isNaN(order.date.getTime())),
     [orders]
@@ -131,13 +152,17 @@ export default function AdminDashboard() {
     ).size;
 
     const lowStockCount = products.filter((p) => {
-      if (!p.sizes) return false;
-      return Object.values(p.sizes).some((stock) => stock > 0 && stock <= 3);
+      const sizes = Array.isArray(p?.sizes) ? p.sizes : [];
+      return sizes.some((entry) => {
+        const quantity = Number(entry?.quantity || 0);
+        return quantity > 0 && quantity <= 3;
+      });
     }).length;
 
     const outOfStockCount = products.filter((p) => {
-      if (!p.sizes) return true;
-      return Object.values(p.sizes).every((stock) => stock === 0);
+      const sizes = Array.isArray(p?.sizes) ? p.sizes : [];
+      if (sizes.length === 0) return true;
+      return sizes.every((entry) => Number(entry?.quantity || 0) === 0);
     }).length;
 
     return [
@@ -146,36 +171,42 @@ export default function AdminDashboard() {
         value: `\u20B9${currentRevenue.toLocaleString("en-IN")}`,
         delta: pctDelta(currentRevenue, previousRevenue),
         tone: "primary",
+        icon: CircleDollarSign,
       },
       {
         label: "Orders",
         value: currentOrders.toLocaleString("en-IN"),
         delta: pctDelta(currentOrders, previousOrders),
         tone: "info",
+        icon: ShoppingBag,
       },
       {
         label: "AOV",
         value: `\u20B9${Math.round(currentAov).toLocaleString("en-IN")}`,
         delta: pctDelta(currentAov, previousAov),
         tone: "success",
+        icon: CircleDollarSign,
       },
       {
         label: "Active Customers",
         value: currentActiveCustomers.toLocaleString("en-IN"),
         delta: pctDelta(currentActiveCustomers, previousActiveCustomers),
         tone: "primary",
+        icon: Users,
       },
       {
         label: "Repeat Rate",
         value: `${repeatRate.toFixed(1)}%`,
         delta: `${repeatCustomers} repeat customers`,
         tone: "warning",
+        icon: RefreshCw,
       },
       {
         label: "Low Stock",
         value: lowStockCount.toString(),
         delta: outOfStockCount > 0 ? `${outOfStockCount} Out` : "All Good",
         tone: lowStockCount > 0 || outOfStockCount > 0 ? "warning" : "info",
+        icon: AlertTriangle,
       },
     ];
   }, [currentPeriodOrders, previousPeriodOrders, products]);
@@ -245,10 +276,12 @@ export default function AdminDashboard() {
 
     return Object.entries(counts)
       .map(([id, sales]) => {
-        const product = products.find((p) => p.id === id);
+        const product = products.find(
+          (p) => String(p?.productId || p?._id || p?.id) === String(id)
+        );
         return {
           id,
-          name: product?.title || id,
+          name: product?.name || product?.title || id,
           sales,
         };
       })
@@ -315,9 +348,24 @@ export default function AdminDashboard() {
       <section className="adm-metric-grid adm-metric-grid-analytics" aria-label="Admin metrics">
         {metrics.map((item) => (
           <article key={item.label} className={`adm-metric-card ${item.tone}`}>
+            <div className="adm-metric-top">
+              <div className="adm-metric-icon-wrap">
+                <item.icon size={18} />
+              </div>
+              {String(item.delta || "").startsWith("-") ? (
+                <span className="adm-metric-trend down">
+                  <ArrowDownRight size={14} />
+                  {item.delta}
+                </span>
+              ) : (
+                <span className="adm-metric-trend up">
+                  <ArrowUpRight size={14} />
+                  {item.delta}
+                </span>
+              )}
+            </div>
             <p>{item.label}</p>
             <strong>{item.value}</strong>
-            <span>{item.delta}</span>
           </article>
         ))}
       </section>
@@ -344,7 +392,7 @@ export default function AdminDashboard() {
                 {recentOrders.map((o) => (
                   <tr key={`${o.id}-${o.date.toISOString()}`}>
                     <td data-label="Order ID" style={{ fontWeight: 600, color: "var(--adm-primary)" }}>#{String(o.id || "ORDER").slice(-6)}</td>
-                    <td data-label="Customer">{o.address?.firstName || "Guest"}</td>
+                    <td data-label="Customer">{o.userId || o.address?.name || "Guest"}</td>
                     <td data-label="Total">{"\u20B9"}{o.total.toLocaleString("en-IN")}</td>
                     <td data-label="Date">{new Date(o.date).toLocaleDateString()}</td>
                   </tr>

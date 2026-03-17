@@ -40,6 +40,10 @@ export default function ProductDetails() {
       productVariants[0]
     );
   }, [productVariants, selectedColor]);
+  const activeSizeInventory = useMemo(
+    () => selectedVariant?.sizeInventory || product?.sizeInventory || [],
+    [selectedVariant, product]
+  );
   const activeSizes = useMemo(
     () => selectedVariant?.sizes || product?.sizes || {},
     [selectedVariant, product]
@@ -52,9 +56,13 @@ export default function ProductDetails() {
   const requiresSizeSelection = hasSizes && !selectedSize;
   const selectedStock = useMemo(() => {
     if (!hasSizes || !selectedSize) return null;
-    const raw = activeSizes[selectedSize];
-    return Number.isFinite(Number(raw)) ? Number(raw) : 0;
-  }, [activeSizes, hasSizes, selectedSize]);
+    const selectedSizeData = activeSizeInventory.find(
+      (sizeData) => sizeData.size === selectedSize
+    );
+    return Number.isFinite(Number(selectedSizeData?.quantity))
+      ? Number(selectedSizeData.quantity)
+      : 0;
+  }, [activeSizeInventory, hasSizes, selectedSize]);
   useEffect(() => {
     if (selectedStock === null) return;
     setQty((prev) => Math.min(Math.max(1, prev), selectedStock || 1));

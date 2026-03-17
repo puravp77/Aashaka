@@ -26,7 +26,7 @@ export default function Login() {
   const { login } = useAuth();
 
   const [form, setForm] = useState({
-    id: "",
+    email: "",
     password: "",
   });
 
@@ -36,7 +36,7 @@ export default function Login() {
 
   useEffect(() => {
     // Force clean fields on page open even if browser tries to autofill.
-    const clear = () => setForm({ id: "", password: "" });
+    const clear = () => setForm({ email: "", password: "" });
     clear();
     const t = setTimeout(clear, 0);
     return () => clearTimeout(t);
@@ -52,10 +52,10 @@ export default function Login() {
   const validate = () => {
     const newErrors = {};
 
-    if (!form.id.trim()) {
-      newErrors.id = "Email is required";
-    } else if (!isValidEmail(form.id)) {
-      newErrors.id = "Enter a valid email address";
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!isValidEmail(form.email)) {
+      newErrors.email = "Enter a valid email address";
     }
 
     if (!form.password.trim()) {
@@ -77,15 +77,11 @@ export default function Login() {
     if (!validate()) return;
 
     try {
-      await login(form.id.trim(), form.password);
+      await login(form.email.trim(), form.password);
       navigate("/");
     } catch (err) {
-      if (err.message === "EMAIL_NOT_FOUND") {
-        setErrors({ id: "Email does not exist" });
-      } else if (err.message === "ADMIN_USE_ADMIN_PORTAL") {
-        setErrors({ id: "Use the Admin Portal for admin accounts" });
-      } else if (err.message === "WRONG_PASSWORD") {
-        setErrors({ password: "Incorrect password" });
+      if (err.message === "ADMIN_USE_ADMIN_PORTAL") {
+        setErrors({ email: "Use the Admin Portal for admin accounts" });
       } else {
         setErrors({ password: "Invalid email or password" });
       }
@@ -113,14 +109,14 @@ export default function Login() {
             <div className="field">
               <input
                 type="text"
-                name="id"
+                name="email"
                 placeholder="Email ID"
-                value={form.id}
+                value={form.email}
                 onChange={handleChange}
-                className={errors.id ? "error-input" : ""}
+                className={errors.email ? "error-input" : ""}
                 autoComplete="off"
               />
-              {errors.id && <span className="error">{errors.id}</span>}
+              {errors.email && <span className="error">{errors.email}</span>}
             </div>
 
             {/* PASSWORD */}

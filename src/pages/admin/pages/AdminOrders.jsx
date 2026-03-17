@@ -1,57 +1,76 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import "../AdminLayout.css";
 import "./AdminPages.css";
-import { fetchCollection } from "../../../utils/api";
+import { fetchAdminOrders, updateAdminOrder } from "../../../utils/adminApi";
 
-const STATUS_ROTATION = ["Pending", "Processing", "Shipped", "Delivered"];
+const getDisplayStatus = (order) => {
+  if (order?.isDelivered) return "Delivered";
+  if (order?.isPaid) return "Paid";
+  return "Pending";
+};
+
+const formatCustomer = (order) => {
+  const userName = String(order?.user?.name || "").trim();
+  const userEmail = String(order?.user?.email || "").trim();
+  const shippingName = String(order?.shippingAddress?.name || "").trim();
+  return userEmail || userName || shippingName || "Guest";
+};
+
+const normalizeOrderRow = (order) => ({
+  id: String(order?._id || ""),
+  customer: formatCustomer(order),
+  date: order?.createdAt ? new Date(order.createdAt).toLocaleDateString("en-IN") : "-",
+  status: getDisplayStatus(order),
+  amount: `\u20B9${Number(order?.totalPrice || 0).toLocaleString("en-IN")}`,
+  isPaid: Boolean(order?.isPaid),
+  isDelivered: Boolean(order?.isDelivered),
+});
 
 export default function AdminOrders() {
   const [status, setStatus] = useState("All");
   const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
   const filterMenuRef = useRef(null);
   const rowMenuRef = useRef(null);
-  const statusOptions = ["Pending", "Processing", "Shipped", "Delivered"];
-  const filterOptions = ["All", ...statusOptions];
+  const filterOptions = ["All", "Pending", "Paid", "Delivered"];
 
-  const updateOrderStatus = (orderId, nextStatus) => {
-    setRows((prev) =>
-      prev.map((row) => (row.id === orderId ? { ...row, status: nextStatus } : row))
-    );
+  const updateOrderState = async (orderId, payload, successMessage) => {
+    try {
+      const updatedOrder = await updateAdminOrder(orderId, payload);
+      const normalized = normalizeOrderRow(updatedOrder);
+      setRows((prev) =>
+        prev.map((row) => (row.id === orderId ? { ...row, ...normalized } : row))
+      );
+      setOpenMenuId(null);
+      toast.success(successMessage);
+    } catch (error) {
+      toast.error(error.message || "Unable to update order.");
+    }
   };
 
   useEffect(() => {
     let mounted = true;
 
     const loadOrders = async () => {
+      setLoading(true);
       try {
-        const orders = await fetchCollection("orders");
+        const orders = await fetchAdminOrders();
+        const mapped = orders.map(normalizeOrderRow);
 
-        const mapped = orders.map((order, index) => {
-          const email = String(order?.userId || "");
-          const nameFromAddress = order?.shippingAddress?.firstName
-            ? `${order.shippingAddress.firstName} ${order.shippingAddress.lastName || ""}`.trim()
-            : "";
-          const customerName = nameFromAddress || (email.split("@")[0] || "User");
-          const statusValue = STATUS_ROTATION[index % STATUS_ROTATION.length];
-          const amountValue = Number(order?.total || 0);
-
-          return {
-            id: order?.orderId || order?.id || `ORD-${index + 1}`,
-            customer: customerName,
-            payment: order?.paymentMode || "COD",
-            status: statusValue,
-            amount: `\u20B9${amountValue.toLocaleString("en-IN")}`,
-          };
-        });
-
-        if (mounted && mapped.length > 0) {
+        if (mounted) {
           setRows(mapped);
         }
-      } catch {
+      } catch (error) {
         if (mounted) {
           setRows([]);
+          toast.error(error.message || "Unable to load admin orders.");
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
         }
       }
     };
@@ -129,64 +148,91 @@ export default function AdminOrders() {
           <thead>
             <tr>
               <th>Order ID</th>
-              <th>Customer</th>
-              <th>Payment</th>
+              <th>User</th>
+              <th>Date</th>
               <th>Status</th>
-              <th>Amount</th>
+              <th>Total</th>
               <th>Update</th>
             </tr>
           </thead>
           <tbody>
-            {visible.map((order) => (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.customer}</td>
-                <td>{order.payment}</td>
-                <td>
-                  <span className={`adm-status ${order.status.toLowerCase()}`}>
-                    {order.status}
-                  </span>
-                </td>
-                <td>{order.amount}</td>
-                <td>
-                  <div className="adm-status-menu" ref={openMenuId === order.id ? rowMenuRef : null}>
-                    <button
-                      type="button"
-                      className={`adm-select adm-select-inline adm-select-status-${order.status.toLowerCase()}`}
-                      onClick={() =>
-                        setOpenMenuId((prev) => (prev === order.id ? null : order.id))
-                      }
-                      aria-haspopup="listbox"
-                      aria-expanded={openMenuId === order.id}
-                    >
+            {loading ? (
+              <tr>
+                <td className="adm-table-empty" colSpan="6">Loading orders...</td>
+              </tr>
+            ) : visible.length === 0 ? (
+              <tr>
+                <td className="adm-table-empty" colSpan="6">No orders found.</td>
+              </tr>
+            ) : (
+              visible.map((order) => (
+                <tr key={order.id}>
+                  <td>{order.id}</td>
+                  <td>{order.customer}</td>
+                  <td>{order.date}</td>
+                  <td>
+                    <span className={`adm-status ${order.status.toLowerCase()}`}>
                       {order.status}
-                      <span className={`adm-select-caret ${openMenuId === order.id ? "open" : ""}`} />
-                    </button>
-                    {openMenuId === order.id && (
-                      <ul className="adm-status-menu-list" role="listbox" aria-label="Update status">
-                        {statusOptions.map((option) => (
-                          <li key={option}>
+                    </span>
+                  </td>
+                  <td>{order.amount}</td>
+                  <td>
+                    <div className="adm-status-menu" ref={openMenuId === order.id ? rowMenuRef : null}>
+                      <button
+                        type="button"
+                        className={`adm-select adm-select-inline adm-select-status-${order.status.toLowerCase()}`}
+                        onClick={() =>
+                          setOpenMenuId((prev) => (prev === order.id ? null : order.id))
+                        }
+                        aria-haspopup="listbox"
+                        aria-expanded={openMenuId === order.id}
+                      >
+                        Update
+                        <span className={`adm-select-caret ${openMenuId === order.id ? "open" : ""}`} />
+                      </button>
+                      {openMenuId === order.id && (
+                        <ul className="adm-status-menu-list" role="listbox" aria-label="Update order">
+                          <li>
                             <button
                               type="button"
-                              className={`adm-status-option ${option === order.status ? "active" : ""}`}
-                              onClick={() => {
-                                updateOrderStatus(order.id, option);
-                                setOpenMenuId(null);
-                              }}
-                              role="option"
-                              aria-selected={option === order.status}
+                              className={`adm-status-option ${order.isDelivered ? "active" : ""}`}
+                              onClick={() =>
+                                updateOrderState(
+                                  order.id,
+                                  { isDelivered: true, orderStatus: "delivered" },
+                                  "Order marked as delivered"
+                                )
+                              }
+                              disabled={order.isDelivered}
                             >
-                              <span>{option}</span>
-                              {option === order.status && <span className="adm-status-check">v</span>}
+                              <span>Mark as Delivered</span>
+                              {order.isDelivered && <span className="adm-status-check">v</span>}
                             </button>
                           </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            ))}
+                          <li>
+                            <button
+                              type="button"
+                              className={`adm-status-option ${order.isPaid ? "active" : ""}`}
+                              onClick={() =>
+                                updateOrderState(
+                                  order.id,
+                                  { isPaid: true },
+                                  "Order marked as paid"
+                                )
+                              }
+                              disabled={order.isPaid}
+                            >
+                              <span>Mark as Paid</span>
+                              {order.isPaid && <span className="adm-status-check">v</span>}
+                            </button>
+                          </li>
+                        </ul>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

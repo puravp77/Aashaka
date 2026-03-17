@@ -7,6 +7,10 @@ npm run deploy
 Merged Command:
 npx json-server public/data/db.json --port 5000
 
+BACKEND Command
+npm run seed:products
+npm run dev
+
 
 9-03-2026
 
@@ -126,3 +130,129 @@ CONTINUE
 19. Adjusted [productRoutes.js](/d:/Project/aashaka/backend/routes/productRoutes.js) so `POST /api/products` is protected with `protect` exactly as requested for your JWT testing flow.
 
 20. Diagnosed the Thunder Client JWT issue end-to-end: first identified the malformed `Authorization` header format, then confirmed the backend correctly reads Bearer tokens, and finally verified that the remaining `"token invalid"` response is due to the token being stale, malformed, or pasted incorrectly rather than a backend route or middleware bug.
+
+
+
+
+
+
+
+
+17-03-2026 --- BACKEND IMPLEMENTATION
+
+
+
+1. Analyzed the full Aashaka codebase status and documented what was already migrated from `json-server` to the real backend versus what was still pending.
+
+2. Migrated user order history from old local/json-server logic to backend APIs in [OrderHistory.jsx](/d:/Project/aashaka/src/pages/order/OrderHistory.jsx).
+
+3. Updated the profile orders section in [UserProfilePage.jsx](/d:/Project/aashaka/src/pages/profile/UserProfilePage.jsx) to fetch real user orders from backend instead of local fallback order data.
+
+4. Updated [OrderSuccess.jsx](/d:/Project/aashaka/src/pages/order/OrderSuccess.jsx) to stop depending on old local order lookups and use backend-backed order normalization.
+
+5. Added shared order-fetching and normalization logic in [orderApi.js](/d:/Project/aashaka/src/utils/orderApi.js) so order pages could consume MongoDB orders without breaking the existing UI shape.
+
+6. Inspected the backend order schema and confirmed missing order fields like `size`, `isPaid`, and `isDelivered`, then updated [Order.js](/d:/Project/aashaka/backend/models/Order.js) to support them safely.
+
+7. Refactored backend order creation in [orderController.js](/d:/Project/aashaka/backend/controllers/orderController.js) to use `orderItems` as the primary storage field instead of `products`.
+
+8. Updated the order model/controller compatibility layer so older code can still read schema aliases while all newly created orders use `orderItems`.
+
+9. Updated [PlaceOrder.jsx](/d:/Project/aashaka/src/pages/order/PlaceOrder.jsx) so checkout now sends `orderItems` instead of `products` to match the backend order API.
+
+10. Fixed product identity inside checkout by ensuring `orderItems.product` uses MongoDB `_id` only, not legacy `productId`.
+
+11. Updated [CartContext.jsx](/d:/Project/aashaka/src/context/CartContext.jsx) so cart items now preserve backend `_id` alongside storefront IDs when products are added to cart.
+
+12. Added a checkout safety guard in [PlaceOrder.jsx](/d:/Project/aashaka/src/pages/order/PlaceOrder.jsx) to block outdated cart entries that do not contain Mongo `_id`.
+
+13. Added backend support for fetching a single order with `GET /api/orders/:id` through [orderRoutes.js](/d:/Project/aashaka/backend/routes/orderRoutes.js) and [orderController.js](/d:/Project/aashaka/backend/controllers/orderController.js).
+
+14. Updated checkout success routing so [PlaceOrder.jsx](/d:/Project/aashaka/src/pages/order/PlaceOrder.jsx) redirects to `/order-success/:orderId` after successful order creation.
+
+15. Updated [StoreApp.jsx](/d:/Project/aashaka/src/StoreApp.jsx) to support both `/order-success` and `/order-success/:orderId` routes without breaking routing.
+
+16. Reworked [OrderSuccess.jsx](/d:/Project/aashaka/src/pages/order/OrderSuccess.jsx) to read order ID from URL params and fetch the real order from backend with bearer token authentication.
+
+17. Extended [OrderSuccess.css](/d:/Project/aashaka/src/pages/order/OrderSuccess.css) to support real order item and shipping address sections while keeping the same page structure and feel.
+
+18. Analyzed the admin order system and replaced mock order loading in [AdminOrders.jsx](/d:/Project/aashaka/src/pages/admin/pages/AdminOrders.jsx) with real backend `GET /api/orders`.
+
+19. Added admin order update support through backend `PUT /api/orders/:id` so the existing admin UI can mark orders as delivered or paid.
+
+20. Updated [AdminDashboard.jsx](/d:/Project/aashaka/src/pages/admin/pages/AdminDashboard.jsx) so recent orders, analytics, and order-driven metrics use live backend orders instead of mock order data.
+
+21. Reviewed admin login flow end to end across [AdminLogin.jsx](/d:/Project/aashaka/src/pages/admin/AdminLogin.jsx), [AuthContext.jsx](/d:/Project/aashaka/src/context/AuthContext.jsx), and [authController.js](/d:/Project/aashaka/backend/controllers/authController.js).
+
+22. Diagnosed the admin login failure and confirmed the root cause was not the frontend form or controller logic, but the absence of a real admin user in MongoDB.
+
+23. Added detailed login debugging in [AuthContext.jsx](/d:/Project/aashaka/src/context/AuthContext.jsx) and [authController.js](/d:/Project/aashaka/backend/controllers/authController.js) to differentiate invalid credentials, role mismatch, and backend reachability issues.
+
+24. Improved admin login error handling in [AdminLogin.jsx](/d:/Project/aashaka/src/pages/admin/AdminLogin.jsx) so it now distinguishes access denied, invalid admin credentials, and backend not reachable cases.
+
+25. Created the missing admin user directly in MongoDB with `role: "admin"` so backend admin authentication works correctly.
+
+26. Verified backend login directly against `POST /api/auth/login` and confirmed that the API now returns a valid JWT token plus a user object with `role: "admin"`.
+
+27. Analyzed the admin products flow across [AdminProducts.jsx](/d:/Project/aashaka/src/pages/admin/pages/AdminProducts.jsx) and [AdminAddProduct.jsx](/d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx).
+
+28. Replaced old product listing, deletion, and mock API usage in [AdminProducts.jsx](/d:/Project/aashaka/src/pages/admin/pages/AdminProducts.jsx) with real backend product APIs.
+
+29. Updated admin product create/edit logic in [AdminAddProduct.jsx](/d:/Project/aashaka/src/pages/admin/pages/AdminAddProduct.jsx) to use backend-compatible payloads:
+- `name`
+- `description`
+- `price`
+- `category`
+- `images`
+- `sizes: [{ size, quantity }]`
+- `colors`
+
+30. Added shared backend admin product helpers in [adminApi.js](/d:/Project/aashaka/src/utils/adminApi.js) for fetch, create, update, and delete actions.
+
+31. Switched admin product edit/delete operations to use Mongo `_id` instead of legacy `productId` where required by the backend CRUD flow.
+
+32. Extended the admin product table to display real backend fields such as image and size/quantity information while keeping the same table-based UI.
+
+33. Analyzed the admin customers page and found it still depended on mock `/users` and `/orders` data.
+
+34. Added new backend user-management controller logic in [userController.js](/d:/Project/aashaka/backend/controllers/userController.js) to support customer and admin listing via the existing `User` model.
+
+35. Added new backend user routes in [userRoutes.js](/d:/Project/aashaka/backend/routes/userRoutes.js) and registered them in [server.js](/d:/Project/aashaka/backend/server.js).
+
+36. Implemented `GET /api/users` to return real non-admin customers with order counts aggregated from the orders collection.
+
+37. Replaced mock customer loading in [AdminCustomers.jsx](/d:/Project/aashaka/src/pages/admin/pages/AdminCustomers.jsx) with real backend `GET /api/users` and added proper loading and empty states.
+
+38. Analyzed the Allow List page and found it still used separate fake `allowlist` and `users` endpoints from the old json-server setup.
+
+39. Rebuilt [AdminAllowlist.jsx](/d:/Project/aashaka/src/pages/admin/pages/AdminAllowlist.jsx) so it now manages admin users through the real `users` collection using `role: "admin"`.
+
+40. Implemented backend admin-user APIs:
+- `GET /api/users/admins`
+- `POST /api/users/admins`
+- `DELETE /api/users/admins/:id`
+
+41. Ensured `POST /api/users/admins` creates admin users with hashed passwords and returns a proper duplicate-email error when email already exists.
+
+42. Updated [adminApi.js](/d:/Project/aashaka/src/utils/adminApi.js) again to support admin user fetch/create/delete APIs for Customers and Allow List screens.
+
+43. Improved the admin dashboard visuals in [AdminDashboard.jsx](/d:/Project/aashaka/src/pages/admin/pages/AdminDashboard.jsx) by adding metric icons and trend indicators while preserving the same structure.
+
+44. Enhanced admin styling in [AdminPages.css](/d:/Project/aashaka/src/pages/admin/pages/AdminPages.css) with better card elevation, spacing, table padding, hover feel, and typography without changing layout structure.
+
+45. Implemented a global admin theme system by creating [ThemeContext.jsx](/d:/Project/aashaka/src/context/ThemeContext.jsx).
+
+46. Added persistent dark/light theme storage in localStorage via the new theme context, with dark mode as the default.
+
+47. Wrapped the admin app in [AdminApp.jsx](/d:/Project/aashaka/src/AdminApp.jsx) with the global `ThemeProvider`.
+
+48. Refactored [AdminLayout.jsx](/d:/Project/aashaka/src/pages/admin/AdminLayout.jsx) so the existing header theme toggle now uses the global theme context instead of local component state.
+
+49. Preserved the existing `.adm-page.dark-mode` styling system so all existing admin pages continue responding to the theme consistently:
+- Dashboard
+- Products
+- Orders
+- Customers
+- Allow List
+
+50. Repeatedly verified the project after each major change using backend syntax checks and frontend `npm run build`, and all final changes completed with successful build verification.

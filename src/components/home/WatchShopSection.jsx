@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import watchShopData from "../../data/WatchShopData";
 import WatchShopModal from "./WatchShopModal";
+import { useProducts } from "../../context/ProductContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -22,6 +23,37 @@ const WatchShopSection = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { products } = useProducts();
+
+  const watchItems = watchShopData
+    .map((item) => {
+      const matchedProduct =
+        products.find((product) => String(product.id) === String(item.productId)) ||
+        products.find(
+          (product) => product.title?.toLowerCase() === item.title.toLowerCase()
+        );
+
+      if (!matchedProduct) return null;
+
+      const oldPrice =
+        matchedProduct.oldPrice && matchedProduct.oldPrice > matchedProduct.price
+          ? matchedProduct.oldPrice
+          : item.oldPrice;
+      const discount =
+        oldPrice && oldPrice > matchedProduct.price
+          ? Math.round(((oldPrice - matchedProduct.price) / oldPrice) * 100)
+          : item.discount;
+
+      return {
+        ...item,
+        productId: matchedProduct.id,
+        title: matchedProduct.title,
+        price: matchedProduct.price,
+        oldPrice,
+        discount,
+      };
+    })
+    .filter(Boolean);
 
   // Auto-close modal on route change.
   useEffect(() => {
@@ -87,7 +119,7 @@ const WatchShopSection = () => {
           1280: { slidesPerView: 5 },
         }}
       >
-        {watchShopData.map((item, index) => (
+        {watchItems.map((item, index) => (
           <SwiperSlide key={item.id}>
             <div className="watchshop-card">
               <div
@@ -140,7 +172,7 @@ const WatchShopSection = () => {
 
       {activeIndex !== null && (
         <WatchShopModal
-          items={watchShopData}
+          items={watchItems}
           index={activeIndex}
           setIndex={setActiveIndex}
         />

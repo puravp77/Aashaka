@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, Search, Filter, Edit2, Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
 import "../AdminLayout.css";
 import "./AdminPages.css";
-import { fetchCollection, getApiBaseUrl, isStaticDataMode } from "../../../utils/api";
+import { deleteAdminProduct, fetchAdminProducts } from "../../../utils/adminApi";
 
 const PAGE_SIZE = 15;
 
@@ -24,51 +25,62 @@ export default function AdminProducts() {
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const categoryMenuRef = useRef(null);
 
-  const productRows = useMemo(() => {
-    return products.map((product) => {
-      const sizes = product?.sizes && typeof product.sizes === "object" ? product.sizes : {};
-      const stock = Object.values(sizes).reduce((sum, qty) => sum + (Number(qty) || 0), 0);
-      const status = stock === 0 ? "Draft" : stock <= 8 ? "Low" : "Active";
-      const categoryLabel =
-        product?.category?.charAt(0).toUpperCase() + product?.category?.slice(1);
+  const productRows = useMemo(
+    () =>
+      products.map((product) => {
+        const sizes = Array.isArray(product?.sizes) ? product.sizes : [];
+        const stock = sizes.reduce(
+          (sum, entry) => sum + (Number(entry?.quantity) || 0),
+          0
+        );
+        const status = stock === 0 ? "Draft" : stock <= 8 ? "Low" : "Active";
+        const categoryLabel =
+          product?.category?.charAt(0).toUpperCase() + product?.category?.slice(1);
 
-      return {
-        id: String(product?.id || "").toUpperCase(),
-        rawId: String(product?.id || ""),
-        name: product?.title || "Untitled Product",
-        category: categoryLabel || "Uncategorized",
-        price: `₹${Number(product?.price || 0).toLocaleString("en-IN")}`,
-        stock,
-        status,
-      };
-    });
-  }, [products]);
+        return {
+          id: String(product?._id || "").toUpperCase(),
+          rawId: String(product?._id || ""),
+          name: product?.name || "Untitled Product",
+          category: categoryLabel || "Uncategorized",
+          price: `₹${Number(product?.price || 0).toLocaleString("en-IN")}`,
+          image: Array.isArray(product?.images) ? product.images[0] || "" : "",
+          sizesLabel:
+            sizes.length > 0
+              ? sizes.map((entry) => `${entry.size}: ${entry.quantity}`).join(", ")
+              : "No sizes",
+          stock,
+          status,
+        };
+      }),
+    [products]
+  );
 
   const categories = useMemo(() => {
     const unique = Array.from(new Set(productRows.map((row) => row.category)));
     return ["All", ...unique];
   }, [productRows]);
 
-  const filtered = useMemo(() => {
-    return productRows.filter((row) => {
-      const matchSearch = row.name.toLowerCase().includes(search.toLowerCase());
-      const matchCategory = category === "All" || row.category === category;
-      return matchSearch && matchCategory;
-    });
-  }, [productRows, search, category]);
+  const filtered = useMemo(
+    () =>
+      productRows.filter((row) => {
+        const matchSearch = row.name.toLowerCase().includes(search.toLowerCase());
+        const matchCategory = category === "All" || row.category === category;
+        return matchSearch && matchCategory;
+      }),
+    [productRows, search, category]
+  );
 
   const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const loadProducts = async () => {
     try {
-      const data = await fetchCollection("products", {
-        query: { _sort: "id", _order: "desc" },
-      });
+      const data = await fetchAdminProducts();
       setProducts(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error loading products:", err);
       setProducts([]);
+      toast.error(err.message || "Unable to load products.");
     }
   };
 
@@ -78,27 +90,18 @@ export default function AdminProducts() {
 
   const handleDelete = async (productId) => {
     if (!window.confirm(`Are you sure you want to delete product ${productId}?`)) return;
-    if (isStaticDataMode()) {
-      alert("Delete is only available when json-server is running.");
-      return;
-    }
 
     try {
-     
-      const originalProduct = products.find(p => String(p.id).toUpperCase() === productId);
-      const targetId = originalProduct ? originalProduct.id : productId;
-
-      const res = await fetch(`${getApiBaseUrl()}/products/${targetId}`, {
-        method: "DELETE"
-      });
-
-      if (!res.ok) throw new Error("Delete failed");
-
-      setProducts(prev => prev.filter(p => p.id !== targetId));
-      alert("Product deleted successfully");
+      await deleteAdminProduct(productId);
+      setProducts((prev) =>
+        prev.filter(
+          (product) => String(product?._id || "") !== String(productId)
+        )
+      );
+      toast.success("Product deleted successfully");
     } catch (err) {
       console.error(err);
-      alert("Error deleting product: " + err.message);
+      toast.error(err.message || "Error deleting product");
     }
   };
 
@@ -184,6 +187,8 @@ export default function AdminProducts() {
               <th>ID</th>
               <th>Product</th>
               <th>Category</th>
+              <th>Image</th>
+              <th>Sizes</th>
               <th>Price</th>
               <th>Stock</th>
               <th>Status</th>
@@ -196,6 +201,8 @@ export default function AdminProducts() {
                 <td className="adm-font-mono">{row.id}</td>
                 <td style={{ fontWeight: 500 }}>{row.name}</td>
                 <td>{row.category}</td>
+                <td>{row.image || "No image"}</td>
+                <td>{row.sizesLabel}</td>
                 <td>{row.price}</td>
                 <td>{row.stock}</td>
                 <td>

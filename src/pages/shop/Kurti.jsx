@@ -1,22 +1,21 @@
 import "./Kurti.css";
 import { withPublicUrl } from "../../utils/assetPath";
 import { useNavigate } from "react-router-dom";
-import normalizedKurtiData from "../../data/normalizedKurtiData";
+import { useProducts } from "../../context/ProductContext";
 
 export default function Kurti() {
-
   const navigate = useNavigate();
+  const { products } = useProducts();
+  const kurtiProducts = products.filter((product) => product.category === "kurti");
 
   return (
     <section className="kurti-page">
       <div className="kurti-top">
-        <span className="count">
-          {normalizedKurtiData.length} PRODUCTS
-        </span>
+        <span className="count">{kurtiProducts.length} PRODUCTS</span>
       </div>
 
       <div className="kurti-grid">
-        {normalizedKurtiData.map((product) => (
+        {kurtiProducts.map((product) => (
           <div
             key={product.id}
             className="kurti-item"
@@ -26,8 +25,8 @@ export default function Kurti() {
             <h3>{product.title}</h3>
 
             <div className="price">
-              <span className="current">₹{product.price}</span>
-              <span className="old">₹{product.oldPrice}</span>
+              <span className="current">Rs.{product.price}</span>
+              {product.oldPrice && <span className="old">Rs.{product.oldPrice}</span>}
             </div>
           </div>
         ))}
@@ -35,4 +34,3 @@ export default function Kurti() {
     </section>
   );
 }
-

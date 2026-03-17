@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 import {
-  appendLocalOrder,
   getLocalAddresses,
   shouldUseLocalCheckoutStore,
 } from "../../utils/localCheckoutData";
@@ -677,61 +677,85 @@ export default function PlaceOrder() {
       return;
     }
 
-    const orderId = `ORD-${Date.now().toString(36).toUpperCase()}`;
-    const orderDate = new Date().toISOString();
-    const orderRecord = {
-      orderId,
-      userId: userId || form.email || null,
-      date: orderDate,
-      items: cartItems.map((item) => ({
-        id: item.id,
-        title: item.title,
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+      toast.error("Please log in to place your order.");
+      return;
+    }
+
+    const hasInvalidCartProduct = cartItems.some((item) => !item?._id);
+    if (hasInvalidCartProduct) {
+      toast.error("Some cart items are outdated. Please remove them and add them again.");
+      return;
+    }
+
+    const selectedAddress =
+      selectedAddressIndex !== "" && addresses[Number(selectedAddressIndex)]
+        ? {
+            name: `${addresses[Number(selectedAddressIndex)]?.firstName || ""} ${
+              addresses[Number(selectedAddressIndex)]?.lastName || ""
+            }`.trim(),
+            phone: addresses[Number(selectedAddressIndex)]?.mobile || form.phone,
+            addressLine: [
+              addresses[Number(selectedAddressIndex)]?.address1,
+              addresses[Number(selectedAddressIndex)]?.address2,
+            ]
+              .filter(Boolean)
+              .join(", "),
+            city: addresses[Number(selectedAddressIndex)]?.city || form.city,
+            state: addresses[Number(selectedAddressIndex)]?.state || form.state,
+            pincode: addresses[Number(selectedAddressIndex)]?.pincode || form.pincode,
+          }
+        : {
+            name: [form.firstName, form.middleName, form.lastName]
+              .filter(Boolean)
+              .join(" "),
+            phone: form.phone,
+            addressLine: [form.address1, form.address2].filter(Boolean).join(", "),
+            city: form.city,
+            state: form.state,
+            pincode: form.pincode,
+          };
+
+    const orderPayload = {
+      orderItems: cartItems.map((item) => ({
+        product: item._id,
+        name: item.name || item.title || "Product",
         price: item.price,
-        qty: item.qty,
         size: item.size || null,
-        image: withPublicUrl(item.image),
+        quantity: item.quantity || item.qty || 1,
+        image: item.image || item.images?.[0] || "",
       })),
-      subtotal: total,
-      shipping: shippingCharge,
-      discount,
-      total: finalTotal,
-      paymentMode,
-      shippingAddress: {
-        email: form.email,
-        firstName: form.firstName,
-        middleName: form.middleName,
-        lastName: form.lastName,
-        address1: form.address1,
-        address2: form.address2,
-        state: form.state,
-        city: form.city,
-        pincode: form.pincode,
-        phone: form.phone,
-      },
+      shippingAddress: selectedAddress,
+      totalPrice: finalTotal,
+      paymentMethod: paymentMode,
     };
 
-    if (useLocalCheckoutStore) {
-      appendLocalOrder(orderRecord.userId, orderRecord);
-    } else {
-      try {
-        await fetch("http://localhost:5000/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(orderRecord),
-        });
-      } catch (err) {
-        // If API fails, continue checkout without blocking
-      }
-    }
-
     try {
-      localStorage.setItem(checkoutKey, JSON.stringify(form));
-    } catch (err) {
-      // ignore
-    }
+      const response = await fetch("http://localhost:5000/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderPayload),
+      });
 
-    clearCart();
-    navigate("/order-success");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData?.message || "Failed to place order");
+      }
+
+      const responseData = await response.json().catch(() => ({}));
+      const createdOrderId = responseData?.order?._id;
+
+      localStorage.setItem(checkoutKey, JSON.stringify(form));
+
+      clearCart();
+      navigate(createdOrderId ? `/order-success/${createdOrderId}` : "/order-success");
+    } catch (err) {
+      toast.error(err.message || "Unable to place order right now.");
+    }
   };
 
   const shippingCharge =

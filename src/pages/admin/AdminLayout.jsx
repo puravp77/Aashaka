@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 import {
   Bell,
   CheckSquare,
@@ -49,6 +50,7 @@ export default function AdminLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { adminUser, adminLogout } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
   const profileMenuRef = useRef(null);
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined"
@@ -60,13 +62,6 @@ export default function AdminLayout() {
       ? !window.matchMedia("(max-width: 1100px)").matches
       : true
   );
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    try {
-      return localStorage.getItem("admin_theme") === "dark";
-    } catch {
-      return false;
-    }
-  });
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const pageTitle = useMemo(() => {
@@ -80,14 +75,6 @@ export default function AdminLayout() {
     adminLogout();
     navigate("/admin/login", { replace: true });
   };
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("admin_theme", isDarkMode ? "dark" : "light");
-    } catch {
-      // ignore storage errors
-    }
-  }, [isDarkMode]);
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 1100px)");
@@ -184,7 +171,7 @@ export default function AdminLayout() {
                 className="adm-icon-btn"
                 aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
                 data-tip={isDarkMode ? "Light mode" : "Dark mode"}
-                onClick={() => setIsDarkMode((prev) => !prev)}
+                onClick={toggleTheme}
               >
                 {isDarkMode ? <Sun size={19} /> : <Moon size={19} />}
               </button>

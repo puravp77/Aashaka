@@ -1,47 +1,38 @@
 import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import "../AdminLayout.css";
 import "./AdminPages.css";
-import { fetchCollection } from "../../../utils/api";
+import { fetchAdminCustomers } from "../../../utils/adminApi";
 
 export default function AdminCustomers() {
   const [search, setSearch] = useState("");
   const [rows, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     const loadUsers = async () => {
+      setLoading(true);
       try {
-        const [users, orders] = await Promise.all([
-          fetchCollection("users"),
-          fetchCollection("orders"),
-        ]);
+        const users = await fetchAdminCustomers();
+        const mapped = users.map((user) => ({
+          name: user?.name || "User",
+          email: user?.email || "-",
+          orders: Number(user?.ordersCount || 0),
+        }));
 
-        const orderCountByUser = orders.reduce((acc, order) => {
-          const userId = String(order?.userId || "").toLowerCase();
-          if (!userId) return acc;
-          acc[userId] = (acc[userId] || 0) + 1;
-          return acc;
-        }, {});
-
-        const mapped = users
-          .filter((user) => String(user?.role).toLowerCase() !== "admin")
-          .map((user) => {
-            const email = String(user?.id || "");
-            const ordersCount = orderCountByUser[email.toLowerCase()] || 0;
-            return {
-              name: email.split("@")[0] || email || "User",
-              email,
-              orders: ordersCount,
-            };
-          });
-
-        if (mounted && mapped.length > 0) {
+        if (mounted) {
           setRows(mapped);
         }
-      } catch {
+      } catch (error) {
         if (mounted) {
           setRows([]);
+          toast.error(error.message || "Unable to load customers.");
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
         }
       }
     };
@@ -52,18 +43,19 @@ export default function AdminCustomers() {
     };
   }, []);
 
-  const visible = useMemo(() => {
-    return rows.filter((row) =>
-      row.name.toLowerCase().includes(search.toLowerCase()) ||
-      row.email.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [rows, search]);
+  const visible = useMemo(
+    () =>
+      rows.filter((row) =>
+        row.name.toLowerCase().includes(search.toLowerCase()) ||
+        row.email.toLowerCase().includes(search.toLowerCase())
+      ),
+    [rows, search]
+  );
 
   return (
     <section className="adm-widget">
       <div className="adm-widget-head">
         <h2>Customers</h2>
-
       </div>
 
       <div className="adm-controls">
@@ -85,13 +77,23 @@ export default function AdminCustomers() {
             </tr>
           </thead>
           <tbody>
-            {visible.map((row) => (
-              <tr key={row.email}>
-                <td>{row.name}</td>
-                <td>{row.email}</td>
-                <td>{row.orders}</td>
+            {loading ? (
+              <tr>
+                <td className="adm-table-empty" colSpan="3">Loading customers...</td>
               </tr>
-            ))}
+            ) : visible.length === 0 ? (
+              <tr>
+                <td className="adm-table-empty" colSpan="3">No customers found.</td>
+              </tr>
+            ) : (
+              visible.map((row) => (
+                <tr key={row.email}>
+                  <td>{row.name}</td>
+                  <td>{row.email}</td>
+                  <td>{row.orders}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

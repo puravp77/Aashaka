@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import "../AdminLayout.css";
 import "./AdminPages.css";
+import {
+  createAdminProduct,
+  fetchAdminProductById,
+  fetchAdminProducts,
+  updateAdminProduct,
+} from "../../../utils/adminApi";
 
 const categoryOptions = ["CLOTH", "JEWELLERY"];
 const subCategoryMap = {
@@ -17,6 +24,7 @@ const parseNumber = (value) => {
 };
 
 const uniqueValues = (values) => Array.from(new Set(values.filter(Boolean)));
+const normalizeFilename = (value = "") => String(value).replace(/^.*[\\/]/, "").trim();
 
 const createInventoryRow = (size = "", stock = "") => ({ size, stock });
 
@@ -26,17 +34,6 @@ const createColorVariant = () => ({
   multiImageNames: [],
   inventoryRows: [createInventoryRow()],
 });
-
-const derivePercentageFromPrices = (oldPrice, finalPrice) => {
-  const basePrice = parseNumber(oldPrice);
-  const salePrice = parseNumber(finalPrice);
-
-  if (basePrice <= 0 || salePrice <= 0 || salePrice >= basePrice) {
-    return "";
-  }
-
-  return String(Math.round(((basePrice - salePrice) / basePrice) * 100));
-};
 
 function AdminCustomSelect({
   label,
@@ -158,47 +155,42 @@ export default function AdminAddProduct({ editMode = false }) {
     if (editMode && id) {
       const fetchProduct = async () => {
         try {
-          const res = await fetch(`http://localhost:5000/products/${id}`);
-          if (!res.ok) throw new Error("Product not found");
-          const data = await res.json();
+          const data = await fetchAdminProductById(id);
+          const normalizedRows = Array.isArray(data?.sizes) && data.sizes.length > 0
+            ? data.sizes.map((entry) => createInventoryRow(entry?.size || "", String(entry?.quantity || 0)))
+            : [createInventoryRow()];
+          const normalizedImages = Array.isArray(data?.images)
+            ? data.images.map((img) => normalizeFilename(img)).filter(Boolean)
+            : [];
+          const availableSubCategory =
+            Object.keys(subCategoryPrefixMap).find(
+              (key) => subCategoryPrefixMap[key].category === data.category
+            ) || "";
 
-          // Map data to form state
           setForm({
             category: data.category === "kurti" ? "CLOTH" : "JEWELLERY",
-            subCategory: Object.keys(subCategoryPrefixMap).find(key => subCategoryPrefixMap[key].category === data.category) || "",
-            itemName: data.title || "",
-            itemPrice: data.oldPrice || data.price || "",
-            percentage: derivePercentageFromPrices(data.oldPrice, data.price),
+            subCategory: availableSubCategory,
+            itemName: data.name || "",
+            itemPrice: String(data.price || ""),
+            percentage: "",
             discount: "",
-            color: data.details?.colour || "",
-            description: data.details?.description || "",
-            material: data.details?.material || "",
-            specification: data.details?.specification || "",
-            styleNotes: data.details?.styleNotes || "",
-            finalPrice: "",
+            color: Array.isArray(data?.colors) ? data.colors[0] || "" : "",
+            description: data.description || "",
+            material: "",
+            specification: "",
+            styleNotes: "",
+            finalPrice: String(data.price || ""),
           });
 
-          const normalizedImages = (data.images || []).map((img) => img.replace("images/", ""));
-          const normalizedRows = data.sizes && typeof data.sizes === "object"
-            ? Object.entries(data.sizes).map(([size, stock]) => createInventoryRow(size, String(stock)))
-            : [createInventoryRow()];
-
           if (data.category === "kurti") {
-            const variants = Array.isArray(data.variants) && data.variants.length > 0
-              ? data.variants.map((variant) => ({
-                color: variant.color || "",
-                itemImageName: variant.images?.[0]?.replace("images/", "") || "",
-                multiImageNames: (variant.images || []).slice(1).map((img) => img.replace("images/", "")),
-                inventoryRows: variant.sizes && typeof variant.sizes === "object"
-                  ? Object.entries(variant.sizes).map(([size, stock]) => createInventoryRow(size, String(stock)))
-                  : [createInventoryRow()],
-              }))
-              : [{
-                color: data.details?.colour || "",
+            const variants = [
+              {
+                color: Array.isArray(data?.colors) ? data.colors[0] || "" : "",
                 itemImageName: normalizedImages[0] || "",
                 multiImageNames: normalizedImages.slice(1),
                 inventoryRows: normalizedRows,
-              }];
+              },
+            ];
 
             setColorVariants(variants);
           } else {
@@ -211,7 +203,7 @@ export default function AdminAddProduct({ editMode = false }) {
           setIsLoading(false);
         } catch (err) {
           console.error(err);
-          alert("Error loading product");
+          toast.error("Error loading product");
           navigate("/admin/products");
         }
       };
@@ -410,20 +402,16 @@ export default function AdminAddProduct({ editMode = false }) {
       let finalCategory = "other";
 
       if (!editMode) {
-        // 1. Fetch current products to generate ID
-        const res = await fetch("http://localhost:5000/products");
-        if (!res.ok) throw new Error("Could not fetch current products");
-        const currentProducts = await res.json();
+        const currentProducts = await fetchAdminProducts();
 
         const config = subCategoryPrefixMap[form.subCategory] || { prefix: "p", category: "other" };
         const prefix = config.prefix;
         finalCategory = config.category;
 
-        // Find highest number for this prefix
         const regex = new RegExp(`^${prefix}(\\d+)$`, 'i');
         let maxNum = 0;
         currentProducts.forEach(p => {
-          const match = p.id.match(regex);
+          const match = String(p?.productId || "").match(regex);
           if (match) {
             const num = parseInt(match[1], 10);
             if (num > maxNum) maxNum = num;
@@ -435,81 +423,48 @@ export default function AdminAddProduct({ editMode = false }) {
         finalCategory = config.category;
       }
 
-      // 2. Prepare payload
-      const sizesObj = {};
-      inventoryRows.forEach(row => {
-        if (row.size) {
-          sizesObj[row.size] = parseNumber(row.stock);
-        }
-      });
-
-      const normalizedVariants = form.category === "CLOTH"
-        ? colorVariants.map((variant) => {
-          const variantSizes = {};
-          variant.inventoryRows.forEach((row) => {
-            if (row.size) {
-              variantSizes[row.size] = parseNumber(row.stock);
-            }
-          });
-
-          return {
-            color: variant.color,
-            images: uniqueValues([
-              variant.itemImageName ? `images/${variant.itemImageName}` : "",
-              ...variant.multiImageNames.map((name) => `images/${name}`),
-            ]),
-            sizes: variantSizes,
-          };
-        }).filter((variant) => variant.color || variant.images.length > 0 || Object.keys(variant.sizes).length > 0)
-        : [];
-
-      const primaryVariant = normalizedVariants[0] || null;
-
+      const inventorySource = form.category === "CLOTH"
+        ? colorVariants[0]?.inventoryRows || []
+        : inventoryRows;
+      const normalizedSizes = inventorySource
+        .map((row) => ({
+          size: String(row?.size || "").trim(),
+          quantity: parseNumber(row?.stock),
+        }))
+        .filter((row) => row.size);
+      const imageSource = form.category === "CLOTH"
+        ? [
+            colorVariants[0]?.itemImageName || "",
+            ...(colorVariants[0]?.multiImageNames || []),
+          ]
+        : [itemImageName, ...multiImageNames];
+      const normalizedImages = uniqueValues(imageSource.map(normalizeFilename));
+      const normalizedColors = form.category === "CLOTH"
+        ? uniqueValues(colorVariants.map((variant) => variant.color))
+        : uniqueValues([form.color]);
       const payload = {
-        id: targetId,
-        title: form.itemName,
-        images: form.category === "CLOTH"
-          ? (primaryVariant?.images || [])
-          : uniqueValues([
-            itemImageName ? `images/${itemImageName}` : "",
-            ...multiImageNames.map(name => `images/${name}`)
-          ]),
-        price: parseNumber(finalPriceValue),
-        oldPrice: parseNumber(form.itemPrice),
+        productId: targetId,
+        name: form.itemName,
+        price: parseNumber(finalPriceValue || form.itemPrice),
         category: finalCategory,
-        sizes: form.category === "CLOTH" ? (primaryVariant?.sizes || {}) : sizesObj,
-        variants: normalizedVariants,
-        details: {
-          colour: form.category === "CLOTH"
-            ? normalizedVariants.map((variant) => variant.color).filter(Boolean).join(", ")
-            : form.color,
-          material: form.material,
-          size: form.category === "CLOTH"
-            ? Object.keys(primaryVariant?.sizes || {}).join(", ")
-            : inventoryRows.map(r => r.size).filter(Boolean).join(", "),
-          description: form.description,
-          specification: form.specification,
-          styleNotes: form.styleNotes
-        }
+        description: form.description || form.material || "",
+        images: normalizedImages,
+        sizes: normalizedSizes,
+        colors: normalizedColors,
+        isFeatured: false,
       };
 
-      // 3. POST or PUT to JSON Server
-      const url = editMode ? `http://localhost:5000/products/${id}` : "http://localhost:5000/products";
-      const method = editMode ? "PUT" : "POST";
+      if (editMode) {
+        await updateAdminProduct(id, payload);
+      } else {
+        await createAdminProduct(payload);
+      }
 
-      const postRes = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      if (!postRes.ok) throw new Error("Failed to save product");
-
-      alert(`Product ${targetId} ${editMode ? "updated" : "added"} successfully!`);
+      toast.success(`Product ${targetId} ${editMode ? "updated" : "added"} successfully!`);
       navigate("/admin/products");
     } catch (err) {
       console.error(err);
-      alert("Error saving product: " + err.message);
+      toast.error("Error saving product: " + err.message);
     } finally {
       setIsSubmitting(false);
     }

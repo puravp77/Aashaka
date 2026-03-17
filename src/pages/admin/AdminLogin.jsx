@@ -33,27 +33,23 @@ export default function AdminLogin() {
 
     setLoading(true);
     try {
-      // 1. Authenticate credentials
-      const user = await adminLogin(form.id.trim(), form.password);
-
-      // 2. Fetch latest allowlist to verify access
-      const allowlistRes = await fetch("http://localhost:5000/allowlist");
-      const allowlistData = await allowlistRes.json();
-
-      const isAuthorized = allowlistData.some(
-        admin => admin.email.toLowerCase() === user.id.toLowerCase() || admin.email.toLowerCase() === user.email?.toLowerCase()
-      );
-
-      if (user.role !== "admin" || !isAuthorized) {
-        setError("This account does not have authorization to access the Admin Portal.");
-        setLoading(false);
-        return;
-      }
+      console.debug("[admin-login] submitting", {
+        email: form.id.trim(),
+      });
+      await adminLogin(form.id.trim(), form.password);
 
       navigate("/admin/dashboard", { replace: true });
     } catch (err) {
       console.error("Login verification failed:", err);
-      setError("Invalid admin credentials or connection error.");
+      if (err.message === "NOT_ADMIN") {
+        setError("Access denied");
+      } else if (err.message === "BACKEND_UNREACHABLE") {
+        setError("Backend not reachable. Please start the server on http://localhost:5000");
+      } else if (err.message === "Invalid email or password") {
+        setError("Invalid admin credentials.");
+      } else {
+        setError("Invalid admin credentials or connection error.");
+      }
       setLoading(false);
     }
   };

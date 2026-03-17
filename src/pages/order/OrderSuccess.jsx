@@ -1,8 +1,10 @@
 import "./OrderSuccess.css";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext";
-import { getLocalOrders, shouldUseLocalCheckoutStore } from "../../utils/localCheckoutData";
+import { fetchOrderById } from "../../utils/orderApi";
+import { withPublicUrl } from "../../utils/assetPath";
 
 const CONFETTI_COLORS = [
   "#7f0d32",
@@ -29,20 +31,11 @@ const createConfettiParticles = (count) =>
 
 export default function OrderSuccess() {
   const { user } = useAuth();
-  const [latestOrder, setLatestOrder] = useState(null);
+  const { orderId } = useParams();
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [showCelebration, setShowCelebration] = useState(true);
   const celebrationTimerRef = useRef(null);
-
-  const fallbackUser = useMemo(() => {
-    try {
-      const raw = localStorage.getItem("store_user");
-      return raw ? JSON.parse(raw) : null;
-    } catch {
-      return null;
-    }
-  }, []);
-
-  const userId = user?.id || fallbackUser?.id || null;
   const confettiParticles = useMemo(() => createConfettiParticles(56), []);
 
   useEffect(() => {
@@ -61,57 +54,62 @@ export default function OrderSuccess() {
   useEffect(() => {
     let ignore = false;
 
-    const getLastOrder = (orders) => {
-      if (!Array.isArray(orders) || orders.length === 0) return null;
-      return [...orders].sort((a, b) => {
-        const aTime = new Date(a?.date || 0).getTime();
-        const bTime = new Date(b?.date || 0).getTime();
-        return bTime - aTime;
-      })[0];
-    };
-
-    const loadLatestOrder = async () => {
-      if (!userId) {
-        if (!ignore) setLatestOrder(null);
-        return;
-      }
-
-      if (shouldUseLocalCheckoutStore()) {
+    const loadOrder = async () => {
+      if (!user || !orderId) {
         if (!ignore) {
-          setLatestOrder(getLastOrder(getLocalOrders(userId)));
+          setOrder(null);
+          setLoading(false);
         }
         return;
       }
 
+      setLoading(true);
       try {
-        const res = await fetch(
-          `http://localhost:5000/orders?userId=${encodeURIComponent(userId)}`
-        );
-        if (!res.ok) return;
-        const data = await res.json();
         if (!ignore) {
-          setLatestOrder(getLastOrder(data));
+          setOrder(await fetchOrderById(orderId));
         }
-      } catch {
-        if (!ignore) setLatestOrder(null);
+      } catch (error) {
+        if (!ignore) {
+          setOrder(null);
+          toast.error(error.message || "Unable to load your latest order.");
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
       }
     };
 
-    loadLatestOrder();
+    loadOrder();
     return () => {
       ignore = true;
     };
-  }, [userId]);
+  }, [orderId, user]);
 
-  const deliveryDateLabel = useMemo(() => {
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 5);
-    return targetDate.toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  }, []);
+  const shippingAddressLines = useMemo(() => {
+    if (!order?.shippingAddress) return [];
+
+    const { name, phone, addressLine, city, state, pincode } = order.shippingAddress;
+    return [
+      name,
+      phone,
+      addressLine,
+      [city, state].filter(Boolean).join(", "),
+      pincode,
+    ].filter(Boolean);
+  }, [order]);
+
+  const paymentStatusLabel = useMemo(() => {
+    if (!order) return "Pending";
+    if (order.isPaid) return "Paid";
+    return order.paymentMode?.toLowerCase() === "cod" ? "Pending" : "Pending";
+  }, [order]);
+
+  const orderStatusLabel = useMemo(() => {
+    if (!order) return "Pending";
+    if (order.isDelivered) return "Delivered";
+    return order.statusLabel || "Pending";
+  }, [order]);
 
   return (
     <section className="order-success-page">
@@ -149,35 +147,65 @@ export default function OrderSuccess() {
           <p>We will contact you shortly to confirm your order details.</p>
         </div>
 
-        <div className="order-success-meta">
-          <div className="meta-card">
-            <span className="meta-label">Order ID</span>
-            <strong className="meta-value">
-              {latestOrder?.orderId || "Will be shared on call"}
-            </strong>
-          </div>
+        {loading ? (
+          <div className="order-success-note">Loading your order details...</div>
+        ) : !order ? (
+          <div className="order-success-note">We could not load this order right now.</div>
+        ) : (
+          <>
+            <div className="order-success-meta">
+              <div className="meta-card">
+                <span className="meta-label">Order ID</span>
+                <strong className="meta-value">{order.orderId}</strong>
+              </div>
 
-          <div className="meta-card">
-            <span className="meta-label">Total Amount</span>
-            <strong className="meta-value">
-              {typeof latestOrder?.total === "number"
-                ? `Rs. ${latestOrder.total}`
-                : "To be confirmed"}
-            </strong>
-          </div>
+              <div className="meta-card">
+                <span className="meta-label">Total Amount</span>
+                <strong className="meta-value">Rs. {order.total}</strong>
+              </div>
 
-          <div className="meta-card">
-            <span className="meta-label">Payment</span>
-            <strong className="meta-value">
-              {latestOrder?.paymentMode || "Cash on Delivery"}
-            </strong>
-          </div>
+              <div className="meta-card">
+                <span className="meta-label">Order Status</span>
+                <strong className="meta-value">{orderStatusLabel}</strong>
+              </div>
 
-          <div className="meta-card">
-            <span className="meta-label">Expected Delivery</span>
-            <strong className="meta-value">{deliveryDateLabel}</strong>
-          </div>
-        </div>
+              <div className="meta-card">
+                <span className="meta-label">Payment Status</span>
+                <strong className="meta-value">{paymentStatusLabel}</strong>
+              </div>
+            </div>
+
+            <div className="order-success-grid">
+              <div className="order-success-panel">
+                <h3>Items</h3>
+                <div className="order-success-items">
+                  {order.items.map((item, index) => (
+                    <div
+                      className="order-success-item"
+                      key={`${order.orderId}-${item.id}-${item.size || "nosize"}-${index}`}
+                    >
+                      <img src={withPublicUrl(item.image)} alt={item.title} />
+                      <div>
+                        <div className="order-success-item-title">{item.title}</div>
+                        {item.size && <div className="order-success-item-meta">Size: {item.size}</div>}
+                        <div className="order-success-item-meta">Qty: {item.qty}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="order-success-panel">
+                <h3>Shipping Address</h3>
+                <div className="order-success-address">
+                  {shippingAddressLines.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="order-success-note">
           You can track updates from your order history after confirmation.
@@ -187,7 +215,7 @@ export default function OrderSuccess() {
           <Link to="/" className="btn-primary">
             CONTINUE SHOPPING
           </Link>
-          {userId && (
+          {user && (
             <Link to="/order-history" className="btn-secondary">
               VIEW ORDER HISTORY
             </Link>

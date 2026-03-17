@@ -188,6 +188,7 @@ export default function StoreApp() {
               <Route path="/cart" element={<AnimatedRoute><Cart /></AnimatedRoute>} />
               <Route path="/checkout" element={<AnimatedRoute><Checkout /></AnimatedRoute>} />
               <Route path="/place-order" element={<AnimatedRoute><PlaceOrder /></AnimatedRoute>} />
+              <Route path="/order-success/:orderId" element={<AnimatedRoute><OrderSuccess /></AnimatedRoute>} />
               <Route path="/order-success" element={<AnimatedRoute><OrderSuccess /></AnimatedRoute>} />
 
               <Route path="/contact-us" element={<AnimatedRoute><ContactUs /></AnimatedRoute>} />

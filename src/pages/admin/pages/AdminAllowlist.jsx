@@ -1,11 +1,24 @@
-import { useState, useEffect } from "react";
-import { UserPlus, Trash2, ShieldCheck, Mail, User as UserIcon, Search, Loader2, Eye, EyeOff, Lock } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  UserPlus,
+  Trash2,
+  ShieldCheck,
+  Mail,
+  User as UserIcon,
+  Search,
+  Loader2,
+  Eye,
+  EyeOff,
+  Lock,
+} from "lucide-react";
+import { toast } from "react-toastify";
 import "../AdminLayout.css";
 import "./AdminPages.css";
-
-// Path to your json-server endpoints
-const ALLOWLIST_API = "http://localhost:5000/allowlist";
-const USERS_API = "http://localhost:5000/users";
+import {
+  createAdminUser,
+  deleteAdminUser,
+  fetchAdminUsers,
+} from "../../../utils/adminApi";
 
 export default function AdminAllowlist() {
   const [users, setUsers] = useState([]);
@@ -15,99 +28,72 @@ export default function AdminAllowlist() {
   const [showPassword, setShowPassword] = useState(false);
   const [newAdmin, setNewAdmin] = useState({ username: "", email: "", password: "" });
 
-  // Load users from json-server on mount
-  const fetchUsers = async () => {
+  const loadUsers = async () => {
     setLoading(true);
     try {
-      const response = await fetch(ALLOWLIST_API);
-      if (!response.ok) throw new Error("Failed to fetch");
-      const data = await response.json();
-      setUsers(data);
+      const data = await fetchAdminUsers();
+      setUsers(Array.isArray(data) ? data : []);
     } catch (error) {
-      console.error("Error loading allowlist:", error);
+      console.error("Error loading admins:", error);
+      toast.error(error.message || "Unable to load admin users.");
+      setUsers([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
+    loadUsers();
   }, []);
 
   const handleAdd = async (e) => {
     e.preventDefault();
-    if (newAdmin.username && newAdmin.email && newAdmin.password) {
-      try {
-        // 1. Create the Allowlist entry (for Profile/UI)
-        const allowlistEntry = {
-          username: newAdmin.username,
-          email: newAdmin.email
-        };
+    if (!newAdmin.username || !newAdmin.email || !newAdmin.password) {
+      return;
+    }
 
-        const allowResponse = await fetch(ALLOWLIST_API, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(allowlistEntry),
-        });
+    try {
+      const createdUser = await createAdminUser({
+        name: newAdmin.username,
+        email: newAdmin.email,
+        password: newAdmin.password,
+      });
 
-        // 2. Create the User account (for Authentication)
-        const userAccount = {
-          id: newAdmin.email,
-          username: newAdmin.username, // Added username here
-          password: newAdmin.password,
-          role: "admin",
-          isAuthorized: true
-        };
-
-        const userResponse = await fetch(USERS_API, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userAccount),
-        });
-
-        if (allowResponse.ok && userResponse.ok) {
-          await fetchUsers(); // Refresh list
-          setNewAdmin({ username: "", email: "", password: "" });
-          setIsAdding(false);
-          setShowPassword(false);
-        } else {
-          throw new Error("Failed to save one or more entries");
-        }
-      } catch (error) {
-        alert("Failed to save admin info. Please check if the email already exists.");
-      }
+      setUsers((prev) => [createdUser, ...prev]);
+      setNewAdmin({ username: "", email: "", password: "" });
+      setIsAdding(false);
+      setShowPassword(false);
+      toast.success("Admin account created successfully.");
+    } catch (error) {
+      toast.error(error.message || "Failed to create admin user.");
     }
   };
 
   const removeUser = async (user) => {
-    if (window.confirm(`Are you sure you want to remove access and DELETE the account for ${user.username}?`)) {
-      try {
-        // Delete from Allowlist
-        await fetch(`${ALLOWLIST_API}/${user.id}`, { method: "DELETE" });
+    if (!window.confirm(`Are you sure you want to remove admin access for ${user.name || user.email}?`)) {
+      return;
+    }
 
-        // Delete from Users (using email as ID)
-        try {
-          await fetch(`${USERS_API}/${user.email}`, { method: "DELETE" });
-        } catch (e) {
-          console.warn("User account might not have existed in users list");
-        }
-
-        setUsers(users.filter((u) => u.id !== user.id));
-      } catch (error) {
-        alert("Failed to remove admin access.");
-      }
+    try {
+      await deleteAdminUser(user._id);
+      setUsers((prev) => prev.filter((item) => item._id !== user._id));
+      toast.success("Admin user removed successfully.");
+    } catch (error) {
+      toast.error(error.message || "Failed to remove admin access.");
     }
   };
 
-  const filteredUsers = users.filter(
-    (u) =>
-      u.username.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase())
+  const filteredUsers = useMemo(
+    () =>
+      users.filter((u) =>
+        String(u?.name || "").toLowerCase().includes(search.toLowerCase()) ||
+        String(u?.email || "").toLowerCase().includes(search.toLowerCase())
+      ),
+    [users, search]
   );
 
   return (
     <div className="adm-allowlist-container">
-      {/* Header Actions */}
       <div className="adm-page-actions">
         <div className="adm-search-box">
           <Search size={18} />
@@ -127,7 +113,6 @@ export default function AdminAllowlist() {
         </button>
       </div>
 
-      {/* Add Admin Form */}
       {isAdding && (
         <form className="adm-card adm-add-admin-form" onSubmit={handleAdd}>
           <div className="adm-form-header-row">
@@ -201,14 +186,13 @@ export default function AdminAllowlist() {
         </form>
       )}
 
-      {/* Users Table */}
       <section className="adm-widget">
         <div className="adm-widget-head">
           <div className="adm-widget-title">
             <ShieldCheck size={20} className="adm-icon-primary" />
             <div>
               <h2>Access Control List</h2>
-              <span>Authorized users managed via Persistence API</span>
+              <span>Admin accounts managed via user roles</span>
             </div>
           </div>
         </div>
@@ -231,14 +215,14 @@ export default function AdminAllowlist() {
               </thead>
               <tbody>
                 {filteredUsers.map((row) => (
-                  <tr key={`${row.id}`}>
+                  <tr key={row._id}>
                     <td>
                       <div className="adm-user-profile">
                         <div className="adm-user-avatar">
-                          {row.username.charAt(0).toUpperCase()}
+                          {String(row?.name || row?.email || "A").charAt(0).toUpperCase()}
                         </div>
                         <div className="adm-user-info">
-                          <strong>{row.username}</strong>
+                          <strong>{row?.name || "Administrator"}</strong>
                           <span>Administrator</span>
                         </div>
                       </div>

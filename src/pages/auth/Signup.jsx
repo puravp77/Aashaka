@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import { authPageVariants } from "../../components/auth/authPageMotion";
-import { isStaticHost, loadLocalUsers, saveLocalUsers } from "../../utils/localAuth";
+import { getApiBaseUrl } from "../../utils/api";
 import { Eye, EyeOff } from "lucide-react";
 
 /* ---------------- HELPERS ---------------- */
@@ -33,8 +33,10 @@ const shake = {
 
 export default function Signup() {
   const navigate = useNavigate();
+  const authBaseUrl = `${getApiBaseUrl()}/api/auth`;
 
   const [form, setForm] = useState({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -47,7 +49,7 @@ export default function Signup() {
   useEffect(() => {
     // Force clean fields on page open even if browser tries to autofill.
     const clear = () =>
-      setForm({ email: "", password: "", confirmPassword: "" });
+      setForm({ name: "", email: "", password: "", confirmPassword: "" });
     clear();
     const t = setTimeout(clear, 0);
     return () => clearTimeout(t);
@@ -69,6 +71,10 @@ export default function Signup() {
 
   const validate = () => {
     const newErrors = {};
+
+    if (!form.name.trim()) {
+      newErrors.name = "Name is required";
+    }
 
     if (!form.email.trim())
       newErrors.email = "Email is required";
@@ -97,51 +103,20 @@ export default function Signup() {
     } 
     
     try {
-      if (isStaticHost()) {
-        const users = await loadLocalUsers();
-        const exists = users.some((u) => u.id === form.email.trim());
-        if (exists) {
-          toast.error("Email already registered");
-          return;
-        }
-
-        const nextUsers = [
-          ...users,
-          { id: form.email.trim(), password: form.password, role: "user" },
-        ];
-        saveLocalUsers(nextUsers);
-
-        toast.success("Account created successfully!", {
-          position: "top-center",
-          autoClose: 3000,
-        });
-
-        navigate("/login", { replace: true });
-        return;
-      }
-
-      const checkRes = await fetch(
-        `http://localhost:5000/users?id=${form.email.trim()}`
-      );
-      const existingUsers = await checkRes.json();
-
-      if (existingUsers.length > 0) {
-        toast.error("Email already registered");
-        return;
-      }
-
-      const response = await fetch("http://localhost:5000/users", {
+      const response = await fetch(`${authBaseUrl}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: form.email.trim(),
+          name: form.name.trim(),
+          email: form.email.trim(),
           password: form.password,
-          role: "user",
         }),
       });
 
+      const data = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        toast.error("Signup failed. Please try again.");
+        toast.error(data?.message || "Signup failed. Please try again.");
         return;
       }
 
@@ -169,6 +144,23 @@ export default function Signup() {
         <h2>Create Account</h2>
 
         <form onSubmit={handleSignup} autoComplete="off">
+          <motion.div
+            className="field"
+            variants={shake}
+            animate={errors.name ? "animate" : ""}
+          >
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={form.name}
+              onChange={handleChange}
+              className={errors.name ? "error-input" : ""}
+              autoComplete="name"
+            />
+            {errors.name && <span className="error">{errors.name}</span>}
+          </motion.div>
+
           {/* EMAIL */}
           <motion.div
             className="field"

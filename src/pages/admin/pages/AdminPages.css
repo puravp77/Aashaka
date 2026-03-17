@@ -10,9 +10,10 @@
 
 .adm-metric-card {
   border: 1px solid transparent;
-  border-radius: 8px;
-  padding: 16px 18px;
-  box-shadow: 0 8px 16px rgba(35, 49, 78, 0.12);
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 16px 28px rgba(35, 49, 78, 0.16);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
 .adm-metric-grid.adm-metric-grid-analytics .adm-metric-card {
@@ -22,6 +23,48 @@
   justify-content: center;
   align-items: flex-start;
   text-align: left;
+}
+
+.adm-metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 34px rgba(35, 49, 78, 0.2);
+}
+
+.adm-metric-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.adm-metric-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.16);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.adm-metric-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.adm-metric-trend.down {
+  background: rgba(80, 17, 17, 0.26);
 }
 
 .adm-metric-card p {
@@ -142,10 +185,10 @@
 
 .adm-widget {
   border: 1px solid #d8dde6;
-  border-radius: 8px;
+  border-radius: 14px;
   background: #fff;
-  padding: 16px;
-  box-shadow: none;
+  padding: 18px;
+  box-shadow: 0 14px 28px rgba(28, 42, 68, 0.08);
 }
 
 .adm-widget-head {
@@ -157,13 +200,15 @@
 
 .adm-widget-head h2 {
   margin: 0;
-  font-size: 28px;
+  font-size: 30px;
+  letter-spacing: -0.03em;
   color: #1f2633;
 }
 
 .adm-widget-head span {
   font-size: 14px;
   color: #697486;
+  line-height: 1.45;
 }
 
 .adm-range-tabs {
@@ -485,6 +530,24 @@
 .adm-table-compact td {
   padding-top: 9px;
   padding-bottom: 9px;
+}
+
+.adm-table thead th {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.adm-table tbody td {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  transition: background 0.18s ease;
+}
+
+.adm-table tbody tr:hover td {
+  background: rgba(79, 94, 220, 0.04);
 }
 
 .adm-allowlist-container {

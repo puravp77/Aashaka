@@ -54,7 +54,14 @@ export function CartProvider({ children }) {
         }
         return prev.map((item) =>
           item.id === product.id && item.size === size && item.color === color
-            ? { ...item, qty: nextQty }
+            ? {
+                ...item,
+                _id: product._id || item._id || null,
+                name: product.name || product.title || item.name || item.title,
+                title: product.title || product.name || item.title,
+                image: product.images?.[0] || item.image,
+                qty: nextQty,
+              }
             : item
         );
       }
@@ -67,7 +74,9 @@ export function CartProvider({ children }) {
       return [
         ...prev,
         {
+          _id: product._id || null,
           id: product.id,
+          name: product.name || product.title,
           title: product.title,
           price: product.price,
           image: product.images?.[0],

@@ -1,65 +1,58 @@
 import "./OrderHistory.css";
-import { withPublicUrl } from "../../utils/assetPath";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext";
-import {
-  getLocalOrders,
-  shouldUseLocalCheckoutStore,
-} from "../../utils/localCheckoutData";
+import { withPublicUrl } from "../../utils/assetPath";
+import { fetchMyOrders } from "../../utils/orderApi";
 
 export default function OrderHistory() {
   const { user } = useAuth();
-  const storedUser = (() => {
-    try {
-      const raw = localStorage.getItem("store_user");
-      return raw ? JSON.parse(raw) : null;
-    } catch (err) {
-      return null;
-    }
-  })();
-  const userId = user?.id || storedUser?.id || null;
-  const useLocalCheckoutStore = shouldUseLocalCheckoutStore();
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!userId) {
+    if (!user) {
       setOrders([]);
+      setLoading(false);
       return;
     }
 
     let ignore = false;
 
-    if (useLocalCheckoutStore) {
-      setOrders(getLocalOrders(userId));
-      return;
-    }
-
-    try {
-      const loadOrders = async () => {
-        const res = await fetch(`http://localhost:5000/orders?userId=${encodeURIComponent(userId)}`);
-        if (!res.ok) return;
-        const data = await res.json();
+    const loadOrders = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchMyOrders();
         if (!ignore) {
-          setOrders(Array.isArray(data) ? data : []);
+          setOrders(data);
         }
-      };
+      } catch (error) {
+        if (!ignore) {
+          setOrders([]);
+          toast.error(error.message || "Unable to load your orders.");
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    };
 
-      loadOrders();
-    } catch (err) {
-      setOrders([]);
-    }
+    loadOrders();
     return () => {
       ignore = true;
     };
-  }, [userId, useLocalCheckoutStore]);
+  }, [user]);
 
   return (
     <section className="order-history-page">
       <div className="order-history-wrapper">
         <h2 className="order-history-title">ORDER HISTORY</h2>
 
-        {orders.length === 0 ? (
-          <p className="order-history-empty">No orders placed yet.</p>
+        {loading ? (
+          <p className="order-history-empty">Loading orders...</p>
+        ) : orders.length === 0 ? (
+          <p className="order-history-empty">No orders yet</p>
         ) : (
           <div className="order-history-list">
             {orders.map((order) => (
@@ -74,6 +67,12 @@ export default function OrderHistory() {
                   <div className="order-history-total">
                     Rs. {order.total}
                   </div>
+                </div>
+
+                <div className="order-history-summary">
+                  <div>Status: {order.statusLabel}</div>
+                  <div>{order.isDelivered ? "Delivered" : "Not delivered yet"}</div>
+                  <div>{order.isPaid ? "Paid" : "Payment pending"}</div>
                 </div>
 
                 <div className="order-history-items">
