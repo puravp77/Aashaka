@@ -112,7 +112,8 @@ export default function AdminLayout() {
       <div className={`adm-shell ${isSidebarOpen ? "" : "sidebar-collapsed"}`}>
         <aside className={`adm-sidebar ${isSidebarOpen ? "is-open" : ""}`} id="admin-sidebar">
           <div className="adm-logo-wrap">
-            <div>
+            <div className="adm-brand-block">
+              <span className="adm-brand-mark">A</span>
               <div className="adm-logo">Aashaka</div>
               <p className="adm-logo-sub">Admin Console</p>
             </div>
@@ -150,6 +151,10 @@ export default function AdminLayout() {
               >
                 <Menu size={20} />
               </button>
+              <div className="adm-topbar-titleblock">
+                <p className="adm-topbar-kicker">Aashaka Control Room</p>
+                <strong>{pageTitle}</strong>
+              </div>
               <nav className="adm-quick-nav" aria-label="Header links">
                 {QUICK_LINKS.map((item) => (
                   <NavLink
@@ -229,9 +234,18 @@ export default function AdminLayout() {
           </header>
 
           <section className="adm-page-head">
-            <p className="adm-breadcrumb">
-              <Link to="/admin/dashboard">Home</Link> / <span>{pageTitle}</span>
-            </p>
+            <div className="adm-page-head-main">
+              <p className="adm-breadcrumb">
+                <Link to="/admin/dashboard">Home</Link> / <span>{pageTitle}</span>
+              </p>
+              <div className="adm-page-title-stack">
+                <h1>{pageTitle}</h1>
+                <p>
+                  Manage store operations, review live activity, and keep the admin workspace aligned with the Aashaka storefront.
+                </p>
+              </div>
+            </div>
+            <div className="adm-page-head-badge">Live Workspace</div>
           </section>
 
           <Outlet />

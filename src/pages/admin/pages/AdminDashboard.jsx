@@ -306,42 +306,38 @@ export default function AdminDashboard() {
   }, [currentPeriodOrders]);
 
   return (
-    <>
-      <section className="adm-quick-actions">
-        <div className="adm-widget-head">
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Zap size={20} color="var(--adm-primary)" fill="var(--adm-primary)" style={{ opacity: 0.8 }} />
-            <h2 style={{ fontSize: "18px" }}>Quick Actions</h2>
-          </div>
+    <div className="adm-dashboard-page">
+      <section className="adm-dashboard-hero">
+        <div className="adm-dashboard-hero-copy">
+          <p className="adm-dashboard-kicker">Performance Center</p>
+          <h2>Monitor growth, inventory, and store momentum from one place.</h2>
+          <p>
+            Review revenue, fulfillment movement, customer activity, and product performance with a cleaner control-center experience.
+          </p>
         </div>
-        <div className="adm-action-btns">
-          <button onClick={() => navigate("/admin/products/add")} className="adm-action-btn">
-            <div className="btn-icon" style={{ background: "rgba(50, 31, 219, 0.1)", color: "#321fdb" }}>
-              <Plus size={20} />
-            </div>
-            <span>Add Product</span>
-          </button>
 
-          <button onClick={() => navigate("/admin/content")} className="adm-action-btn">
-            <div className="btn-icon" style={{ background: "rgba(56, 150, 240, 0.1)", color: "#3896f0" }}>
-              <Edit size={20} />
+        <div className="adm-dashboard-hero-panel">
+          <div className="adm-dashboard-hero-panel-top">
+            <span className="adm-dashboard-hero-chip">Current Range</span>
+            <div className="adm-range-tabs" role="tablist" aria-label="Range selector">
+              <button type="button" className={range === "day" ? "active" : ""} onClick={() => setRange("day")}>Day</button>
+              <button type="button" className={range === "month" ? "active" : ""} onClick={() => setRange("month")}>Month</button>
+              <button type="button" className={range === "year" ? "active" : ""} onClick={() => setRange("year")}>Year</button>
             </div>
-            <span>Edit Content</span>
-          </button>
+          </div>
 
-          <button onClick={() => navigate("/admin/maintenance-room")} className="adm-action-btn">
-            <div className="btn-icon" style={{ background: "rgba(222, 90, 89, 0.1)", color: "#de5a59" }}>
-              <Hammer size={20} />
-            </div>
-            <span>Maintenance</span>
-          </button>
-
-          <button onClick={() => window.open("/", "_blank")} className="adm-action-btn">
-            <div className="btn-icon" style={{ background: "rgba(16, 185, 129, 0.1)", color: "#10b981" }}>
-              <ExternalLink size={20} />
-            </div>
-            <span>View Shop</span>
-          </button>
+          <div className="adm-dashboard-mini-grid">
+            <article className="adm-dashboard-mini-card">
+              <span>{rangeMeta[range].subtitle}</span>
+              <strong>{currentPeriodOrders.length}</strong>
+              <small>Orders in view</small>
+            </article>
+            <article className="adm-dashboard-mini-card">
+              <span>Catalog</span>
+              <strong>{products.length}</strong>
+              <small>Tracked products</small>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -370,9 +366,86 @@ export default function AdminDashboard() {
         ))}
       </section>
 
-      <section className="adm-widgets">
+      <section className="adm-quick-actions adm-dashboard-actions">
+        <div className="adm-widget-head adm-dashboard-section-head">
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <Zap size={20} color="var(--adm-primary)" fill="var(--adm-primary)" style={{ opacity: 0.8 }} />
+            <h2 style={{ fontSize: "18px" }}>Quick Actions</h2>
+          </div>
+          <span>Jump into the most-used admin workflows.</span>
+        </div>
+        <div className="adm-action-btns adm-dashboard-action-btns">
+          <button onClick={() => navigate("/admin/products/add")} className="adm-action-btn">
+            <div className="btn-icon" style={{ background: "rgba(79, 94, 220, 0.12)", color: "#4f5edc" }}><Plus size={20} /></div>
+            <span>Add Product</span>
+          </button>
+          <button onClick={() => navigate("/admin/content")} className="adm-action-btn">
+            <div className="btn-icon" style={{ background: "rgba(61, 149, 245, 0.12)", color: "#3d95f5" }}><Edit size={20} /></div>
+            <span>Edit Content</span>
+          </button>
+          <button onClick={() => navigate("/admin/maintenance-room")} className="adm-action-btn">
+            <div className="btn-icon" style={{ background: "rgba(245, 158, 11, 0.14)", color: "#d38b0f" }}><Hammer size={20} /></div>
+            <span>Maintenance</span>
+          </button>
+          <button onClick={() => window.open("/", "_blank")} className="adm-action-btn">
+            <div className="btn-icon" style={{ background: "rgba(16, 185, 129, 0.12)", color: "#10b981" }}><ExternalLink size={20} /></div>
+            <span>View Shop</span>
+          </button>
+        </div>
+      </section>
+
+      <section className="adm-dashboard-main-grid">
+        <article className="adm-widget adm-chart-widget adm-dashboard-chart-card">
+          <div className="adm-widget-head adm-dashboard-section-head">
+            <div>
+              <h2>Analytics Trend</h2>
+              <span>{subtitle}</span>
+            </div>
+            <span className="adm-dashboard-panel-badge">Orders, users, revenue</span>
+          </div>
+          <div className="adm-line-chart" aria-hidden="true">
+            <div className="adm-line-grid" />
+            <svg className="adm-line-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <polyline className="adm-line-orders" points={toPolyline(orderSeries)} />
+              <polyline className="adm-line-users" points={toPolyline(activeUsersSeries)} />
+              <polyline className="adm-line-revenue" points={toPolyline(revenueSeries)} />
+            </svg>
+            <div className="adm-line-legend">
+              <span><i className="orders" /> Orders</span>
+              <span><i className="users" /> Active Users</span>
+              <span><i className="revenue" /> Revenue</span>
+            </div>
+          </div>
+        </article>
+
+        <article className="adm-widget adm-dashboard-payment-card">
+          <div className="adm-widget-head adm-dashboard-section-head">
+            <div>
+              <h2>Payment Mix</h2>
+              <span>Revenue split by payment mode</span>
+            </div>
+          </div>
+          <div className="adm-mix-list">
+            {paymentMix.map((mode) => (
+              <div className="adm-mix-row" key={mode.mode}>
+                <div className="adm-mix-label">
+                  <strong>{mode.mode}</strong>
+                  <span>{"\u20B9"}{Math.round(mode.amount).toLocaleString("en-IN")}</span>
+                </div>
+                <div className="adm-mix-bar">
+                  <span style={{ width: `${Math.max(2, mode.percent)}%` }} />
+                </div>
+                <small>{mode.percent.toFixed(1)}%</small>
+              </div>
+            ))}
+            {paymentMix.length === 0 && <p className="adm-empty-note">No payment data available for this period.</p>}
+          </div>
+        </article>
+      </section>
+
+      <section className="adm-widgets adm-dashboard-bottom-grid">
         <article className="adm-widget adm-dashboard-list-widget">
-          <div className="adm-widget-head">
+          <div className="adm-widget-head adm-dashboard-section-head">
             <div>
               <h2>Recent Orders</h2>
               <span>Track your latest shop activity</span>
@@ -403,7 +476,7 @@ export default function AdminDashboard() {
         </article>
 
         <article className="adm-widget adm-dashboard-list-widget">
-          <div className="adm-widget-head">
+          <div className="adm-widget-head adm-dashboard-section-head">
             <div>
               <h2>Top Products</h2>
               <span>Your best sellers in this {rangeMeta[range].label.toLowerCase()} period</span>
@@ -430,76 +503,7 @@ export default function AdminDashboard() {
             </table>
           </div>
         </article>
-
-        <article className="adm-widget">
-          <div className="adm-widget-head">
-            <div>
-              <h2>Payment Mix</h2>
-              <span>Revenue split by payment mode</span>
-            </div>
-          </div>
-          <div className="adm-mix-list">
-            {paymentMix.map((mode) => (
-              <div className="adm-mix-row" key={mode.mode}>
-                <div className="adm-mix-label">
-                  <strong>{mode.mode}</strong>
-                  <span>{"\u20B9"}{Math.round(mode.amount).toLocaleString("en-IN")}</span>
-                </div>
-                <div className="adm-mix-bar">
-                  <span style={{ width: `${Math.max(2, mode.percent)}%` }} />
-                </div>
-                <small>{mode.percent.toFixed(1)}%</small>
-              </div>
-            ))}
-            {paymentMix.length === 0 && <p className="adm-empty-note">No payment data available for this period.</p>}
-          </div>
-        </article>
-
-        <article className="adm-widget adm-chart-widget">
-          <div className="adm-widget-head">
-            <div>
-              <h2>Analytics Trend</h2>
-              <span>{subtitle}</span>
-            </div>
-            <div className="adm-range-tabs" role="tablist" aria-label="Range selector">
-              <button
-                type="button"
-                className={range === "day" ? "active" : ""}
-                onClick={() => setRange("day")}
-              >
-                Day
-              </button>
-              <button
-                type="button"
-                className={range === "month" ? "active" : ""}
-                onClick={() => setRange("month")}
-              >
-                Month
-              </button>
-              <button
-                type="button"
-                className={range === "year" ? "active" : ""}
-                onClick={() => setRange("year")}
-              >
-                Year
-              </button>
-            </div>
-          </div>
-          <div className="adm-line-chart" aria-hidden="true">
-            <div className="adm-line-grid" />
-            <svg className="adm-line-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <polyline className="adm-line-orders" points={toPolyline(orderSeries)} />
-              <polyline className="adm-line-users" points={toPolyline(activeUsersSeries)} />
-              <polyline className="adm-line-revenue" points={toPolyline(revenueSeries)} />
-            </svg>
-            <div className="adm-line-legend">
-              <span><i className="orders" /> Orders</span>
-              <span><i className="users" /> Active Users</span>
-              <span><i className="revenue" /> Revenue</span>
-            </div>
-          </div>
-        </article>
       </section>
-    </>
+    </div>
   );
 }

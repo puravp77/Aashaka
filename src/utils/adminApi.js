@@ -51,6 +51,24 @@ export const updateAdminOrder = async (orderId, payload) => {
   return data?.order || data;
 };
 
+export const updateAdminOrderStatus = async (orderId, status) => {
+  const response = await fetch(
+    `${BASE_URL}/api/orders/${encodeURIComponent(orderId)}/status`,
+    {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ status }),
+    }
+  );
+  const data = await readJson(response, {});
+
+  if (!response.ok) {
+    throw new Error(data?.message || "Unable to update order status.");
+  }
+
+  return data?.order || data;
+};
+
 export const fetchAdminProducts = async () => {
   const response = await fetch(`${BASE_URL}/api/products`, {
     headers: getAuthHeaders(),

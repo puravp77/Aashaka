@@ -12,6 +12,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "./WatchShopSection.css";
 import { withPublicUrl } from "../../utils/assetPath";
+import allProducts from "../../data/allProducts";
 
 const WatchShopSection = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -23,13 +24,15 @@ const WatchShopSection = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { products } = useProducts();
+  const { products, loading } = useProducts();
+
+  const catalog = products.length > 0 ? products : allProducts;
 
   const watchItems = watchShopData
     .map((item) => {
       const matchedProduct =
-        products.find((product) => String(product.id) === String(item.productId)) ||
-        products.find(
+        catalog.find((product) => String(product.id) === String(item.productId)) ||
+        catalog.find(
           (product) => product.title?.toLowerCase() === item.title.toLowerCase()
         );
 
@@ -104,71 +107,79 @@ const WatchShopSection = () => {
         </p>
       </div>
 
-      <Swiper
-        modules={[Navigation]}
-        navigation={{
-          nextEl: ".watchshop-next",
-          prevEl: ".watchshop-prev",
-        }}
-        spaceBetween={20}
-        slidesPerView={1}
-        breakpoints={{
-          480: { slidesPerView: 2 },
-          768: { slidesPerView: 3 },
-          1024: { slidesPerView: 4 },
-          1280: { slidesPerView: 5 },
-        }}
-      >
-        {watchItems.map((item, index) => (
-          <SwiperSlide key={item.id}>
-            <div className="watchshop-card">
-              <div
-                className="watchshop-video-wrapper"
-                onClick={() => setActiveIndex(index)}
-              >
-                <video
-                  ref={(el) => {
-                    if (el) {
-                      videoRefs.current.set(index, el);
-                    } else {
-                      videoRefs.current.delete(index);
-                    }
-                  }}
-                  src={withPublicUrl(item.video)}
-                  muted
-                  loop
-                  playsInline
-                  autoPlay={shouldStartPlayback}
-                  preload="metadata"
-                />
-              </div>
-
-              <div className="watchshop-info">
-                <div className="watchshop-price">
-                  <span className="price">{"\u20B9"}{item.price}</span>
-                  <span className="discount">{item.discount}% off</span>
-                  <span className="old-price">{"\u20B9"}{item.oldPrice}</span>
+      {watchItems.length > 0 ? (
+        <Swiper
+          modules={[Navigation]}
+          navigation={{
+            nextEl: ".watchshop-next",
+            prevEl: ".watchshop-prev",
+          }}
+          spaceBetween={20}
+          slidesPerView={1}
+          breakpoints={{
+            480: { slidesPerView: 2 },
+            768: { slidesPerView: 3 },
+            1024: { slidesPerView: 4 },
+            1280: { slidesPerView: 5 },
+          }}
+        >
+          {watchItems.map((item, index) => (
+            <SwiperSlide key={item.id}>
+              <div className="watchshop-card">
+                <div
+                  className="watchshop-video-wrapper"
+                  onClick={() => setActiveIndex(index)}
+                >
+                  <video
+                    ref={(el) => {
+                      if (el) {
+                        videoRefs.current.set(index, el);
+                      } else {
+                        videoRefs.current.delete(index);
+                      }
+                    }}
+                    src={withPublicUrl(item.video)}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay={shouldStartPlayback}
+                    preload="metadata"
+                  />
                 </div>
 
-                <h3 className="watchshop-name">{item.title}</h3>
+                <div className="watchshop-info">
+                  <div className="watchshop-price">
+                    <span className="price">{"\u20B9"}{item.price}</span>
+                    <span className="discount">{item.discount}% off</span>
+                    <span className="old-price">{"\u20B9"}{item.oldPrice}</span>
+                  </div>
 
-                <button
-                  className="watchshop-btn"
-                  onClick={() => {
-                    setActiveIndex(null);
-                    navigate(`/product/${item.productId}`);
-                  }}
-                >
-                  Buy Now
-                </button>
+                  <h3 className="watchshop-name">{item.title}</h3>
+
+                  <button
+                    className="watchshop-btn"
+                    onClick={() => {
+                      setActiveIndex(null);
+                      navigate(`/product/${item.productId}`);
+                    }}
+                  >
+                    Buy Now
+                  </button>
+                </div>
               </div>
-            </div>
-          </SwiperSlide>
-        ))}
+            </SwiperSlide>
+          ))}
 
-        <div className="watchshop-prev">&#8249;</div>
-        <div className="watchshop-next">&#8250;</div>
-      </Swiper>
+          <div className="watchshop-prev">&#8249;</div>
+          <div className="watchshop-next">&#8250;</div>
+        </Swiper>
+      ) : (
+        !loading && (
+          <div className="watchshop-empty-state">
+            Watch & Shop looks are being refreshed. Please check back shortly.
+          </div>
+        )
+      )}
 
       {activeIndex !== null && (
         <WatchShopModal

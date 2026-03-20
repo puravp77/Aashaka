@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import allProducts from "../data/allProducts";
 
 const ProductContext = createContext();
 const BASE_URL = "http://localhost:5000";
@@ -111,6 +112,96 @@ const normalizeProduct = (product) => {
   };
 };
 
+const normalizeFallbackProduct = (product) => {
+  const id = String(product?.id || product?.productId || product?._id || "");
+  const normalizedImages = Array.isArray(product?.images) && product.images.length > 0
+    ? product.images.filter(Boolean)
+    : ["images/placeholder-product.jpg"];
+  const normalizedSizeInventory = Array.isArray(product?.sizeInventory)
+    ? product.sizeInventory
+        .map((entry) => ({
+          size: String(entry?.size || ""),
+          quantity: Number(entry?.quantity || 0),
+        }))
+        .filter((entry) => entry.size)
+    : Object.entries(product?.sizes || {}).map(([size, quantity]) => ({
+        size: String(size),
+        quantity: Number(quantity || 0),
+      }));
+  const normalizedSizes = buildSizeMap(normalizedSizeInventory);
+  const normalizedColors = Array.isArray(product?.colors)
+    ? product.colors.filter(Boolean)
+    : [];
+
+  return {
+    ...product,
+    id,
+    _id: product?._id || id,
+    productId: product?.productId || id,
+    title: product?.title || product?.name || "Untitled Product",
+    name: product?.name || product?.title || "Untitled Product",
+    category: String(product?.category || "").toLowerCase(),
+    description: product?.description || "",
+    images: normalizedImages,
+    image: normalizedImages[0] || "",
+    sizes: normalizedSizes,
+    sizeInventory: normalizedSizeInventory,
+    colors: normalizedColors,
+    oldPrice: product?.oldPrice || null,
+    details: {
+      description: product?.details?.description || product?.description || "",
+      colour: product?.details?.colour || normalizedColors.join(", "),
+      material: product?.details?.material || "",
+      size: product?.details?.size || Object.keys(normalizedSizes).join(", "),
+    },
+    variants: Array.isArray(product?.variants)
+      ? product.variants
+      : normalizedColors.map((color) => ({
+          color,
+          images: normalizedImages,
+          sizes: normalizedSizes,
+          sizeInventory: normalizedSizeInventory,
+          sourceId: id,
+          price: product?.price,
+          oldPrice: product?.oldPrice || null,
+        })),
+  };
+};
+
+const buildAliases = (items) =>
+  items.reduce((acc, product) => {
+    const canonicalId = String(product.id);
+    const candidates = [
+      product.id,
+      product.productId,
+      product._id,
+      product.name,
+      product.title,
+    ]
+      .filter(Boolean)
+      .map((value) => String(value));
+
+    candidates.forEach((candidate) => {
+      acc[candidate] = canonicalId;
+      acc[candidate.toLowerCase()] = canonicalId;
+    });
+
+    return acc;
+  }, {});
+
+const loadFallbackProducts = () => {
+  const normalizedProducts = Array.isArray(allProducts)
+    ? allProducts.map(normalizeFallbackProduct)
+    : [];
+  const sortedProducts = sortProducts(normalizedProducts);
+  const aliases = buildAliases(sortedProducts);
+
+  return {
+    normalizedProducts: sortedProducts,
+    aliases,
+  };
+};
+
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [groupedProducts, setGroupedProducts] = useState([]);
@@ -132,20 +223,23 @@ export function ProductProvider({ children }) {
         const normalizedProducts = Array.isArray(data)
           ? data.map(normalizeProduct)
           : [];
-        const sortedProducts = sortProducts(normalizedProducts);
-        const aliases = sortedProducts.reduce((acc, product) => {
-          acc[String(product.id)] = String(product.id);
-          return acc;
-        }, {});
+        const hasRemoteProducts = normalizedProducts.length > 0;
+        const sortedProducts = hasRemoteProducts
+          ? sortProducts(normalizedProducts)
+          : loadFallbackProducts().normalizedProducts;
+        const aliases = hasRemoteProducts
+          ? buildAliases(sortedProducts)
+          : loadFallbackProducts().aliases;
 
         setProducts(sortedProducts);
         setGroupedProducts(sortedProducts);
         setProductAliases(aliases);
       } catch (error) {
         console.error("Failed to load products:", error);
-        setProducts([]);
-        setGroupedProducts([]);
-        setProductAliases({});
+        const fallback = loadFallbackProducts();
+        setProducts(fallback.normalizedProducts);
+        setGroupedProducts(fallback.normalizedProducts);
+        setProductAliases(fallback.aliases);
       } finally {
         setLoading(false);
       }

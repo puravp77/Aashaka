@@ -3,10 +3,11 @@ import { withPublicUrl } from "../../utils/assetPath";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useProducts } from "../../context/ProductContext";
+import allProducts from "../../data/allProducts";
 
 export default function ChokerSection() {
   const navigate = useNavigate();
-  const { products } = useProducts();
+  const { products, loading } = useProducts();
   const container = {
     hidden: {},
     visible: {
@@ -18,7 +19,10 @@ export default function ChokerSection() {
     visible: { opacity: 1, y: 0 },
   };
 
-  const chokers = products.filter((product) => product.category === "choker");
+  const catalog = products.length > 0 ? products : allProducts;
+  const chokers = catalog
+    .filter((product) => String(product.category).toLowerCase() === "choker")
+    .slice(0, 4);
 
   return (
     <section className="choker-section">
@@ -30,41 +34,49 @@ export default function ChokerSection() {
         </p>
       </div>
 
-      <motion.div
-        className="choker-grid"
-        variants={container}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.2 }}
-      >
-        {chokers.map((product) => (
-          <motion.div
-            className="choker-card"
-            key={product.id}
-            onClick={() => navigate(`/product/${product.id}`)}
-            style={{ cursor: "pointer" }}
-            variants={item}
-          >
-            <div className="choker-image-wrap">
-              <img src={withPublicUrl(product.images[0])} alt={product.title} />
-              <div className="choker-hover-overlay" />
-              <span className="choker-badge">Curated</span>
-              <span className="choker-view-icon">View</span>
-            </div>
-
-            <div className="choker-info">
-              <p className="choker-product-title">{product.title}</p>
-
-              <div className="choker-price-row">
-                <span className="choker-price">{"\u20B9"}{product.price}</span>
-                {product.oldPrice && (
-                  <span className="choker-old-price">{"\u20B9"}{product.oldPrice}</span>
-                )}
+      {chokers.length > 0 ? (
+        <motion.div
+          className="choker-grid"
+          variants={container}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.2 }}
+        >
+          {chokers.map((product) => (
+            <motion.div
+              className="choker-card"
+              key={product.id}
+              onClick={() => navigate(`/product/${product.id}`)}
+              style={{ cursor: "pointer" }}
+              variants={item}
+            >
+              <div className="choker-image-wrap">
+                <img src={withPublicUrl(product.images[0])} alt={product.title} />
+                <div className="choker-hover-overlay" />
+                <span className="choker-badge">Curated</span>
+                <span className="choker-view-icon">View</span>
               </div>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+
+              <div className="choker-info">
+                <p className="choker-product-title">{product.title}</p>
+
+                <div className="choker-price-row">
+                  <span className="choker-price">{"\u20B9"}{product.price}</span>
+                  {product.oldPrice && (
+                    <span className="choker-old-price">{"\u20B9"}{product.oldPrice}</span>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      ) : (
+        !loading && (
+          <div className="choker-empty-state">
+            Choker pieces are being refreshed. Please check back in a moment.
+          </div>
+        )
+      )}
     </section>
   );
 }

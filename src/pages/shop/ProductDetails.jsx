@@ -23,7 +23,10 @@ export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState(null);
   const RECENTLY_VIEWED_STORAGE_KEY = "aashaka_recently_viewed";
 
-  const canonicalId = productAliases?.[String(id)] || String(id);
+  const canonicalId =
+    productAliases?.[String(id)] ||
+    productAliases?.[String(id).toLowerCase()] ||
+    String(id);
   /* FIND PRODUCT */
   const product = !loading
     ? groupedProducts.find(p => String(p.id) === canonicalId)

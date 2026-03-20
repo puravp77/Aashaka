@@ -117,7 +117,7 @@ export default function AdminProducts() {
   }, []);
 
   return (
-    <section className="adm-widget">
+    <section className="adm-widget" style={{ position: "relative", overflow: "visible" }}>
       <div className="adm-widget-head">
         <h2>Products</h2>
         <button
@@ -130,7 +130,7 @@ export default function AdminProducts() {
         </button>
       </div>
 
-      <div className="adm-controls">
+      <div className="adm-controls" style={{ position: "relative", zIndex: 80, overflow: "visible" }}>
         <div className="adm-search-input-wrap">
           <Search size={18} className="adm-search-icon" />
           <input
@@ -143,7 +143,11 @@ export default function AdminProducts() {
             }}
           />
         </div>
-        <div className="adm-status-menu" ref={categoryMenuRef}>
+        <div
+          className="adm-status-menu"
+          ref={categoryMenuRef}
+          style={{ position: "relative", zIndex: 90, overflow: "visible" }}
+        >
           <button
             type="button"
             className="adm-select adm-select-inline"
@@ -156,7 +160,21 @@ export default function AdminProducts() {
             <span className={`adm-select-caret ${isCategoryMenuOpen ? "open" : ""}`} />
           </button>
           {isCategoryMenuOpen && (
-            <ul className="adm-status-menu-list" role="listbox" aria-label="Filter products by category">
+            <ul
+              className="adm-status-menu-list"
+              role="listbox"
+              aria-label="Filter products by category"
+              style={{
+                position: "absolute",
+                top: "calc(100% + 8px)",
+                right: 0,
+                left: "auto",
+                minWidth: "220px",
+                maxHeight: "320px",
+                overflowY: "auto",
+                zIndex: 9999,
+              }}
+            >
               {categories.map((item) => (
                 <li key={item}>
                   <button
@@ -171,7 +189,6 @@ export default function AdminProducts() {
                     aria-selected={item === category}
                   >
                     <span>{toTitleCase(item)}</span>
-                    {item === category && <span className="adm-status-check">v</span>}
                   </button>
                 </li>
               ))}
@@ -180,7 +197,7 @@ export default function AdminProducts() {
         </div>
       </div>
 
-      <div className="adm-table-wrap">
+      <div className="adm-table-wrap" style={{ position: "relative", zIndex: 1 }}>
         <table className="adm-table">
           <thead>
             <tr>

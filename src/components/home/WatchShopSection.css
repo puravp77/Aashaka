@@ -75,6 +75,20 @@
   padding: 8px 34px 10px;
 }
 
+.watchshop-empty-state {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 24px;
+  text-align: center;
+  border: 1px solid #ead7c2;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 249, 243, 0.98) 100%);
+  box-shadow: 0 12px 26px rgba(36, 20, 10, 0.08);
+  color: #6e5f53;
+}
+
 /* ===============================
    CARD
 ================================ */

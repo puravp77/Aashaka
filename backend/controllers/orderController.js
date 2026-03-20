@@ -2,6 +2,49 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 
+const populateOrderById = (orderId) =>
+  Order.findById(orderId)
+    .populate("user", "name email role")
+    .populate("orderItems.product", "name price category images");
+
+const normalizeLegacyStatus = (order) => {
+  if (["Pending", "Paid", "Delivered"].includes(order?.status)) {
+    return order.status;
+  }
+
+  if (order?.isDelivered) {
+    return "Delivered";
+  }
+
+  if (order?.isPaid) {
+    return "Paid";
+  }
+
+  return "Pending";
+};
+
+const applyUnifiedStatus = (order, nextStatus) => {
+  order.status = nextStatus;
+
+  if (nextStatus === "Delivered") {
+    order.isDelivered = true;
+    order.isPaid = true;
+    order.orderStatus = "delivered";
+    return;
+  }
+
+  if (nextStatus === "Paid") {
+    order.isDelivered = false;
+    order.isPaid = true;
+    order.orderStatus = "processing";
+    return;
+  }
+
+  order.isDelivered = false;
+  order.isPaid = false;
+  order.orderStatus = "pending";
+};
+
 const createOrder = async (req, res, next) => {
   try {
     const {
@@ -97,6 +140,7 @@ const createOrder = async (req, res, next) => {
       totalPrice,
       shippingAddress,
       paymentMethod,
+      status: "Pending",
     });
 
     return res.status(201).json({
@@ -158,7 +202,7 @@ const getAllOrders = async (req, res, next) => {
 
 const updateOrder = async (req, res, next) => {
   try {
-    const { isPaid, isDelivered, orderStatus } = req.body;
+    const { isPaid, isDelivered, orderStatus, status } = req.body;
 
     const order = await Order.findById(req.params.id);
     if (!order) {
@@ -183,11 +227,15 @@ const updateOrder = async (req, res, next) => {
       }
     }
 
+    if (status && ["Pending", "Paid", "Delivered"].includes(status)) {
+      applyUnifiedStatus(order, status);
+    } else {
+      order.status = normalizeLegacyStatus(order);
+    }
+
     await order.save();
 
-    const populatedOrder = await Order.findById(order._id)
-      .populate("user", "name email role")
-      .populate("orderItems.product", "name price category images");
+    const populatedOrder = await populateOrderById(order._id);
 
     return res.status(200).json({
       message: "Order updated successfully",
@@ -200,21 +248,46 @@ const updateOrder = async (req, res, next) => {
 
 const updateOrderStatus = async (req, res, next) => {
   try {
-    const { orderStatus } = req.body;
+    const { status } = req.body;
+
+    console.log("[admin-orders] status update requested", {
+      orderId: req.params.id,
+      status,
+      adminId: req.user?._id?.toString?.() || null,
+    });
+
+    if (!["Pending", "Paid", "Delivered"].includes(status)) {
+      return res.status(400).json({
+        message: "Invalid status. Use Pending, Paid, or Delivered.",
+      });
+    }
 
     const order = await Order.findById(req.params.id);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    order.orderStatus = orderStatus || order.orderStatus;
+    applyUnifiedStatus(order, status);
     await order.save();
+
+    const updatedOrder = await populateOrderById(order._id);
+
+    console.log("[admin-orders] status updated", {
+      orderId: updatedOrder._id.toString(),
+      status: updatedOrder.status,
+      isPaid: updatedOrder.isPaid,
+      isDelivered: updatedOrder.isDelivered,
+    });
 
     return res.status(200).json({
       message: "Order status updated successfully",
-      order,
+      order: updatedOrder,
     });
   } catch (error) {
+    console.error("[admin-orders] status update failed", {
+      orderId: req.params.id,
+      message: error.message,
+    });
     next(error);
   }
 };

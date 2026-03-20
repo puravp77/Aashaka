@@ -130,6 +130,10 @@ export function CartProvider({ children }) {
     setCartOpen(false);
   };
 
+  const replaceCartItems = (nextItems) => {
+    setCartItems(Array.isArray(nextItems) ? nextItems : []);
+  };
+
   /* =========================
      TOTAL PRICE
   ========================= */
@@ -161,6 +165,7 @@ export function CartProvider({ children }) {
         removeFromCart,
         updateQty,
         clearCart,
+        replaceCartItems,
         total,
 
         uniqueItemCount,

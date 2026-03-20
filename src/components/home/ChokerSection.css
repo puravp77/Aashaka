@@ -53,6 +53,18 @@
   align-items: stretch;
 }
 
+.choker-empty-state {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  text-align: center;
+  border: 1px solid #e6d3bf;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #6e5f53;
+  box-shadow: 0 10px 24px rgba(37, 20, 10, 0.08);
+}
+
 /* ===============================
    CARD
 ================================ */

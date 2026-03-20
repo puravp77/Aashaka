@@ -10,6 +10,7 @@ import {
   shouldUseLocalCheckoutStore,
 } from "../../utils/localCheckoutData";
 import { useSettings } from "../../context/SettingsContext";
+import { getApiBaseUrl } from "../../utils/api";
 
 
 
@@ -119,7 +120,7 @@ export default function PlaceOrder() {
   const navigate = useNavigate();
   const fieldRefs = useRef({});
 
-  const { cartItems, total, clearCart } = useCart();
+  const { cartItems, total, clearCart, replaceCartItems } = useCart();
   const { user } = useAuth();
   const { settings } = useSettings();
   const { flatRate, freeShippingThreshold } = settings.shippingRates;
@@ -171,6 +172,70 @@ export default function PlaceOrder() {
   const [citySearch, setCitySearch] = useState("");
   const stateDropdownRef = useRef(null);
   const cityDropdownRef = useRef(null);
+
+  const resolveCartItemsWithBackendIds = useCallback(async () => {
+    const itemsMissingBackendId = cartItems.some((item) => !item?._id);
+    if (!itemsMissingBackendId) {
+      return cartItems;
+    }
+
+    const response = await fetch(`${getApiBaseUrl()}/api/products`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Unable to refresh your cart right now.");
+    }
+
+    const products = await response.json().catch(() => []);
+    const productMap = new Map();
+
+    (Array.isArray(products) ? products : []).forEach((product) => {
+      const candidates = [
+        product?._id,
+        product?.productId,
+        product?.id,
+        product?.name,
+      ]
+        .filter(Boolean)
+        .map((value) => String(value).toLowerCase());
+
+      candidates.forEach((candidate) => {
+        productMap.set(candidate, product);
+      });
+    });
+
+    const resolvedItems = cartItems.map((item) => {
+      if (item?._id) return item;
+
+      const match =
+        productMap.get(String(item?.id || "").toLowerCase()) ||
+        productMap.get(String(item?.productId || "").toLowerCase()) ||
+        productMap.get(String(item?.name || item?.title || "").toLowerCase());
+
+      if (!match?._id) {
+        return item;
+      }
+
+      return {
+        ...item,
+        _id: match._id,
+        id: item.id || match.productId || match._id,
+        name: item.name || match.name || item.title,
+        title: item.title || match.name || item.name,
+        image: item.image || match.images?.[0] || item.image,
+        price: item.price ?? match.price,
+      };
+    });
+
+    const stillMissingBackendId = resolvedItems.some((item) => !item?._id);
+    if (stillMissingBackendId) {
+      throw new Error("Some cart items could not be refreshed. Please remove them and add them again.");
+    }
+
+    replaceCartItems(resolvedItems);
+    return resolvedItems;
+  }, [cartItems, replaceCartItems]);
 
   useEffect(() => {
     try {
@@ -683,9 +748,12 @@ export default function PlaceOrder() {
       return;
     }
 
-    const hasInvalidCartProduct = cartItems.some((item) => !item?._id);
-    if (hasInvalidCartProduct) {
-      toast.error("Some cart items are outdated. Please remove them and add them again.");
+    let resolvedCartItems = cartItems;
+
+    try {
+      resolvedCartItems = await resolveCartItemsWithBackendIds();
+    } catch (error) {
+      toast.error(error.message || "Some cart items are outdated. Please remove them and add them again.");
       return;
     }
 
@@ -718,7 +786,7 @@ export default function PlaceOrder() {
           };
 
     const orderPayload = {
-      orderItems: cartItems.map((item) => ({
+      orderItems: resolvedCartItems.map((item) => ({
         product: item._id,
         name: item.name || item.title || "Product",
         price: item.price,

@@ -12,6 +12,7 @@ export default function Wishlist() {
   const { wishlistItems, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
   const [qtyMap, setQtyMap] = useState({});
+  const wishlistCount = wishlistItems.length;
 
   const getQty = (id) => qtyMap[id] || 1;
   const setQty = (id, value) => {
@@ -21,7 +22,25 @@ export default function Wishlist() {
   return (
     <section className="wishlist-page">
       <div className="wishlist-wrapper">
-        <h2 className="wishlist-title">WISHLIST</h2>
+        <header className="wishlist-hero">
+          <p className="wishlist-kicker">Saved For Later</p>
+          <h1 className="wishlist-title">Your Wishlist</h1>
+          <p className="wishlist-subtitle">
+            Keep your favorite Aashaka pieces close, compare them calmly, and move the right ones into your cart when you are ready.
+          </p>
+
+          <div className="wishlist-meta">
+            <div className="wishlist-stat">
+              <span className="wishlist-stat-label">Saved Pieces</span>
+              <strong>{wishlistCount}</strong>
+            </div>
+            <div className="wishlist-meta-copy">
+              {wishlistCount > 0
+                ? "Your curated edit is ready."
+                : "Start building your personal edit."}
+            </div>
+          </div>
+        </header>
 
         {wishlistItems.length === 0 ? (
           <div className="wishlist-empty">
@@ -84,9 +103,10 @@ export default function Wishlist() {
                   </div>
 
                   <div className="wishlist-info">
-                    <h4 onClick={() => navigate(`/product/${item.id}`)}>
-                      {item.title}
-                    </h4>
+                    <div className="wishlist-info-top">
+                      <span className="wishlist-badge">Wishlist Pick</span>
+                    </div>
+                    <h4 onClick={() => navigate(`/product/${item.id}`)}>{item.title}</h4>
                     {item.color && (
                       <div className="wishlist-size">Color: {item.color}</div>
                     )}
@@ -97,6 +117,13 @@ export default function Wishlist() {
                       <span>Rs. {item.price}</span>
                       {item.oldPrice && <del>Rs. {item.oldPrice}</del>}
                     </div>
+                    <button
+                      type="button"
+                      className="wishlist-link-btn"
+                      onClick={() => navigate(`/product/${item.id}`)}
+                    >
+                      View Product
+                    </button>
                   </div>
 
                   <div className="wishlist-actions">

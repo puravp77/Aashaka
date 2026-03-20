@@ -659,7 +659,7 @@
 
 .also-card:hover .also-cta {
   background: var(--pd-maroon);
-  color: #fff;
+  color: #fffaf4;
 }
 
 .product-info-panel,
