@@ -27,7 +27,7 @@
   max-width: 1220px;
   margin: 0 auto;
   padding: 0 24px;
-  overflow-x: hidden;
+  overflow: visible;
 }
 
 .profile-content {
@@ -120,8 +120,7 @@
   padding: 26px;
   background: linear-gradient(180deg, rgba(255, 253, 248, 0.95) 0%, rgba(255, 249, 241, 0.98) 100%);
   box-shadow: 0 14px 34px rgba(52, 35, 25, 0.1);
-  overflow-x: hidden;
-  overflow-y: visible;
+  overflow: visible;
 }
 
 .address-section::before {
@@ -345,8 +344,7 @@
   padding: 20px;
   background: var(--surface);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-  overflow-x: hidden;
-  overflow-y: visible;
+  overflow: visible;
 }
 
 .address-form {
@@ -442,7 +440,7 @@
 }
 
 .select-wrapper.open {
-  z-index: 20;
+  z-index: 60;
 }
 
 .select-trigger {
@@ -497,7 +495,7 @@
   border: 1px solid #c3ab95;
   border-radius: 14px;
   background: #fff;
-  z-index: 21;
+  z-index: 80;
   padding: 10px;
   box-shadow: 0 14px 30px rgba(45, 31, 26, 0.14);
 }

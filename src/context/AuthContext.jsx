@@ -18,6 +18,17 @@ const normalizeUser = (apiUser) => {
   };
 };
 
+const hydrateStoredUser = (storageKey) => {
+  try {
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    localStorage.removeItem(storageKey);
+    return null;
+  }
+};
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [adminUser, setAdminUser] = useState(null);
@@ -49,7 +60,9 @@ export function AuthProvider({ children }) {
       });
 
       if (!response.ok) {
-        throw new Error("SESSION_EXPIRED");
+        const error = new Error("SESSION_EXPIRED");
+        error.status = response.status;
+        throw error;
       }
 
       const data = await response.json();
@@ -69,7 +82,34 @@ export function AuthProvider({ children }) {
 
       return normalizedUser;
     } catch (error) {
-      clearSession();
+      const storedAdminUser = hydrateStoredUser(ADMIN_STORAGE_KEY);
+      const storedCustomerUser = hydrateStoredUser(CUSTOMER_STORAGE_KEY);
+      const isAuthError = error?.status === 401 || error?.status === 403 || error?.message === "SESSION_EXPIRED";
+
+      console.error("[auth] session restore failed", {
+        message: error.message,
+        status: error?.status || null,
+        hasStoredAdminUser: Boolean(storedAdminUser),
+        hasStoredCustomerUser: Boolean(storedCustomerUser),
+      });
+
+      if (isAuthError) {
+        clearSession();
+        return null;
+      }
+
+      if (storedAdminUser?.role === "admin") {
+        setAdminUser(storedAdminUser);
+        setUser(null);
+        return storedAdminUser;
+      }
+
+      if (storedCustomerUser) {
+        setUser(storedCustomerUser);
+        setAdminUser(null);
+        return storedCustomerUser;
+      }
+
       return null;
     }
   }, []);

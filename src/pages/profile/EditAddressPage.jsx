@@ -11,8 +11,13 @@ import {
 } from "../../utils/localCheckoutData";
 import { fetchCollection } from "../../utils/api";
 
-const STATES_API_URL =    "https://www.india-location-hub.in/api/locations/states";
-const DISTRICTS_API_URL = "https://www.india-location-hub.in/api/locations/districts";
+const LOCATIONS_DATA_URL =
+  "https://raw.githubusercontent.com/nshntarora/Indian-Cities-JSON/master/cities.json";
+const STATES_CACHE_KEY = "aashaka_states_cache_v1";
+const STATE_FETCH_TIMEOUT_MS = 8000;
+const STATE_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
+const DISTRICT_FETCH_TIMEOUT_MS = 8000;
+const DISTRICT_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
 
 const formatLocationName = (value) => {
   if (!value || typeof value !== "string") return "";
@@ -44,6 +49,36 @@ const normalizeLocationText = (value) =>
     .replace(/\s+/g, " ")
     .replace(/&/g, "and")
     .trim();
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const parseLocationsResponse = (locationsJson) => {
+  const apiLocations = Array.isArray(locationsJson) ? locationsJson : [];
+
+  const normalizedDistricts = apiLocations
+    .map((item) => ({
+      name: formatLocationName(item?.name || ""),
+      rawStateName: item?.state || "",
+    }))
+    .filter((district) => district.name && district.rawStateName);
+
+  const stateMap = new Map();
+  normalizedDistricts.forEach((district) => {
+    const key = normalizeLocationText(district.rawStateName);
+    if (!stateMap.has(key)) {
+      stateMap.set(key, {
+        rawName: district.rawStateName,
+        label: formatLocationName(district.rawStateName),
+      });
+    }
+  });
+
+  const normalizedStates = Array.from(stateMap.values()).sort((a, b) =>
+    a.label.localeCompare(b.label)
+  );
+
+  return { normalizedStates, normalizedDistricts };
+};
 
 const loadFallbackDistrictsFromLocalData = async (selectedStateRawName) => {
   const addresses = await fetchCollection("addresses");
@@ -184,33 +219,86 @@ const EditAddressPage = () => {
       setLocationError("");
 
       try {
-        const statesRes = await fetch(STATES_API_URL);
-        if (!statesRes.ok) {
-          throw new Error("Failed to load states");
+        let locationsJson = null;
+        let lastError = null;
+
+        for (let attempt = 0; attempt < STATE_FETCH_RETRY_DELAYS_MS.length; attempt += 1) {
+          const delayMs = STATE_FETCH_RETRY_DELAYS_MS[attempt];
+          if (delayMs > 0) {
+            await wait(delayMs);
+          }
+
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), STATE_FETCH_TIMEOUT_MS);
+
+          try {
+            const statesRes = await fetch(LOCATIONS_DATA_URL, {
+              signal: controller.signal,
+              cache: "no-store",
+            });
+
+            if (!statesRes.ok) {
+              throw new Error(`Failed to load states (${statesRes.status})`);
+            }
+
+            locationsJson = await statesRes.json();
+            lastError = null;
+            break;
+          } catch (err) {
+            lastError = err;
+          } finally {
+            clearTimeout(timeoutId);
+          }
         }
 
-        const statesJson = await statesRes.json();
+        if (!locationsJson) {
+          throw lastError || new Error("Failed to load states");
+        }
 
-        const apiStates = Array.isArray(statesJson?.data?.states)
-          ? statesJson.data.states
-          : [];
+        const { normalizedStates, normalizedDistricts } =
+          parseLocationsResponse(locationsJson);
 
-        const normalizedStates = apiStates
-          .map((state) => ({
-            rawName: state?.name || "",
-            label: formatLocationName(state?.name || ""),
-          }))
-          .filter((state) => state.rawName && state.label)
-          .sort((a, b) => a.label.localeCompare(b.label));
+        if (normalizedStates.length === 0) {
+          throw new Error("State API returned an empty list");
+        }
 
         if (!ignore) {
           setStateOptions(normalizedStates);
+          allDistrictsRef.current = normalizedDistricts;
+          setLocationError("");
+        }
+
+        try {
+          localStorage.setItem(
+            STATES_CACHE_KEY,
+            JSON.stringify({
+              savedAt: Date.now(),
+              states: normalizedStates,
+            })
+          );
+        } catch {
+          // ignore cache write errors
         }
       } catch (err) {
+        let cachedStates = [];
+
+        try {
+          const rawCache = localStorage.getItem(STATES_CACHE_KEY);
+          const parsedCache = rawCache ? JSON.parse(rawCache) : null;
+          cachedStates = Array.isArray(parsedCache?.states) ? parsedCache.states : [];
+        } catch {
+          cachedStates = [];
+        }
+
         if (!ignore) {
-          setLocationError("Unable to load states right now.");
-          setStateOptions([]);
-          setDistrictOptions([]);
+          if (cachedStates.length > 0) {
+            setStateOptions(cachedStates);
+            setLocationError("Live states service is slow. Showing saved state list.");
+          } else {
+            setLocationError("Unable to load states right now. Please try again.");
+            setStateOptions([]);
+            setDistrictOptions([]);
+          }
         }
       } finally {
         if (!ignore) {
@@ -401,27 +489,43 @@ const EditAddressPage = () => {
       setDistrictOptions([]);
 
       try {
-        const districtsRes = await fetch(
-          `${DISTRICTS_API_URL}?state_name=${encodeURIComponent(
-            selectedStateRawName
-          )}`
-        );
+        let districtsJson = null;
+        let lastError = null;
 
-        if (!districtsRes.ok) {
-          throw new Error("Failed to load districts");
+        for (let attempt = 0; attempt < DISTRICT_FETCH_RETRY_DELAYS_MS.length; attempt += 1) {
+          const delayMs = DISTRICT_FETCH_RETRY_DELAYS_MS[attempt];
+          if (delayMs > 0) {
+            await wait(delayMs);
+          }
+
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), DISTRICT_FETCH_TIMEOUT_MS);
+
+          try {
+            const districtsRes = await fetch(LOCATIONS_DATA_URL, {
+              signal: controller.signal,
+              cache: "no-store",
+            });
+
+            if (!districtsRes.ok) {
+              throw new Error(`Failed to load districts (${districtsRes.status})`);
+            }
+
+            districtsJson = await districtsRes.json();
+            lastError = null;
+            break;
+          } catch (err) {
+            lastError = err;
+          } finally {
+            clearTimeout(timeoutId);
+          }
         }
 
-        const districtsJson = await districtsRes.json();
-        const apiDistricts = Array.isArray(districtsJson?.data?.districts)
-          ? districtsJson.data.districts
-          : [];
+        if (!districtsJson) {
+          throw lastError || new Error("Failed to load districts");
+        }
 
-        const normalizedDistricts = apiDistricts
-          .map((district) => ({
-            name: formatLocationName(district?.name || ""),
-            rawStateName: district?.state_name || "",
-          }))
-          .filter((district) => district.name && district.rawStateName);
+        const { normalizedDistricts } = parseLocationsResponse(districtsJson);
 
         const uniqueStates = new Set(
           normalizedDistricts.map((district) =>
@@ -462,11 +566,11 @@ const EditAddressPage = () => {
               setCityError("Live cities service unavailable. Showing saved city list.");
             } else {
               setDistrictOptions([]);
-              setCityError("Unable to load cities right now.");
+              setCityError("Unable to load cities right now. Please try again.");
             }
           } catch {
             setDistrictOptions([]);
-            setCityError("Unable to load cities right now.");
+            setCityError("Unable to load cities right now. Please try again.");
           }
         }
       } finally {
