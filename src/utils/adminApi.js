@@ -1,9 +1,10 @@
 import { getApiBaseUrl } from "./api";
+import { ADMIN_AUTH_TOKEN_KEY } from "./authStorage";
 
 const BASE_URL = getApiBaseUrl();
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("auth_token");
+  const token = localStorage.getItem(ADMIN_AUTH_TOKEN_KEY);
   if (!token) {
     throw new Error("Please log in as admin.");
   }

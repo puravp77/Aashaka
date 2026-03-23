@@ -46,7 +46,13 @@ export default function AdminProducts() {
           image: Array.isArray(product?.images) ? product.images[0] || "" : "",
           sizesLabel:
             sizes.length > 0
-              ? sizes.map((entry) => `${entry.size}: ${entry.quantity}`).join(", ")
+              ? sizes
+                  .map((entry) =>
+                    String(entry?.size || "").toLowerCase() === "free"
+                      ? "Free Size"
+                      : `${entry.size}: ${entry.quantity}`
+                  )
+                  .join(", ")
               : "No sizes",
           stock,
           status,

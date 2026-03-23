@@ -18,10 +18,13 @@ export default function AdminProfile() {
 
     useEffect(() => {
         if (adminUser) {
+            const displayName =
+                String(adminUser.name || adminUser.username || adminUser.email || "Admin").trim();
+
             setFormData({
-                username: adminUser.username || "Purav",
-                email: adminUser.id || adminUser.email || "",
-                role: adminUser.role || "Administrator",
+                username: displayName,
+                email: adminUser.email || adminUser.id || "",
+                role: adminUser.role === "admin" ? "Administrator" : (adminUser.role || "Administrator"),
             });
         }
     }, [adminUser]);
@@ -57,7 +60,7 @@ export default function AdminProfile() {
         }, 1000);
     };
 
-    const userInitial = formData.username ? formData.username.charAt(0).toUpperCase() : "P";
+    const userInitial = formData.username ? formData.username.charAt(0).toUpperCase() : "A";
 
     return (
         <div className="adm-profile-container">

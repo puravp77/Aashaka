@@ -21,7 +21,15 @@ const formatCustomer = (order) => {
 const normalizeOrderRow = (order) => ({
   id: String(order?._id || ""),
   customer: formatCustomer(order),
-  date: order?.createdAt ? new Date(order.createdAt).toLocaleDateString("en-IN") : "-",
+  date: order?.createdAt
+    ? new Date(order.createdAt).toLocaleDateString("en-IN")
+    : "-",
+  time: order?.createdAt
+    ? new Date(order.createdAt).toLocaleTimeString("en-IN", {
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : "-",
   status: getDisplayStatus(order),
   amount: `\u20B9${Number(order?.totalPrice || 0).toLocaleString("en-IN")}`,
   isPaid: getDisplayStatus(order) === "Paid" || getDisplayStatus(order) === "Delivered",
@@ -216,6 +224,7 @@ export default function AdminOrders() {
                 <th>Order ID</th>
                 <th>User</th>
                 <th>Date</th>
+                <th>Time</th>
                 <th>Status</th>
                 <th>Total</th>
                 <th>Update</th>
@@ -224,11 +233,11 @@ export default function AdminOrders() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td className="adm-table-empty" colSpan="6">Loading orders...</td>
+                  <td className="adm-table-empty" colSpan="7">Loading orders...</td>
                 </tr>
               ) : visible.length === 0 ? (
                 <tr>
-                  <td className="adm-table-empty" colSpan="6">No orders found.</td>
+                  <td className="adm-table-empty" colSpan="7">No orders found.</td>
                 </tr>
               ) : (
               visible.map((order, index) => {
@@ -263,6 +272,7 @@ export default function AdminOrders() {
                       </div>
                     </td>
                     <td>{order.date}</td>
+                    <td>{order.time}</td>
                     <td>
                       <span className={`adm-status ${order.status.toLowerCase()}`}>
                         {order.status}

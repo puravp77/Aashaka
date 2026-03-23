@@ -191,7 +191,13 @@ export default function AdminLayout() {
                   aria-expanded={isProfileMenuOpen}
                   onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                 >
-                  {adminUser?.username ? adminUser.username.charAt(0).toUpperCase() : (adminUser?.id ? adminUser.id.charAt(0).toUpperCase() : "A")}
+                  {adminUser?.name
+                    ? adminUser.name.charAt(0).toUpperCase()
+                    : adminUser?.username
+                      ? adminUser.username.charAt(0).toUpperCase()
+                      : adminUser?.email
+                        ? adminUser.email.charAt(0).toUpperCase()
+                        : "A"}
                 </button>
 
                 {isProfileMenuOpen && (

@@ -27,6 +27,7 @@ const uniqueValues = (values) => Array.from(new Set(values.filter(Boolean)));
 const normalizeFilename = (value = "") => String(value).replace(/^.*[\\/]/, "").trim();
 
 const createInventoryRow = (size = "", stock = "") => ({ size, stock });
+const createJewelleryInventoryRow = () => createInventoryRow("Free", "10");
 
 const createColorVariant = () => ({
   color: "",
@@ -158,7 +159,7 @@ export default function AdminAddProduct({ editMode = false }) {
           const data = await fetchAdminProductById(id);
           const normalizedRows = Array.isArray(data?.sizes) && data.sizes.length > 0
             ? data.sizes.map((entry) => createInventoryRow(entry?.size || "", String(entry?.quantity || 0)))
-            : [createInventoryRow()];
+            : [data.category === "kurti" ? createInventoryRow() : createJewelleryInventoryRow()];
           const normalizedImages = Array.isArray(data?.images)
             ? data.images.map((img) => normalizeFilename(img)).filter(Boolean)
             : [];
@@ -246,7 +247,13 @@ export default function AdminAddProduct({ editMode = false }) {
   useEffect(() => {
     if (form.category === "JEWELLERY") {
       setInventoryRows((prev) =>
-        prev.map(row => ({ ...row, size: "Free" }))
+        prev.length > 0
+          ? prev.map((row) => ({
+              ...row,
+              size: "Free",
+              stock: row.stock || "10",
+            }))
+          : [createJewelleryInventoryRow()]
       );
     }
   }, [form.category]);
@@ -380,8 +387,10 @@ export default function AdminAddProduct({ editMode = false }) {
   };
 
   const addInventoryRow = () => {
-    const defaultSize = form.category === "JEWELLERY" ? "Free" : "";
-    setInventoryRows((prev) => [...prev, { size: defaultSize, stock: "" }]);
+    const defaultRow = form.category === "JEWELLERY"
+      ? createJewelleryInventoryRow()
+      : createInventoryRow();
+    setInventoryRows((prev) => [...prev, defaultRow]);
   };
 
   const removeInventoryRow = (index) => {

@@ -1,4 +1,5 @@
 import { getApiBaseUrl } from "./api";
+import { CUSTOMER_AUTH_TOKEN_KEY } from "./authStorage";
 
 const BASE_URL = getApiBaseUrl();
 const ORDERS_API_URL = `${BASE_URL}/api/orders`;
@@ -57,7 +58,7 @@ export const normalizeOrder = (order) => {
 };
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("auth_token");
+  const token = localStorage.getItem(CUSTOMER_AUTH_TOKEN_KEY);
   if (!token) {
     throw new Error("Please log in to view your orders.");
   }

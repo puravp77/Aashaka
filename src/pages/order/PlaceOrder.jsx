@@ -11,6 +11,7 @@ import {
 } from "../../utils/localCheckoutData";
 import { useSettings } from "../../context/SettingsContext";
 import { getApiBaseUrl } from "../../utils/api";
+import { CUSTOMER_AUTH_TOKEN_KEY } from "../../utils/authStorage";
 
 
 
@@ -742,7 +743,7 @@ export default function PlaceOrder() {
       return;
     }
 
-    const token = localStorage.getItem("auth_token");
+    const token = localStorage.getItem(CUSTOMER_AUTH_TOKEN_KEY);
     if (!token) {
       toast.error("Please log in to place your order.");
       return;

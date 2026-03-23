@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Truck, Activity, Save, Loader2, AlertCircle, Info } from "lucide-react";
+import { toast } from "react-toastify";
 import { useSettings } from "../../../context/SettingsContext";
 import "./AdminPages.css";
 import { fetchSingleton, getApiBaseUrl, isStaticDataMode } from "../../../utils/api";
@@ -61,10 +62,14 @@ export default function AdminMaintenanceRoom() {
             }
 
             refreshSettings();
-            alert("Settings updated successfully!");
+            toast.success("Maintenance settings updated successfully.", {
+                toastId: "maintenance-settings-success"
+            });
         } catch (error) {
             console.error("Save error:", error);
-            alert("Settings saved locally, but server update failed.");
+            toast.error("Settings saved locally, but server update failed.", {
+                toastId: "maintenance-settings-error"
+            });
         } finally {
             setLoading(false);
         }

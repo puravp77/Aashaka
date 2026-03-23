@@ -1,11 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { getApiBaseUrl } from "../utils/api";
+import {
+  ADMIN_AUTH_TOKEN_KEY,
+  ADMIN_STORAGE_KEY,
+  CUSTOMER_AUTH_TOKEN_KEY,
+  CUSTOMER_STORAGE_KEY,
+} from "../utils/authStorage";
 
 const AuthContext = createContext();
-
-const AUTH_TOKEN_KEY = "auth_token";
-const CUSTOMER_STORAGE_KEY = "store_user";
-const ADMIN_STORAGE_KEY = "admin_user";
 const AUTH_BASE_URL = `${getApiBaseUrl()}/api/auth`;
 
 const normalizeUser = (apiUser) => {
@@ -35,7 +37,8 @@ export function AuthProvider({ children }) {
   const [authReady, setAuthReady] = useState(false);
 
   const clearSession = () => {
-    localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(CUSTOMER_AUTH_TOKEN_KEY);
+    localStorage.removeItem(ADMIN_AUTH_TOKEN_KEY);
     localStorage.removeItem(CUSTOMER_STORAGE_KEY);
     localStorage.removeItem(ADMIN_STORAGE_KEY);
     setUser(null);
@@ -43,7 +46,9 @@ export function AuthProvider({ children }) {
   };
 
   const loadUser = useCallback(async () => {
-    const token = localStorage.getItem(AUTH_TOKEN_KEY);
+    const token =
+      localStorage.getItem(ADMIN_AUTH_TOKEN_KEY) ||
+      localStorage.getItem(CUSTOMER_AUTH_TOKEN_KEY);
     if (!token) {
       localStorage.removeItem(CUSTOMER_STORAGE_KEY);
       localStorage.removeItem(ADMIN_STORAGE_KEY);
@@ -181,7 +186,8 @@ export function AuthProvider({ children }) {
       throw new Error("ADMIN_USE_ADMIN_PORTAL");
     }
 
-    localStorage.setItem(AUTH_TOKEN_KEY, session.token);
+    localStorage.setItem(CUSTOMER_AUTH_TOKEN_KEY, session.token);
+    localStorage.removeItem(ADMIN_AUTH_TOKEN_KEY);
     localStorage.setItem(CUSTOMER_STORAGE_KEY, JSON.stringify(session.user));
     localStorage.removeItem(ADMIN_STORAGE_KEY);
     setUser(session.user);
@@ -199,8 +205,9 @@ export function AuthProvider({ children }) {
       throw new Error("NOT_ADMIN");
     }
 
-    localStorage.setItem(AUTH_TOKEN_KEY, session.token);
+    localStorage.setItem(ADMIN_AUTH_TOKEN_KEY, session.token);
     localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(session.user));
+    localStorage.removeItem(CUSTOMER_AUTH_TOKEN_KEY);
     localStorage.removeItem(CUSTOMER_STORAGE_KEY);
     setAdminUser(session.user);
     setUser(null);
@@ -221,7 +228,16 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, adminUser, login, adminLogin, logout, adminLogout, loadUser }}
+      value={{
+        user,
+        adminUser,
+        isAuthenticated: Boolean(user || adminUser),
+        login,
+        adminLogin,
+        logout,
+        adminLogout,
+        loadUser,
+      }}
     >
       {children}
     </AuthContext.Provider>
