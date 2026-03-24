@@ -32,6 +32,7 @@ const STATE_FETCH_TIMEOUT_MS = 8000;
 const STATE_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
 const DISTRICT_FETCH_TIMEOUT_MS = 8000;
 const DISTRICT_FETCH_RETRY_DELAYS_MS = [0, 500, 1200];
+const MONGODB_OBJECT_ID_REGEX = /^[a-f\d]{24}$/i;
 
 const formatLocationName = (value) => {
   if (!value || typeof value !== "string") return "";
@@ -175,7 +176,12 @@ export default function PlaceOrder() {
   const cityDropdownRef = useRef(null);
 
   const resolveCartItemsWithBackendIds = useCallback(async () => {
-    const itemsMissingBackendId = cartItems.some((item) => !item?._id);
+    const hasValidBackendId = (value) =>
+      MONGODB_OBJECT_ID_REGEX.test(String(value || "").trim());
+
+    const itemsMissingBackendId = cartItems.some(
+      (item) => !hasValidBackendId(item?._id)
+    );
     if (!itemsMissingBackendId) {
       return cartItems;
     }
@@ -207,7 +213,7 @@ export default function PlaceOrder() {
     });
 
     const resolvedItems = cartItems.map((item) => {
-      if (item?._id) return item;
+      if (hasValidBackendId(item?._id)) return item;
 
       const match =
         productMap.get(String(item?.id || "").toLowerCase()) ||
@@ -229,7 +235,9 @@ export default function PlaceOrder() {
       };
     });
 
-    const stillMissingBackendId = resolvedItems.some((item) => !item?._id);
+    const stillMissingBackendId = resolvedItems.some(
+      (item) => !hasValidBackendId(item?._id)
+    );
     if (stillMissingBackendId) {
       throw new Error("Some cart items could not be refreshed. Please remove them and add them again.");
     }
