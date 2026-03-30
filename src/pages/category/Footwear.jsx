@@ -31,6 +31,17 @@ const sortOptionMeta = {
   },
 };
 
+const priceRanges = [
+  { id: "under-1000", label: "Under \u20B91000", min: 0, max: 999 },
+  { id: "1000-2000", label: "\u20B91000 - \u20B92000", min: 1000, max: 2000 },
+  { id: "above-2000", label: "Above \u20B92000", min: 2001, max: Number.POSITIVE_INFINITY },
+];
+
+const getProductSizes = (product) =>
+  Object.keys(product?.sizes || {})
+    .map((size) => String(size).trim())
+    .filter(Boolean);
+
 function SortMenu({ value, onChange }) {
   return (
     <div className="sort-wrapper">
@@ -61,6 +72,11 @@ export default function Footwear() {
   const [sortBy, setSortBy] = useState("newest");
   const [categoryProducts, setCategoryProducts] = useState([]);
   const [currentBanner, setCurrentBanner] = useState(0);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [selectedPriceRange, setSelectedPriceRange] = useState("");
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [appliedPriceRange, setAppliedPriceRange] = useState("");
+  const [appliedSizes, setAppliedSizes] = useState([]);
   const metadata = categoryMetadata[FOOTWEAR_METADATA_KEY];
 
   useEffect(() => {
@@ -90,9 +106,25 @@ export default function Footwear() {
 
   const localProducts = getProductsByCategory(FOOTWEAR_CATEGORY);
   const sourceProducts = categoryProducts.length > 0 ? categoryProducts : localProducts;
+  const availableSizes = useMemo(
+    () =>
+      Array.from(new Set(sourceProducts.flatMap(getProductSizes))).sort((a, b) =>
+        a.localeCompare(b, undefined, { numeric: true })
+      ),
+    [sourceProducts]
+  );
 
   const filteredProducts = useMemo(() => {
-    const result = [...sourceProducts];
+    const result = [...sourceProducts].filter((product) => {
+      const price = Number(product?.price || 0);
+      const range = priceRanges.find((item) => item.id === appliedPriceRange);
+      const matchesPrice = !range || (price >= range.min && price <= range.max);
+      const productSizes = getProductSizes(product);
+      const matchesSize =
+        appliedSizes.length === 0 || appliedSizes.some((size) => productSizes.includes(size));
+
+      return matchesPrice && matchesSize;
+    });
 
     if (sortBy === "price-low") {
       result.sort((a, b) => a.price - b.price);
@@ -101,7 +133,19 @@ export default function Footwear() {
     }
 
     return result;
-  }, [sortBy, sourceProducts]);
+  }, [sortBy, sourceProducts, appliedPriceRange, appliedSizes]);
+
+  const toggleSize = (value) => {
+    setSelectedSizes((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+    );
+  };
+
+  const applyFilters = () => {
+    setAppliedPriceRange(selectedPriceRange);
+    setAppliedSizes(selectedSizes);
+    setFilterOpen(false);
+  };
 
   if (loading && sourceProducts.length === 0) {
     return <div className="loading-container">Loading...</div>;
@@ -149,10 +193,69 @@ export default function Footwear() {
       </div>
 
       <div className="category-container">
-        <div className="filter-bar">
-          <span className="count">{filteredProducts.length} PRODUCTS FOUND</span>
-          <SortMenu value={sortBy} onChange={setSortBy} />
+        <div className="shop-top-bar">
+          <p className="product-count">{filteredProducts.length} Products Found</p>
+          <div className="shop-actions">
+            <button type="button" className="filter-btn" onClick={() => setFilterOpen(true)}>
+              Filter
+            </button>
+            <SortMenu value={sortBy} onChange={setSortBy} />
+          </div>
         </div>
+
+        {filterOpen && (
+          <div className="filter-overlay" onClick={() => setFilterOpen(false)}>
+            <div className="filter-drawer" onClick={(event) => event.stopPropagation()}>
+              <div className="filter-drawer-header">
+                <h3>Filters</h3>
+                <button type="button" className="filter-close" onClick={() => setFilterOpen(false)}>
+                  &times;
+                </button>
+              </div>
+
+              <div className="filter-section">
+                <h4>Category</h4>
+                <label>
+                  <input type="checkbox" checked readOnly />
+                  Footwear
+                </label>
+              </div>
+
+              <div className="filter-section">
+                <h4>Price</h4>
+                {priceRanges.map((range) => (
+                  <label key={range.id}>
+                    <input
+                      type="radio"
+                      name="footwear-price"
+                      checked={selectedPriceRange === range.id}
+                      onChange={() => setSelectedPriceRange(range.id)}
+                    />
+                    {range.label}
+                  </label>
+                ))}
+              </div>
+
+              <div className="filter-section">
+                <h4>Size</h4>
+                {availableSizes.map((size) => (
+                  <label key={size}>
+                    <input
+                      type="checkbox"
+                      checked={selectedSizes.includes(size)}
+                      onChange={() => toggleSize(size)}
+                    />
+                    {size}
+                  </label>
+                ))}
+              </div>
+
+              <button type="button" className="apply-btn" onClick={applyFilters}>
+                Apply Filters
+              </button>
+            </div>
+          </div>
+        )}
 
         {filteredProducts.length > 0 ? (
           <div className="product-grid">

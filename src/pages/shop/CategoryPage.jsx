@@ -7,6 +7,46 @@ import { motion } from "framer-motion";
 import ProductCard from "../../components/product/ProductCard";
 import "./CategoryPage.css";
 
+const categoryGroupMap = {
+  Cloths: ["kurti"],
+  Jewellery: ["oxidised", "bangles", "earrings", "necklace", "choker"],
+  Footwear: ["footwear"],
+};
+
+const priceRanges = [
+  { id: "under-1000", label: "Under \u20B91000", min: 0, max: 999 },
+  { id: "1000-2000", label: "\u20B91000 - \u20B92000", min: 1000, max: 2000 },
+  { id: "above-2000", label: "Above \u20B92000", min: 2001, max: Number.POSITIVE_INFINITY },
+];
+
+const getProductSizes = (product) =>
+  Object.keys(product?.sizes || {})
+    .map((size) => String(size).trim())
+    .filter(Boolean);
+
+const matchesCategoryGroup = (product, selectedGroups) => {
+  if (selectedGroups.length === 0) return true;
+
+  const productCategory = String(product?.category || "").toLowerCase();
+  return selectedGroups.some((group) =>
+    (categoryGroupMap[group] || []).includes(productCategory)
+  );
+};
+
+const matchesPriceRange = (product, selectedRange) => {
+  if (!selectedRange) return true;
+  const range = priceRanges.find((item) => item.id === selectedRange);
+  if (!range) return true;
+  const price = Number(product?.price || 0);
+  return price >= range.min && price <= range.max;
+};
+
+const matchesSizes = (product, selectedSizes) => {
+  if (selectedSizes.length === 0) return true;
+  const productSizes = getProductSizes(product);
+  return selectedSizes.some((size) => productSizes.includes(size));
+};
+
 const sortOptionMeta = {
   newest: {
     label: "Newest arrivals",
@@ -88,6 +128,13 @@ const CategoryPage = () => {
   const navigate = useNavigate();
   const { products, loading } = useProducts();
   const [sortBy, setSortBy] = useState("newest");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedPriceRange, setSelectedPriceRange] = useState("");
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [appliedCategories, setAppliedCategories] = useState([]);
+  const [appliedPriceRange, setAppliedPriceRange] = useState("");
+  const [appliedSizes, setAppliedSizes] = useState([]);
 
   const categoryName = paramCategory || (location.pathname === "/kurti" ? "kurti" : "all");
 
@@ -97,6 +144,19 @@ const CategoryPage = () => {
     bannerImage: "images/bannernewasaga2.jpeg",
   };
 
+  const availableSizes = useMemo(() => {
+    const sourceProducts =
+      categoryName === "all"
+        ? products
+        : products.filter(
+            (product) => (product.category || "").toLowerCase() === categoryName.toLowerCase()
+          );
+
+    return Array.from(new Set(sourceProducts.flatMap(getProductSizes))).sort((a, b) =>
+      a.localeCompare(b, undefined, { numeric: true })
+    );
+  }, [products, categoryName]);
+
   const filteredProducts = useMemo(() => {
     const result =
       categoryName === "all"
@@ -105,14 +165,21 @@ const CategoryPage = () => {
             (product) => (product.category || "").toLowerCase() === categoryName.toLowerCase()
           );
 
+    const filtered = result.filter(
+      (product) =>
+        matchesCategoryGroup(product, appliedCategories) &&
+        matchesPriceRange(product, appliedPriceRange) &&
+        matchesSizes(product, appliedSizes)
+    );
+
     if (sortBy === "price-low") {
-      result.sort((a, b) => a.price - b.price);
+      filtered.sort((a, b) => a.price - b.price);
     } else if (sortBy === "price-high") {
-      result.sort((a, b) => b.price - a.price);
+      filtered.sort((a, b) => b.price - a.price);
     }
 
-    return result;
-  }, [products, categoryName, sortBy]);
+    return filtered;
+  }, [products, categoryName, sortBy, appliedCategories, appliedPriceRange, appliedSizes]);
 
   const bannerImage = useMemo(() => {
     if (metadata.bannerImage) {
@@ -135,6 +202,25 @@ const CategoryPage = () => {
 
   const heroImageClassName = `hero-img ${categoryName === "all" ? "hero-img-all" : ""}`;
   const heroClassName = `category-hero ${categoryName === "all" ? "category-hero-all" : ""}`;
+
+  const toggleCategory = (value) => {
+    setSelectedCategories((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+    );
+  };
+
+  const toggleSize = (value) => {
+    setSelectedSizes((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+    );
+  };
+
+  const applyFilters = () => {
+    setAppliedCategories(selectedCategories);
+    setAppliedPriceRange(selectedPriceRange);
+    setAppliedSizes(selectedSizes);
+    setFilterOpen(false);
+  };
 
   if (loading) return <div className="loading-container">Loading...</div>;
 
@@ -171,10 +257,79 @@ const CategoryPage = () => {
       </div>
 
       <div className="category-container">
-        <div className="filter-bar">
-          <span className="count">{filteredProducts.length} PRODUCTS FOUND</span>
-          <SortMenu value={sortBy} onChange={setSortBy} />
+        <div className="shop-top-bar">
+          <p className="product-count">{filteredProducts.length} Products Found</p>
+          <div className="shop-actions">
+            <button type="button" className="filter-btn" onClick={() => setFilterOpen(true)}>
+              Filter
+            </button>
+            <SortMenu value={sortBy} onChange={setSortBy} />
+          </div>
         </div>
+
+        {filterOpen && (
+          <div className="filter-overlay" onClick={() => setFilterOpen(false)}>
+            <div className="filter-drawer" onClick={(event) => event.stopPropagation()}>
+              <div className="filter-drawer-header">
+                <h3>Filters</h3>
+                <button type="button" className="filter-close" onClick={() => setFilterOpen(false)}>
+                  &times;
+                </button>
+              </div>
+
+              <div className="filter-section">
+                <h4>Category</h4>
+                {Object.keys(categoryGroupMap).map((category) => (
+                  <label key={category}>
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(category)}
+                      onChange={() => toggleCategory(category)}
+                    />
+                    {category}
+                  </label>
+                ))}
+              </div>
+
+              <div className="filter-section">
+                <h4>Price</h4>
+                {priceRanges.map((range) => (
+                  <label key={range.id}>
+                    <input
+                      type="radio"
+                      name="price"
+                      checked={selectedPriceRange === range.id}
+                      onChange={() => setSelectedPriceRange(range.id)}
+                    />
+                    {range.label}
+                  </label>
+                ))}
+              </div>
+
+              <div className="filter-section">
+                <h4>Size</h4>
+                {availableSizes.length > 0 ? (
+                  availableSizes.map((size) => (
+                    <label key={size}>
+                      <input
+                        type="checkbox"
+                        checked={selectedSizes.includes(size)}
+                        onChange={() => toggleSize(size)}
+                      />
+                      {size}
+                    </label>
+                  ))
+                ) : (
+                  <p className="filter-empty">No size filters available.</p>
+                )}
+              </div>
+
+              <button type="button" className="apply-btn" onClick={applyFilters}>
+                Apply Filters
+              </button>
+            </div>
+          </div>
+        )}
 
         {filteredProducts.length > 0 ? (
           <div className="product-grid">
