@@ -77,6 +77,7 @@ export default function Footwear() {
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [appliedPriceRange, setAppliedPriceRange] = useState("");
   const [appliedSizes, setAppliedSizes] = useState([]);
+  const filterCount = selectedSizes.length + (selectedPriceRange ? 1 : 0);
   const metadata = categoryMetadata[FOOTWEAR_METADATA_KEY];
 
   useEffect(() => {
@@ -147,6 +148,13 @@ export default function Footwear() {
     setFilterOpen(false);
   };
 
+  const clearFilters = () => {
+    setSelectedPriceRange("");
+    setSelectedSizes([]);
+    setAppliedPriceRange("");
+    setAppliedSizes([]);
+  };
+
   if (loading && sourceProducts.length === 0) {
     return <div className="loading-container">Loading...</div>;
   }
@@ -197,7 +205,7 @@ export default function Footwear() {
           <p className="product-count">{filteredProducts.length} Products Found</p>
           <div className="shop-actions">
             <button type="button" className="filter-btn" onClick={() => setFilterOpen(true)}>
-              Filter
+              Filter {filterCount > 0 ? `(${filterCount})` : ""}
             </button>
             <SortMenu value={sortBy} onChange={setSortBy} />
           </div>
@@ -208,51 +216,58 @@ export default function Footwear() {
             <div className="filter-drawer" onClick={(event) => event.stopPropagation()}>
               <div className="filter-drawer-header">
                 <h3>Filters</h3>
-                <button type="button" className="filter-close" onClick={() => setFilterOpen(false)}>
-                  &times;
+                <button type="button" className="clear-btn" onClick={clearFilters}>
+                  Clear All
                 </button>
               </div>
 
-              <div className="filter-section">
-                <h4>Category</h4>
-                <label>
-                  <input type="checkbox" checked readOnly />
-                  Footwear
-                </label>
-              </div>
-
-              <div className="filter-section">
-                <h4>Price</h4>
-                {priceRanges.map((range) => (
-                  <label key={range.id}>
-                    <input
-                      type="radio"
-                      name="footwear-price"
-                      checked={selectedPriceRange === range.id}
-                      onChange={() => setSelectedPriceRange(range.id)}
-                    />
-                    {range.label}
+              <div className="filter-body">
+                <div className="filter-section">
+                  <h4>Category (1)</h4>
+                  <label className="active">
+                    <input type="checkbox" checked readOnly />
+                    Footwear
                   </label>
-                ))}
+                </div>
+
+                <div className="filter-section">
+                  <h4>Price{selectedPriceRange ? " (1)" : ""}</h4>
+                  {priceRanges.map((range) => (
+                    <label
+                      key={range.id}
+                      className={selectedPriceRange === range.id ? "active" : ""}
+                    >
+                      <input
+                        type="radio"
+                        name="footwear-price"
+                        checked={selectedPriceRange === range.id}
+                        onChange={() => setSelectedPriceRange(range.id)}
+                      />
+                      {range.label}
+                    </label>
+                  ))}
+                </div>
+
+                <div className="filter-section">
+                  <h4>Size{selectedSizes.length > 0 ? ` (${selectedSizes.length})` : ""}</h4>
+                  {availableSizes.map((size) => (
+                    <label key={size} className={selectedSizes.includes(size) ? "active" : ""}>
+                      <input
+                        type="checkbox"
+                        checked={selectedSizes.includes(size)}
+                        onChange={() => toggleSize(size)}
+                      />
+                      {size}
+                    </label>
+                  ))}
+                </div>
               </div>
 
-              <div className="filter-section">
-                <h4>Size</h4>
-                {availableSizes.map((size) => (
-                  <label key={size}>
-                    <input
-                      type="checkbox"
-                      checked={selectedSizes.includes(size)}
-                      onChange={() => toggleSize(size)}
-                    />
-                    {size}
-                  </label>
-                ))}
+              <div className="filter-footer">
+                <button type="button" className="apply-btn" onClick={applyFilters}>
+                  Apply Filters
+                </button>
               </div>
-
-              <button type="button" className="apply-btn" onClick={applyFilters}>
-                Apply Filters
-              </button>
             </div>
           </div>
         )}

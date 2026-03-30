@@ -135,6 +135,8 @@ const CategoryPage = () => {
   const [appliedCategories, setAppliedCategories] = useState([]);
   const [appliedPriceRange, setAppliedPriceRange] = useState("");
   const [appliedSizes, setAppliedSizes] = useState([]);
+  const filterCount =
+    selectedCategories.length + selectedSizes.length + (selectedPriceRange ? 1 : 0);
 
   const categoryName = paramCategory || (location.pathname === "/kurti" ? "kurti" : "all");
 
@@ -222,6 +224,15 @@ const CategoryPage = () => {
     setFilterOpen(false);
   };
 
+  const clearFilters = () => {
+    setSelectedCategories([]);
+    setSelectedPriceRange("");
+    setSelectedSizes([]);
+    setAppliedCategories([]);
+    setAppliedPriceRange("");
+    setAppliedSizes([]);
+  };
+
   if (loading) return <div className="loading-container">Loading...</div>;
 
   return (
@@ -261,7 +272,7 @@ const CategoryPage = () => {
           <p className="product-count">{filteredProducts.length} Products Found</p>
           <div className="shop-actions">
             <button type="button" className="filter-btn" onClick={() => setFilterOpen(true)}>
-              Filter
+              Filter {filterCount > 0 ? `(${filterCount})` : ""}
             </button>
             <SortMenu value={sortBy} onChange={setSortBy} />
           </div>
@@ -272,61 +283,71 @@ const CategoryPage = () => {
             <div className="filter-drawer" onClick={(event) => event.stopPropagation()}>
               <div className="filter-drawer-header">
                 <h3>Filters</h3>
-                <button type="button" className="filter-close" onClick={() => setFilterOpen(false)}>
-                  &times;
+                <button type="button" className="clear-btn" onClick={clearFilters}>
+                  Clear All
                 </button>
               </div>
 
-              <div className="filter-section">
-                <h4>Category</h4>
-                {Object.keys(categoryGroupMap).map((category) => (
-                  <label key={category}>
-                    <input
-                      type="checkbox"
-                      checked={selectedCategories.includes(category)}
-                      onChange={() => toggleCategory(category)}
-                    />
-                    {category}
-                  </label>
-                ))}
-              </div>
-
-              <div className="filter-section">
-                <h4>Price</h4>
-                {priceRanges.map((range) => (
-                  <label key={range.id}>
-                    <input
-                      type="radio"
-                      name="price"
-                      checked={selectedPriceRange === range.id}
-                      onChange={() => setSelectedPriceRange(range.id)}
-                    />
-                    {range.label}
-                  </label>
-                ))}
-              </div>
-
-              <div className="filter-section">
-                <h4>Size</h4>
-                {availableSizes.length > 0 ? (
-                  availableSizes.map((size) => (
-                    <label key={size}>
+              <div className="filter-body">
+                <div className="filter-section">
+                  <h4>Category{selectedCategories.length > 0 ? ` (${selectedCategories.length})` : ""}</h4>
+                  {Object.keys(categoryGroupMap).map((category) => (
+                    <label
+                      key={category}
+                      className={selectedCategories.includes(category) ? "active" : ""}
+                    >
                       <input
                         type="checkbox"
-                        checked={selectedSizes.includes(size)}
-                        onChange={() => toggleSize(size)}
+                        checked={selectedCategories.includes(category)}
+                        onChange={() => toggleCategory(category)}
                       />
-                      {size}
+                      {category}
                     </label>
-                  ))
-                ) : (
-                  <p className="filter-empty">No size filters available.</p>
-                )}
+                  ))}
+                </div>
+
+                <div className="filter-section">
+                  <h4>Price{selectedPriceRange ? " (1)" : ""}</h4>
+                  {priceRanges.map((range) => (
+                    <label
+                      key={range.id}
+                      className={selectedPriceRange === range.id ? "active" : ""}
+                    >
+                      <input
+                        type="radio"
+                        name="price"
+                        checked={selectedPriceRange === range.id}
+                        onChange={() => setSelectedPriceRange(range.id)}
+                      />
+                      {range.label}
+                    </label>
+                  ))}
+                </div>
+
+                <div className="filter-section">
+                  <h4>Size{selectedSizes.length > 0 ? ` (${selectedSizes.length})` : ""}</h4>
+                  {availableSizes.length > 0 ? (
+                    availableSizes.map((size) => (
+                      <label key={size} className={selectedSizes.includes(size) ? "active" : ""}>
+                        <input
+                          type="checkbox"
+                          checked={selectedSizes.includes(size)}
+                          onChange={() => toggleSize(size)}
+                        />
+                        {size}
+                      </label>
+                    ))
+                  ) : (
+                    <p className="filter-empty">No size filters available.</p>
+                  )}
+                </div>
               </div>
 
-              <button type="button" className="apply-btn" onClick={applyFilters}>
-                Apply Filters
-              </button>
+              <div className="filter-footer">
+                <button type="button" className="apply-btn" onClick={applyFilters}>
+                  Apply Filters
+                </button>
+              </div>
             </div>
           </div>
         )}
