@@ -36,6 +36,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import UserProfile from "./pages/profile/UserProfilePage";
 import EditAddressPage from "./pages/profile/EditAddressPage";
 import UserProfileOrders from "./pages/profile/UserProfileOrdersPage";
+import Footwear from "./pages/category/Footwear";
 
 import PageLoader from "./pages/order/PageLoader";
 import "./components/layout/page-content.css";
@@ -174,6 +175,7 @@ export default function StoreApp() {
               <Route path="/order-history" element={<ProtectedRoute><AnimatedRoute><OrderHistory /></AnimatedRoute></ProtectedRoute>} />
 
               <Route path="/kurti" element={<AnimatedRoute><CategoryPage /></AnimatedRoute>} />
+              <Route path="/footwear" element={<AnimatedRoute><Footwear /></AnimatedRoute>} />
               <Route path="/jewellery/:categoryName" element={<AnimatedRoute><CategoryPage /></AnimatedRoute>} />
               <Route path="/shop/:categoryName" element={<AnimatedRoute><CategoryPage /></AnimatedRoute>} />
               <Route path="/product/:id" element={<AnimatedRoute><ProductDetails /></AnimatedRoute>} />

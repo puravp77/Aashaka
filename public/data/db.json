@@ -3111,6 +3111,270 @@
         "material": "Cotton",
         "size": "M, L, XL, XXL, 3XL"
       }
+    },
+    {
+      "id": "f1",
+      "title": "White Minimal Sneakers",
+      "images": ["/images/f1.jpg"],
+      "price": 1499,
+      "oldPrice": 1999,
+      "category": "Footwear",
+      "stock": 14,
+      "rating": 4.4,
+      "sizes": {
+        "36": 2,
+        "37": 3,
+        "38": 4,
+        "39": 3,
+        "40": 2
+      },
+      "details": {
+        "colour": "White",
+        "material": "Vegan Leather",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f2",
+      "title": "Pearl Embroidered Mojari",
+      "images": ["/images/f2.jpg"],
+      "price": 1699,
+      "oldPrice": 2199,
+      "category": "Footwear",
+      "stock": 16,
+      "rating": 4.5,
+      "sizes": {
+        "36": 1,
+        "37": 4,
+        "38": 5,
+        "39": 4,
+        "40": 2
+      },
+      "details": {
+        "colour": "Ivory",
+        "material": "Embroidered Textile",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f3",
+      "title": "Gold Festive Flats",
+      "images": ["/images/f3.jpg"],
+      "price": 1399,
+      "oldPrice": 1799,
+      "category": "Footwear",
+      "stock": 20,
+      "rating": 4.2,
+      "sizes": {
+        "36": 3,
+        "37": 4,
+        "38": 6,
+        "39": 4,
+        "40": 3
+      },
+      "details": {
+        "colour": "Gold",
+        "material": "Metallic Faux Leather",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f4",
+      "title": "Tan Kolhapuri Sandals",
+      "images": ["/images/f4.jpg"],
+      "price": 1299,
+      "oldPrice": 1699,
+      "category": "Footwear",
+      "stock": 18,
+      "rating": 4.1,
+      "sizes": {
+        "36": 2,
+        "37": 4,
+        "38": 5,
+        "39": 5,
+        "40": 2
+      },
+      "details": {
+        "colour": "Tan",
+        "material": "Hand-finished Leatherette",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f5",
+      "title": "Champagne Sequin Slides",
+      "images": ["/images/f5.jpg"],
+      "price": 1599,
+      "oldPrice": 2099,
+      "category": "Footwear",
+      "stock": 15,
+      "rating": 4.3,
+      "sizes": {
+        "36": 2,
+        "37": 3,
+        "38": 5,
+        "39": 3,
+        "40": 2
+      },
+      "details": {
+        "colour": "Champagne",
+        "material": "Sequin Textile",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f6",
+      "title": "Copper Block Heel Mules",
+      "images": ["/images/f6.jpg"],
+      "price": 2299,
+      "oldPrice": 2799,
+      "category": "Footwear",
+      "stock": 12,
+      "rating": 4.6,
+      "sizes": {
+        "36": 1,
+        "37": 2,
+        "38": 4,
+        "39": 3,
+        "40": 2
+      },
+      "details": {
+        "colour": "Copper",
+        "material": "Cushioned Faux Leather",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f7",
+      "title": "Maroon Embroidered Jutti",
+      "images": ["/images/f7.jpg"],
+      "price": 1899,
+      "oldPrice": 2399,
+      "category": "Footwear",
+      "stock": 14,
+      "rating": 4.5,
+      "sizes": {
+        "36": 1,
+        "37": 3,
+        "38": 4,
+        "39": 4,
+        "40": 2
+      },
+      "details": {
+        "colour": "Maroon",
+        "material": "Thread Embroidery Upper",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f8",
+      "title": "Silver Mirror Strap Flats",
+      "images": ["/images/f8.jpg"],
+      "price": 1199,
+      "oldPrice": 1599,
+      "category": "Footwear",
+      "stock": 22,
+      "rating": 4,
+      "sizes": {
+        "36": 4,
+        "37": 5,
+        "38": 6,
+        "39": 4,
+        "40": 3
+      },
+      "details": {
+        "colour": "Silver",
+        "material": "Mirror Work Textile",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f9",
+      "title": "Ivory Wedding Mojari",
+      "images": ["/images/f9.jpg"],
+      "price": 2499,
+      "oldPrice": 2999,
+      "category": "Footwear",
+      "stock": 10,
+      "rating": 4.7,
+      "sizes": {
+        "36": 1,
+        "37": 2,
+        "38": 3,
+        "39": 2,
+        "40": 2
+      },
+      "details": {
+        "colour": "Ivory Gold",
+        "material": "Pearl and Bead Embroidery",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f10",
+      "title": "Nude Comfort Slip-On Flats",
+      "images": ["/images/f10.jpg"],
+      "price": 1099,
+      "oldPrice": 1499,
+      "category": "Footwear",
+      "stock": 24,
+      "rating": 4.1,
+      "sizes": {
+        "36": 4,
+        "37": 5,
+        "38": 7,
+        "39": 5,
+        "40": 3
+      },
+      "details": {
+        "colour": "Nude",
+        "material": "Soft PU Upper",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f11",
+      "title": "Mocha Braided Sandals",
+      "images": ["/images/f11.jpg"],
+      "price": 1349,
+      "oldPrice": 1799,
+      "category": "Footwear",
+      "stock": 19,
+      "rating": 4.2,
+      "sizes": {
+        "36": 3,
+        "37": 4,
+        "38": 5,
+        "39": 4,
+        "40": 3
+      },
+      "details": {
+        "colour": "Mocha",
+        "material": "Braided Faux Leather",
+        "size": "36, 37, 38, 39, 40"
+      }
+    },
+    {
+      "id": "f12",
+      "title": "Crystal Party Heels",
+      "images": ["/images/f12.jpg"],
+      "price": 2799,
+      "oldPrice": 3299,
+      "category": "Footwear",
+      "stock": 9,
+      "rating": 4.8,
+      "sizes": {
+        "36": 1,
+        "37": 2,
+        "38": 2,
+        "39": 2,
+        "40": 2
+      },
+      "details": {
+        "colour": "Silver",
+        "material": "Crystal Mesh and Satin",
+        "size": "36, 37, 38, 39, 40"
+      }
     }
   ]
 }

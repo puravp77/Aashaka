@@ -35,10 +35,16 @@ const productSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+    oldPrice: {
+      type: Number,
+      min: 0,
+      default: null,
+    },
     category: {
       type: String,
       required: true,
       trim: true,
+      index: true,
     },
     description: {
       type: String,
@@ -56,6 +62,17 @@ const productSchema = new mongoose.Schema(
     colors: {
       type: [String],
       default: [],
+    },
+    stock: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
+    rating: {
+      type: Number,
+      min: 0,
+      max: 5,
+      default: 0,
     },
     isFeatured: {
       type: Boolean,

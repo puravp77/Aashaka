@@ -9,6 +9,7 @@ const HeaderMainNav = () => {
   const location = useLocation();
   const isClothsActive = location.pathname.startsWith("/kurti");
   const isJewelleryActive = location.pathname.startsWith("/jewellery");
+  const isFootwearActive = location.pathname.startsWith("/footwear");
 
   return (
     <nav className="header-main-nav">
@@ -49,6 +50,14 @@ const HeaderMainNav = () => {
               <NavLink to="/jewellery/necklace">Necklace</NavLink>
             </div>
           </div>
+          <NavLink
+            to="/footwear"
+            className={({ isActive }) =>
+              `main-link${isActive || isFootwearActive ? " active" : ""}`
+            }
+          >
+            FOOTWEAR
+          </NavLink>
           <NavLink
             to="/about"
             className={({ isActive }) => `main-link${isActive ? " active" : ""}`}

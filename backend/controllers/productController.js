@@ -42,7 +42,7 @@ const getProducts = async (req, res, next) => {
     const filter = {};
 
     if (category) {
-      filter.category = category;
+      filter.category = { $regex: `^${String(category).trim()}$`, $options: "i" };
     }
 
     if (typeof isFeatured !== "undefined") {
@@ -81,11 +81,14 @@ const createProduct = async (req, res, next) => {
       id,
       name,
       price,
+      oldPrice,
       category,
       description,
       images,
       sizes,
       colors,
+      stock,
+      rating,
       isFeatured,
     } = req.body;
 
@@ -93,11 +96,14 @@ const createProduct = async (req, res, next) => {
       productId: productId || id,
       name,
       price,
+      oldPrice,
       category,
       description,
       images: Array.isArray(images) ? images : [],
       sizes: normalizeSizes(sizes),
       colors: Array.isArray(colors) ? colors : [],
+      stock: Number(stock || 0),
+      rating: Number(rating || 0),
       isFeatured: Boolean(isFeatured),
     });
 
@@ -116,11 +122,14 @@ const updateProduct = async (req, res, next) => {
       productId,
       name,
       price,
+      oldPrice,
       category,
       description,
       images,
       sizes,
       colors,
+      stock,
+      rating,
       isFeatured,
     } = req.body;
 
@@ -128,8 +137,11 @@ const updateProduct = async (req, res, next) => {
       productId,
       name,
       price,
+      oldPrice,
       category,
       description,
+      stock: Number(stock || 0),
+      rating: Number(rating || 0),
       isFeatured,
     };
 

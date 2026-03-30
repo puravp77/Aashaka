@@ -1,9 +1,13 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import allProducts from "../data/allProducts";
+import { fetchCollection, isStaticDataMode } from "../utils/api";
 
 const ProductContext = createContext();
 const BASE_URL = "http://localhost:5000";
 const PLACEHOLDER_IMAGE = `${BASE_URL}/uploads/placeholder-product.jpg`;
+const isAbsoluteUrl = (value) => /^([a-z][a-z0-9+.-]*:)?\/\//i.test(String(value || ""));
+const normalizeCategory = (value) => String(value || "").trim().toLowerCase();
+
 const buildSizeMap = (sizes) => {
   if (!Array.isArray(sizes) || sizes.length === 0) {
     return {};
@@ -35,10 +39,11 @@ const sortProducts = (products) => {
   const prefixPriority = {
     k: 1,
     WS: 2,
-    o: 3,
-    b: 4,
-    n: 5,
-    e: 6,
+    f: 3,
+    o: 4,
+    b: 5,
+    n: 6,
+    e: 7,
   };
 
   return [...products].sort((a, b) => {
@@ -61,32 +66,33 @@ const sortProducts = (products) => {
 
 const normalizeProduct = (product) => {
   const id = String(product?.productId || product?._id || product?.id || "");
-  const normalizedImages = Array.isArray(product?.images) && product.images.length > 0
-    ? product.images
-        .filter(Boolean)
-        .map((imageName) => `${BASE_URL}/uploads/${imageName}`)
-    : [PLACEHOLDER_IMAGE];
+  const normalizedImages =
+    Array.isArray(product?.images) && product.images.length > 0
+      ? product.images
+          .filter(Boolean)
+          .map((imageName) =>
+            isAbsoluteUrl(imageName) ? imageName : `${BASE_URL}/uploads/${imageName}`
+          )
+      : [PLACEHOLDER_IMAGE];
   const normalizedSizeInventory = Array.isArray(product?.sizes)
     ? product.sizes
         .map((entry) => ({
-          size: String(entry?.size || ""),
+          size: String(entry?.size || "").trim(),
           quantity: Number(entry?.quantity || 0),
         }))
         .filter((entry) => entry.size)
     : [];
   const normalizedSizes = buildSizeMap(normalizedSizeInventory);
-  const normalizedColors = Array.isArray(product?.colors)
-    ? product.colors.filter(Boolean)
-    : [];
+  const normalizedColors = Array.isArray(product?.colors) ? product.colors.filter(Boolean) : [];
 
   return {
     ...product,
     id,
     _id: product?._id || id,
     productId: product?.productId || id,
-    title: product?.name || "Untitled Product",
-    name: product?.name || "Untitled Product",
-    category: String(product?.category || "").toLowerCase(),
+    title: product?.title || product?.name || "Untitled Product",
+    name: product?.name || product?.title || "Untitled Product",
+    category: String(product?.category || "").trim(),
     description: product?.description || "",
     images: normalizedImages,
     image: normalizedImages[0] || "",
@@ -94,10 +100,15 @@ const normalizeProduct = (product) => {
     sizeInventory: normalizedSizeInventory,
     colors: normalizedColors,
     oldPrice: product?.oldPrice || null,
+    stock:
+      typeof product?.stock === "number"
+        ? product.stock
+        : normalizedSizeInventory.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0),
+    rating: Number(product?.rating || 0),
     details: {
       description: product?.description || "",
-      colour: normalizedColors.join(", "),
-      material: "",
+      colour: product?.colour || normalizedColors.join(", "),
+      material: product?.material || "",
       size: Object.keys(normalizedSizes).join(", "),
     },
     variants: normalizedColors.map((color) => ({
@@ -114,13 +125,14 @@ const normalizeProduct = (product) => {
 
 const normalizeFallbackProduct = (product) => {
   const id = String(product?.id || product?.productId || product?._id || "");
-  const normalizedImages = Array.isArray(product?.images) && product.images.length > 0
-    ? product.images.filter(Boolean)
-    : ["images/placeholder-product.jpg"];
+  const normalizedImages =
+    Array.isArray(product?.images) && product.images.length > 0
+      ? product.images.filter(Boolean)
+      : ["images/banner1.jpg"];
   const normalizedSizeInventory = Array.isArray(product?.sizeInventory)
     ? product.sizeInventory
         .map((entry) => ({
-          size: String(entry?.size || ""),
+          size: String(entry?.size || "").trim(),
           quantity: Number(entry?.quantity || 0),
         }))
         .filter((entry) => entry.size)
@@ -129,9 +141,7 @@ const normalizeFallbackProduct = (product) => {
         quantity: Number(quantity || 0),
       }));
   const normalizedSizes = buildSizeMap(normalizedSizeInventory);
-  const normalizedColors = Array.isArray(product?.colors)
-    ? product.colors.filter(Boolean)
-    : [];
+  const normalizedColors = Array.isArray(product?.colors) ? product.colors.filter(Boolean) : [];
 
   return {
     ...product,
@@ -140,7 +150,7 @@ const normalizeFallbackProduct = (product) => {
     productId: product?.productId || id,
     title: product?.title || product?.name || "Untitled Product",
     name: product?.name || product?.title || "Untitled Product",
-    category: String(product?.category || "").toLowerCase(),
+    category: String(product?.category || "").trim(),
     description: product?.description || "",
     images: normalizedImages,
     image: normalizedImages[0] || "",
@@ -148,6 +158,11 @@ const normalizeFallbackProduct = (product) => {
     sizeInventory: normalizedSizeInventory,
     colors: normalizedColors,
     oldPrice: product?.oldPrice || null,
+    stock:
+      typeof product?.stock === "number"
+        ? product.stock
+        : normalizedSizeInventory.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0),
+    rating: Number(product?.rating || 0),
     details: {
       description: product?.details?.description || product?.description || "",
       colour: product?.details?.colour || normalizedColors.join(", "),
@@ -171,13 +186,7 @@ const normalizeFallbackProduct = (product) => {
 const buildAliases = (items) =>
   items.reduce((acc, product) => {
     const canonicalId = String(product.id);
-    const candidates = [
-      product.id,
-      product.productId,
-      product._id,
-      product.name,
-      product.title,
-    ]
+    const candidates = [product.id, product.productId, product._id, product.name, product.title]
       .filter(Boolean)
       .map((value) => String(value));
 
@@ -202,54 +211,99 @@ const loadFallbackProducts = () => {
   };
 };
 
+const filterByCategory = (items, category) => {
+  if (!category) return items;
+
+  return items.filter(
+    (product) => normalizeCategory(product.category) === normalizeCategory(category)
+  );
+};
+
+const mergeProducts = (primaryProducts, fallbackProducts) => {
+  const merged = new Map();
+
+  fallbackProducts.forEach((product) => {
+    merged.set(String(product.id), product);
+  });
+
+  primaryProducts.forEach((product) => {
+    merged.set(String(product.id), product);
+  });
+
+  return sortProducts(Array.from(merged.values()));
+};
+
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [groupedProducts, setGroupedProducts] = useState([]);
   const [productAliases, setProductAliases] = useState({});
   const [loading, setLoading] = useState(true);
 
+  const fetchProducts = useCallback(async (category) => {
+    const fallback = loadFallbackProducts();
+    const fallbackProducts = filterByCategory(fallback.normalizedProducts, category);
+
+    if (isStaticDataMode()) {
+      return fallbackProducts;
+    }
+
+    try {
+      const query = category ? { category } : undefined;
+      const data = await fetchCollection("api/products", { query, cache: "no-store" });
+      const normalizedProducts = Array.isArray(data) ? data.map(normalizeProduct) : [];
+
+      if (normalizedProducts.length > 0) {
+        return mergeProducts(normalizedProducts, fallbackProducts);
+      }
+
+      if (!category) {
+        return fallback.normalizedProducts;
+      }
+    } catch (error) {
+      console.error("Failed to load products:", error);
+    }
+
+    return fallbackProducts;
+  }, []);
+
+  const getProductsByCategory = useCallback(
+    (category) => filterByCategory(products, category),
+    [products]
+  );
+
+  const fetchProductsByCategory = useCallback(
+    async (category) => fetchProducts(category),
+    [fetchProducts]
+  );
+
   useEffect(() => {
-    const loadProducts = async () => {
+    const loadInitialProducts = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/api/products`, {
-          cache: "no-store",
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-
-        const data = await response.json();
-        const normalizedProducts = Array.isArray(data)
-          ? data.map(normalizeProduct)
-          : [];
-        const hasRemoteProducts = normalizedProducts.length > 0;
-        const sortedProducts = hasRemoteProducts
-          ? sortProducts(normalizedProducts)
-          : loadFallbackProducts().normalizedProducts;
-        const aliases = hasRemoteProducts
-          ? buildAliases(sortedProducts)
-          : loadFallbackProducts().aliases;
-
-        setProducts(sortedProducts);
-        setGroupedProducts(sortedProducts);
+        const loadedProducts = await fetchProducts();
+        const aliases = buildAliases(loadedProducts);
+        setProducts(loadedProducts);
+        setGroupedProducts(loadedProducts);
         setProductAliases(aliases);
-      } catch (error) {
-        console.error("Failed to load products:", error);
-        const fallback = loadFallbackProducts();
-        setProducts(fallback.normalizedProducts);
-        setGroupedProducts(fallback.normalizedProducts);
-        setProductAliases(fallback.aliases);
       } finally {
         setLoading(false);
       }
     };
 
-    loadProducts();
-  }, []);
+    loadInitialProducts();
+  }, [fetchProducts]);
 
   return (
-    <ProductContext.Provider value={{ products, groupedProducts, productAliases, loading }}>
+    <ProductContext.Provider
+      value={{
+        products,
+        groupedProducts,
+        productAliases,
+        loading,
+        fetchProducts,
+        fetchProductsByCategory,
+        getProductsByCategory,
+      }}
+    >
       {children}
     </ProductContext.Provider>
   );

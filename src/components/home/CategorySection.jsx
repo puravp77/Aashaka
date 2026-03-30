@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
 import { motion } from "framer-motion";
 import "./CategorySection.css";
 import { withPublicUrl } from "../../utils/assetPath";
@@ -40,11 +39,17 @@ const CATEGORY_ITEMS = [
     image: "images/kurti.jpeg",
     alt: "Kurti Set",
   },
+  {
+    title: "Footwear",
+    tagline: "Everyday essentials",
+    path: "/footwear",
+    image: "/images/f17.jpg",
+    alt: "Footwear",
+  },
 ];
 
 export default function CategorySection() {
   const navigate = useNavigate();
-  const gridRef = useRef(null);
 
   const container = {
     hidden: {},
@@ -58,16 +63,6 @@ export default function CategorySection() {
     visible: { opacity: 1, y: 0 },
   };
 
-  const scrollLeft = () => {
-    if (!gridRef.current) return;
-    gridRef.current.scrollBy({ left: -220, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    if (!gridRef.current) return;
-    gridRef.current.scrollBy({ left: 220, behavior: "smooth" });
-  };
-
   return (
     <section className="category-section">
       <div className="category-head">
@@ -79,27 +74,8 @@ export default function CategorySection() {
       </div>
 
       <div className="category-wrapper">
-        <button
-          type="button"
-          className="cat-arrow left"
-          onClick={scrollLeft}
-          aria-label="Scroll categories left"
-        >
-          &#8249;
-        </button>
-
-        <button
-          type="button"
-          className="cat-arrow right"
-          onClick={scrollRight}
-          aria-label="Scroll categories right"
-        >
-          &#8250;
-        </button>
-
         <motion.div
           className="category-grid"
-          ref={gridRef}
           variants={container}
           initial="hidden"
           whileInView="visible"
@@ -112,16 +88,18 @@ export default function CategorySection() {
               className="category-card"
               onClick={() => navigate(category.path)}
               variants={item}
+              whileHover={{ y: -6, scale: 1.03 }}
+              whileTap={{ scale: 0.985 }}
             >
               <span className="category-media">
                 <img src={withPublicUrl(category.image)} alt={category.alt} />
                 <span className="category-shade" aria-hidden="true" />
-                <span className="category-chip" aria-hidden="true">
-                  Curated
-                </span>
               </span>
 
               <span className="category-copy">
+                <span className="category-chip" aria-hidden="true">
+                  Curated
+                </span>
                 <span className="category-name">{category.title}</span>
                 <span className="category-tagline">{category.tagline}</span>
               </span>

@@ -26,6 +26,7 @@ export default function Header() {
   const location = useLocation();
   const isClothsActive = location.pathname.startsWith("/kurti");
   const isJewelleryActive = location.pathname.startsWith("/jewellery");
+  const isFootwearActive = location.pathname.startsWith("/footwear");
 
   useEffect(() => {
     setOpenDesktopDropdown(null);
@@ -228,208 +229,226 @@ export default function Header() {
         </button>
       </form>
 
-      {/* NAVBAR */}
-      <nav className="navbar">
-        <div className="logo">
-          <NavLink to="/" className="logo-link">
-            <img src={withPublicUrl("images/headerlogo.jpeg")} alt="Aashaka" />
-          </NavLink>
-        </div>
-
-        {/* DESKTOP MENU */}
-        <ul
-          className="nav-links desktop"
-          ref={desktopNavRef}
-        >
-          <li>
-            <NavLink
-              to="/"
-              className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
-              onClick={() => setOpenDesktopDropdown(null)}
-            >
-              <span>HOME</span>
+      <div className="header-shell">
+        {/* NAVBAR */}
+        <nav className="navbar">
+          <div className="logo">
+            <NavLink to="/" className="logo-link">
+              <img src={withPublicUrl("images/headerlogo.jpeg")} alt="Aashaka" />
             </NavLink>
-          </li>
+          </div>
 
-          <li
-            className={`dropdown${openDesktopDropdown === "cloths" ? " open" : ""}`}
+          {/* DESKTOP MENU */}
+          <ul
+            className="nav-links desktop"
+            ref={desktopNavRef}
           >
+            <li>
+              <NavLink
+                to="/"
+                className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
+                onClick={() => setOpenDesktopDropdown(null)}
+              >
+                <span>HOME</span>
+              </NavLink>
+            </li>
+
+            <li
+              className={`dropdown${openDesktopDropdown === "cloths" ? " open" : ""}`}
+            >
+              <button
+                type="button"
+                className={`nav-item nav-trigger${isClothsActive ? " active" : ""}`}
+                onClick={() =>
+                  setOpenDesktopDropdown((current) =>
+                    current === "cloths" ? null : "cloths"
+                  )
+                }
+                aria-expanded={openDesktopDropdown === "cloths"}
+                aria-haspopup="true"
+              >
+                <span>CLOTHS</span>
+              </button>
+              <div className="dropdown-menu">
+                <NavLink to="/kurti" onClick={() => setOpenDesktopDropdown(null)}>
+                  Kurti Set
+                </NavLink>
+              </div>
+            </li>
+
+            <li
+              className={`dropdown${openDesktopDropdown === "jewellery" ? " open" : ""}`}
+            >
+              <button
+                type="button"
+                className={`nav-item nav-trigger${isJewelleryActive ? " active" : ""}`}
+                onClick={() =>
+                  setOpenDesktopDropdown((current) =>
+                    current === "jewellery" ? null : "jewellery"
+                  )
+                }
+                aria-expanded={openDesktopDropdown === "jewellery"}
+                aria-haspopup="true"
+              >
+                <span>JEWELLERY</span>
+              </button>
+              <div className="dropdown-menu">
+                <NavLink to="/jewellery/oxidised" onClick={() => setOpenDesktopDropdown(null)}>
+                  Oxidised Set
+                </NavLink>
+                <NavLink to="/jewellery/bangles" onClick={() => setOpenDesktopDropdown(null)}>
+                  Bangles-Kada
+                </NavLink>
+                <NavLink to="/jewellery/earrings" onClick={() => setOpenDesktopDropdown(null)}>
+                  Earrings
+                </NavLink>
+                <NavLink to="/jewellery/necklace" onClick={() => setOpenDesktopDropdown(null)}>
+                  Necklace
+                </NavLink>
+              </div>
+            </li>
+
+            <li>
+              <NavLink
+                to="/footwear"
+                className={({ isActive }) => `nav-item${isActive || isFootwearActive ? " active" : ""}`}
+                onClick={() => setOpenDesktopDropdown(null)}
+              >
+                <span>FOOTWEAR</span>
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/about"
+                className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
+                onClick={() => setOpenDesktopDropdown(null)}
+              >
+                <span>ABOUT</span>
+              </NavLink>
+            </li>
+
+            <li>
+              <button
+                type="button"
+                className="cart-link nav-cart"
+                onClick={() => {
+                  setOpenDesktopDropdown(null);
+                  setCartOpen(true);
+                }}
+              >
+                <span className="nav-cart-label">CART</span>
+                <span className="nav-cart-count">{uniqueItemCount}</span>
+              </button>
+            </li>
+          </ul>
+
+          {/* MOBILE RIGHT */}
+          <div className="nav-right">
             <button
               type="button"
-              className={`nav-item nav-trigger${isClothsActive ? " active" : ""}`}
-              onClick={() =>
-                setOpenDesktopDropdown((current) =>
-                  current === "cloths" ? null : "cloths"
-                )
-              }
-              aria-expanded={openDesktopDropdown === "cloths"}
-              aria-haspopup="true"
+              className="cart-text"
+              onClick={() => setCartOpen(true)}
             >
-              <span>CLOTHS</span>
+              <span>CART</span>
+              <span className="cart-mobile-count">{uniqueItemCount}</span>
             </button>
-            <div className="dropdown-menu">
-              <NavLink to="/kurti" onClick={() => setOpenDesktopDropdown(null)}>
+
+            <button
+              className="mobile-search"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Open search"
+            >
+              <FiSearch />
+            </button>
+
+            <button
+              className="hamburger"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav-menu"
+            >
+              <HiOutlineMenu />
+            </button>
+          </div>
+        </nav>
+
+        {menuOpen && <button type="button" className="mobile-overlay" onClick={() => setMenuOpen(false)} aria-label="Close mobile menu" />}
+
+        {/* MOBILE MENU */}
+        <div id="mobile-nav-menu" className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+          <NavLink to="/" onClick={() => setMenuOpen(false)}>HOME</NavLink>
+
+          <div className="mobile-accordion">
+            <button
+              type="button"
+              className={`mobile-title ${clothsOpen ? "active" : ""}`}
+              onClick={() => setClothsOpen(!clothsOpen)}
+            >
+              CLOTHS
+            </button>
+            <div className={`mobile-submenu ${clothsOpen ? "open" : ""}`}>
+              <NavLink to="/kurti" onClick={() => setMenuOpen(false)}>
                 Kurti Set
               </NavLink>
             </div>
-          </li>
+          </div>
 
-          <li
-            className={`dropdown${openDesktopDropdown === "jewellery" ? " open" : ""}`}
-          >
+          <div className="mobile-accordion">
             <button
               type="button"
-              className={`nav-item nav-trigger${isJewelleryActive ? " active" : ""}`}
-              onClick={() =>
-                setOpenDesktopDropdown((current) =>
-                  current === "jewellery" ? null : "jewellery"
-                )
-              }
-              aria-expanded={openDesktopDropdown === "jewellery"}
-              aria-haspopup="true"
+              className={`mobile-title ${jewelleryOpen ? "active" : ""}`}
+              onClick={() => setJewelleryOpen(!jewelleryOpen)}
             >
-              <span>JEWELLERY</span>
+              JEWELLERY
             </button>
-            <div className="dropdown-menu">
-              <NavLink to="/jewellery/oxidised" onClick={() => setOpenDesktopDropdown(null)}>
-                Oxidised Set
+            <div className={`mobile-submenu ${jewelleryOpen ? "open" : ""}`}>
+              <NavLink to="/jewellery/oxidised" onClick={() => setMenuOpen(false)}>
+                Oxidised set
               </NavLink>
-              <NavLink to="/jewellery/bangles" onClick={() => setOpenDesktopDropdown(null)}>
+              <NavLink to="/jewellery/bangles" onClick={() => setMenuOpen(false)}>
                 Bangles-Kada
               </NavLink>
-              <NavLink to="/jewellery/earrings" onClick={() => setOpenDesktopDropdown(null)}>
+              <NavLink to="/jewellery/earrings" onClick={() => setMenuOpen(false)}>
                 Earrings
               </NavLink>
-              <NavLink to="/jewellery/necklace" onClick={() => setOpenDesktopDropdown(null)}>
+              <NavLink to="/jewellery/necklace" onClick={() => setMenuOpen(false)}>
                 Necklace
               </NavLink>
             </div>
-          </li>
-
-          <li>
-            <NavLink
-              to="/about"
-              className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}
-              onClick={() => setOpenDesktopDropdown(null)}
-            >
-              <span>ABOUT</span>
-            </NavLink>
-          </li>
-
-          <li>
-            <button
-              type="button"
-              className="cart-link nav-cart"
-              onClick={() => {
-                setOpenDesktopDropdown(null);
-                setCartOpen(true);
-              }}
-            >
-              <span className="nav-cart-label">CART</span>
-              <span className="nav-cart-count">{uniqueItemCount}</span>
-            </button>
-          </li>
-        </ul>
-
-        {/* MOBILE RIGHT */}
-        <div className="nav-right">
-          <button
-            type="button"
-            className="cart-text"
-            onClick={() => setCartOpen(true)}
-          >
-            <span>CART</span>
-            <span className="cart-mobile-count">{uniqueItemCount}</span>
-          </button>
-
-          <button
-            className="mobile-search"
-            onClick={() => setSearchOpen(true)}
-            aria-label="Open search"
-          >
-            <FiSearch />
-          </button>
-
-          <button
-            className="hamburger"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Open menu"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav-menu"
-          >
-            <HiOutlineMenu />
-          </button>
-        </div>
-      </nav>
-
-      {/* MOBILE MENU */}
-      <div id="mobile-nav-menu" className={`mobile-menu ${menuOpen ? "open" : ""}`}>
-        <NavLink to="/" onClick={() => setMenuOpen(false)}>HOME</NavLink>
-        <NavLink to="/about" onClick={() => setMenuOpen(false)}>ABOUT</NavLink>
-
-        <div className="mobile-accordion">
-          <button
-            className={`mobile-title ${clothsOpen ? "active" : ""}`}
-            onClick={() => setClothsOpen(!clothsOpen)}
-          >
-            CLOTHS
-          </button>
-          <div className={`mobile-submenu ${clothsOpen ? "open" : ""}`}>
-            <NavLink to="/kurti" onClick={() => setMenuOpen(false)}>
-              Kurti Set
-            </NavLink>
           </div>
-        </div>
 
-        <div className="mobile-accordion">
-          <button
-            className={`mobile-title ${jewelleryOpen ? "active" : ""}`}
-            onClick={() => setJewelleryOpen(!jewelleryOpen)}
-          >
-            JEWELLERY
-          </button>
-          <div className={`mobile-submenu ${jewelleryOpen ? "open" : ""}`}>
-            <NavLink to="/jewellery/oxidised" onClick={() => setMenuOpen(false)}>
-              Oxidised set
-            </NavLink>
-            <NavLink to="/jewellery/bangles" onClick={() => setMenuOpen(false)}>
-              Bangles-Kada
-            </NavLink>
-            <NavLink to="/jewellery/earrings" onClick={() => setMenuOpen(false)}>
-              Earrings
-            </NavLink>
-            <NavLink to="/jewellery/necklace" onClick={() => setMenuOpen(false)}>
-              Necklace
-            </NavLink>
-          </div>
-        </div>
+          <NavLink to="/footwear" onClick={() => setMenuOpen(false)}>FOOTWEAR</NavLink>
+          <NavLink to="/about" onClick={() => setMenuOpen(false)}>ABOUT</NavLink>
 
-        {isLoggedIn ? (
-          <>
-            <NavLink to="/wishlist" className="account-link" onClick={() => setMenuOpen(false)}>
-              WISHLIST
+          {isLoggedIn ? (
+            <>
+              <NavLink to="/wishlist" className="account-link" onClick={() => setMenuOpen(false)}>
+                WISHLIST
+              </NavLink>
+              <NavLink to="/order-history" className="account-link" onClick={() => setMenuOpen(false)}>
+                ORDER HISTORY
+              </NavLink>
+              <NavLink to="/user-profile" className="account-link" onClick={() => setMenuOpen(false)}>
+                USER PROFILE
+              </NavLink>
+              <button
+                type="button"
+                className="account-link mobile-logout"
+                onClick={() => {
+                  setLogoutOpen(true);
+                }}
+              >
+                LOGOUT
+              </button>
+            </>
+          ) : (
+            <NavLink to="/login" onClick={() => setMenuOpen(false)}>
+              LOGIN / REGISTRATION
             </NavLink>
-            <NavLink to="/order-history" className="account-link" onClick={() => setMenuOpen(false)}>
-              ORDER HISTORY
-            </NavLink>
-            <NavLink to="/user-profile" className="account-link" onClick={() => setMenuOpen(false)}>
-              USER PROFILE
-            </NavLink>
-            <button
-              type="button"
-              className="account-link mobile-logout"
-              onClick={() => {
-                setLogoutOpen(true);
-              }}
-            >
-              LOGOUT
-            </button>
-          </>
-        ) : (
-          <NavLink to="/login" onClick={() => setMenuOpen(false)}>
-            LOGIN / REGISTRATION
-          </NavLink>
-        )}
+          )}
+        </div>
       </div>
 
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />

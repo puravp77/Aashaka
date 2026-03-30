@@ -29,6 +29,12 @@ export const categoryMetadata = {
         bannerImage: "images/bannerNeck.jpg",
         seoTitle: "Aashaka | Statement Necklaces & Chokers",
     },
+    footwear: {
+        title: "Festive Footwear",
+        description: "Step into celebration with embellished juttis, mojaris, kolhapuris, and block heels designed to pair beautifully with the Aashaka wardrobe.",
+        bannerImage: "/images/fBanner.jpg",
+        seoTitle: "Aashaka | Festive Footwear Collection",
+    },
     all: {
         title: "Complete Collection",
         description: "Explore the entire world of Aashaka. From elegant kurtis to handcrafted jewellery, find everything you need to express your unique style.",

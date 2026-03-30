@@ -12,9 +12,11 @@ const productFilePath = path.join(__dirname, "../../src/data/allProducts.jsx");
 const sourceImagesDir = path.join(__dirname, "../../public/images");
 const uploadsDir = path.join(__dirname, "../uploads");
 const placeholderImageName = "placeholder-product.jpg";
+const isAbsoluteUrl = (value) => /^https?:\/\//i.test(String(value || ""));
 
 const getImageFilename = (imagePath) => {
   if (!imagePath || typeof imagePath !== "string") return null;
+  if (isAbsoluteUrl(imagePath.trim())) return imagePath.trim();
   return path.basename(imagePath.trim());
 };
 
@@ -99,6 +101,11 @@ const transformProduct = (product, imageStats) => {
         .map(getImageFilename)
         .filter(Boolean)
         .map((filename) => {
+          if (isAbsoluteUrl(filename)) {
+            imageStats.successful += 1;
+            return filename;
+          }
+
           const imageAvailable = syncImageToUploads(filename);
 
           if (imageAvailable) {
@@ -118,11 +125,17 @@ const transformProduct = (product, imageStats) => {
     productId: String(product?.id || "").trim(),
     name: product?.title || "Untitled Product",
     price: Number(product?.price || 0),
-    category: String(product?.category || "").toLowerCase(),
-    description: material || colour || "Aashaka product",
+    oldPrice: Number(product?.oldPrice || 0) || null,
+    category: String(product?.category || "").trim(),
+    description: product?.description || material || colour || "Aashaka product",
     images: imageFilenames,
     sizes: sizeInventory,
     colors: colour ? [colour] : [],
+    stock:
+      typeof product?.stock === "number"
+        ? product.stock
+        : sizeInventory.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0),
+    rating: Number(product?.rating || 0),
     isFeatured: false,
   };
 };
